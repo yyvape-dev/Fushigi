@@ -104,3 +104,4 @@
 - skeleton（スケルトン）：`小さな骨の戦士、錆びた短剣を持つ`
 - ogre（オーガ）：`大きなずんぐりした赤茶色の鬼、太い棍棒を持つ`
 - stick（木の棒）／sword（鉄の剣）／axe（大斧）／woodshield（木の盾）／ironshield（鉄の盾）／scroll（強化の巻物）：アイテム共通の末尾で、名詞だけ入れ替える。
+- 草・杖・巻物（アイテム共通の末尾で名詞だけ入れ替え）：herb（薬草）／lifeherb（命の草・金色の草）／firestaff（火の杖）／blowstaff（吹き飛ばしの杖）／swapstaff（場所替えの杖）／mapscroll（地図の巻物）／escscroll（脱出の巻物）／boomscroll（爆発の巻物）

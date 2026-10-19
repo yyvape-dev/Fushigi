@@ -163,6 +163,64 @@ const ITEMS = {
       say(`${itemName(t)}が光った！ 強化値+1`); return true;
     },
   },
+  herb: {
+    name: '薬草', cat: '草', ch: '♣', fg: '#7bdc7b', w: 8, desc: 'HPを6回復する。',
+    use() {
+      if (player.hp >= player.maxhp) { say('HPは満タンだ。'); return false; }
+      const before = player.hp; player.hp = Math.min(player.maxhp, player.hp + 6);
+      fxText(player.x, player.y, '+' + (player.hp - before), '#7bff9a');
+      say(`薬草を食べた。HP+${player.hp - before}`); return true;
+    },
+  },
+  lifeherb: {
+    name: '命の草', cat: '草', ch: '♣', fg: '#ffd84a', w: 1, desc: '最大HPが3増え、HPも3回復する。',
+    use() {
+      player.maxhp += 3; player.hp += 3; fxText(player.x, player.y, '最大HP+3', '#ffe28a');
+      say('命の草を食べた。最大HPが3増えた！'); return true;
+    },
+  },
+  firestaff: {
+    name: '火の杖', cat: '杖', ch: '/', fg: '#ff7a3a', w: 2, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵に8ダメージ。[ ]は残り回数。',
+    use() { const t = zapTarget(); if (!t) return true; zapHit(t.e, 8, '火の玉'); return true; },
+  },
+  blowstaff: {
+    name: '吹き飛ばしの杖', cat: '杖', ch: '/', fg: '#7ac8ff', w: 2, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵を最大5マス吹き飛ばす。',
+    use() {
+      const t = zapTarget(); if (!t) return true;
+      const e = t.e, dx = player.face[0], dy = player.face[1]; let n = 0;
+      while (n < 5 && geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy) && !(e.x + dx === player.x && e.y + dy === player.y)) { e.x += dx; e.y += dy; n++; }
+      e.aware = true; say(`${eT(e).name}を${n}マス吹き飛ばした！`); return true;
+    },
+  },
+  swapstaff: {
+    name: '場所替えの杖', cat: '杖', ch: '/', fg: '#d79aff', w: 1, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵と場所を入れ替える。',
+    use() {
+      const t = zapTarget(); if (!t) return true;
+      const e = t.e; [player.x, e.x] = [e.x, player.x]; [player.y, e.y] = [e.y, player.y]; e.aware = true;
+      say(`${eT(e).name}と場所が入れ替わった！`); return true;
+    },
+  },
+  mapscroll: {
+    name: '地図の巻物', cat: '巻物', ch: '≡', fg: '#9ad8ff', w: 3, desc: 'この階の地図が全部わかる。',
+    use() {
+      if (scene !== 'dungeon') { say('ここでは使えない。'); return false; }
+      for (const row of seen) row.fill(true); say('この階の地図がわかった！'); return true;
+    },
+  },
+  escscroll: {
+    name: '脱出の巻物', cat: '巻物', ch: '≡', fg: '#b6ffb0', w: 2, desc: 'ダンジョンから脱出して町へ戻る。持ち物はそのまま。',
+    use() {
+      if (scene !== 'dungeon') { say('ここでは使えない。'); return false; }
+      toTown(true); say('ふしぎな力で町に戻った。'); return true;
+    },
+  },
+  boomscroll: {
+    name: '爆発の巻物', cat: '巻物', ch: '≡', fg: '#ff9a7a', w: 2, desc: '周囲2マスの敵すべてに7ダメージ。',
+    use() {
+      const hit = enemies.filter(e => Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)) <= 2);
+      say('巻物が爆発した！'); for (const e of hit) zapHit(e, 7, '爆発'); if (!hit.length) say('だれもいなかった…'); return true;
+    },
+  },
   onigiri: {
     name: 'おにぎり', cat: '食', ch: '●', fg: '#ffffff', w: 6, desc: '満腹度を50%回復する。',
     use() {
@@ -187,6 +245,21 @@ const ENEMIES = {
   ogre: { name: 'オーガ', from: 4, w: 3, hp: f => 12 + f * 2, atk: f => [3, 5 + Math.floor(f / 3)], spd: 'slow', col: '#c0623a' },
 };
 const eT = e => ENEMIES[e.kind] || ENEMIES.goblin;
+// 杖・巻物の共通処理：向いている方向の最初の敵（射程8）／ダメージを与える
+function zapTarget() {
+  const dx = player.face[0], dy = player.face[1]; let cx = player.x, cy = player.y;
+  for (let i = 1; i <= 8; i++) {
+    if (!geomOK(cx, cy, dx, dy)) break;
+    cx += dx; cy += dy;
+    const e = enemyAt(cx, cy); if (e) return { e, i };
+  }
+  say('しかし、何も起こらなかった。'); return null;
+}
+function zapHit(e, dmg, label) {
+  e.hp -= dmg; e.aware = true; e.flash = now() + 130; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
+  if (e.hp <= 0) { enemies.splice(enemies.indexOf(e), 1); say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); }
+  else say(`${label}で${eT(e).name}に${dmg}ダメージ。`);
+}
 function rollEnemy(f) {
   const ks = Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= f);
   let r = Math.random() * ks.reduce((a, k) => a + ENEMIES[k].w, 0);
@@ -401,10 +474,10 @@ const inb = (x, y) => x >= 0 && y >= 0 && x < MW && y < MH;
 const enemyAt = (x, y) => enemies.find(e => e.x === x && e.y === y);
 const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
 function rollPlus() { const r = Math.random(); return r < 0.55 ? 0 : r < 0.75 ? 1 : r < 0.88 ? 2 : r < 0.95 ? -1 : 3; }
-const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip) it.plus = plus === undefined ? rollPlus() : plus; return it; };
+const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip) it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; return it; };
 const isEq = it => it === eqWeapon || it === eqShield;
 const ikey = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (isEq(it) ? 'E' : '');   // 持ち物のまとめ表示・操作のキー
-const itemName = it => ITEMS[it.type].name + (it.plus !== undefined ? (it.plus >= 0 ? '+' : '') + it.plus : '');
+const itemName = it => ITEMS[it.type].name + (it.plus === undefined ? '' : ITEMS[it.type].charges ? `[${it.plus}]` : (it.plus >= 0 ? '+' : '') + it.plus);
 const atkBonus = () => eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0;
 const defBonus = () => eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0;
 const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '');
@@ -433,7 +506,7 @@ function loadGame() {
     inv = (s.bag || []).map(decItem).filter(Boolean);
     eqWeapon = eqShield = null;
     if (Array.isArray(s.eq)) { eqWeapon = inv[s.eq[0]] || null; eqShield = inv[s.eq[1]] || null; if (eqWeapon && ITEMS[eqWeapon.type].equip !== 'weapon') eqWeapon = null; if (eqShield && ITEMS[eqShield.type].equip !== 'shield') eqShield = null; }
-    quick = s.quick === null || (ITEMS[s.quick] && !ITEMS[s.quick].equip) ? s.quick : 'potion';
+    quick = s.quick === null || (ITEMS[s.quick] && !ITEMS[s.quick].equip && !ITEMS[s.quick].charges) ? s.quick : 'potion';
     clears = s.clears | 0; deaths = s.deaths | 0; autoPick = !!s.autoPick;
     mapMode = [0, 1, 2].includes(s.mapMode) ? s.mapMode : 1;
     zoomPref = [0, 1, 2, 3, 4, 5].includes(s.zoomPref) ? s.zoomPref : 0;
@@ -647,7 +720,7 @@ function say(m) {
   logTimer = setTimeout(() => { const el = $('log'); if (el.classList) el.classList.add('off'); }, LOG_MS + 50);
 }
 function msgClass(m) {
-  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /の攻撃！|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物|外した/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた|強化値|装備した/.test(m) ? 'good' : '';
+  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /の攻撃！|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物|外した/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた|強化値|装備した|最大HP|地図/.test(m) ? 'good' : '';
 }
 const logHtml = arr => arr.map(l => `<div class="${msgClass(l)}">${l}</div>`).join('');
 function openHist() { if (dead) { guardDead(); return; } if (bagOpen || whOpen || cfgOpen) return; holdStop(); histOpen = true; $('hist').hidden = false; $('histList').innerHTML = logHtml(msgHistory) || '<div>まだメッセージはありません。</div>'; const l = $('histList'); l.scrollTop = l.scrollHeight; render(); }
@@ -827,7 +900,12 @@ function useType(key) {
   const it = firstOf(key);
   if (!it) { say(`${ITEMS[key] ? ITEMS[key].name : 'それ'}を持っていない。`); render(); return; }
   if (ITEMS[it.type].equip) { toggleEquip(it); saveGame(); closeBag(); endTurn(); return; }   // 装備品：着脱でターン経過
-  if (!ITEMS[it.type].use(it)) { render(); renderBag(); return; }   // 効果なし：消費もターン経過もなし
+  if (ITEMS[it.type].staff) {                                    // 杖：回数を1つ消費。0回でも振れる（何も起こらない）
+    if (it.plus <= 0) say('しかし、何も起こらなかった。（回数切れ）');
+    else { it.plus--; ITEMS[it.type].use(it); }
+    closeBag(); endTurn(); return;
+  }
+  if (!ITEMS[it.type].use(it)) { render(); renderBag(); return; }
   inv.splice(inv.indexOf(it), 1);
   closeBag(); endTurn();
 }
@@ -885,7 +963,7 @@ function renderBag() {
   const st = listEl.scrollTop;
   listEl.innerHTML = shown.length ? shown.map(g => rowHtml(g, g.key === bagSel,
     `<button data-act="use" data-type="${g.key}">${ITEMS[g.type].equip ? (isEq(g.items[0]) ? '外す' : '装備') : '使う'}</button><button data-act="drop" data-type="${g.key}">置く</button>` +
-    (ITEMS[g.type].equip ? '' : `<button data-act="quick" data-type="${g.type}">${quick === g.type ? '★解除' : '★クイック'}</button>`))).join('') : '<div class="empty">何も持っていない</div>';
+    (ITEMS[g.type].equip || ITEMS[g.type].charges ? '' : `<button data-act="quick" data-type="${g.type}">${quick === g.type ? '★解除' : '★クイック'}</button>`))).join('') : '<div class="empty">何も持っていない</div>';
   listEl.scrollTop = st;
 }
 listEl.addEventListener('click', ev => {

@@ -241,7 +241,7 @@
   belly = 10; bellyWarn = 10; inv = [mkItem('onigiri')]; useType('onigiri');
   ok('eating resets warning stage', belly === 60 && bellyWarn === 99);
   let oc = 0; for (let i = 0; i < 3000; i++) if (rollType() === 'onigiri') oc++;
-  ok('onigiri appears on floors (' + oc + '/3000)', oc > 300 && oc < 1700);
+  ok('onigiri appears on floors (' + oc + '/3000)', oc > 200 && oc < 1700);
   scene = 'town'; belly = 50; const tb = turn; playerMove(0, 0); ok('no hunger tick in town', belly === 50);
   scene = 'dungeon'; belly = 77; refreshUI(); ok('HUD shows belly in dungeon', (cache.get('belly') || '').includes('77'));
   hungerPref = 1; saveGame(); hungerPref = 0; loadGame(); ok('hungerPref round trip', hungerPref === 1); hungerPref = 0;
@@ -348,6 +348,24 @@
     const wp = mkItem('axe', 0); inv = [wp]; eqWeapon = wp; sl.hp = 99; hitEnemy(sl); ok('combat: axe adds +5 (7-9)', sl.hp >= 90 && sl.hp <= 92);
     const sh = mkItem('ironshield', 3); inv.push(sh); eqShield = sh; ok('combat: shield def 5', defBonus() === 5);
     dead = false; eqWeapon = eqShield = null; }
+  // ===== 追加：草・杖・巻物 =====
+  { scene = 'dungeon'; floorNo = 1; newFloor(); eqWeapon = eqShield = null; dead = false;
+    const mk = (dx, k) => ({ kind: 'goblin', x: player.x + dx, y: player.y, vx: 0, vy: 0, hp: 20, maxhp: 20, aware: true, lost: 0, flash: 0, bump: null, fl: false });
+    for (let dx = 0; dx <= 6; dx++) map[player.y][player.x + dx] = FLOOR;
+    player.face = [1, 0]; player.hp = 10; player.maxhp = 20; const etSave = enemyTurn; enemyTurn = () => {};   // 敵を動かさず効果だけ確認
+    inv = [mkItem('herb'), mkItem('lifeherb')]; useType('herb'); ok('herb: +6 HP', player.hp >= 16 && player.hp <= 17 && inv.length === 1);
+    useType('lifeherb'); ok('lifeherb: max HP +3', player.maxhp === 23 && inv.length === 0);
+    enemies = [mk(3)]; const fs = mkItem('firestaff'); ok('staff: has 3-5 charges', fs.plus >= 3 && fs.plus <= 5 && itemName(fs).includes('['));
+    inv = [fs]; const c0 = fs.plus; useType(ikey(fs)); ok('firestaff: 8 dmg and charge used', enemies[0].hp === 12 && fs.plus === c0 - 1 && inv.length === 1);
+    const bs = mkItem('blowstaff', 2); inv = [bs]; enemies = [mk(1)]; useType(ikey(bs)); ok('blowstaff: knocks back up to 5', enemies[0].x === player.x + 6 && bs.plus === 1);
+    const ss = mkItem('swapstaff', 1); inv = [ss]; enemies = [mk(4)]; const px = player.x; useType(ikey(ss)); ok('swapstaff: swaps places', player.x === px + 4 && enemies[0].x === px);
+    const es = mkItem('firestaff', 0); inv = [es]; enemies = [mk(2)]; useType(ikey(es)); ok('empty staff does nothing but stays', enemies[0].hp === 20 && inv.length === 1);
+    player.x = px; enemies = [mk(5)]; const f1 = mkItem('firestaff', 2); inv = [f1]; useType(ikey(f1)); ok('staff hits enemy up to range 8', enemies[0].hp === 12);
+    enemies = [mk(1), mk(2), mk(5)]; inv = [mkItem('boomscroll')]; useType('boomscroll'); ok('boomscroll: hits within 2 only', enemies.length === 3 && enemies[0].hp === 13 && enemies[1].hp === 13 && enemies[2].hp === 20);
+    seen = Array.from({ length: MH }, () => new Array(MW).fill(false)); inv = [mkItem('mapscroll')]; useType('mapscroll'); ok('mapscroll: reveals map', seen.every(r => r.every(v => v)));
+    inv = [mkItem('escscroll'), mkItem('potion')]; useType('escscroll'); ok('escscroll: back to town with bag kept', scene === 'town' && inv.length === 1);
+    scene = 'town'; inv = [mkItem('mapscroll')]; useType('mapscroll'); ok('mapscroll in town: not consumed', inv.length === 1);
+    wh = []; inv = [mkItem('firestaff', 3), mkItem('herb')]; saveGame(); inv = []; loadGame(); enemyTurn = etSave; ok('staff charges survive save/load', inv.some(i => i.type === 'firestaff' && i.plus === 3)); }
   ok('log position default is bottom-right', logPos === 1);
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
