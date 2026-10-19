@@ -9,7 +9,13 @@ html,body{margin:0;height:100%;background:#0d0d12;color:#ddd;font-family:monospa
 canvas{display:block;touch-action:none}
 #hud{position:fixed;top:0;left:0;right:0;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;background:#000b;z-index:2;font-size:15px;pointer-events:none}
 #hp{color:#ff7a7a}
-#log{position:fixed;top:34px;left:0;right:0;padding:4px 10px;font-size:13px;line-height:1.35;z-index:2;pointer-events:none;text-shadow:0 0 3px #000,0 0 3px #000,0 0 6px #000}
+#log{position:fixed;top:36px;left:8px;max-width:min(62%,330px);padding:6px 10px;font-size:15px;line-height:1.4;z-index:2;background:rgba(8,10,24,.62);border:1px solid rgba(255,255,255,.28);border-radius:8px;transition:opacity .35s;text-shadow:0 1px 2px #000;opacity:1}
+#log.pos-b{top:auto;left:auto;right:max(12px,env(safe-area-inset-right));bottom:max(200px,calc(env(safe-area-inset-bottom) + 194px))}
+#log.off{opacity:0;pointer-events:none}
+#log .dmg{color:#ff9a9a}#log .item{color:#ffe28a}#log .hunger{color:#ffb347}#log .good{color:#9dffb0}
+#hist .plist div{padding:5px 12px;font-size:15px;line-height:1.45;border-bottom:1px solid #ffffff12}
+#hist .dmg{color:#ff9a9a}#hist .item{color:#ffe28a}#hist .hunger{color:#ffb347}#hist .good{color:#9dffb0}
+#logbtn{height:34px!important;font-size:12px!important}
 .btn{background:rgba(50,52,76,.78);color:#eee;border:2px solid #8a8aa8;border-radius:14px;font-family:inherit;font-size:24px;padding:0;margin:0;touch-action:none;-webkit-user-select:none;user-select:none;outline:none}
 .btn.on{background:rgba(120,130,200,.9);border-color:#fff}
 /* 右下：十字キー + Attack(町では「決定」) */
@@ -62,6 +68,7 @@ canvas{display:block;touch-action:none}
 <canvas id="c"></canvas>
 
 <div id="lft">
+  <button class="btn" id="logbtn">履歴</button>
   <button class="btn" id="pick"></button>
   <button class="btn" id="quick">−</button>
   <button class="btn" id="bagbtn">持物<br><small>0</small></button>
@@ -90,6 +97,11 @@ canvas{display:block;touch-action:none}
   <div class="tabs" id="whSeg"><button class="tab on" data-side="bag"></button><button class="tab" data-side="wh"></button></div>
   <div id="whMsg"></div>
   <div class="plist" id="whList"></div>
+</div>
+
+<div id="hist" class="panel" hidden>
+  <div class="phead"><span class="ptitle">メッセージ履歴</span><button class="sm" id="histClose">閉じる</button></div>
+  <div class="plist" id="histList"></div>
 </div>
 
 <div id="cfg" class="panel" hidden>
@@ -355,7 +367,10 @@ const enemyAt = (x, y) => enemies.find(e => e.x === x && e.y === y);
 const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
 const mkItem = type => ({ id: ++uid, type });
 const itemName = it => ITEMS[it.type].name;
-const uiBlocked = () => bagOpen || whOpen || cfgOpen;
+let histOpen = false, logPos = 0, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
+const msgHistory = [];
+const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
+const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen;
 function rollType() {
   const ks = Object.keys(ITEMS); let r = Math.random() * ks.reduce((s, k) => s + ITEMS[k].w, 0);
   for (const k of ks) { r -= ITEMS[k].w; if (r < 0) return k; }
@@ -365,7 +380,7 @@ function rollType() {
 // ===== 保存（倉庫・持ち物・記録）=====
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(i => i.type), bag: inv.map(i => i.type), quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(i => i.type), bag: inv.map(i => i.type), quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos }));
   } catch (_) {}
 }
 function loadGame() {
@@ -381,6 +396,7 @@ function loadGame() {
     charPref = [0, 1, 2].includes(s.charPref) ? s.charPref : 0;
     hungerPref = [0, 1].includes(s.hungerPref) ? s.hungerPref : 0;
     shadePref = [0, 1, 2].includes(s.shadePref) ? s.shadePref : 1;
+    logPos = [0, 1].includes(s.logPos) ? s.logPos : 0;
     return true;
   } catch (_) { return false; }
 }
@@ -577,7 +593,22 @@ function bumpToward(e, tx, ty) { e.bump = { dx: Math.sign(tx - e.x), dy: Math.si
 // =====================================================================
 //  ターン処理
 // =====================================================================
-function say(m) { logs.push(m); if (logs.length > 3) logs.shift(); }
+// メッセージ：1回の行動(ターン)ぶんだけ窓に出し、次の行動で消える。数秒で自動的に隠れる。全部は履歴に残る
+function say(m) {
+  if (logTurn !== turn) { logs = []; logTurn = turn; }
+  logs.push(m); if (logs.length > LOG_LINES) logs.shift();
+  msgHistory.push(m); if (msgHistory.length > HIST_MAX) msgHistory.shift();
+  logT = now();
+  clearTimeout(logTimer);
+  logTimer = setTimeout(() => { const el = $('log'); if (el.classList) el.classList.add('off'); }, LOG_MS + 50);
+}
+function msgClass(m) {
+  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /^gの攻撃|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた/.test(m) ? 'good' : '';
+}
+const logHtml = arr => arr.map(l => `<div class="${msgClass(l)}">${l}</div>`).join('');
+function openHist() { if (dead) { guardDead(); return; } if (bagOpen || whOpen || cfgOpen) return; holdStop(); histOpen = true; $('hist').hidden = false; $('histList').innerHTML = logHtml(msgHistory) || '<div>まだメッセージはありません。</div>'; const l = $('histList'); l.scrollTop = l.scrollHeight; render(); }
+function closeHist() { histOpen = false; $('hist').hidden = true; render(); }
+const toggleHist = () => (histOpen ? closeHist() : openHist());
 
 // 死亡中の入力：少し待ってから町へ。trueなら呼び出し側は何もしない
 function guardDead() {
@@ -868,6 +899,9 @@ whListEl.addEventListener('click', ev => {
 });
 whSegEl.addEventListener('click', ev => { const t = ev.target.closest('[data-side]'); if (t) { whSide = t.dataset.side; whSel = null; whMsg = ''; renderWh(); } });
 $('whClose').addEventListener('click', () => { closeWh(); render(); });
+$('logbtn').addEventListener('click', toggleHist);
+$('log').addEventListener('click', openHist);
+$('histClose').addEventListener('click', closeHist);
 
 // =====================================================================
 //  設定（自動拾い・表示サイズ・地図）と、素材（画像）の取り込み
@@ -886,6 +920,7 @@ function renderCfg() {
     `<div class="set"><span class="lab">自動拾い<br><small>踏んだだけで拾う</small></span><button class="sm" data-cfg="auto">${autoPick ? 'ON' : 'OFF'}</button></div>`,
     `<div class="set"><span class="lab">表示サイズ<br><small>絵が細かいほど「中」「大」が映える</small></span><button class="sm" data-cfg="zoom">${ZOOM_LABEL[zoomPref]}</button></div>`,
     `<div class="set"><span class="lab">キャラの大きさ<br><small>1マスより大きく描く（頭が上にはみ出す）</small></span><button class="sm" data-cfg="char">×${CHAR_K[charPref]}</button></div>`,
+    `<div class="set"><span class="lab">メッセージ窓の位置<br><small>下＝右下に表示（本家は右下に小さく出る）</small></span><button class="sm" data-cfg="logpos">${logPos ? '右下' : '上'}</button></div>`,
     `<div class="set"><span class="lab">町の判定を表示<br><small>町で、歩けない所(赤)・倉庫(緑)・入口(青)を重ねて表示。一枚絵とのズレ確認用</small></span><button class="sm" data-cfg="grid">${showGrid ? 'ON' : 'OFF'}</button></div>`,
     `<div class="set"><span class="lab">陰影（立体感）<br><small>壁の高さ・壁際の影・暗がり。絵が平らに見えるとき「強」</small></span><button class="sm" data-cfg="shade">${['なし', '標準', '強'][shadePref]}</button></div>`,
     `<div class="set"><span class="lab">満腹度の減り<br><small>「速い」は動作確認用（2ターンで1%）</small></span><button class="sm" data-cfg="hunger">${hungerPref ? '速い' : '標準'}</button></div>`,
@@ -907,6 +942,7 @@ cfgListEl.addEventListener('click', ev => {
   const a = b.dataset.cfg;
   if (a === 'auto') autoPick = !autoPick;
   else if (a === 'zoom') { zoomPref = (zoomPref + 1) % 6; resize(); }
+  else if (a === 'logpos') logPos = 1 - logPos;
   else if (a === 'grid') showGrid = !showGrid;
   else if (a === 'shade') shadePref = (shadePref + 1) % 3;
   else if (a === 'hunger') hungerPref = 1 - hungerPref;
@@ -991,7 +1027,8 @@ function refreshUI() {
   setH('bagc', `持${inv.length}/${MAXBAG}`);
   setH('belly', scene === 'dungeon' ? `<span style="color:${belly <= 10 ? '#ff6b6b' : belly <= 20 ? '#ffb347' : '#fff'}">満${belly}%</span>` : '');
   setH('hp', `HP ${player.hp}/${player.maxhp}`);
-  setH('log', logs.join('<br>'));
+  setH('log', logHtml(logs));
+  { const el = $('log'); if (el.classList) { el.classList.toggle('off', !logs.length || histOpen || now() - logT > LOG_MS); el.classList.toggle('pos-b', logPos === 1); } }
   setH('quick', quick ? `${ITEMS[quick].name}<br><small>×${inv.filter(i => i.type === quick).length}</small>` : '−');
   setH('bagbtn', `持物<br><small>${inv.length}/${MAXBAG}</small>`);
   const c = ctxInfo();
@@ -1237,10 +1274,13 @@ const KEYS = {
 };
 addEventListener('keydown', ev => {
   const k = ev.key;
+  if (k === 'Escape' && histOpen) { closeHist(); return; }
+  if (histOpen) { if (k === 'v') closeHist(); return; }
   if (k === 'Escape' && cfgOpen) { closeCfg(); renderBag(); render(); return; }
   if (cfgOpen) return;
   if (k === 'Escape' && whOpen) { closeWh(); render(); return; }
   if (whOpen) return;
+  if (k === 'v' && !bagOpen && !whOpen) { toggleHist(); return; }                                 // メッセージ履歴
   if (k === 'm' && !bagOpen) { mapMode = (mapMode + 1) % 3; saveGame(); render(); return; }   // 地図 OFF→小→大
   if (k === 'i' || k === 'Tab' || (k === 'Escape' && bagOpen)) { ev.preventDefault(); toggleBag(); return; }   // 持ち物
   if (bagOpen) return;

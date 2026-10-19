@@ -7,3 +7,6 @@
 - 町の一枚絵：`assets/town.png`（22:15）。判定は内部の22×15の格子。設定の「町の判定を表示」でズレを確認できる。
 - 絵のプロンプト：`docs/art_prompts.md` / 町の配置ガイド：`docs/town_layout_guide.png`
 - 保存：ブラウザの localStorage（URLごとに別）。
+
+## テスト（画面なしで動かす自動テスト）
+`npm i @napi-rs/canvas` のあと `node tests/harness.js index.html tests/test_mvp.js`（`ALL OK` が出れば成功）。
