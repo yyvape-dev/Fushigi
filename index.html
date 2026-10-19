@@ -1228,7 +1228,7 @@ function rigPart(g, name, x, y, ang) {
 // 武器：外部の絵があればそれを、なければ線で描いた剣・棒・斧。原点=手、上向きが刃
 function rigWeapon(g, it) {
   const d = ITEMS[it.type], ext = SPRITES[extName(it.type)];
-  if (ext && ext.width > 64) { g.save(); g.translate(0, -26); g.rotate(-Math.PI / 4); g.drawImage(ext, -32, -32, 64, 64); g.restore(); return; }   // 絵は右上向きの斜め置きを想定（仮説）
+  if (ext && ext.width > 64) { const L = it.type === 'stick' ? 64 : it.type === 'axe' ? 84 : 80; g.drawImage(ext, -L / 2, -L * 0.8, L, L); return; }   // 絵の規約：刃を真上、柄の握りは画像の下から20%・左右中央（正方形）
   g.save(); g.lineCap = 'round'; g.strokeStyle = '#2a1a0a'; g.lineWidth = 8;
   if (it.type === 'stick') { g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -48); g.stroke(); g.strokeStyle = d.fg; g.lineWidth = 5; g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -48); g.stroke(); }
   else if (it.type === 'axe') {
@@ -1243,7 +1243,7 @@ function rigWeapon(g, it) {
 }
 function rigShield(g, it) {                                      // 原点=手。腕の前に大きめに重ねる
   const d = ITEMS[it.type], ext = SPRITES[extName(it.type)];
-  if (ext && ext.width > 64) { g.drawImage(ext, -8, -34, 56, 56); return; }
+  if (ext && ext.width > 64) { g.drawImage(ext, -30, -36, 58, 58); return; }   // 絵の規約：正面向き・中央が手の位置（正方形）
   g.save(); g.translate(-2, -8); g.fillStyle = d.fg; g.strokeStyle = '#1a1a24'; g.lineWidth = 3;
   g.beginPath(); g.arc(0, 0, 24, 0, Math.PI * 2); g.fill(); g.stroke();
   g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.arc(0, 0, 15, 0, Math.PI * 2); g.fill();
