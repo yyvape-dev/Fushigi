@@ -1185,6 +1185,7 @@ function tileKey(x, y) {
 //   主人公に取り込み画像(SPRITES.player)があればそちらを優先（パーツ表示はしない）
 // =====================================================================
 const RIG_PARTS = ['head', 'torso', 'cape', 'arm_hang', 'arm_bent', 'arm_fwd', 'arm_lion', 'leg_a', 'leg_b'];
+const RIG_EXTRA = ['head_hurt', 'head_atk', 'head_dead'];      // 表情差分の頭（無ければ通常の頭で代用）
 const RIG_IMG = {};
 let rigReady = false;
 const RIG = {
@@ -1205,6 +1206,7 @@ function loadRig() {
     im.onerror = () => {};
     im.src = 'assets/rig/' + k + '.png';
   }
+  for (const k of RIG_EXTRA) { const im = new Image(); im.onload = () => { RIG_IMG[k] = im; kick(); }; im.onerror = () => {}; im.src = 'assets/rig/' + k + '.png'; }
 }
 const rigOn = () => rigReady && !SPRITES.player;
 const lerp = (a, b, u) => a + (b - a) * u;
@@ -1212,18 +1214,19 @@ const SWING_MS = 300;
 // 姿勢：歩き（移動量に同期した脚と腕の振り）／攻撃（振りかぶり→振り下ろし→戻し）
 function rigPose(e, t) {
   const ph = (e.vx + e.vy) * Math.PI, s = Math.sin(ph);
-  const P = { bob: -Math.abs(s) * 3, lean: 0, lunge: 0, head: 0, cape: s * 0.12, legA: s * 0.55, legB: -s * 0.55, sArm: -s * 0.3, wArm: s * 0.3, fwd: false, blade: 0.9 };
+  const P = { bob: -Math.abs(s) * 3, lean: 0, lunge: 0, head: 0, cape: s * 0.12, legA: s * 0.55, legB: -s * 0.55, sArm: -s * 0.3, wArm: s * 0.3, fwd: false, blade: 0.9, atk: false, fall: 0 };
   if (e.swing && t - e.swing < SWING_MS) {
     const p = (t - e.swing) / SWING_MS;
     if (p < 0.3) { const u = p / 0.3; P.wArm = lerp(0, 2.5, u); P.blade = lerp(0.9, -0.7, u); P.lean = -0.12 * u; P.head = -0.06 * u; }
     else if (p < 0.55) { const u = (p - 0.3) / 0.25; P.wArm = lerp(2.5, -0.9, u); P.blade = lerp(-0.7, 1.9, u); P.lean = lerp(-0.12, 0.2, u); P.lunge = 10 * u; P.head = lerp(-0.06, 0.08, u); }
     else { const u = (p - 0.55) / 0.45; P.wArm = lerp(-0.9, 0, u); P.blade = lerp(1.9, 0.9, u); P.lean = lerp(0.2, 0, u); P.lunge = 10 * (1 - u); P.head = lerp(0.08, 0, u); }
-    P.legA = P.legB = 0; P.sArm = -P.lean * 2; P.bob = 0; P.cape = -P.lean * 1.5;
+    P.legA = P.legB = 0; P.sArm = -P.lean * 2; P.bob = 0; P.cape = -P.lean * 1.5; P.atk = p < 0.8;
   }
+  if (dead && e === player) { P.fall = Math.min(1.4, Math.max(0, (t - deadAt) / 300 * 1.4)); P.legA = P.legB = P.sArm = P.wArm = 0; P.bob = 0; }
   return P;
 }
 function rigPart(g, name, x, y, ang) {
-  const d = RIG.part[name]; g.save(); g.translate(x, y); g.rotate(ang); g.scale(d.s, d.s); g.drawImage(RIG_IMG[name], -d.px, -d.py); g.restore();
+  const base = name.startsWith('head') ? 'head' : name, d = RIG.part[base]; g.save(); g.translate(x, y); g.rotate(ang); g.scale(d.s, d.s); g.drawImage(RIG_IMG[name] || RIG_IMG[base], -d.px, -d.py); g.restore();
 }
 // 武器：外部の絵があればそれを、なければ線で描いた剣・棒・斧。原点=手、上向きが刃
 function rigWeapon(g, it) {
@@ -1252,7 +1255,8 @@ function rigShield(g, it) {                                      // 原点=手�
 // 足元中央 (fx,fy) に高さ h で描く
 function drawRig(g, fx, fy, h, e, t) {
   const P = rigPose(e, t), u = h / RIG.H;
-  g.save(); g.translate(fx, fy); g.scale(u, u); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  g.save(); g.translate(fx, fy); g.scale(u, u); g.rotate(-P.fall); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';   // 力尽きると後ろへ倒れる
+  const headNm = dead && e === player ? 'head_dead' : (hurtT && t - hurtT < 450) ? 'head_hurt' : P.atk ? 'head_atk' : 'head';
   rigPart(g, 'leg_a', -13, RIG.legY, P.legA);                    // 奥の脚→手前の脚
   rigPart(g, 'leg_b', 14, RIG.legY, P.legB);
   g.save(); g.translate(P.lunge, RIG.hipY + P.bob); g.rotate(P.lean);
@@ -1275,7 +1279,7 @@ function drawRig(g, fx, fy, h, e, t) {
   rigPart(g, 'torso', 0, 0, 0);
   farArm(true);                                                   // 盾は胴の手前に見せる
   if (!headFirst) nearArm();
-  rigPart(g, 'head', RIG.neck[0], RIG.neck[1], P.head);
+  rigPart(g, headNm, RIG.neck[0], RIG.neck[1], P.head);
   if (headFirst) nearArm();
   g.restore(); g.restore();
 }
@@ -1459,6 +1463,7 @@ function stepVis(dt) {
 function animating(t) {
   if (t - fadeT < 350 || (hurtT && t - hurtT < 260) || fx.length) return true;
   if (player.swing && t - player.swing < SWING_MS) return true;
+  if (dead && t - deadAt < 350) return true;
   return [player, ...enemies].some(e => Math.abs(e.x - e.vx) > 0.001 || Math.abs(e.y - e.vy) > 0.001 || e.bump || e.flash > t);
 }
 function frame() {

@@ -377,6 +377,12 @@
     const P0 = rigPose({ vx: 0, vy: 0, swing: 0 }, 0), P1 = rigPose({ vx: 0.5, vy: 0 }, 0);
     ok('rig: walking swings legs, idle does not', Math.abs(P0.legA) < 1e-9 && Math.abs(P1.legA) > 0.3);
     const Ps = rigPose({ vx: 0, vy: 0, swing: 1000 }, 1000 + SWING_MS * 0.4); ok('rig: strike phase lunges and leans', Ps.lunge > 0 && Ps.lean > 0);
+    { const Pa = rigPose({ vx: 0, vy: 0, swing: 1000 }, 1000 + SWING_MS * 0.4), Pi = rigPose({ vx: 0, vy: 0, swing: 0 }, 5000);
+      ok('rig: attack face only during swing', Pa.atk === true && Pi.atk === false);
+      const dSave = dead, daSave = deadAt; dead = true; deadAt = 1000; const Pd = rigPose(player, 1000 + 300);
+      ok('rig: death makes the body fall backward', Pd.fall > 1.3); dead = dSave; deadAt = daSave;
+      RIG_IMG.head_hurt = RIG_IMG.head; hurtT = now(); player.swing = 0; player.fl = false; let t3 = null; try { render(); dead = true; deadAt = now() - 500; render(); } catch (e) { t3 = e; } dead = false; hurtT = 0;
+      ok('rig: hurt/dead faces draw (and fall back when extra heads are missing)', !t3); delete RIG_IMG.head_hurt; }
     player.swing = 0; rigReady = false; for (const k of RIG_PARTS) delete RIG_IMG[k]; eqWeapon = eqShield = null; render(); ok('rig: falls back to flat sprite when not loaded', !rigOn()); }
   ok('log position default is bottom-right', logPos === 1);
   DUNGEONS.first.floors = 3; toTown(false);
