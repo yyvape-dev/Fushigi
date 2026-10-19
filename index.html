@@ -1181,7 +1181,7 @@ function tileKey(x, y) {
 // =====================================================================
 //  パーツで動く主人公（切り絵リグ）：assets/rig/*.png の9パーツを回転させて描く
 //   全身絵が無くても、歩き・攻撃・装備（剣と盾が手に付く）を表現できる。
-//   座標は「足元中央=原点・y上がマイナス・全身の高さ≒262」の独自単位。part: s=倍率 px,py=回転の支点（パーツ画像内の座標） hx,hy=手の位置
+//   座標は「足元中央=原点・y上がマイナス・全身の高さ≒252」の独自単位。part: s=倍率 px,py=回転の支点（パーツ画像内の座標） hx,hy=手の位置
 //   主人公に取り込み画像(SPRITES.player)があればそちらを優先（パーツ表示はしない）
 // =====================================================================
 const RIG_PARTS = ['head', 'torso', 'cape', 'arm_hang', 'arm_bent', 'arm_fwd', 'arm_lion', 'leg_a', 'leg_b'];
@@ -1189,12 +1189,12 @@ const RIG_EXTRA = ['head_hurt', 'head_atk', 'head_dead'];      // 表情差分�
 const RIG_IMG = {};
 let rigReady = false;
 const RIG = {
-  H: 262, hipY: -62, legY: -69, neck: [0, -97], shL: [-27, -81], shR: [46, -82],
+  H: 252, hipY: -58, legY: -64, neck: [0, -72], shL: [-21, -61], shR: [39, -62],
   part: {
-    head: { s: 0.54, px: 118, py: 178 }, torso: { s: 0.62, px: 89, py: 170 }, cape: { s: 0.62, px: 97, py: 22 },
-    arm_hang: { s: 0.55, px: 62, py: 20, hx: 55, hy: 160 }, arm_fwd: { s: 0.55, px: 32, py: 18, hx: 148, hy: 138 },
-    arm_bent: { s: 0.55, px: 115, py: 128, hx: 55, hy: 18 }, arm_lion: { s: 0.55, px: 42, py: 38, hx: 65, hy: 172 },
-    leg_a: { s: 0.38, px: 60, py: 12 }, leg_b: { s: 0.44, px: 50, py: 15 },
+    head: { s: 0.68, px: 118, py: 178 }, torso: { s: 0.47, px: 89, py: 170 }, cape: { s: 0.47, px: 97, py: 22 },
+    arm_hang: { s: 0.38, px: 62, py: 20, hx: 55, hy: 160 }, arm_fwd: { s: 0.38, px: 32, py: 18, hx: 148, hy: 138 },
+    arm_bent: { s: 0.38, px: 115, py: 128, hx: 55, hy: 18 }, arm_lion: { s: 0.38, px: 42, py: 38, hx: 65, hy: 172 },
+    leg_a: { s: 0.34, px: 60, py: 12 }, leg_b: { s: 0.385, px: 50, py: 15 },
   },
 };
 function loadRig() {
@@ -1231,7 +1231,7 @@ function rigPart(g, name, x, y, ang) {
 // 武器：外部の絵があればそれを、なければ線で描いた剣・棒・斧。原点=手、上向きが刃
 function rigWeapon(g, it) {
   const d = ITEMS[it.type], ext = SPRITES[extName(it.type)];
-  if (ext && ext.width > 64) { const L = it.type === 'stick' ? 64 : it.type === 'axe' ? 84 : 80; g.drawImage(ext, -L / 2, -L * 0.8, L, L); return; }   // 絵の規約：刃を真上、柄の握りは画像の下から20%・左右中央（正方形）
+  if (ext && ext.width > 64) { const L = it.type === 'stick' ? 56 : it.type === 'axe' ? 72 : 68; g.drawImage(ext, -L / 2, -L * 0.8, L, L); return; }   // 絵の規約：刃を真上、柄の握りは画像の下から20%・左右中央（正方形）
   g.save(); g.lineCap = 'round'; g.strokeStyle = '#2a1a0a'; g.lineWidth = 8;
   if (it.type === 'stick') { g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -48); g.stroke(); g.strokeStyle = d.fg; g.lineWidth = 5; g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -48); g.stroke(); }
   else if (it.type === 'axe') {
@@ -1246,7 +1246,7 @@ function rigWeapon(g, it) {
 }
 function rigShield(g, it) {                                      // 原点=手。腕の前に大きめに重ねる
   const d = ITEMS[it.type], ext = SPRITES[extName(it.type)];
-  if (ext && ext.width > 64) { g.drawImage(ext, -30, -36, 58, 58); return; }   // 絵の規約：正面向き・中央が手の位置（正方形）
+  if (ext && ext.width > 64) { g.drawImage(ext, -24, -30, 46, 46); return; }   // 絵の規約：正面向き・中央が手の位置（正方形）
   g.save(); g.translate(-2, -8); g.fillStyle = d.fg; g.strokeStyle = '#1a1a24'; g.lineWidth = 3;
   g.beginPath(); g.arc(0, 0, 24, 0, Math.PI * 2); g.fill(); g.stroke();
   g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.arc(0, 0, 15, 0, Math.PI * 2); g.fill();
@@ -1257,8 +1257,8 @@ function drawRig(g, fx, fy, h, e, t) {
   const P = rigPose(e, t), u = h / RIG.H;
   g.save(); g.translate(fx, fy); g.scale(u, u); g.rotate(-P.fall); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';   // 力尽きると後ろへ倒れる
   const headNm = dead && e === player ? 'head_dead' : (hurtT && t - hurtT < 450) ? 'head_hurt' : P.atk ? 'head_atk' : 'head';
-  rigPart(g, 'leg_a', -13, RIG.legY, P.legA);                    // 奥の脚→手前の脚
-  rigPart(g, 'leg_b', 14, RIG.legY, P.legB);
+  rigPart(g, 'leg_a', -10, RIG.legY, P.legA);                    // 奥の脚→手前の脚
+  rigPart(g, 'leg_b', 11, RIG.legY, P.legB);
   g.save(); g.translate(P.lunge, RIG.hipY + P.bob); g.rotate(P.lean);
   rigPart(g, 'cape', RIG.neck[0], RIG.neck[1] + 4, P.cape);       // マント（胴の後ろ）
   const headFirst = P.wArm > 1.2;                                // 手前の腕（キャラの右腕・画面左・武器側）を高く振りかぶったときだけ、頭の手前に出す（元絵と同じ）
