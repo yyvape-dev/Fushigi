@@ -9,7 +9,7 @@ html,body{margin:0;height:100%;background:#0d0d12;color:#ddd;font-family:monospa
 canvas{display:block;touch-action:none}
 #hud{position:fixed;top:0;left:0;right:0;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;background:#000b;z-index:2;font-size:15px;pointer-events:none}
 #hp{color:#ff7a7a}
-#log{position:fixed;top:36px;left:8px;max-width:min(62%,330px);padding:6px 10px;font-size:15px;line-height:1.4;z-index:2;background:rgba(8,10,24,.62);border:1px solid rgba(255,255,255,.28);border-radius:8px;transition:opacity .35s;text-shadow:0 1px 2px #000;opacity:1}
+#log{position:fixed;top:36px;left:8px;max-width:min(62%,330px);padding:6px 10px;font-size:15px;line-height:1.4;z-index:2;background:rgba(8,10,24,.62);border:1px solid rgba(255,255,255,.28);border-radius:8px;transition:opacity .35s;text-shadow:0 1px 2px #000;opacity:1;pointer-events:none}
 #log.pos-b{top:auto;left:auto;right:max(12px,env(safe-area-inset-right));bottom:max(200px,calc(env(safe-area-inset-bottom) + 194px))}
 #log.off{opacity:0;pointer-events:none}
 #log .dmg{color:#ff9a9a}#log .item{color:#ffe28a}#log .hunger{color:#ffb347}#log .good{color:#9dffb0}
@@ -958,7 +958,6 @@ whListEl.addEventListener('click', ev => {
 whSegEl.addEventListener('click', ev => { const t = ev.target.closest('[data-side]'); if (t) { whSide = t.dataset.side; whSel = null; whMsg = ''; renderWh(); } });
 $('whClose').addEventListener('click', () => { closeWh(); render(); });
 $('logbtn').addEventListener('click', toggleHist);
-$('log').addEventListener('click', openHist);
 $('histClose').addEventListener('click', closeHist);
 
 // =====================================================================
