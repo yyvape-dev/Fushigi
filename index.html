@@ -453,6 +453,7 @@ let scene = 'town';               // 'town' | 'dungeon'
 let dungeonId = 'first';
 let map, rooms, player, enemies = [], floorItems = [], inv = [], wh = [], quick, floorNo, turn, dead, deadAt, vis, seen, logs = [];
 let clears = 0, deaths = 0;
+let rigPref = 0;                  // 主人公の表示：0=パーツで動く 1=1枚絵（取り込んだ絵があるときはこちらを選ぶ）
 let gift = false;                 // お試し装備を倉庫に配ったか（1回だけ）
 let eqWeapon = null, eqShield = null;   // 装備中の武器・盾（持ち物の中の1個を指す）
 let autoPick = false;             // 自動拾い（既定OFF：踏んでも拾わず、足元に載るだけ）
@@ -496,7 +497,7 @@ function rollType() {
 // ===== 保存（倉庫・持ち物・記録）=====
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], gift, quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], gift, quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref }));
   } catch (_) {}
 }
 function loadGame() {
@@ -514,6 +515,7 @@ function loadGame() {
     zoomPref = [0, 1, 2, 3, 4, 5].includes(s.zoomPref) ? s.zoomPref : 0;
     charPref = [0, 1, 2].includes(s.charPref) ? s.charPref : 0;
     hungerPref = [0, 1].includes(s.hungerPref) ? s.hungerPref : 0;
+    rigPref = [0, 1].includes(s.rigPref) ? s.rigPref : 0;
     shadePref = [0, 1, 2].includes(s.shadePref) ? s.shadePref : 1;
     logPos = [0, 1].includes(s.logPos) ? s.logPos : 1;
     return true;
@@ -1063,6 +1065,7 @@ function renderCfg() {
     `<div class="set"><span class="lab">キャラの大きさ<br><small>1マスより大きく描く（頭が上にはみ出す）</small></span><button class="sm" data-cfg="char">×${CHAR_K[charPref]}</button></div>`,
     `<div class="set"><span class="lab">メッセージ窓の位置<br><small>下＝右下に表示（本家は右下に小さく出る）</small></span><button class="sm" data-cfg="logpos">${logPos ? '右下' : '上'}</button></div>`,
     `<div class="set"><span class="lab">町の判定を表示<br><small>町で、歩けない所(赤)・倉庫(緑)・入口(青)を重ねて表示。一枚絵とのズレ確認用</small></span><button class="sm" data-cfg="grid">${showGrid ? 'ON' : 'OFF'}</button></div>`,
+    `<div class="set"><span class="lab">主人公の表示<br><small>パーツ＝歩き・攻撃・装備が動く／1枚絵＝取り込んだ絵をそのまま表示</small></span><button class="sm" data-cfg="rig">${rigPref ? '1枚絵' : 'パーツ'}</button></div>`,
     `<div class="set"><span class="lab">陰影（立体感）<br><small>壁の高さ・壁際の影・暗がり。絵が平らに見えるとき「強」</small></span><button class="sm" data-cfg="shade">${['なし', '標準', '強'][shadePref]}</button></div>`,
     `<div class="set"><span class="lab">満腹度の減り<br><small>「速い」は動作確認用（2ターンで1%）</small></span><button class="sm" data-cfg="hunger">${hungerPref ? '速い' : '標準'}</button></div>`,
     `<div class="set"><span class="lab">地図<br><small>画面の地図をタップで 小⇔大</small></span><button class="sm" data-cfg="map">${MAP_LABEL[mapMode]}</button></div>`,
@@ -1086,6 +1089,7 @@ cfgListEl.addEventListener('click', ev => {
   else if (a === 'logpos') logPos = 1 - logPos;
   else if (a === 'grid') showGrid = !showGrid;
   else if (a === 'shade') shadePref = (shadePref + 1) % 3;
+  else if (a === 'rig') rigPref = rigPref ? 0 : 1;
   else if (a === 'hunger') hungerPref = 1 - hungerPref;
   else if (a === 'char') charPref = (charPref + 1) % 3;
   else if (a === 'map') mapMode = (mapMode + 1) % 3;
@@ -1187,7 +1191,7 @@ function tileKey(x, y) {
 //  パーツで動く主人公（切り絵リグ）：assets/rig/*.png の9パーツを回転させて描く
 //   全身絵が無くても、歩き・攻撃・装備（剣と盾が手に付く）を表現できる。
 //   座標は「足元中央=原点・y上がマイナス・全身の高さ≒252」の独自単位。part: s=倍率 px,py=回転の支点（パーツ画像内の座標） hx,hy=手の位置
-//   主人公に取り込み画像(SPRITES.player)があればそちらを優先（パーツ表示はしない）
+//   設定の「主人公の表示」で、パーツ表示と1枚絵（取り込み画像）を切り替える
 // =====================================================================
 const RIG_PARTS = ['head', 'torso', 'cape', 'arm_hang', 'arm_bent', 'arm_fwd', 'arm_lion', 'leg_a', 'leg_b'];
 const RIG_EXTRA = ['head_hurt', 'head_atk', 'head_dead'];      // 表情差分の頭（無ければ通常の頭で代用）
@@ -1213,7 +1217,7 @@ function loadRig() {
   }
   for (const k of RIG_EXTRA) { const im = new Image(); im.onload = () => { RIG_IMG[k] = im; kick(); }; im.onerror = () => {}; im.src = 'assets/rig/' + k + '.png'; }
 }
-const rigOn = () => rigReady && !SPRITES.player;
+const rigOn = () => rigReady && rigPref === 0;
 const lerp = (a, b, u) => a + (b - a) * u;
 const SWING_MS = 300;
 // 姿勢：歩き（移動量に同期した脚と腕の振り）／攻撃（振りかぶり→振り下ろし→戻し）
