@@ -400,6 +400,26 @@
     const n0 = wh.length; boot(); ok('gift: not given twice after save/load', wh.length === n0 || wh.length === n0);
     scene = 'town'; toTown(false); player.x = 11; player.y = 9; snapVis(); player.swing = 0; playerAttack(); ok('town: attack button does a practice swing (no turn)', player.swing > 0); }
   ok('log position default is bottom-right', logPos === 1);
+  // ===== 追加：戦闘の演出（斬撃・火花・揺れ）=====
+  { const fresh = () => { scene = 'dungeon'; floorNo = 1; newFloor(); dead = false; vfx.length = 0; shakeAmp = 0; };
+    const spawnAdj = () => { const e = enemies[0] || (enemies.push({ kind: 'goblin', hp: 99, maxhp: 99 }), enemies[0]); const p = [[1, 0], [-1, 0], [0, 1], [0, -1]].find(([dx, dy]) => geomOK(player.x, player.y, dx, dy)) || [1, 0]; e.x = e.vx = player.x + p[0]; e.y = e.vy = player.y + p[1]; e.hp = e.maxhp = 99; e.bump = null; return e; };
+    ok('vfx: default is 標準', vfxPref === 1);
+    fresh(); vfxPref = 1; let e = spawnAdj(); hitEnemy(e);
+    ok('vfx: a hit spawns a slash and sparks', vfx.some(v => v.kind === 'slash') && vfx.filter(v => v.kind === 'spark').length >= 4);
+    ok('vfx: a hit shakes the screen and keeps animating', shakeAmp > 0 && animating(now()));
+    let thr = null; try { for (const dt of [0, 80, 150, 250, 400]) { for (const v of vfx) v.t0 -= dt; shakeT0 -= dt; draw(); } } catch (er) { thr = er; console.log(er); }
+    ok('vfx: draws across its whole lifetime without error', !thr);
+    fresh(); e = spawnAdj(); hitEnemy(e); for (const v of vfx) v.t0 -= 200; shakeT0 -= 40; fadeT = -1e9; draw(); __savePng(out("shot_vfx_hit.png"));
+    fresh(); vfxPref = 2; e = spawnAdj(); e.hp = 1; hitEnemy(e); const strong = vfx.length, amp2 = shakeAmp;
+    fresh(); vfxPref = 1; e = spawnAdj(); e.hp = 1; hitEnemy(e);
+    ok('vfx: 強 gives more sparks and a bigger shake than 標準', strong > vfx.length && amp2 > shakeAmp);
+    fresh(); vfxPref = 0; e = spawnAdj(); hitEnemy(e);
+    ok('vfx: なし spawns nothing and does not shake', vfx.length === 0 && shakeAmp === 0);
+    fresh(); vfxPref = 1; e = spawnAdj(); e.hp = 99; player.hp = player.maxhp = 50; enemyTurn();
+    ok('vfx: an enemy hit on the player spawns a slash on the player', vfx.some(v => v.kind === 'slash' && v.x === player.x && v.y === player.y));
+    for (const v of vfx) v.t0 -= 5000; shakeT0 -= 5000; draw();
+    ok('vfx: expired effects are removed and the shake settles', vfx.length === 0 && shakeAmp === 0);
+    vfxPref = 2; saveGame(); vfxPref = 1; loadGame(); ok('vfx: pref saved and loaded', vfxPref === 2); vfxPref = 1; toTown(false); }
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
 })();
