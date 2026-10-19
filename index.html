@@ -1188,7 +1188,7 @@ const RIG_PARTS = ['head', 'torso', 'cape', 'arm_hang', 'arm_bent', 'arm_fwd', '
 const RIG_IMG = {};
 let rigReady = false;
 const RIG = {
-  H: 262, hipY: -62, legY: -69, neck: [0, -97], shL: [-27, -81], shR: [32, -81],
+  H: 262, hipY: -62, legY: -69, neck: [0, -97], shL: [-27, -81], shR: [46, -82],
   part: {
     head: { s: 0.54, px: 118, py: 178 }, torso: { s: 0.62, px: 89, py: 170 }, cape: { s: 0.62, px: 97, py: 22 },
     arm_hang: { s: 0.55, px: 62, py: 20, hx: 55, hy: 160 }, arm_fwd: { s: 0.55, px: 32, py: 18, hx: 148, hy: 138 },
@@ -1257,21 +1257,26 @@ function drawRig(g, fx, fy, h, e, t) {
   rigPart(g, 'leg_b', 14, RIG.legY, P.legB);
   g.save(); g.translate(P.lunge, RIG.hipY + P.bob); g.rotate(P.lean);
   rigPart(g, 'cape', RIG.neck[0], RIG.neck[1] + 4, P.cape);       // マント（胴の後ろ）
-  const headFirst = P.wArm > 1.2;                                // 腕を高く振りかぶったときだけ、奥の腕を頭の手前に出す（元絵と同じ）
-  const farArm = (arm, weapon) => {                               // 奥の腕（画面左・武器側）。腕はふだん胴の後ろ、武器は手前に見せる
-    const nm = P.fwd ? 'arm_fwd' : 'arm_hang', d = RIG.part[nm];
-    g.save(); g.translate(RIG.shL[0], RIG.shL[1]); g.rotate(P.wArm); if (arm) rigPart(g, nm, 0, 0, 0);
-    if (weapon && eqWeapon) { g.save(); g.translate((d.hx - d.px) * d.s, (d.hy - d.py) * d.s); g.rotate(P.blade - P.lean - P.wArm); rigWeapon(g, eqWeapon); g.restore(); }
+  const headFirst = P.wArm > 1.2;                                // 手前の腕（キャラの右腕・画面左・武器側）を高く振りかぶったときだけ、頭の手前に出す（元絵と同じ）
+  const dL = RIG.part.arm_lion;                                   // 奥の腕（キャラの左腕・画面右・盾側・獅子の肩当て）：胴の後ろ。肩当ては胴の外に出る
+  const farArm = shield => {
+    g.save(); g.translate(RIG.shR[0], RIG.shR[1]); g.rotate(P.sArm);
+    if (!shield) rigPart(g, 'arm_lion', 0, 0, 0);
+    else if (eqShield) { g.translate((dL.hx - dL.px) * dL.s, (dL.hy - dL.py) * dL.s); g.rotate(-P.lean - P.sArm); rigShield(g, eqShield); }
     g.restore();
   };
-  if (!headFirst) farArm(true, false);
+  const nearArm = () => {                                         // 手前の腕＋武器
+    const nm = P.fwd ? 'arm_fwd' : 'arm_hang', d = RIG.part[nm];
+    g.save(); g.translate(RIG.shL[0], RIG.shL[1]); g.rotate(P.wArm); rigPart(g, nm, 0, 0, 0);
+    if (eqWeapon) { g.save(); g.translate((d.hx - d.px) * d.s, (d.hy - d.py) * d.s); g.rotate(P.blade - P.lean - P.wArm); rigWeapon(g, eqWeapon); g.restore(); }
+    g.restore();
+  };
+  farArm(false);
   rigPart(g, 'torso', 0, 0, 0);
-  { const d = RIG.part.arm_lion;                                  // 手前の腕（画面右・盾側。獅子の肩当て）
-    g.save(); g.translate(RIG.shR[0], RIG.shR[1]); g.rotate(P.sArm); rigPart(g, 'arm_lion', 0, 0, 0);
-    if (eqShield) { g.save(); g.translate((d.hx - d.px) * d.s, (d.hy - d.py) * d.s); g.rotate(-P.lean - P.sArm); rigShield(g, eqShield); g.restore(); }
-    g.restore(); }
+  farArm(true);                                                   // 盾は胴の手前に見せる
+  if (!headFirst) nearArm();
   rigPart(g, 'head', RIG.neck[0], RIG.neck[1], P.head);
-  farArm(headFirst, true);
+  if (headFirst) nearArm();
   g.restore(); g.restore();
 }
 // キャラを1体描く：パーツ表示が使えるときは主人公だけパーツで、それ以外は1枚絵
