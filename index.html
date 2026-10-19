@@ -151,14 +151,30 @@ const MAXBELLY = 100, HUNGER_TURNS = [10, 2];
 // ダンジョン定義：floors を増やせば多階層になる（最終階の階段 = 踏破）
 const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 5 } };
 
+// 草の回復：HPが満タンなら、回復のかわりに最大HPが上がる（本家と同じ）。cure: 0=なし 1=混乱だけ 2=悪い状態すべて
+function healHerb(label, heal, up, cure) {
+  return () => {
+    const s = player.st;
+    if (cure === 1 && s.confuse > 0) { s.confuse = 0; say('混乱が治った。'); } else if (cure === 2 && cureBad()) say('悪い状態が治った。');
+    if (player.hp >= player.maxhp) {
+      player.maxhp += up; player.hp = player.maxhp; fxText(player.x, player.y, '最大HP+' + up, '#ffe28a');
+      say(`${label}を食べた。最大HPが${up}増えた！`); return true;
+    }
+    const before = player.hp; player.hp = Math.min(player.maxhp, player.hp + heal);
+    fxText(player.x, player.y, '+' + (player.hp - before), '#7bff9a');
+    say(`${label}を食べた。HP+${player.hp - before}`); return true;
+  };
+}
+
 // =====================================================================
 //  アイテム定義：新アイテムはここに1項目足すだけ
-//  cat:タブ分類 / ch,fg:絵が無いときの仮表示 / w:床に出る重み / use():効果があれば true（消費してターン経過）、無効なら false
+//  cat:タブ分類 / ch,fg:絵が無いときの仮表示 / w:床に出る重み / from:出始める階 / use():効果があれば true（消費してターン経過）、無効なら false
+//  equip:'weapon'|'shield'|'ring' / seal:武器・盾の印（効果は wSeal()/sSeal() の判定側に書く）
 //  絵：assets/<キー>.png を置く（または ITEM_ART にドット絵を足す）
 // =====================================================================
 const ITEMS = {
   potion: {
-    name: '回復薬', cat: '薬', ch: '!', fg: '#ff6ad5', w: 10, desc: 'HPを10回復する。',
+    name: '回復薬', cat: '薬', ch: '!', fg: '#ff6ad5', w: 12, desc: 'HPを10回復する。',
     use() {
       if (player.hp >= player.maxhp) { say('HPは満タンだ。'); return false; }
       const before = player.hp; player.hp = Math.min(player.maxhp, player.hp + 10);
@@ -171,51 +187,121 @@ const ITEMS = {
   axe: { name: '大斧', cat: '武器', ch: 'Ƭ', fg: '#e8b080', w: 1, equip: 'weapon', atk: 5, desc: '武器。攻撃+5。強化値の分だけさらに強くなる。' },
   woodshield: { name: '木の盾', cat: '盾', ch: ')', fg: '#b88a50', w: 3, equip: 'shield', def: 1, desc: '盾。受けるダメージ-1。強化値の分だけさらに減る。' },
   ironshield: { name: '鉄の盾', cat: '盾', ch: ']', fg: '#c8d4e4', w: 2, equip: 'shield', def: 2, desc: '盾。受けるダメージ-2。強化値の分だけさらに減る。' },
-  scroll: {
-    name: '強化の巻物', cat: '巻物', ch: '≡', fg: '#ffe9a8', w: 4, desc: '装備中の武器（なければ盾）の強化値を+1する。',
-    use() {
-      const t = eqWeapon || eqShield;
-      if (!t) { say('装備していないので効果がなかった。'); return false; }
-      t.plus++; fxText(player.x, player.y, '+1', '#ffe28a');
-      say(`${itemName(t)}が光った！ 強化値+1`); return true;
-    },
-  },
-  herb: {
-    name: '薬草', cat: '草', ch: '♣', fg: '#7bdc7b', w: 8, desc: 'HPを6回復する。',
-    use() {
-      if (player.hp >= player.maxhp) { say('HPは満タンだ。'); return false; }
-      const before = player.hp; player.hp = Math.min(player.maxhp, player.hp + 6);
-      fxText(player.x, player.y, '+' + (player.hp - before), '#7bff9a');
-      say(`薬草を食べた。HP+${player.hp - before}`); return true;
-    },
-  },
+  // ===== 草（食べる）。本家シレン6の草を、このゲームの体力の規模（最大HP20）に合わせて数値を縮めたもの =====
+  weed: { name: '雑草', cat: '草', ch: '♣', fg: '#8a9a7a', w: 1, desc: '食べても何も起こらない。', use() { say('雑草を食べた。…何も起こらなかった。'); return true; } },
+  herb: { name: '薬草', cat: '草', ch: '♣', fg: '#7bdc7b', w: 10, desc: 'HPを6回復する。HPが満タンなら最大HPが1増える。', use: healHerb('薬草', 6, 1, 0) },
+  outogiri: { name: '弟切草', cat: '草', ch: '♣', fg: '#a8e86a', w: 5, from: 2, desc: 'HPを15回復し、混乱が治る。満タンなら最大HPが2増える。', use: healHerb('弟切草', 15, 2, 1) },
+  iyashi: { name: 'いやし草', cat: '草', ch: '♣', fg: '#5fe0c0', w: 3, from: 3, desc: 'HPを30回復し、悪い状態がすべて治る。満タンなら最大HPが3増える。', use: healHerb('いやし草', 30, 3, 2) },
   lifeherb: {
-    name: '命の草', cat: '草', ch: '♣', fg: '#ffd84a', w: 1, desc: '最大HPが3増え、HPも3回復する。',
+    name: '命の草', cat: '草', ch: '♣', fg: '#ffd84a', w: 1, from: 2, desc: '最大HPが3増え、HPも3回復する。',
     use() {
       player.maxhp += 3; player.hp += 3; fxText(player.x, player.y, '最大HP+3', '#ffe28a');
       say('命の草を食べた。最大HPが3増えた！'); return true;
     },
   },
-  firestaff: {
-    name: '火の杖', cat: '杖', ch: '/', fg: '#ff7a3a', w: 2, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵に8ダメージ。[ ]は残り回数。',
-    use() { const t = zapTarget(); if (!t) return true; zapHit(t.e, 8, '火の玉'); return true; },
+  kaguwashi: {
+    name: 'かぐわし草', cat: '草', ch: '♣', fg: '#c8f0a0', w: 2, from: 2, desc: '悪い状態（混乱・睡眠・目つぶし・くちなし・ちから低下）が治る。',
+    use() { if (!cureBad()) { say('悪い状態ではなかった。'); return false; } say('かぐわし草を食べた。悪い状態が治った！'); return true; },
   },
-  blowstaff: {
-    name: '吹き飛ばしの杖', cat: '杖', ch: '/', fg: '#7ac8ff', w: 2, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵を最大5マス吹き飛ばす。',
+  antidoteherb: {
+    name: '毒消し草', cat: '草', ch: '♣', fg: '#b0e0ff', w: 2, from: 2, desc: 'ちから低下が治り、悪い状態がすべて治る。',
+    use() { if (!cureBad()) { say('悪い状態ではなかった。'); return false; } say('毒消し草を食べた。すっきりした！'); return true; },
+  },
+  reviveherb: {
+    name: '復活の草', cat: '草', ch: '♣', fg: '#fff2a0', w: 1, from: 3, desc: '持っているだけで、力尽きたときに自動で生き返る（HP全回復）。使うと雑草になる。',
+    use() { say('復活の草は、持っているだけで効果がある。'); return false; },
+  },
+  bellyup: {
+    name: '胃拡張の種', cat: '草', ch: '•', fg: '#ffb86a', w: 1, from: 2, desc: 'この冒険の間、最大満腹度が5増える。',
+    use() { bellyBonus += 5; say(`胃拡張の種を食べた。最大満腹度が${maxBelly()}%になった。`); return true; },
+  },
+  bellydown: {
+    name: '胃縮小の種', cat: '草', ch: '•', fg: '#9a8aa8', w: 1, from: 2, desc: 'この冒険の間、最大満腹度が5減る。',
+    use() { bellyBonus -= 5; belly = Math.min(belly, maxBelly()); say(`胃縮小の種を食べた。最大満腹度が${maxBelly()}%になった。`); return true; },
+  },
+  dragonherb: {
+    name: 'ドラゴン草', cat: '草', ch: '♣', fg: '#ff6a3a', w: 2, from: 3, desc: '食べると、向いている方向へ炎を吐いて最初の敵に12〜15ダメージ。',
+    use() { const t = zapTarget(); if (!t) return true; zapHit(t.e, rnd(12, 15), '炎'); return true; },
+  },
+  warpherb: {
+    name: '高飛び草', cat: '草', ch: '♣', fg: '#9ad8ff', w: 3, from: 2, desc: '食べると、この階のどこかの部屋へワープする。',
+    use() { if (scene !== 'dungeon') { say('ここでは使えない。'); return false; } warpPlayer(); say('高飛び草を食べた。どこかへ飛んだ！'); return true; },
+  },
+  strherb: {
+    name: 'ちからの草', cat: '草', ch: '♣', fg: '#ff9a5a', w: 2, from: 3, desc: 'この冒険の間、攻撃力が1上がる。ちから低下も治る。（本家は「ちから」の最大値が上がる。ここでは攻撃力で代用）',
+    use() { atkUp++; player.st.weak = 0; fxText(player.x, player.y, '攻撃+1', '#ffb06b'); say('ちからの草を食べた。力がみなぎる！'); return true; },
+  },
+  poisonherb: {
+    name: '毒草', cat: '草', ch: '♣', fg: '#9a4ad8', w: 2, from: 2, desc: '食べると5ダメージを受け、40ターンの間ちからが下がる（攻撃力-2）。',
+    use() { say('毒草を食べた。ぐっ…！'); addStatus('weak', 40); hurtPlayer(5, `毒にやられて力尽きた…（${floorNo}階）`); return true; },
+  },
+  confherb: {
+    name: '混乱草', cat: '草', ch: '♣', fg: '#ffa0e0', w: 2, from: 2, desc: '食べると20ターン混乱する。移動や攻撃の向きがでたらめになる。',
+    use() { say('混乱草を食べた。頭がぐるぐるする…'); addStatus('confuse', 20); return true; },
+  },
+  sleepherb: {
+    name: '睡眠草', cat: '草', ch: '♣', fg: '#7a7ad8', w: 2, from: 2, desc: '食べると5ターン眠る。眠っている間は行動できない。',
+    use() { say('睡眠草を食べた。意識が遠のく…'); addStatus('sleep', 5); return true; },
+  },
+  blindherb: {
+    name: '目つぶし草', cat: '草', ch: '♣', fg: '#444466', w: 2, from: 2, desc: '食べると12ターン目つぶしになる。周りが見えなくなる。',
+    use() { say('目つぶし草を食べた。目の前が真っ暗だ！'); addStatus('blind', 12); return true; },
+  },
+  eyeherb: {
+    name: 'めぐすり草', cat: '草', ch: '♣', fg: '#80f0ff', w: 2, from: 2, desc: '目つぶしが治り、40ターンの間「よく見え」状態になる（地図にこの階の敵が全部映る）。本家は隠れた罠が見える。',
+    use() { player.st.blind = 0; player.st.seeing = 40; say('めぐすり草を食べた。よく見える！'); return true; },
+  },
+  hasteherb: {
+    name: 'すばやさ草', cat: '草', ch: '♣', fg: '#ffe040', w: 2, from: 2, desc: '25ターンの間、倍速になる（敵が2回に1回しか動かない）。',
+    use() { player.st.haste = Math.max(player.st.haste, 25); say('すばやさ草を食べた。体が軽い！'); return true; },
+  },
+  powerherb: {
+    name: 'パワーアップ草', cat: '草', ch: '♣', fg: '#ff5a5a', w: 2, from: 2, desc: '30ターンの間、攻撃力が3上がる。',
+    use() { player.st.power = Math.max(player.st.power, 30); fxText(player.x, player.y, '攻撃+3', '#ffb06b'); say('パワーアップ草を食べた。力があふれる！'); return true; },
+  },
+  invincherb: {
+    name: '無敵草', cat: '草', ch: '♣', fg: '#ffffff', w: 1, from: 3, desc: '20ターンの間、無敵になる。ダメージと悪い状態を防ぐ。',
+    use() { player.st.invinc = Math.max(player.st.invinc, 20); cureBad(); say('無敵草を食べた。体が光り輝く！'); return true; },
+  },
+
+  // ===== 巻物（読む）=====
+  scroll: {
+    name: '天の恵みの巻物', cat: '巻物', ch: '≡', fg: '#ffe9a8', w: 4, desc: '装備中の武器の強化値を+1する（たまに+3）。',
     use() {
-      const t = zapTarget(); if (!t) return true;
-      const e = t.e, dx = player.face[0], dy = player.face[1]; let n = 0;
-      while (n < 5 && geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy) && !(e.x + dx === player.x && e.y + dy === player.y)) { e.x += dx; e.y += dy; n++; }
-      e.aware = true; say(`${eT(e).name}を${n}マス吹き飛ばした！`); return true;
+      const t = eqWeapon;
+      if (!t) { say('武器を装備していないので効果がなかった。'); return false; }
+      const up = Math.random() < 0.1 ? 3 : 1; t.plus += up; fxText(player.x, player.y, '+' + up, '#ffe28a');
+      say(`${itemName(t)}が光った！ 強化値+${up}`); return true;
     },
   },
-  swapstaff: {
-    name: '場所替えの杖', cat: '杖', ch: '/', fg: '#d79aff', w: 1, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵と場所を入れ替える。',
+  shieldscroll: {
+    name: '地の恵みの巻物', cat: '巻物', ch: '≡', fg: '#d8c890', w: 3, from: 2, desc: '装備中の盾の強化値を+1する（たまに+3）。',
     use() {
-      const t = zapTarget(); if (!t) return true;
-      const e = t.e; [player.x, e.x] = [e.x, player.x]; [player.y, e.y] = [e.y, player.y]; e.aware = true;
-      say(`${eT(e).name}と場所が入れ替わった！`); return true;
+      const t = eqShield;
+      if (!t) { say('盾を装備していないので効果がなかった。'); return false; }
+      const up = Math.random() < 0.1 ? 3 : 1; t.plus += up; fxText(player.x, player.y, '+' + up, '#ffe28a');
+      say(`${itemName(t)}が光った！ 強化値+${up}`); return true;
     },
+  },
+  confscroll: {
+    name: '混乱の巻物', cat: '巻物', ch: '≡', fg: '#ffa0e0', w: 2, from: 2, desc: '部屋の中の敵すべてを15ターン混乱させる。通路では周囲1マス。',
+    use() { const t = roomEnemies(); for (const e of t) { (e.st || (e.st = {})).confuse = 15; e.aware = true; } say(t.length ? `${t.length}体の敵が混乱した！` : 'だれもいなかった…'); return true; },
+  },
+  sleepscroll: {
+    name: 'バクスイの巻物', cat: '巻物', ch: '≡', fg: '#8a8ae0', w: 2, from: 2, desc: '部屋の中の敵すべてを眠らせる（殴られるか20ターンで起きる）。通路では周囲1マス。',
+    use() { const t = roomEnemies(); for (const e of t) (e.st || (e.st = {})).sleep = 20; say(t.length ? `${t.length}体の敵が眠った！` : 'だれもいなかった…'); return true; },
+  },
+  vacuumscroll: {
+    name: '真空斬りの巻物', cat: '巻物', ch: '≡', fg: '#a0f0ff', w: 2, from: 3, desc: '部屋の中の敵すべてに12〜15ダメージ。通路では周囲1マス。',
+    use() { const t = roomEnemies(); say('真空の刃が走った！'); for (const e of t) zapHit(e, rnd(12, 15), '真空斬り'); if (!t.length) say('だれもいなかった…'); return true; },
+  },
+  annihilatescroll: {
+    name: '全滅の巻物', cat: '巻物', ch: '≡', fg: '#ff7ad0', w: 1, from: 3, desc: '部屋の中の敵をすべて消滅させる。通路では周囲1マス。',
+    use() { const t = roomEnemies(); for (const e of t) { enemies.splice(enemies.indexOf(e), 1); fxText(e.x, e.y, '消滅', '#ff9be8'); } say(t.length ? `${t.length}体の敵が消え去った！` : 'だれもいなかった…'); return true; },
+  },
+  lightscroll: {
+    name: 'あかりの巻物', cat: '巻物', ch: '≡', fg: '#fff0a0', w: 2, from: 2, desc: 'この階の地形と、すべての敵・道具が地図に映る。',
+    use() { if (scene !== 'dungeon') { say('ここでは使えない。'); return false; } for (const row of seen) row.fill(true); floorLight = true; say('フロアが明るくなった。敵と道具の場所がわかる！'); return true; },
   },
   mapscroll: {
     name: '地図の巻物', cat: '巻物', ch: '≡', fg: '#9ad8ff', w: 3, desc: 'この階の地図が全部わかる。',
@@ -223,6 +309,45 @@ const ITEMS = {
       if (scene !== 'dungeon') { say('ここでは使えない。'); return false; }
       for (const row of seen) row.fill(true); say('この階の地図がわかった！'); return true;
     },
+  },
+  gatherscroll: {
+    name: '生物集合の巻物', cat: '巻物', ch: '≡', fg: '#ff9060', w: 1, from: 3, desc: 'この階の敵がすべて、自分の周りに引き寄せられる。',
+    use() {
+      if (scene !== 'dungeon') { say('ここでは使えない。'); return false; }
+      const cells = freeNear(enemies.length); enemies.forEach((e, i) => { if (cells[i]) { e.x = cells[i][0]; e.y = cells[i][1]; e.aware = true; } });
+      say(enemies.length ? '敵が集まってきた！' : '敵はいなかった…'); return true;
+    },
+  },
+  itemscroll: {
+    name: '道具寄せの巻物', cat: '巻物', ch: '≡', fg: '#ff6ad5', w: 2, from: 2, desc: 'この階に落ちている道具が、すべて自分の周りに集まる。',
+    use() {
+      if (scene !== 'dungeon') { say('ここでは使えない。'); return false; }
+      const cells = freeNear(floorItems.length); floorItems.forEach((f, i) => { if (cells[i]) { f.x = cells[i][0]; f.y = cells[i][1]; } });
+      say(floorItems.length ? '道具が集まってきた！' : '落ちている道具はなかった…'); return true;
+    },
+  },
+  housescroll: {
+    name: '魔物部屋の巻物', cat: '巻物', ch: '≡', fg: '#d03a3a', w: 1, from: 3, desc: '周りに敵が6体現れる。（危険な巻物）',
+    use() {
+      if (scene !== 'dungeon') { say('ここでは使えない。'); return false; }
+      const cells = freeNear(6); for (const [x, y] of cells) spawnEnemy(x, y, true);
+      say('魔物があふれ出した！'); return true;
+    },
+  },
+  hastescroll: {
+    name: '敵加速の巻物', cat: '巻物', ch: '≡', fg: '#e07a3a', w: 1, from: 3, desc: '部屋の中の敵すべてが、20ターン倍速になる。通路では周囲1マス。（悪い巻物）',
+    use() { const t = roomEnemies(); for (const e of t) { (e.st || (e.st = {})).boost = 20; e.aware = true; } say(t.length ? `${t.length}体の敵が素早くなった！` : 'だれもいなかった…'); return true; },
+  },
+  helpscroll: {
+    name: '困った時の巻物', cat: '巻物', ch: '≡', fg: '#b0ffd0', w: 1, from: 3, desc: 'HPが全回復し、悪い状態が治る。満腹度が20%以下ならそれも50%まで回復する。',
+    use() {
+      player.hp = player.maxhp; cureBad(); if (scene === 'dungeon' && belly <= 20) { belly = Math.min(maxBelly(), 50); bellyWarn = bellyStage(); }
+      fxText(player.x, player.y, 'HP全回復', '#7bff9a'); say('困った時の巻物を読んだ。力がよみがえった！'); return true;
+    },
+  },
+  mutescroll: {
+    name: 'くちなしの巻物', cat: '巻物', ch: '≡', fg: '#777788', w: 1, from: 2, desc: '30ターンの間、くちなし状態になる。草を食べたり巻物を読んだりできない。（悪い巻物）',
+    use() { say('くちなしの巻物を読んだ。口が開かない…'); addStatus('mute', 30); return true; },
   },
   escscroll: {
     name: '脱出の巻物', cat: '巻物', ch: '≡', fg: '#b6ffb0', w: 2, desc: 'ダンジョンから脱出して町へ戻る。持ち物はそのまま。',
@@ -238,11 +363,78 @@ const ITEMS = {
       say('巻物が爆発した！'); for (const e of hit) zapHit(e, 7, '爆発'); if (!hit.length) say('だれもいなかった…'); return true;
     },
   },
-  onigiri: {
-    name: 'おにぎり', cat: '食', ch: '●', fg: '#ffffff', w: 6, desc: '満腹度を50%回復する。',
+
+  // ===== 腕輪（2つまで装備できる。同じ腕輪を2つ付けると効果が2倍）=====
+  ring_regen: { name: '回復の腕輪', cat: '腕輪', ch: '○', fg: '#7bffb0', w: 1, from: 2, equip: 'ring', desc: 'HPの自然回復が速くなる。そのぶん満腹度の減りも速くなる。' },
+  ring_strength: { name: 'ちからの腕輪', cat: '腕輪', ch: '○', fg: '#ff9a5a', w: 1, from: 2, equip: 'ring', desc: '攻撃力が2上がる。（本家は「ちから+3」。ここでは攻撃力で代用）' },
+  ring_bellyup: { name: '胃拡張の腕輪', cat: '腕輪', ch: '○', fg: '#ffd86a', w: 1, from: 2, equip: 'ring', desc: '最大満腹度が25増える。' },
+  ring_bellydown: { name: '胃縮小の腕輪', cat: '腕輪', ch: '○', fg: '#9a8aa8', w: 1, from: 2, equip: 'ring', desc: '最大満腹度が25減る。（悪い腕輪）' },
+  ring_antidote: { name: '毒消しの腕輪', cat: '腕輪', ch: '○', fg: '#b0e0ff', w: 1, from: 2, equip: 'ring', desc: '毒草などで「ちから低下」にならない。' },
+  ring_noconf: { name: '混乱よけの腕輪', cat: '腕輪', ch: '○', fg: '#ffa0e0', w: 1, from: 2, equip: 'ring', desc: '混乱しなくなる。' },
+  ring_nosleep: { name: '睡眠よけの腕輪', cat: '腕輪', ch: '○', fg: '#8a8ae0', w: 1, from: 2, equip: 'ring', desc: '眠らなくなる。' },
+  ring_moroha: { name: '諸刃の腕輪', cat: '腕輪', ch: '○', fg: '#ff6a6a', w: 1, from: 3, equip: 'ring', desc: '攻撃が20%で会心の一撃（ダメージ2倍）になる。そのかわり、敵の攻撃も10%で痛恨の一撃（2倍）になる。' },
+  ring_tsukon: { name: '痛恨の腕輪', cat: '腕輪', ch: '○', fg: '#a04040', w: 1, from: 2, equip: 'ring', desc: '敵の攻撃が15%で痛恨の一撃（ダメージ2倍）になる。（悪い腕輪）' },
+  ring_boom: { name: '爆発の腕輪', cat: '腕輪', ch: '○', fg: '#ff8a3a', w: 1, from: 3, equip: 'ring', desc: 'たまに自分と周囲1マスが爆発し、敵に10ダメージ。自分のHPは1になる。（悪い腕輪）' },
+  ring_warp: { name: '高飛びの腕輪', cat: '腕輪', ch: '○', fg: '#9ad8ff', w: 1, from: 2, equip: 'ring', desc: 'たまに、この階のどこかへワープする。' },
+  ring_seeall: { name: '透視の腕輪', cat: '腕輪', ch: '○', fg: '#e0f8ff', w: 1, from: 3, equip: 'ring', desc: 'この階の敵と道具が、常に地図に映る。' },
+  ring_senseE: { name: '気配察知の腕輪', cat: '腕輪', ch: '○', fg: '#ff8080', w: 1, from: 2, equip: 'ring', desc: 'この階の敵が、常に地図に映る。' },
+  ring_senseI: { name: '道具感知の腕輪', cat: '腕輪', ch: '○', fg: '#ff9be8', w: 1, from: 2, equip: 'ring', desc: 'この階の道具が、常に地図に映る。' },
+  ring_sneak: { name: '忍び足の腕輪', cat: '腕輪', ch: '○', fg: '#8a9a8a', w: 1, from: 2, equip: 'ring', desc: '敵に気づかれにくくなる（3マス以内に近づくまで気づかれない）。' },
+  ring_leak: { name: '垂れ流しの腕輪', cat: '腕輪', ch: '○', fg: '#7a6a5a', w: 1, from: 2, equip: 'ring', desc: 'たまに持ち物を1つ落とす。（悪い腕輪）' },
+  ring_summon: { name: '魔物呼びの腕輪', cat: '腕輪', ch: '○', fg: '#a03a7a', w: 1, from: 2, equip: 'ring', desc: '時間がたつと、新しい敵が現れる。（悪い腕輪）' },
+
+  // ===== 武器・盾（基礎値は本家の値をこのゲームの規模に縮めたもの。印の効果は本家の印を簡略化）=====
+  woodsword: { name: '木刀', cat: '武器', ch: '/', fg: '#d8b078', w: 3, equip: 'weapon', atk: 2, desc: '武器。攻撃+2。強化値の分だけさらに強くなる。' },
+  bronzesword: { name: '青銅の太刀', cat: '武器', ch: '†', fg: '#d8a060', w: 2, from: 2, equip: 'weapon', atk: 3, desc: '武器。攻撃+3。強化値の分だけさらに強くなる。' },
+  katana: { name: 'カタナ', cat: '武器', ch: '†', fg: '#e8f0ff', w: 2, from: 3, equip: 'weapon', atk: 4, desc: '武器。攻撃+4。強化値の分だけさらに強くなる。' },
+  dotanuki: { name: 'どうたぬき', cat: '武器', ch: '†', fg: '#c8c8d8', w: 1, from: 4, equip: 'weapon', atk: 6, desc: '武器。攻撃+6。強化値の分だけさらに強くなる。' },
+  minoaxe: { name: 'ミノタウロスの斧', cat: '武器', ch: 'Ƭ', fg: '#d89060', w: 1, from: 3, equip: 'weapon', atk: 4, seal: 'crit', desc: '武器。攻撃+4。印「会心の一撃」：25%でダメージ2倍。' },
+  renkentou: { name: '連撃刀', cat: '武器', ch: '†', fg: '#a0d0ff', w: 1, from: 3, equip: 'weapon', atk: 3, seal: 'double', desc: '武器。攻撃+3。印「連続攻撃」：25%でもう一度攻撃する。' },
+  kamaitachi: { name: '妖刀かまいたち', cat: '武器', ch: '†', fg: '#90e0c0', w: 1, from: 2, equip: 'weapon', atk: 2, seal: 'tri', desc: '武器。攻撃+2。印「三方向攻撃」：正面と、その左右斜めの3マスを同時に攻撃する。' },
+  healsword: { name: '回復の剣', cat: '武器', ch: '†', fg: '#a0ffb0', w: 1, from: 2, equip: 'weapon', atk: 2, seal: 'drain', desc: '武器。攻撃+2。印「回復」：与えたダメージの1/3だけHPが回復する。' },
+  steakknife: { name: 'ステーキナイフ', cat: '武器', ch: '†', fg: '#ffb090', w: 1, from: 2, equip: 'weapon', atk: 3, seal: 'hungry', desc: '武器。攻撃+3。印「ハングリー」：満腹度が30%以下だと攻撃+3。' },
+  harisen: { name: '巨大ハリセン', cat: '武器', ch: '/', fg: '#fff0c0', w: 1, from: 2, equip: 'weapon', atk: 3, seal: 'knock', desc: '武器。攻撃+3。印「突き飛ばし」：30%で敵を1マス突き飛ばす。' },
+  skyblade: { name: '空の刃', cat: '武器', ch: '†', fg: '#a0e0ff', w: 1, from: 2, equip: 'weapon', atk: 3, seal: 'bat', desc: '武器。攻撃+3。印「浮遊特攻」：空を飛ぶ敵（コウモリ）に2倍のダメージ。' },
+  firesword: { name: '火迅風魔刀', cat: '武器', ch: '†', fg: '#ff7a3a', w: 1, from: 4, equip: 'weapon', atk: 8, seal: 'fire', desc: '武器。攻撃+8。印「炎飛ばし」：HPが満タンのとき、離れた敵にAttackで炎を飛ばして8ダメージ。' },
+  bronzeshield: { name: '青銅甲の盾', cat: '盾', ch: ')', fg: '#d8a060', w: 2, from: 2, equip: 'shield', def: 2, desc: '盾。受けるダメージ-2。強化値の分だけさらに減る。' },
+  ironshield2: { name: '鉄甲の盾', cat: '盾', ch: ']', fg: '#d8e0f0', w: 2, from: 3, equip: 'shield', def: 3, desc: '盾。受けるダメージ-3。強化値の分だけさらに減る。' },
+  onioookami: { name: 'おにおおかみ', cat: '盾', ch: ']', fg: '#c0c0d0', w: 1, from: 4, equip: 'shield', def: 4, desc: '盾。受けるダメージ-4。強化値の分だけさらに減る。' },
+  battlecounter: { name: 'バトルカウンター', cat: '盾', ch: ')', fg: '#ff8a6a', w: 1, from: 2, equip: 'shield', def: 1, seal: 'counter', desc: '盾。受けるダメージ-1。印「カウンター」：敵の攻撃のダメージの半分を、攻撃してきた敵に返す。' },
+  mikiri: { name: '見切りの盾', cat: '盾', ch: ')', fg: '#a0d0ff', w: 1, from: 2, equip: 'shield', def: 1, seal: 'dodge', desc: '盾。受けるダメージ-1。印「見切り」：25%で敵の攻撃をかわす。' },
+  konjo: { name: '根性の盾', cat: '盾', ch: ']', fg: '#ffd070', w: 1, from: 3, equip: 'shield', def: 3, seal: 'guts', desc: '盾。受けるダメージ-3。印「根性」：致命傷を受けても、50%でHP1で踏みとどまる。' },
+  zekkocho: { name: '絶好調の盾', cat: '盾', ch: ')', fg: '#fff0a0', w: 1, from: 2, equip: 'shield', def: 2, seal: 'fullhalf', desc: '盾。受けるダメージ-2。印「満タン防御」：HPが満タンのとき、受けるダメージが半分になる。' },
+  haramochi: { name: 'ハラモチの盾', cat: '盾', ch: ')', fg: '#e0c090', w: 1, from: 2, equip: 'shield', def: 1, seal: 'belly', desc: '盾。受けるダメージ-1。印「ハラモチ」：満腹度の減りが遅くなる（1.5倍もつ）。' },
+  steakplate: { name: 'ステーキプレート', cat: '盾', ch: ')', fg: '#ffb090', w: 1, from: 2, equip: 'shield', def: 3, seal: 'hungryDef', desc: '盾。受けるダメージ-3。印「ハングリー」：満腹度が30%以下だと、さらに-2。' },
+  minoshield: { name: 'ミノタウロスの盾', cat: '盾', ch: ']', fg: '#d89060', w: 1, from: 3, equip: 'shield', def: 2, seal: 'critguard', desc: '盾。受けるダメージ-2。印「痛恨耐性」：痛恨の一撃を受けても、ダメージが2倍にならない。' },
+
+  // ===== 杖（振る。回数つき）=====
+  firestaff: {
+    name: '火の杖', cat: '杖', ch: '/', fg: '#ff7a3a', w: 2, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵に8ダメージ。[ ]は残り回数。',
+    use() { const t = zapTarget(); if (!t) return true; zapHit(t.e, 8, '火の玉'); return true; },
+  },
+  blowstaff: {
+    name: '吹き飛ばしの杖', cat: '杖', ch: '/', fg: '#7ac8ff', w: 2, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵を最大5マス吹き飛ばす。',
     use() {
-      if (belly >= MAXBELLY) { say('おなかはいっぱいだ。'); return false; }
-      const before = belly; belly = Math.min(MAXBELLY, belly + 50);
+      const t = zapTarget(); if (!t) return true;
+      const e = t.e, dx = zapDir[0], dy = zapDir[1]; let n = 0;
+      while (n < 5 && geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy) && !(e.x + dx === player.x && e.y + dy === player.y)) { e.x += dx; e.y += dy; n++; }
+      e.aware = true; say(`${eT(e).name}を${n}マス吹き飛ばした！`); return true;
+    },
+  },
+  swapstaff: {
+    name: '場所替えの杖', cat: '杖', ch: '/', fg: '#d79aff', w: 1, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵と場所を入れ替える。',
+    use() {
+      const t = zapTarget(); if (!t) return true;
+      const e = t.e; [player.x, e.x] = [e.x, player.x]; [player.y, e.y] = [e.y, player.y]; e.aware = true;
+      say(`${eT(e).name}と場所が入れ替わった！`); return true;
+    },
+  },
+  // ===== 食べ物 =====
+  onigiri: {
+    name: 'おにぎり', cat: '食', ch: '●', fg: '#ffffff', w: 9, desc: '満腹度を50%回復する。',
+    use() {
+      if (belly >= maxBelly()) { say('おなかはいっぱいだ。'); return false; }
+      const before = belly; belly = Math.min(maxBelly(), belly + 50);
       bellyWarn = bellyStage();
       fxText(player.x, player.y, '満腹+' + (belly - before), '#ffe28a');
       say(`おにぎりを食べた。満腹度+${belly - before}%`); return true;
@@ -263,20 +455,113 @@ const ENEMIES = {
 };
 const eT = e => ENEMIES[e.kind] || ENEMIES.goblin;
 // 杖・巻物の共通処理：向いている方向の最初の敵（射程8）／ダメージを与える
-function zapTarget() {
-  const dx = player.face[0], dy = player.face[1]; let cx = player.x, cy = player.y;
+let zapDir = [0, 1];
+function lineTarget() {                                         // 向いている方向の最初の敵（混乱中は向きがでたらめ）。いなければ null
+  zapDir = player.st.confuse > 0 ? DIRS8[rnd(0, 7)] : player.face;
+  const dx = zapDir[0], dy = zapDir[1]; let cx = player.x, cy = player.y;
   for (let i = 1; i <= 8; i++) {
     if (!geomOK(cx, cy, dx, dy)) break;
     cx += dx; cy += dy;
     const e = enemyAt(cx, cy); if (e) return { e, i };
   }
-  say('しかし、何も起こらなかった。'); return null;
+  return null;
 }
+function zapTarget() { const t = lineTarget(); if (!t) say('しかし、何も起こらなかった。'); return t; }
 function zapHit(e, dmg, label) {
-  e.hp -= dmg; e.aware = true; e.flash = now() + 130; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
+  e.hp -= dmg; e.aware = true; e.flash = now() + 130; if (e.st) e.st.sleep = 0; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
   if (e.hp <= 0) { enemies.splice(enemies.indexOf(e), 1); say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); }
   else say(`${label}で${eT(e).name}に${dmg}ダメージ。`);
 }
+// =====================================================================
+//  状態異常・腕輪・封印・復活の補助（効果の判定はここに集める）
+//   状態は player.st（残りターン）。敵は e.st（confuse/sleep/boost）。腕輪は eqRings（2枠）。
+// =====================================================================
+const DIRS8 = [[0, -1], [1, -1], [1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1]];
+const ST_LABEL = { confuse: '混乱', sleep: '睡眠', blind: '目つぶし', mute: 'くちなし', weak: 'ちから低下', haste: '倍速', power: 'パワーアップ', invinc: '無敵', seeing: 'よく見え' };
+const ST_BAD = ['confuse', 'sleep', 'blind', 'mute', 'weak'];
+const newStatus = () => ({ confuse: 0, sleep: 0, blind: 0, mute: 0, weak: 0, haste: 0, power: 0, invinc: 0, seeing: 0 });
+const statusText = () => Object.keys(player.st).filter(k => player.st[k] > 0).map(k => `${ST_LABEL[k]}${player.st[k]}`).join(' ');
+const ringN = name => eqRings.filter(r => r && r.type === 'ring_' + name).length;       // 装備中のその腕輪の数（2つで効果2倍）
+const wSeal = () => eqWeapon ? ITEMS[eqWeapon.type].seal || '' : '';
+const sSeal = () => eqShield ? ITEMS[eqShield.type].seal || '' : '';
+const maxBelly = () => Math.max(25, MAXBELLY + bellyBonus + 25 * ringN('bellyup') - 25 * ringN('bellydown'));
+const senseEnemies = () => floorLight || ringN('seeall') > 0 || ringN('senseE') > 0 || player.st.seeing > 0;   // 地図に敵が映るか
+const senseItems = () => floorLight || ringN('seeall') > 0 || ringN('senseI') > 0;                              // 地図に道具が映るか
+function addStatus(k, n) {                                      // 悪い状態は 無敵・各よけの腕輪で防げる。かかったら true
+  const s = player.st;
+  if (ST_BAD.includes(k)) {
+    if (s.invinc > 0) { say('無敵なので効かなかった。'); return false; }
+    if ((k === 'confuse' && ringN('noconf')) || (k === 'sleep' && ringN('nosleep')) || (k === 'weak' && ringN('antidote'))) { say('腕輪の力で防いだ！'); return false; }
+  }
+  s[k] = Math.max(s[k], n); return true;
+}
+function cureBad() { const s = player.st; let any = false; for (const k of ST_BAD) if (s[k] > 0) { s[k] = 0; any = true; } return any; }
+function tickStatus() {
+  const s = player.st;
+  for (const k of Object.keys(s)) if (s[k] > 0 && --s[k] === 0) say(k === 'sleep' ? '目が覚めた。' : ST_BAD.includes(k) ? `${ST_LABEL[k]}が治った。` : `${ST_LABEL[k]}の効果が切れた。`);
+}
+// 力尽きたか判定。復活の草を持っていれば生き返る（草は雑草になる）。死んだら true
+function checkDeath(msg) {
+  if (dead) return true;
+  if (player.hp > 0) return false;
+  const k = inv.findIndex(i => i.type === 'reviveherb');
+  if (k >= 0) {
+    inv.splice(k, 1); inv.push(mkItem('weed')); player.hp = player.maxhp; cureBad();
+    fxText(player.x, player.y, '復活！', '#fff2a0'); vfxShake(5, 300); say('復活の草が光った！ 生き返った！'); return false;
+  }
+  player.hp = 0; dead = true; deadAt = now(); say(msg); return true;
+}
+function hurtPlayer(n, msg) {                                   // 敵以外から受けるダメージ（草・爆風）。無敵なら無効
+  if (player.st.invinc > 0) { fxText(player.x, player.y, '0', '#9ad8ff'); return false; }
+  player.hp -= n; player.flash = now() + 130; hurtT = now(); fxText(player.x, player.y, '-' + n, '#ffb347'); vfxShake(3, 160);
+  return checkDeath(msg);
+}
+// 「部屋の中の敵」。通路にいるときは周囲1マスの敵
+function roomEnemies() {
+  const r = playerRoom();
+  return enemies.filter(e => r >= 0 ? roomGrid[e.y][e.x] === r : Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)) <= 1);
+}
+// プレイヤーの近くの、何も無い床マスを近い順に n 個
+function freeNear(n) {
+  const out = [];
+  for (let r = 1; r <= 9 && out.length < n; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+    if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || out.length >= n) continue;
+    const x = player.x + dx, y = player.y + dy;
+    if (inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !itemAt(x, y)) out.push([x, y]);
+  }
+  return out;
+}
+function spawnEnemy(x, y, aware) {
+  const kind = rollEnemy(floorNo), hp = ENEMIES[kind].hp(floorNo);
+  const e = { kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: !!aware, lost: 0, flash: 0, bump: null, fl: false, st: {} };
+  enemies.push(e); return e;
+}
+function warpPlayer() {                                         // この階のどこかの部屋へ
+  const c = [];
+  for (const R of rooms) for (let y = R.y; y < R.y + R.h; y++) for (let x = R.x; x < R.x + R.w; x++) if (map[y][x] === FLOOR && !enemyAt(x, y) && !(x === player.x && y === player.y)) c.push([x, y]);
+  if (!c.length) return;
+  const [x, y] = c[rnd(0, c.length - 1)]; player.x = player.vx = x; player.y = player.vy = y; fxText(x, y, '転移', '#9ad8ff');
+}
+// 腕輪の「たまに起きる」効果。毎ターン呼ばれる
+function ringTick() {
+  if (scene !== 'dungeon' || dead) return;
+  const n = ringN;
+  if (n('warp') && Math.random() < 0.04 * n('warp')) { warpPlayer(); say('腕輪の力でワープした！'); }
+  if (n('boom') && Math.random() < 0.025 * n('boom')) {
+    say('腕輪が爆発した！');
+    for (const e of enemies.filter(o => Math.max(Math.abs(o.x - player.x), Math.abs(o.y - player.y)) <= 1)) zapHit(e, 10, '爆風');
+    if (player.st.invinc <= 0 && player.hp > 1) { player.hp = 1; hurtT = now(); vfxShake(6, 300); fxText(player.x, player.y, 'HP1', '#ff6b6b'); }
+  }
+  if (n('leak') && Math.random() < 0.04 * n('leak')) {
+    const c = inv.filter(i => !isEq(i));
+    if (c.length && !itemAt(player.x, player.y)) { const it = c[rnd(0, c.length - 1)]; inv.splice(inv.indexOf(it), 1); floorItems.push({ x: player.x, y: player.y, item: it }); say(`${itemName(it)}を落としてしまった！`); }
+  }
+  if (n('summon') && Math.random() < 0.03 * n('summon')) {
+    const R = rooms[rnd(0, rooms.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
+    if (map[y][x] === FLOOR && !enemyAt(x, y) && !vis[y][x] && !(x === player.x && y === player.y)) { spawnEnemy(x, y, true); say('どこかで魔物の気配がする…'); }
+  }
+}
+
 function rollEnemy(f) {
   const ks = Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= f);
   let r = Math.random() * ks.reduce((a, k) => a + ENEMIES[k].w, 0);
@@ -473,11 +758,14 @@ let clears = 0, deaths = 0;
 let rigPref = 0;                  // 主人公の表示：0=パーツで動く 1=1枚絵（取り込んだ絵があるときはこちらを選ぶ）
 let gift = false;                 // お試し装備を倉庫に配ったか（1回だけ）
 let eqWeapon = null, eqShield = null;   // 装備中の武器・盾（持ち物の中の1個を指す）
+let eqRings = [null, null];       // 装備中の腕輪（2枠。持ち物の中の1個を指す）
 let autoPick = false;             // 自動拾い（既定OFF：踏んでも拾わず、足元に載るだけ）
 let uid = 0;
 let bagOpen = false, bagTab = '全部', bagSel = null;
 let whOpen = false, whSide = 'bag', whSel = null, whMsg = '';
 let cfgOpen = false, DPR = 1;
+let bellyBonus = 0, atkUp = 0, floorLight = false, hasteFlip = false;   // この冒険の間だけ有効：最大満腹度の増減／ちからの草／この階があかるい／倍速の交互フラグ
+const BASE_HP = 20;
 let belly = MAXBELLY, bellyWarn = 99, hungerPref = 0;   // 満腹度（%）／直近の警告段階／減る速さ 0=標準 1=速い(確認用)
 let roomGrid = [];                // ダンジョンの部屋番号マップ（部屋の中=番号、それ以外=-1）
 let mapMode = 1;                  // 地図：0=非表示 1=小 2=大
@@ -495,12 +783,12 @@ const inb = (x, y) => x >= 0 && y >= 0 && x < MW && y < MH;
 const enemyAt = (x, y) => enemies.find(e => e.x === x && e.y === y);
 const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
 function rollPlus() { const r = Math.random(); return r < 0.55 ? 0 : r < 0.75 ? 1 : r < 0.88 ? 2 : r < 0.95 ? -1 : 3; }
-const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip) it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; return it; };
-const isEq = it => it === eqWeapon || it === eqShield;
+const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip && ITEMS[type].equip !== 'ring') it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; return it; };
+const isEq = it => it === eqWeapon || it === eqShield || eqRings.includes(it);
 const ikey = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (isEq(it) ? 'E' : '');   // 持ち物のまとめ表示・操作のキー
 const itemName = it => ITEMS[it.type].name + (it.plus === undefined ? '' : ITEMS[it.type].charges ? `[${it.plus}]` : (it.plus >= 0 ? '+' : '') + it.plus);
-const atkBonus = () => eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0;
-const defBonus = () => eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0;
+const atkBonus = () => (eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0) + atkUp + 2 * ringN('strength') + (player.st.power > 0 ? 3 : 0) - (player.st.weak > 0 ? 2 : 0) + (wSeal() === 'hungry' && belly <= 30 ? 3 : 0);
+const defBonus = () => (eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0) + (sSeal() === 'hungryDef' && belly <= 30 ? 2 : 0);
 const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '');
 const decItem = t => { const [ty, pl] = String(t).split(':'); return ITEMS[ty] ? mkItem(ty, pl === undefined ? undefined : (+pl | 0)) : null; };
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
@@ -508,7 +796,8 @@ const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
 const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen;
 function rollType() {
-  const ks = Object.keys(ITEMS); let r = Math.random() * ks.reduce((s, k) => s + ITEMS[k].w, 0);
+  const ks = Object.keys(ITEMS).filter(k => (ITEMS[k].from || 1) <= floorNo);
+  let r = Math.random() * ks.reduce((a, k) => a + ITEMS[k].w, 0);
   for (const k of ks) { r -= ITEMS[k].w; if (r < 0) return k; }
   return ks[0];
 }
@@ -516,7 +805,7 @@ function rollType() {
 // ===== 保存（倉庫・持ち物・記録）=====
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], gift, quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref, vfxPref }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], rings: eqRings.map(r => inv.indexOf(r)), gift, quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref, vfxPref }));
   } catch (_) {}
 }
 function loadGame() {
@@ -527,6 +816,8 @@ function loadGame() {
     inv = (s.bag || []).map(decItem).filter(Boolean);
     eqWeapon = eqShield = null;
     if (Array.isArray(s.eq)) { eqWeapon = inv[s.eq[0]] || null; eqShield = inv[s.eq[1]] || null; if (eqWeapon && ITEMS[eqWeapon.type].equip !== 'weapon') eqWeapon = null; if (eqShield && ITEMS[eqShield.type].equip !== 'shield') eqShield = null; }
+    eqRings = [null, null];
+    if (Array.isArray(s.rings)) s.rings.slice(0, 2).forEach((ix, i) => { const r = inv[ix]; if (r && ITEMS[r.type].equip === 'ring') eqRings[i] = r; });
     gift = !!s.gift;
     quick = s.quick === null || (ITEMS[s.quick] && !ITEMS[s.quick].equip && !ITEMS[s.quick].charges) ? s.quick : 'potion';
     clears = s.clears | 0; deaths = s.deaths | 0; autoPick = !!s.autoPick;
@@ -598,6 +889,7 @@ function playerRoom() {
 }
 
 function newFloor() {
+  floorLight = false;
   genMap();
   buildRoomGrid();
   const start = rooms[0];
@@ -612,11 +904,10 @@ function newFloor() {
     const r = rooms[rnd(1, rooms.length - 1)];
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
     if (map[y][x] !== FLOOR || enemyAt(x, y) || (x === player.x && y === player.y)) continue;
-    const kind = rollEnemy(floorNo), hp = ENEMIES[kind].hp(floorNo);
-    enemies.push({ kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: false, lost: 0, flash: 0, bump: null, fl: false });
+    spawnEnemy(x, y, false);
   }
   floorItems = [];                                              // アイテム：1〜3個
-  const ni = rnd(1, 3);
+  const ni = rnd(2, 5);
   for (let i = 0; i < ni; i++) {
     const r = rooms[rnd(0, rooms.length - 1)];
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
@@ -635,7 +926,7 @@ function snapVis() { for (const e of [player, ...enemies]) { e.vx = e.x; e.vy = 
 function toTown(fromDungeon) {
   scene = 'town'; buildTown();
   enemies = []; floorItems = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
-  player.hp = player.maxhp; player.face = [0, 1];
+  player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus(); floorLight = false;
   player.x = fromDungeon ? 17 : 11; player.y = fromDungeon ? 4 : 9;
   seen = Array.from({ length: MH }, () => new Array(MW).fill(true));
   snapVis(); updateVis();
@@ -645,7 +936,8 @@ function toTown(fromDungeon) {
 function enterDungeon() {
   if (uiBlocked() || guardDead()) return;
   scene = 'dungeon'; floorNo = 1; turn = 0; logs = []; fx.length = 0; vfx.length = 0; shakeAmp = 0;
-  player.hp = player.maxhp; player.face = [0, 1]; belly = MAXBELLY; bellyWarn = 99;
+  player.maxhp = BASE_HP; player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus();   // 体力はレベル1相当で毎回リセット（本家と同じ）
+  atkUp = 0; bellyBonus = 0; floorLight = false; belly = maxBelly(); bellyWarn = 99;
   saveGame();                                                   // 出発時点の持ち物を保存
   newFloor();
   say(`${DUNGEONS[dungeonId].name}に入った。`);
@@ -659,14 +951,14 @@ function clearDungeon() {
   saveGame(); render();
 }
 function afterDeath() {                                         // 死亡：持ち物を全て失う。倉庫は無事
-  inv = []; eqWeapon = eqShield = null; deaths++; dead = false;
+  inv = []; eqWeapon = eqShield = null; eqRings = [null, null]; deaths++; dead = false;
   toTown(true);
   say('力尽きた…持ち物を全て失った。');
   say('倉庫の物は無事だ。');
   saveGame(); render();
 }
 function boot() {
-  player = { x: 0, y: 0, vx: 0, vy: 0, hp: 20, maxhp: 20, face: [0, 1], bump: null, flash: 0, fl: false };
+  player = { x: 0, y: 0, vx: 0, vy: 0, hp: BASE_HP, maxhp: BASE_HP, face: [0, 1], bump: null, flash: 0, fl: false, st: newStatus() };
   dead = false; floorNo = 1; turn = 0;
   if (!loadGame()) { wh = [mkItem('potion'), mkItem('potion'), mkItem('potion'), mkItem('onigiri'), mkItem('onigiri')]; inv = []; quick = 'potion'; clears = 0; deaths = 0; }
   const giftMsg = !gift;
@@ -702,6 +994,7 @@ function updateVis() {
   if (scene === 'town') { for (let y = 0; y < MH; y++) vis[y].fill(true); return; }   // 町は全部見える
   // 本家の見え方：部屋は明るく全体が見える。通路では周囲1マスしか見えない。見た場所は地図に残る
   const mark = (x, y) => { if (inb(x, y)) { vis[y][x] = true; seen[y][x] = true; } };
+  if (player.st.blind > 0) { mark(player.x, player.y); return; }   // 目つぶし：自分のマスしか見えない
   for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) mark(player.x + dx, player.y + dy);
   const r = playerRoom();
   if (r >= 0) { const R = rooms[r]; for (let y = R.y - 1; y <= R.y + R.h; y++) for (let x = R.x - 1; x <= R.x + R.w; x++) mark(x, y); }
@@ -812,8 +1105,13 @@ function guardDead() {
   return true;
 }
 const bellyStage = () => belly <= 0 ? 0 : belly <= 10 ? 10 : belly <= 20 ? 20 : 99;
+function hungerIv() {                                          // 満腹度が1%減るまでのターン数（回復の腕輪で短く、ハラモチの盾で長く）
+  let iv = HUNGER_TURNS[hungerPref] / (1 + 0.5 * ringN('regen'));
+  if (sSeal() === 'belly') iv *= 1.5;
+  return Math.max(1, Math.round(iv));
+}
 function hungerTick() {
-  if (turn % HUNGER_TURNS[hungerPref] === 0 && belly > 0) belly--;
+  if (turn % hungerIv() === 0 && belly > 0) belly--;
   const stage = bellyStage();
   if (stage < bellyWarn) {
     bellyWarn = stage;
@@ -821,27 +1119,59 @@ function hungerTick() {
   }
   if (belly <= 0) {                                             // 空腹：毎ターンHP-1
     player.hp--; player.flash = now() + 130; hurtT = now(); fxText(player.x, player.y, '-1', '#ffb347');
-    if (player.hp <= 0) { player.hp = 0; dead = true; deadAt = now(); say(`ひもじさで力尽きた…（${floorNo}階）`); }
+    checkDeath(`ひもじさで力尽きた…（${floorNo}階）`);
   }
 }
+// 1ターン分の処理。倍速のときは2回に1回、敵も空腹も進まない
+function turnCore() {
+  const free = scene === 'dungeon' && player.st.haste > 0 && (hasteFlip = !hasteFlip);
+  if (scene === 'dungeon' && !free) enemyTurn();
+  if (!free) turn++;
+  if (!dead && scene === 'dungeon' && !free) { hungerTick(); ringTick(); }
+  if (!dead && !free && turn % Math.max(2, Math.round(10 / (1 + ringN('regen')))) === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;
+  if (!dead) tickStatus();
+}
 function endTurn() {
-  if (scene === 'dungeon') enemyTurn();
-  turn++;
-  if (!dead && scene === 'dungeon') hungerTick();
-  if (!dead && turn % 10 === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;
+  turnCore();
+  for (let g = 0; g < 12 && !dead && scene === 'dungeon' && player.st.sleep > 0; g++) turnCore();   // 眠っている間は、敵だけが動く
   updateVis();
   render();
 }
 function hitEnemy(e) {
   player.swing = now(); kick();
-  const dmg = rnd(2, 4) + atkBonus(); e.hp -= dmg; e.aware = true; e.flash = now() + 130;
   if (e.x !== player.x) player.fl = e.x < player.x;
   bumpToward(player, e.x, e.y);
-  fxText(e.x, e.y, '-' + dmg, '#ffffff');
-  vfxHit(e.x, e.y, e.x - player.x, e.y - player.y, '#ffe9a0', e.hp <= 0);
-  vfxShake(e.hp <= 0 ? 4 : 2, e.hp <= 0 ? 200 : 110);
-  if (e.hp <= 0) { enemies.splice(enemies.indexOf(e), 1); say(`${eT(e).name}に${dmg}ダメージ。倒した！`); }
-  else say(`${eT(e).name}に${dmg}ダメージ。`);
+  const targets = [e];
+  if (wSeal() === 'tri') {                                      // 三方向攻撃：正面の左右斜めの敵も
+    const i = DIRS8.findIndex(d => d[0] === Math.sign(e.x - player.x) && d[1] === Math.sign(e.y - player.y));
+    for (const j of [i - 1, i + 1]) {
+      const d = DIRS8[(j + 8) % 8];
+      if (!geomOK(player.x, player.y, d[0], d[1])) continue;
+      const o = enemyAt(player.x + d[0], player.y + d[1]); if (o && !targets.includes(o)) targets.push(o);
+    }
+  }
+  for (const t of targets) strikeOne(t, false);
+}
+// 1体への攻撃。印・腕輪の効果（会心・特攻・回復・突き飛ばし・連続攻撃）もここ
+function strikeOne(e, again) {
+  let dmg = rnd(2, 4) + atkBonus(), crit = false;
+  if (Math.random() < 0.2 * ringN('moroha') + (wSeal() === 'crit' ? 0.25 : 0)) { dmg *= 2; crit = true; }
+  if (wSeal() === 'bat' && e.kind === 'bat') dmg *= 2;
+  e.hp -= dmg; e.aware = true; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
+  fxText(e.x, e.y, '-' + dmg, crit ? '#ffe28a' : '#ffffff');
+  vfxHit(e.x, e.y, e.x - player.x, e.y - player.y, '#ffe9a0', e.hp <= 0 || crit);
+  vfxShake(e.hp <= 0 ? 4 : crit ? 3 : 2, e.hp <= 0 ? 200 : 110);
+  const pre = crit ? '会心の一撃！ ' : '';
+  if (e.hp <= 0) { enemies.splice(enemies.indexOf(e), 1); say(`${pre}${eT(e).name}に${dmg}ダメージ。倒した！`); }
+  else say(`${pre}${eT(e).name}に${dmg}ダメージ。`);
+  if (wSeal() === 'drain' && player.hp < player.maxhp) {
+    const b = player.hp; player.hp = Math.min(player.maxhp, player.hp + Math.max(1, Math.floor(dmg / 3))); fxText(player.x, player.y, '+' + (player.hp - b), '#7bff9a');
+  }
+  if (e.hp > 0 && wSeal() === 'knock' && Math.random() < 0.3) {
+    const dx = Math.sign(e.x - player.x), dy = Math.sign(e.y - player.y);
+    if (geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy)) { e.x += dx; e.y += dy; say('突き飛ばした！'); }
+  }
+  if (e.hp > 0 && !again && wSeal() === 'double' && Math.random() < 0.25) { say('連続攻撃！'); strikeOne(e, true); }
 }
 // 床のアイテムを持ち物へ。入らなければ false
 function takeFloor(f) {
@@ -855,6 +1185,7 @@ function takeFloor(f) {
 function playerMove(dx, dy) {
   if (uiBlocked() || guardDead()) return;
   if (!dx && !dy) { endTurn(); return; }
+  if (player.st.confuse > 0) { const r = DIRS8[rnd(0, 7)]; dx = r[0]; dy = r[1]; }          // 混乱：向きがでたらめ
   player.face = [dx, dy];                                       // 向きは壁に当たっても更新
   if (dx) player.fl = dx < 0;                                   // 絵は右向きが基本。左へ動くときは反転
   if (!geomOK(player.x, player.y, dx, dy)) { render(); return; }  // 壁：ターン消費なし
@@ -906,6 +1237,12 @@ function playerPickUp() {
 function playerAttack() {
   if (uiBlocked() || guardDead()) return;
   if (scene === 'town') { const c = ctxInfo(); if (c) c.fn(); else { player.swing = now(); say('素振りをした。'); render(); } return; }
+  if (player.st.confuse > 0) {                                  // 混乱：向きがでたらめ。敵がいなければ空振り
+    const d = DIRS8[rnd(0, 7)]; player.face = d;
+    const o = geomOK(player.x, player.y, d[0], d[1]) ? enemyAt(player.x + d[0], player.y + d[1]) : null;
+    if (o) hitEnemy(o); else { player.swing = now(); say('混乱していて空振りした！'); }
+    endTurn(); return;
+  }
   const [fx_, fy_] = player.face;
   let t = geomOK(player.x, player.y, fx_, fy_) ? enemyAt(player.x + fx_, player.y + fy_) : null;
   if (!t) {
@@ -916,6 +1253,10 @@ function playerAttack() {
       if (e) { t = e; player.face = [dx, dy]; }
     }
   }
+  if (!t && wSeal() === 'fire' && player.hp >= player.maxhp) {  // 炎飛ばし：HPが満タンなら、離れた敵に炎
+    const z = lineTarget();
+    if (z) { player.swing = now(); kick(); zapHit(z.e, 8, '炎'); endTurn(); return; }
+  }
   if (!t) { say('周りに敵がいない。'); render(); return; }
   hitEnemy(t);
   endTurn();
@@ -924,28 +1265,38 @@ function playerAttack() {
 function enemyTurn() {
   const d = distMap();
   for (const e of [...enemies]) {
-    const T = eT(e);
-    for (let step = 0; step < (T.spd === 'fast' ? 2 : 1); step++) {
+    const T = eT(e), S = e.st || (e.st = {});
+    if (S.sleep > 0) { S.sleep--; continue; }                     // 眠っている敵は動かない（殴られると起きる）
+    const confused = S.confuse > 0; if (confused) S.confuse--;
+    if (S.boost > 0) S.boost--;
+    for (let step = 0; step < (T.spd === 'fast' || S.boost > 0 ? 2 : 1); step++) {
       if (!enemies.includes(e)) break;
       const dist = Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y));
-      if (dist <= SIGHT && los(e.x, e.y, player.x, player.y)) { e.aware = true; e.lost = 0; }
+      if (dist <= (ringN('sneak') ? 3 : SIGHT) && los(e.x, e.y, player.x, player.y)) { e.aware = true; e.lost = 0; }
       else if (step === 0 && e.aware && ++e.lost > 10) e.aware = false;
       // 隣接なら攻撃（1ターンに1回）
-      if (dist === 1 && geomOK(e.x, e.y, player.x - e.x, player.y - e.y)) {
+      if (!confused && dist === 1 && geomOK(e.x, e.y, player.x - e.x, player.y - e.y)) {
         const [lo, hi] = T.atk(floorNo);
-        const raw = rnd(lo, hi), dmg = Math.max(1, raw - defBonus()); player.hp -= dmg;
-        bumpToward(e, player.x, player.y); hurtT = now(); player.flash = now() + 130;
+        bumpToward(e, player.x, player.y);
         if (e.x !== player.x) e.fl = player.x < e.x;
-        fxText(player.x, player.y, '-' + dmg, '#ff6b6b');
-        vfxHit(player.x, player.y, player.x - e.x, player.y - e.y, '#ff6a4d', false);
-        vfxShake(Math.min(7, 3 + dmg * 0.5), 230);
-        say(`${T.name}の攻撃！ ${dmg}ダメージ。`);
-        if (player.hp <= 0) { player.hp = 0; dead = true; deadAt = now(); say(`力尽きた…（${floorNo}階）`); return; }
+        if (sSeal() === 'dodge' && Math.random() < 0.25) { say(`${T.name}の攻撃！ ひらりとかわした！`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); break; }
+        let dmg = Math.max(1, rnd(lo, hi) - defBonus()), crit = false;
+        if (Math.random() < 0.1 * ringN('moroha') + 0.15 * ringN('tsukon')) { crit = true; if (sSeal() !== 'critguard') dmg *= 2; }
+        if (sSeal() === 'fullhalf' && player.hp >= player.maxhp) dmg = Math.max(1, Math.ceil(dmg / 2));
+        if (player.st.invinc > 0) dmg = 0;
+        player.hp -= dmg;
+        if (dmg > 0) { hurtT = now(); player.flash = now() + 130; vfxShake(Math.min(7, 3 + dmg * 0.5), 230); }
+        fxText(player.x, player.y, '-' + dmg, crit ? '#ffe28a' : '#ff6b6b');
+        vfxHit(player.x, player.y, player.x - e.x, player.y - e.y, '#ff6a4d', crit);
+        say(`${crit ? '痛恨の一撃！ ' : ''}${T.name}の攻撃！ ${dmg}ダメージ。`);
+        if (sSeal() === 'counter' && dmg > 0) zapHit(e, Math.max(1, Math.ceil(dmg / 2)), 'カウンター');
+        if (player.hp <= 0 && sSeal() === 'guts' && Math.random() < 0.5) { player.hp = 1; say('根性で踏みとどまった！'); }
+        if (checkDeath(`力尽きた…（${floorNo}階）`)) return;
         break;
       }
       if (T.spd === 'slow' && turn % 2 === 1) break;               // 動きが遅い敵：2ターンに1歩
       let mx = 0, my = 0;
-      if (e.aware && d[e.y][e.x] > 0 && !(T.spd === 'fast' && Math.random() < 0.25)) {
+      if (!confused && e.aware && d[e.y][e.x] > 0 && !(T.spd === 'fast' && Math.random() < 0.25)) {
         // 距離が最小の隣接マスへ
         let best = d[e.y][e.x], cand = [];
         for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
@@ -957,7 +1308,7 @@ function enemyTurn() {
           else if (d[ny][nx] === best && cand.length) cand.push([dx, dy]);
         }
         if (cand.length) [mx, my] = cand[rnd(0, cand.length - 1)];
-      } else if (Math.random() < (T.spd === 'fast' ? 0.8 : 0.4)) {
+      } else if (confused || Math.random() < (T.spd === 'fast' ? 0.8 : 0.4)) {
         mx = rnd(-1, 1); my = rnd(-1, 1);
       }
       if ((mx || my) && geomOK(e.x, e.y, mx, my)) {
@@ -973,16 +1324,28 @@ function enemyTurn() {
 //   種類ごとにまとめて表示し、操作は「その種類の先頭の1個」に対して行う
 // =====================================================================
 const firstOf = key => inv.find(i => ikey(i) === key);
-function toggleEquip(it) {
+function toggleEquip(it) {                                      // 着脱できたら true
   const slot = ITEMS[it.type].equip;
+  if (slot === 'ring') {
+    const i = eqRings.indexOf(it);
+    if (i >= 0) { eqRings[i] = null; say(`${itemName(it)}を外した。`); }
+    else {
+      const f = eqRings.indexOf(null);
+      if (f < 0) { say('腕輪は2つまでしか付けられない。先に外そう。'); return false; }
+      eqRings[f] = it; say(`${itemName(it)}を装備した。`);
+    }
+    belly = Math.min(belly, maxBelly()); return true;
+  }
   if (slot === 'weapon') { if (eqWeapon === it) { eqWeapon = null; say(`${itemName(it)}を外した。`); } else { eqWeapon = it; say(`${itemName(it)}を装備した。`); } }
   else { if (eqShield === it) { eqShield = null; say(`${itemName(it)}を外した。`); } else { eqShield = it; say(`${itemName(it)}を装備した。`); } }
+  return true;
 }
 function useType(key) {
   if (guardDead()) return;
   const it = firstOf(key);
   if (!it) { say(`${ITEMS[key] ? ITEMS[key].name : 'それ'}を持っていない。`); render(); return; }
-  if (ITEMS[it.type].equip) { toggleEquip(it); saveGame(); closeBag(); endTurn(); return; }   // 装備品：着脱でターン経過
+  if (ITEMS[it.type].equip) { if (!toggleEquip(it)) { render(); renderBag(); return; } saveGame(); closeBag(); endTurn(); return; }   // 装備品：着脱でターン経過
+  if (player.st.mute > 0 && (ITEMS[it.type].cat === '草' || ITEMS[it.type].cat === '巻物')) { say('くちなし状態で使えない！'); render(); renderBag(); return; }
   if (ITEMS[it.type].staff) {                                    // 杖：回数を1つ消費。0回でも振れる（何も起こらない）
     if (it.plus <= 0) say('しかし、何も起こらなかった。（回数切れ）');
     else { it.plus--; ITEMS[it.type].use(it); }
@@ -1002,7 +1365,7 @@ function dropType(key) {
   if (guardDead()) return;
   const it = firstOf(key);
   if (!it) return;
-  if (isEq(it) && scene === 'dungeon') { if (eqWeapon === it) eqWeapon = null; if (eqShield === it) eqShield = null; }
+  if (isEq(it) && scene === 'dungeon') { if (eqWeapon === it) eqWeapon = null; if (eqShield === it) eqShield = null; eqRings = eqRings.map(r => r === it ? null : r); belly = Math.min(belly, maxBelly()); }
   if (scene === 'town') { say('町では置けない。倉庫に預けよう。'); closeBag(); render(); return; }
   const f = itemAt(player.x, player.y);
   if (f) {
@@ -1081,7 +1444,7 @@ function moveItems(type, n, from, to, cap) {
     if (to.length >= cap) break;
     const k = from.findIndex(it => ikey(it) === type);
     if (k < 0) break;
-    const mv = from.splice(k, 1)[0]; if (eqWeapon === mv) eqWeapon = null; if (eqShield === mv) eqShield = null;
+    const mv = from.splice(k, 1)[0]; if (eqWeapon === mv) eqWeapon = null; if (eqShield === mv) eqShield = null; eqRings = eqRings.map(r => r === mv ? null : r);
     to.push(mv); moved++;
   }
   return moved;
@@ -1133,6 +1496,16 @@ const defaultKey = k => k === 'floor' ? 'floor0' : k === 'ground' ? 'ground0' : 
 let artTarget = null;
 function openCfg() { holdStop(); cfgOpen = true; cfgEl.hidden = false; renderCfg(); }
 function closeCfg() { cfgOpen = false; cfgEl.hidden = true; setMsg(''); }
+// 確認用：倉庫と持ち物にまだ無い種類を1個ずつ、倉庫に入れる（強化値は+0）。入れた種類数を返す
+function giftAll() {
+  let n = 0;
+  for (const k of Object.keys(ITEMS)) {
+    if (wh.length >= MAXWH) break;
+    if (wh.some(i => i.type === k) || inv.some(i => i.type === k)) continue;
+    wh.push(mkItem(k, ITEMS[k].equip && ITEMS[k].equip !== 'ring' ? 0 : undefined)); n++;
+  }
+  return n;
+}
 function renderCfg() {
   const rows = [
     `<div class="set"><span class="lab">自動拾い<br><small>踏んだだけで拾う</small></span><button class="sm" data-cfg="auto">${autoPick ? 'ON' : 'OFF'}</button></div>`,
@@ -1145,6 +1518,7 @@ function renderCfg() {
     `<div class="set"><span class="lab">戦闘の演出<br><small>斬撃の弧・命中の火花・被弾や撃破での画面の揺れ。酔うときは「なし」</small></span><button class="sm" data-cfg="vfx">${['なし', '標準', '強'][vfxPref]}</button></div>`,
     `<div class="set"><span class="lab">満腹度の減り<br><small>「速い」は動作確認用（2ターンで1%）</small></span><button class="sm" data-cfg="hunger">${hungerPref ? '速い' : '標準'}</button></div>`,
     `<div class="set"><span class="lab">地図<br><small>画面の地図をタップで 小⇔大</small></span><button class="sm" data-cfg="map">${MAP_LABEL[mapMode]}</button></div>`,
+    `<div class="set"><span class="lab">お試しアイテム<br><small>倉庫に、まだ無い種類のアイテムを1個ずつ入れる（確認用。倉庫がいっぱいになるまで。何度でも押せる）</small></span><button class="sm" data-cfg="giftall">配る</button></div>`,
     `<div class="set"><span class="lab"><b>素材（画像の差し替え）</b><br><small>PNG推奨・256×256以上。キャラとアイテムは背景を単色マゼンタ(#FF00FF)に、タイルは不透明で。</small></span></div>`,
   ];
   for (const k of ASSET_KEYS) rows.push(`<div class="art"><canvas width="48" height="48" data-key="${k}"></canvas><span class="nm">${artLabel(k)}<br><small>${SPRITES[k] ? '差し替え済み' : '内蔵'}</small></span>` +
@@ -1170,6 +1544,7 @@ cfgListEl.addEventListener('click', ev => {
   else if (a === 'hunger') hungerPref = 1 - hungerPref;
   else if (a === 'char') charPref = (charPref + 1) % CHAR_K.length;
   else if (a === 'map') mapMode = (mapMode + 1) % 3;
+  else if (a === 'giftall') { const n = giftAll(); setMsg(n ? `${n}種を倉庫に入れました（倉庫 ${wh.length}/${MAXWH}）` : (wh.length >= MAXWH ? '倉庫がいっぱいです' : '全部の種類が揃っています')); }
   else if (a === 'pick') { artTarget = b.dataset.key; setMsg(`「${artLabel(artTarget)}」の画像を選んでください`); artFileEl.value = ''; artFileEl.click(); return; }
   else if (a === 'reset') resetArt(b.dataset.key);
   saveGame(); renderCfg(); render();
@@ -1249,11 +1624,11 @@ const cache = new Map();
 function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) { cache.set(k, v); $(id).style[prop] = v; } }
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
-  setH('where', scene === 'town' ? `町　踏破${clears}` : `${DUNGEONS[dungeonId].name} 下り ${floorNo}F`);
+  setH('where', scene === 'town' ? `町　踏破${clears}` : `${DUNGEONS[dungeonId].name} 下り ${floorNo}F${statusText() ? '　' + statusText() : ''}`);
   setH('bagc', `持${inv.length}/${MAXBAG}`);
-  setH('belly', `満腹度 ${belly}/${MAXBELLY}`);
+  setH('belly', `満腹度 ${belly}/${maxBelly()}`);
   setS('blbar', 'display', scene === 'dungeon' ? 'block' : 'none');
-  setS('blf', 'width', Math.max(0, Math.min(100, belly)) + '%');
+  setS('blf', 'width', Math.max(0, Math.min(100, belly / maxBelly() * 100)).toFixed(1) + '%');
   setS('blf', 'background', belly <= 10 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
   setH('hp', `HP ${player.hp}/${player.maxhp}`);
   const hpr = Math.max(0, Math.min(1, player.hp / player.maxhp));
@@ -1436,8 +1811,8 @@ function drawMinimap() {
     ctx.fillStyle = map[y][x] === STAIRS ? '#ffd54a' : vis[y][x] ? 'rgba(195,210,255,.9)' : 'rgba(110,130,205,.65)';
     ctx.fillRect(bx + x * sc, by + y * sc, sc, sc);
   }
-  for (const f of floorItems) if (seen[f.y][f.x]) { ctx.fillStyle = '#ff6ad5'; ctx.fillRect(bx + f.x * sc, by + f.y * sc, sc, sc); }
-  for (const e of enemies) if (vis[e.y][e.x]) { ctx.fillStyle = '#ff4d4d'; ctx.fillRect(bx + e.x * sc, by + e.y * sc, sc, sc); }
+  for (const f of floorItems) if (seen[f.y][f.x] || senseItems()) { ctx.fillStyle = '#ff6ad5'; ctx.fillRect(bx + f.x * sc, by + f.y * sc, sc, sc); }
+  for (const e of enemies) if (vis[e.y][e.x] || senseEnemies()) { ctx.fillStyle = '#ff4d4d'; ctx.fillRect(bx + e.x * sc, by + e.y * sc, sc, sc); }
   ctx.fillStyle = '#000'; ctx.fillRect(bx + player.x * sc - 2, by + player.y * sc - 2, sc + 4, sc + 4);
   ctx.fillStyle = '#fff'; ctx.fillRect(bx + player.x * sc - 1, by + player.y * sc - 1, sc + 2, sc + 2);
 }
@@ -1525,6 +1900,12 @@ function draw() {
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
     ctx.fillStyle = '#000'; ctx.fillRect(px, py + TS - 3, TS, 3);
     ctx.fillStyle = '#e55'; ctx.fillRect(px, py + TS - 3, TS * e.hp / e.maxhp, 3);
+    const S = e.st;                                                                // 敵の状態：眠り・混乱の目印
+    if (S && (S.sleep > 0 || S.confuse > 0 || S.boost > 0)) {
+      ctx.font = 'bold ' + Math.round(TS * 0.3) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
+      const mk = S.sleep > 0 ? ['Zzz', '#9ab0ff'] : S.confuse > 0 ? ['?', '#ff9be8'] : ['≫', '#ffb060'];
+      ctx.fillStyle = '#000'; ctx.fillText(mk[0], px + TS / 2 + 1, py - TS * 0.45 + 1); ctx.fillStyle = mk[1]; ctx.fillText(mk[0], px + TS / 2, py - TS * 0.45);
+    }
   }
   const [ppx, ppy] = drawEntity('player', player, t, camX, camY);
   ctx.fillStyle = '#ffd54a';                                                       // 向きの目印（Attackの狙い先）

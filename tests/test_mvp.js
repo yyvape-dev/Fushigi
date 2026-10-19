@@ -347,7 +347,8 @@
     ok('equip: save keeps plus + eq slots', sv.bag.includes('sword:2') && sv.eq[0] === 0 && sv.eq[1] === 2);
     eqWeapon = eqShield = null; wh = []; inv = []; loadGame();
     ok('equip: load restores plus and equipped', inv[0].plus === 2 && eqWeapon === inv[0] && eqShield === inv[2] && inv.length === 5);
-    useType('scroll'); ok('scroll: raises equipped weapon plus', inv[0].plus === 3 && !inv.some(i => i.type === 'scroll'));
+    { const rs = Math.random; Math.random = () => 0.5; useType('scroll'); Math.random = rs; }                      // 「たまに+3」を避けて+1に固定
+    ok('scroll: raises equipped weapon plus', inv[0].plus === 3 && !inv.some(i => i.type === 'scroll'));
     whSide = 'bag'; whTransfer(ikey(inv[0]), false); ok('warehouse: moving equipped item unequips it', eqWeapon === null && wh.length === 1 && wh[0].plus === 3);
     eqWeapon = null; eqShield = null; useType('scroll'); }
   { scene = 'dungeon'; floorNo = 1; newFloor(); eqWeapon = null; eqShield = null; inv = [];
@@ -420,6 +421,132 @@
     for (const v of vfx) v.t0 -= 5000; shakeT0 -= 5000; draw();
     ok('vfx: expired effects are removed and the shake settles', vfx.length === 0 && shakeAmp === 0);
     vfxPref = 2; saveGame(); vfxPref = 1; loadGame(); ok('vfx: pref saved and loaded', vfxPref === 2); vfxPref = 1; toTown(false); }
+  // ===== 追加：草・巻物・腕輪・武器盾の拡充（シレン6準拠）=====
+  { const SEALS = new Set(['crit', 'double', 'tri', 'drain', 'hungry', 'knock', 'bat', 'fire', 'counter', 'dodge', 'guts', 'fullhalf', 'belly', 'hungryDef', 'critguard']);
+    const etSave = enemyTurn; let calls = 0; const stub = () => { calls++; };
+    const R = (v, f) => { const rs = Math.random; Math.random = () => v; try { f(); } finally { Math.random = rs; } };
+    const setup = () => {
+      scene = 'dungeon'; floorNo = 3; newFloor(); dead = false; eqWeapon = eqShield = null; eqRings = [null, null]; inv = []; enemies = []; floorItems = [];
+      player.st = newStatus(); player.maxhp = 20; player.hp = 20; atkUp = 0; bellyBonus = 0; belly = 100; floorLight = false; calls = 0; enemyTurn = stub; player.face = [1, 0]; turn = 1;   // turn=1：自然回復の周期に当たらないように
+    };
+    const mkE = (dx, dy, hp = 30, kind = 'goblin') => { const x = player.x + dx, y = player.y + dy; map[y][x] = FLOOR; const e = { kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: true, lost: 0, flash: 0, bump: null, fl: false, st: {} }; enemies.push(e); return e; };
+    const give = (t, plus) => { const it = mkItem(t, plus); inv.push(it); return it; };
+
+    // --- 一覧の整合
+    const keys = Object.keys(ITEMS);
+    ok('items: every item has name/cat/ch/fg/weight/desc', keys.every(k => { const d = ITEMS[k]; return d.name && d.cat && d.ch && d.fg && d.w > 0 && typeof d.desc === 'string' && d.desc.length > 4; }));
+    ok('items: every item is usable, equippable or a staff', keys.every(k => typeof ITEMS[k].use === 'function' || ITEMS[k].equip));
+    ok('items: weapons have atk, shields have def, seals are known', keys.every(k => { const d = ITEMS[k]; return (d.equip !== 'weapon' || d.atk > 0) && (d.equip !== 'shield' || d.def > 0) && (!d.seal || SEALS.has(d.seal)); }));
+    ok('items: rings have no plus value, weapons do', mkItem('ring_regen').plus === undefined && itemName(mkItem('ring_regen')) === '回復の腕輪' && mkItem('katana', 1).plus === 1);
+    ok('items: 20+ herbs, 10+ scrolls, 15+ rings, 10+ weapons, 10+ shields', ['草', '巻物', '腕輪', '武器', '盾'].every((c, i) => keys.filter(k => ITEMS[k].cat === c).length >= [20, 10, 15, 10, 10][i]));
+    ok('items: save/load keeps ids of new items', keys.every(k => { const it = mkItem(k); const b = decItem(encItem(it)); return b && b.type === k && b.plus === it.plus; }));
+    floorNo = 1; { let bad = 0; for (let i = 0; i < 600; i++) if ((ITEMS[rollType()].from || 1) > 1) bad++; ok('items: floor 1 never drops deeper items', bad === 0); }
+    floorNo = 5; { const got = new Set(); for (let i = 0; i < 4000; i++) got.add(rollType()); ok('items: floor 5 can drop every item', keys.every(k => got.has(k))); }
+
+    // --- 草
+    setup(); inv = [give('herb'), give('outogiri'), give('iyashi')]; player.hp = 10; useType('herb');
+    ok('herb: +6 HP', player.hp === 16);
+    player.st.confuse = 5; useType('outogiri'); ok('outogiri: +15 HP and cures confusion', player.hp === 20 && player.st.confuse === 0);
+    player.st.sleep = 0; player.st.blind = 4; player.st.weak = 4; player.hp = 5; useType('iyashi'); ok('iyashi: heals and cures every bad state', player.hp === 20 && !ST_BAD.some(k => player.st[k] > 0));
+    inv = [give('herb')]; player.hp = player.maxhp; useType('herb'); ok('herb at full HP: max HP +1 instead', player.maxhp === 21 && inv.length === 0);
+    setup(); inv = [give('kaguwashi')]; ok('kaguwashi: not consumed when nothing to cure', (useType('kaguwashi'), inv.length === 1));
+    player.st.mute = 3; ok('mute: herbs and scrolls cannot be used', (useType('kaguwashi'), inv.length === 1)); player.st.mute = 0; player.st.confuse = 3; useType('kaguwashi'); ok('kaguwashi: cures and is consumed', inv.length === 0 && player.st.confuse === 0);
+    setup(); inv = [give('bellyup'), give('bellydown')]; useType('bellyup'); ok('bellyup seed: max belly +5', maxBelly() === 105); useType('bellydown'); useType('bellydown'); ok('bellydown seed: clamps belly to the new max', maxBelly() === 100 && belly <= maxBelly());
+    setup(); inv = [give('strherb'), give('powerherb')]; useType('strherb'); ok('strherb: attack +1 for the run', atkBonus() === 1); useType('powerherb'); ok('powerherb: attack +3 while it lasts', atkBonus() === 4 && player.st.power >= 28);
+    setup(); inv = [give('poisonherb')]; useType('poisonherb'); ok('poisonherb: 5 damage and weakened (-2 attack)', player.hp === 15 && player.st.weak > 30 && atkBonus() === -2);
+    setup(); eqRings[0] = give('ring_antidote'); inv = [eqRings[0], give('poisonherb')]; useType('poisonherb'); ok('ring_antidote: blocks weakness (damage still taken)', player.hp === 15 && player.st.weak === 0);
+    setup(); player.hp = 4; inv = [give('poisonherb')]; useType('poisonherb'); ok('poisonherb can kill', dead === true); dead = false;
+    setup(); player.hp = 4; inv = [give('poisonherb'), give('reviveherb')]; useType('poisonherb'); ok('reviveherb: revives at full HP and turns into a weed', dead === false && player.hp === player.maxhp && !inv.some(i => i.type === 'reviveherb') && inv.some(i => i.type === 'weed'));
+    setup(); inv = [give('reviveherb')]; useType('reviveherb'); ok('reviveherb: eating it by hand is refused', inv.length === 1);
+    setup(); inv = [give('invincherb'), give('confherb'), give('sleepherb')]; player.st.confuse = 3; useType('invincherb'); ok('invincherb: invincible and cures bad states', player.st.invinc >= 18 && player.st.confuse === 0);
+    useType('confherb'); useType('sleepherb'); ok('invincible: blocks confusion and sleep', player.st.confuse === 0 && player.st.sleep === 0);
+    setup(); inv = [give('confherb')]; useType('confherb'); ok('confherb: confused', player.st.confuse > 0);
+    setup(); eqRings[0] = give('ring_noconf'); eqRings[1] = give('ring_nosleep'); inv.push(give('confherb'), give('sleepherb')); useType('confherb'); useType('sleepherb'); ok('rings: noconf/nosleep block them', player.st.confuse === 0 && player.st.sleep === 0);
+    setup(); inv = [give('sleepherb')]; useType('sleepherb'); ok('sleepherb: sleeps through 5 enemy turns, then wakes', calls === 5 && player.st.sleep === 0);
+    setup(); inv = [give('hasteherb')]; useType('hasteherb'); calls = 0; for (let i = 0; i < 4; i++) playerMove(0, 0); ok('hasteherb: enemies act only every other action', calls === 2);
+    setup(); inv = [give('blindherb')]; useType('blindherb'); updateVis(); ok('blindherb: only own tile is visible', vis.flat().filter(Boolean).length === 1 && vis[player.y][player.x]);
+    inv = [give('eyeherb')]; useType('eyeherb'); updateVis(); ok('eyeherb: cures blindness, shows enemies on the map', player.st.blind === 0 && senseEnemies() && vis.flat().filter(Boolean).length > 1);
+    setup(); const ox = player.x, oy = player.y; inv = [give('warpherb')]; useType('warpherb'); ok('warpherb: lands on a floor tile', map[player.y][player.x] === FLOOR && !enemyAt(player.x, player.y)); void ox; void oy;
+    setup(); { const e = mkE(1, 0, 40); inv = [give('dragonherb')]; useType('dragonherb'); ok('dragonherb: 12-15 fire damage to the first enemy', e.hp >= 25 && e.hp <= 28); }
+    setup(); player.st.confuse = 9; { let faces = new Set(); for (let i = 0; i < 40; i++) { player.face = [1, 0]; playerMove(1, 0); faces.add(player.face.join()); } ok('confusion: movement direction is random', faces.size >= 3); }
+
+    // --- 巻物（部屋の敵が対象）
+    setup(); { const a = mkE(1, 0), b = mkE(-1, 1); inv = [give('confscroll'), give('sleepscroll'), give('hastescroll'), give('vacuumscroll')];
+      useType('confscroll'); ok('confscroll: confuses every enemy in the room', a.st.confuse === 15 && b.st.confuse === 15);
+      useType('sleepscroll'); ok('sleepscroll: sleeps them', a.st.sleep === 20 && b.st.sleep === 20);
+      useType('hastescroll'); ok('hastescroll: speeds them up', a.st.boost === 20);
+      a.hp = b.hp = 30; useType('vacuumscroll'); ok('vacuumscroll: 12-15 damage to each, and damage wakes them', a.hp >= 15 && a.hp <= 18 && b.hp >= 15 && b.hp <= 18 && a.st.sleep === 0); }
+    setup(); { mkE(1, 0); mkE(-1, 0); inv = [give('annihilatescroll')]; useType('annihilatescroll'); ok('annihilatescroll: removes the room\'s enemies', enemies.length === 0); }
+    setup(); { const e = mkE(1, 0); inv = [give('helpscroll')]; player.hp = 2; player.st.sleep = 0; player.st.blind = 5; belly = 10; useType('helpscroll'); ok('helpscroll: full heal, cures, refills a starving belly', player.hp === player.maxhp && player.st.blind === 0 && belly === 50); void e; }
+    setup(); { const e = mkE(1, 0, 30); e.x = e.vx = player.x + 1; inv = [give('gatherscroll')]; const far = rooms[rooms.length - 1]; const f = { kind: 'goblin', x: far.cx, y: far.cy, vx: far.cx, vy: far.cy, hp: 5, maxhp: 5, aware: false, lost: 0, flash: 0, bump: null, fl: false, st: {} }; enemies.push(f);
+      useType('gatherscroll'); ok('gatherscroll: every enemy ends up near the player', enemies.every(o => Math.max(Math.abs(o.x - player.x), Math.abs(o.y - player.y)) <= 3) && new Set(enemies.map(o => o.x + ',' + o.y)).size === enemies.length); }
+    setup(); { floorItems = [{ x: rooms[0].cx, y: rooms[0].cy, item: mkItem('potion') }]; const far = rooms[rooms.length - 1]; floorItems.push({ x: far.cx, y: far.cy, item: mkItem('herb') }); player.x = far.cx + 0; player.y = far.cy + 0; inv = [give('itemscroll')]; useType('itemscroll');
+      ok('itemscroll: floor items gather around the player', floorItems.every(f => Math.max(Math.abs(f.x - player.x), Math.abs(f.y - player.y)) <= 2) && new Set(floorItems.map(f => f.x + ',' + f.y)).size === floorItems.length); }
+    setup(); { inv = [give('housescroll')]; useType('housescroll'); ok('housescroll: 6 aware enemies appear around the player', enemies.length === 6 && enemies.every(e => e.aware)); }
+    setup(); inv = [give('lightscroll')]; useType('lightscroll'); ok('lightscroll: map revealed and enemies/items sensed', seen.every(r => r.every(v => v)) && senseEnemies() && senseItems());
+    newFloor(); ok('lightscroll: effect ends on the next floor', !senseEnemies());
+    setup(); inv = [give('mutescroll')]; useType('mutescroll'); ok('mutescroll: mutes for 30 turns', player.st.mute > 25);
+    setup(); { const w = give('sword', 0); eqWeapon = w; const sh = give('woodshield', 0); eqShield = sh; inv.push(give('scroll'), give('shieldscroll'));
+      R(0.5, () => { useType('scroll'); useType('shieldscroll'); }); ok('scrolls: 天の恵み→weapon, 地の恵み→shield (+1 each)', w.plus === 1 && sh.plus === 1); }
+
+    // --- 腕輪
+    setup(); { const r1 = give('ring_regen'), r2 = give('ring_regen'), r3 = give('ring_strength'); useType(ikey(r1)); useType(ikey(r2)); ok('rings: two can be worn at once', eqRings[0] === r1 && eqRings[1] === r2 && ringN('regen') === 2);
+      const n0 = turn; useType(ikey(r3)); ok('rings: a third is refused', eqRings.every(r => r !== r3) && isEq(r3) === false && true); void n0;
+      saveGame(); eqRings = [null, null]; loadGame(); ok('rings: worn rings survive save/load', ringN('regen') === 2 && inv.filter(isEq).length === 2);
+      useType(ikey(inv.find(isEq))); ok('rings: tapping a worn ring takes it off', ringN('regen') === 1);
+      dropType(ikey(inv.find(isEq))); ok('rings: dropping a worn ring takes it off', ringN('regen') === 0); }
+    setup(); { eqRings[0] = give('ring_strength'); ok('ring_strength: attack +2', atkBonus() === 2); eqRings[1] = give('ring_strength'); ok('ring_strength x2: attack +4', atkBonus() === 4);
+      eqRings = [give('ring_bellyup'), null]; ok('ring_bellyup: max belly +25', maxBelly() === 125); eqRings = [give('ring_bellydown'), give('ring_bellydown')]; ok('ring_bellydown x2: max belly 50', maxBelly() === 50);
+      eqRings = [give('ring_regen'), null]; ok('ring_regen: belly drains faster', hungerIv() < HUNGER_TURNS[hungerPref]);
+      eqRings = [null, null]; ok('no ring: belly drains at the normal pace', hungerIv() === HUNGER_TURNS[hungerPref]);
+      eqRings = [give('ring_senseE'), null]; ok('ring_senseE: senses enemies only', senseEnemies() && !senseItems()); eqRings = [give('ring_senseI'), null]; ok('ring_senseI: senses items only', !senseEnemies() && senseItems());
+      eqRings = [give('ring_seeall'), null]; ok('ring_seeall: senses both', senseEnemies() && senseItems()); eqRings = [null, null]; }
+    setup(); { eqRings[0] = give('ring_boom'); const e = mkE(1, 0, 30); R(0, () => ringTick()); ok('ring_boom: explodes — enemy hurt 10, player left at 1 HP', e.hp === 20 && player.hp === 1);
+      setup(); eqRings[0] = give('ring_warp'); const ox = player.x, oy = player.y; let moved = false; for (let i = 0; i < 20 && !moved; i++) { R(0, () => ringTick()); moved = player.x !== ox || player.y !== oy; } ok('ring_warp: eventually warps', moved);
+      setup(); eqRings[0] = give('ring_leak'); give('potion'); R(0, () => ringTick()); ok('ring_leak: drops an unworn item at your feet', inv.filter(i => i.type === 'potion').length === 0 && floorItems.some(f => f.item.type === 'potion'));
+      setup(); eqRings[0] = give('ring_summon'); for (const r of vis) r.fill(false); const n0 = enemies.length; R(0, () => { for (let i = 0; i < 30 && enemies.length === n0; i++) ringTick(); }); ok('ring_summon: a new enemy appears', enemies.length > n0); }
+    setup(); { eqRings[0] = give('ring_sneak'); enemyTurn = etSave; const e = mkE(-2, 0); e.aware = false; player.face = [1, 0]; const far = { ...e }; void far; e.x = player.x + 5; e.y = player.y; map[e.y][e.x] = FLOOR; for (let x = player.x; x <= e.x; x++) map[player.y][x] = FLOOR;
+      endTurn(); ok('ring_sneak: an enemy 5 tiles away does not notice you', e.aware === false); eqRings = [null, null]; endTurn(); ok('without ring_sneak, the same enemy notices you', e.aware === true); enemyTurn = stub; }
+    setup(); { eqRings[0] = give('ring_moroha'); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('ring_moroha: a low roll is a critical hit (2 x 2 = 4)', 99 - e.hp === 4);
+      e.hp = 99; R(0.5, () => hitEnemy(e)); ok('ring_moroha: a normal roll is not (2+1 = 3)', 99 - e.hp === 3); }
+
+    // --- 武器の印
+    setup(); { eqWeapon = give('minoaxe', 0); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('minoaxe: 会心 doubles (2+4)*2 = 12', e.hp === 99 - 12); }
+    setup(); { eqWeapon = give('skyblade', 0); const b = mkE(1, 0, 99, 'bat'), g = mkE(0, 1, 99, 'goblin'); R(0, () => { hitEnemy(b); hitEnemy(g); }); ok('skyblade: double damage to bats only', 99 - b.hp === 10 && 99 - g.hp === 5); }
+    setup(); { eqWeapon = give('healsword', 0); player.hp = 10; const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('healsword: heals a third of the damage', player.hp === 11); }
+    setup(); { eqWeapon = give('steakknife', 0); const e = mkE(1, 0, 99); belly = 100; R(0, () => hitEnemy(e)); const a = 99 - e.hp; e.hp = 99; belly = 20; R(0, () => hitEnemy(e)); ok('steakknife: +3 when hungry', 99 - e.hp === a + 3); }
+    setup(); { eqWeapon = give('harisen', 0); const e = mkE(1, 0, 99); map[player.y][player.x + 2] = FLOOR; R(0, () => hitEnemy(e)); ok('harisen: knocks the enemy back one tile', e.x === player.x + 2); }
+    setup(); { eqWeapon = give('renkentou', 0); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('renkentou: attacks twice on a proc', 99 - e.hp === (2 + 3) * 2); }
+    setup(); { eqWeapon = give('kamaitachi', 0); player.face = [1, 0]; const a = mkE(1, 0, 99), b = mkE(1, -1, 99), c = mkE(1, 1, 99), d = mkE(-1, 0, 99); R(0, () => hitEnemy(a)); ok('kamaitachi: hits the front three tiles, not behind', a.hp < 99 && b.hp < 99 && c.hp < 99 && d.hp === 99); }
+    setup(); { eqWeapon = give('firesword', 0); player.face = [-1, 0]; const e = mkE(-2, 0, 99); playerAttack(); ok('firesword: fires at range when HP is full', e.hp === 91); player.hp = 5; e.hp = 99; playerAttack(); ok('firesword: no fire when HP is not full', e.hp === 99); }
+    setup(); { eqWeapon = give('katana', 2); ok('katana+2: attack bonus 4+2', atkBonus() === 6); }
+
+    // --- 盾の印（敵の攻撃は本物の enemyTurn で）
+    const foe = () => { enemyTurn = etSave; const e = mkE(1, 0, 30); e.aware = true; return e; };
+    setup(); { eqShield = give('mikiri', 0); const e = foe(); R(0, () => enemyTurn()); ok('mikiri: dodges at a low roll', player.hp === 20); enemyTurn = stub; }
+    setup(); { eqShield = give('battlecounter', 0); const e = foe(); R(0.99, () => enemyTurn()); ok('battlecounter: reflects half the damage', player.hp < 20 && e.hp < 30); enemyTurn = stub; }
+    setup(); { eqShield = give('zekkocho', 0); const e = foe(); e.kind = 'ogre'; R(0.99, () => enemyTurn()); const full = 20 - player.hp; setup(); eqShield = give('zekkocho', 0); const e2 = foe(); e2.kind = 'ogre'; player.hp = 19; R(0.99, () => enemyTurn()); ok('zekkocho: half damage at full HP', full >= 1 && 19 - player.hp >= full); enemyTurn = stub; }
+    setup(); { eqShield = give('konjo', 0); const e = foe(); e.kind = 'ogre'; player.hp = 1; R(0, () => enemyTurn()); ok('konjo: survives a lethal hit at 1 HP on a low roll', dead === false && player.hp === 1); enemyTurn = stub; dead = false; }
+    setup(); { const e = foe(); e.kind = 'ogre'; player.hp = 1; R(0, () => enemyTurn()); ok('without konjo the same hit kills', dead === true); enemyTurn = stub; dead = false; }
+    setup(); { eqShield = give('steakplate', 0); belly = 100; const a = defBonus(); belly = 20; ok('steakplate: +2 defence when hungry', defBonus() === a + 2); }
+    setup(); { eqShield = give('haramochi', 0); ok('haramochi: belly lasts longer', hungerIv() > HUNGER_TURNS[hungerPref] || HUNGER_TURNS[hungerPref] === 2 && hungerIv() === 3); }
+    setup(); { eqShield = give('ironshield2', 0); eqWeapon = give('dotanuki', 0); ok('catalogue: 鉄甲の盾 def 3, どうたぬき atk 6', defBonus() === 3 && atkBonus() === 6); }
+    setup(); { player.st.invinc = 5; const e = foe(); const hp0 = player.hp; R(0.99, () => enemyTurn()); ok('invincible: enemy hits do 0 damage', player.hp === hp0); enemyTurn = stub; }
+    setup(); { eqRings[0] = give('ring_tsukon'); const e = foe(); R(0, () => enemyTurn()); const dm = 20 - player.hp; ok('ring_tsukon: enemy crits double the damage on a low roll', dm === 2); enemyTurn = stub; }
+    setup(); { eqRings[0] = give('ring_tsukon'); eqShield = give('minoshield', 0); const e = foe(); R(0, () => enemyTurn()); ok('minoshield: crit damage is not doubled', 20 - player.hp === 1); enemyTurn = stub; }
+
+    // --- 敵の状態
+    setup(); { enemyTurn = etSave; const e = mkE(1, 0, 30); e.st.sleep = 3; endTurn(); ok('enemy asleep: does not attack', player.hp === 20 && e.st.sleep === 2);
+      e.st.sleep = 0; e.st.confuse = 4; let hit = 0; for (let i = 0; i < 12; i++) { player.hp = 20; endTurn(); if (player.hp < 20) hit++; e.x = player.x + 1; e.y = player.y; } ok('enemy confused: rarely attacks', hit < 12); enemyTurn = stub; }
+
+    // --- 画面・体力リセット
+    setup(); { eqRings[0] = give('ring_seeall'); const e = mkE(1, 0); e.st.sleep = 3; mkE(-1, 0).st.confuse = 3; mkE(0, 1).st.boost = 3; player.st.blind = 3; player.st.power = 5; let thr = null; try { draw(); player.st.blind = 0; updateVis(); draw(); } catch (er) { thr = er; console.log(er); } ok('draw: statuses, enemy marks and rings render without error', !thr); }
+    setup(); { player.st.confuse = 4; player.st.power = 7; draw(); ok('hud: status text lists remaining turns', statusText().includes('混乱4') && statusText().includes('パワーアップ7')); }
+    toTown(false); player.maxhp = 33; player.hp = 33; enterDungeon(); ok('enterDungeon: max HP resets to the level-1 value', player.maxhp === BASE_HP && player.hp === BASE_HP && atkUp === 0 && bellyBonus === 0);
+    eqRings = [mkItem('ring_bellyup'), null]; inv = [eqRings[0]]; toTown(false); enterDungeon(); ok('enterDungeon: starts with a full (extended) belly', belly === 125);
+    wh = []; inv = [mkItem('potion')]; const g1 = giftAll(); ok('giftall: fills the warehouse up to its cap, skipping what the bag has', g1 === MAXWH && wh.length === MAXWH && !wh.some(i => i.type === 'potion') && wh.filter(i => i.plus !== undefined && ITEMS[i.type].equip).every(i => i.plus === 0));
+    wh = wh.slice(0, MAXWH - 3); ok('giftall: refills what was removed', giftAll() >= 3 && wh.length <= MAXWH);
+    enemyTurn = etSave; eqRings = [null, null]; inv = []; wh = []; }
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
 })();
