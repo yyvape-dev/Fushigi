@@ -453,6 +453,7 @@ let scene = 'town';               // 'town' | 'dungeon'
 let dungeonId = 'first';
 let map, rooms, player, enemies = [], floorItems = [], inv = [], wh = [], quick, floorNo, turn, dead, deadAt, vis, seen, logs = [];
 let clears = 0, deaths = 0;
+let gift = false;                 // お試し装備を倉庫に配ったか（1回だけ）
 let eqWeapon = null, eqShield = null;   // 装備中の武器・盾（持ち物の中の1個を指す）
 let autoPick = false;             // 自動拾い（既定OFF：踏んでも拾わず、足元に載るだけ）
 let uid = 0;
@@ -495,7 +496,7 @@ function rollType() {
 // ===== 保存（倉庫・持ち物・記録）=====
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], gift, quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos }));
   } catch (_) {}
 }
 function loadGame() {
@@ -506,6 +507,7 @@ function loadGame() {
     inv = (s.bag || []).map(decItem).filter(Boolean);
     eqWeapon = eqShield = null;
     if (Array.isArray(s.eq)) { eqWeapon = inv[s.eq[0]] || null; eqShield = inv[s.eq[1]] || null; if (eqWeapon && ITEMS[eqWeapon.type].equip !== 'weapon') eqWeapon = null; if (eqShield && ITEMS[eqShield.type].equip !== 'shield') eqShield = null; }
+    gift = !!s.gift;
     quick = s.quick === null || (ITEMS[s.quick] && !ITEMS[s.quick].equip && !ITEMS[s.quick].charges) ? s.quick : 'potion';
     clears = s.clears | 0; deaths = s.deaths | 0; autoPick = !!s.autoPick;
     mapMode = [0, 1, 2].includes(s.mapMode) ? s.mapMode : 1;
@@ -645,8 +647,11 @@ function boot() {
   player = { x: 0, y: 0, vx: 0, vy: 0, hp: 20, maxhp: 20, face: [0, 1], bump: null, flash: 0, fl: false };
   dead = false; floorNo = 1; turn = 0;
   if (!loadGame()) { wh = [mkItem('potion'), mkItem('potion'), mkItem('potion'), mkItem('onigiri'), mkItem('onigiri')]; inv = []; quick = 'potion'; clears = 0; deaths = 0; }
+  const giftMsg = !gift;
+  if (!gift) { for (const t of ['stick', 'sword', 'axe', 'woodshield', 'ironshield']) wh.push(mkItem(t, 0)); gift = true; }   // 動作確認用：武器と盾を倉庫へ（1回だけ）
   toTown(false);
   say('町に着いた。倉庫で道具を用意して、入口から潜ろう。');
+  if (giftMsg) say('倉庫に武器と盾を入れておいた。持ち物に出して装備してみよう。');
   render();
 }
 
@@ -825,7 +830,7 @@ function playerPickUp() {
 // Attackボタン：向いている方向の敵を殴る。いなければ隣接する敵を自動で狙う。誰もいなければターン消費なし（町では「決定」）
 function playerAttack() {
   if (uiBlocked() || guardDead()) return;
-  if (scene === 'town') { const c = ctxInfo(); if (c) c.fn(); else { say('町では戦えない。'); render(); } return; }
+  if (scene === 'town') { const c = ctxInfo(); if (c) c.fn(); else { player.swing = now(); say('素振りをした。'); render(); } return; }
   const [fx_, fy_] = player.face;
   let t = geomOK(player.x, player.y, fx_, fy_) ? enemyAt(player.x + fx_, player.y + fy_) : null;
   if (!t) {

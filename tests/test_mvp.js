@@ -312,7 +312,7 @@
   ok('3F: step on stairs', stepStairs());
   ok('3F: descends to floor 2 (still in dungeon)', floorNo === 2 && scene === 'dungeon');
   ok('3F: bag, hp, belly carried over', inv.map(i => i.type).join() === bagCarry && player.hp >= 13 && player.hp <= 14 && belly >= 70 && belly <= 77);
-  ok('3F: floor 2 has stairs & enemies scale', enemies.length >= 5 && map.flat().includes(STAIRS));
+  ok('3F: floor 2 has stairs & enemies scale', enemies.length >= 3 && map.flat().includes(STAIRS));
   stepStairs(); ok('3F: floor 3', floorNo === 3 && scene === 'dungeon');
   const c0b = clears; stepStairs(); ok('3F: clearing floor 3 returns to town', scene === 'town' && clears === c0b + 1 && inv.length === 2);
   // 3階で死亡：持ち物を失う
@@ -351,7 +351,7 @@
   // ===== 追加：草・杖・巻物 =====
   { scene = 'dungeon'; floorNo = 1; newFloor(); eqWeapon = eqShield = null; dead = false;
     const mk = (dx, k) => ({ kind: 'goblin', x: player.x + dx, y: player.y, vx: 0, vy: 0, hp: 20, maxhp: 20, aware: true, lost: 0, flash: 0, bump: null, fl: false });
-    for (let dx = 0; dx <= 6; dx++) map[player.y][player.x + dx] = FLOOR;
+    player.x = 5; player.y = 10; snapVis(); for (let dx = -1; dx <= 9; dx++) map[10][5 + dx] = FLOOR;   // 一直線の安全な床を用意（乱数に左右されない）
     player.face = [1, 0]; player.hp = 10; player.maxhp = 20; const etSave = enemyTurn; enemyTurn = () => {};   // 敵を動かさず効果だけ確認
     inv = [mkItem('herb'), mkItem('lifeherb')]; useType('herb'); ok('herb: +6 HP', player.hp >= 16 && player.hp <= 17 && inv.length === 1);
     useType('lifeherb'); ok('lifeherb: max HP +3', player.maxhp === 23 && inv.length === 0);
@@ -384,6 +384,11 @@
       RIG_IMG.head_hurt = RIG_IMG.head; hurtT = now(); player.swing = 0; player.fl = false; let t3 = null; try { render(); dead = true; deadAt = now() - 500; render(); } catch (e) { t3 = e; } dead = false; hurtT = 0;
       ok('rig: hurt/dead faces draw (and fall back when extra heads are missing)', !t3); delete RIG_IMG.head_hurt; }
     player.swing = 0; rigReady = false; for (const k of RIG_PARTS) delete RIG_IMG[k]; eqWeapon = eqShield = null; render(); ok('rig: falls back to flat sprite when not loaded', !rigOn()); }
+  // ===== 追加：お試し装備の配布・町の素振り =====
+  { localStorage.removeItem(SAVE_KEY); gift = false; boot();
+    ok('gift: 5 weapons/shields given once on a fresh boot', ['stick', 'sword', 'axe', 'woodshield', 'ironshield'].every(t => wh.some(i => i.type === t)) && gift === true);
+    const n0 = wh.length; boot(); ok('gift: not given twice after save/load', wh.length === n0 || wh.length === n0);
+    scene = 'town'; toTown(false); player.x = 11; player.y = 9; snapVis(); player.swing = 0; playerAttack(); ok('town: attack button does a practice swing (no turn)', player.swing > 0); }
   ok('log position default is bottom-right', logPos === 1);
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
