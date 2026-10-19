@@ -10,3 +10,8 @@
 
 ## テスト（画面なしで動かす自動テスト）
 `npm i @napi-rs/canvas` のあと `node tests/harness.js index.html tests/test_mvp.js`（`ALL OK` が出れば成功）。
+
+## パーツで動く主人公（切り絵リグ）
+- `assets/rig/*.png`（頭・胴・マント・腕4種・脚2種）を回転させて、歩き・攻撃・装備（剣と盾が手に付く）を描く。
+- 主人公の取り込み画像（設定→素材）がある場合は、そちらを優先して1枚絵で表示する。
+- 支点・倍率・姿勢は `index.html` の `RIG` と `rigPose()`。

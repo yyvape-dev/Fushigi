@@ -366,6 +366,18 @@
     inv = [mkItem('escscroll'), mkItem('potion')]; useType('escscroll'); ok('escscroll: back to town with bag kept', scene === 'town' && inv.length === 1);
     scene = 'town'; inv = [mkItem('mapscroll')]; useType('mapscroll'); ok('mapscroll in town: not consumed', inv.length === 1);
     wh = []; inv = [mkItem('firestaff', 3), mkItem('herb')]; saveGame(); inv = []; loadGame(); enemyTurn = etSave; ok('staff charges survive save/load', inv.some(i => i.type === 'firestaff' && i.plus === 3)); }
+  // ===== 追加：パーツで動く主人公（リグ） =====
+  { for (const k of RIG_PARTS) { const c = document.createElement('canvas'); c.width = 40; c.height = 60; const g2 = c.getContext('2d'); g2.fillStyle = '#c33'; g2.fillRect(0, 0, 40, 60); RIG_IMG[k] = c; }
+    rigReady = true; delete SPRITES.player; ok('rig: on when ready and no imported player art', rigOn());
+    SPRITES.player = document.createElement('canvas'); ok('rig: off when player art imported', !rigOn()); delete SPRITES.player;
+    scene = 'dungeon'; floorNo = 1; newFloor(); eqWeapon = mkItem('sword', 1); eqShield = mkItem('woodshield', 0);
+    let thr = null; try { for (const sw of [0, 0.1, 0.4, 0.8]) { player.swing = sw ? now() - sw * SWING_MS : 0; render(); } player.vx += 0.4; render(); player.vx = player.x; player.fl = true; player.flash = now() + 100; render(); eqWeapon = mkItem('axe', 0); eqShield = null; render(); eqWeapon = mkItem('stick', 0); render(); } catch (e) { thr = e; console.log(e); }
+    ok('rig: draws all poses/equipment without error', !thr);
+    player.swing = now(); ok('rig: swing keeps animation running', animating(now()));
+    const P0 = rigPose({ vx: 0, vy: 0, swing: 0 }, 0), P1 = rigPose({ vx: 0.5, vy: 0 }, 0);
+    ok('rig: walking swings legs, idle does not', Math.abs(P0.legA) < 1e-9 && Math.abs(P1.legA) > 0.3);
+    const Ps = rigPose({ vx: 0, vy: 0, swing: 1000 }, 1000 + SWING_MS * 0.4); ok('rig: strike phase lunges and leans', Ps.lunge > 0 && Ps.lean > 0);
+    player.swing = 0; rigReady = false; for (const k of RIG_PARTS) delete RIG_IMG[k]; eqWeapon = eqShield = null; render(); ok('rig: falls back to flat sprite when not loaded', !rigOn()); }
   ok('log position default is bottom-right', logPos === 1);
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');

@@ -755,6 +755,7 @@ function endTurn() {
   render();
 }
 function hitEnemy(e) {
+  player.swing = now(); kick();
   const dmg = rnd(2, 4) + atkBonus(); e.hp -= dmg; e.aware = true; e.flash = now() + 130;
   if (e.x !== player.x) player.fl = e.x < player.x;
   bumpToward(player, e.x, e.y);
@@ -1177,6 +1178,105 @@ function tileKey(x, y) {
   if (t === WALL) return (inb(x, y + 1) && map[y + 1][x] !== WALL) ? 'wallF' : 'wallT';
   return t === STAIRS ? 'stairs' : 'floor' + v;
 }
+// =====================================================================
+//  パーツで動く主人公（切り絵リグ）：assets/rig/*.png の9パーツを回転させて描く
+//   全身絵が無くても、歩き・攻撃・装備（剣と盾が手に付く）を表現できる。
+//   座標は「足元中央=原点・y上がマイナス・全身の高さ≒262」の独自単位。part: s=倍率 px,py=回転の支点（パーツ画像内の座標） hx,hy=手の位置
+//   主人公に取り込み画像(SPRITES.player)があればそちらを優先（パーツ表示はしない）
+// =====================================================================
+const RIG_PARTS = ['head', 'torso', 'cape', 'arm_hang', 'arm_bent', 'arm_fwd', 'arm_lion', 'leg_a', 'leg_b'];
+const RIG_IMG = {};
+let rigReady = false;
+const RIG = {
+  H: 262, hipY: -62, legY: -69, neck: [0, -97], shL: [-27, -81], shR: [32, -81],
+  part: {
+    head: { s: 0.54, px: 118, py: 178 }, torso: { s: 0.62, px: 89, py: 170 }, cape: { s: 0.62, px: 97, py: 22 },
+    arm_hang: { s: 0.55, px: 62, py: 20, hx: 55, hy: 160 }, arm_fwd: { s: 0.55, px: 32, py: 18, hx: 148, hy: 138 },
+    arm_bent: { s: 0.55, px: 115, py: 128, hx: 55, hy: 18 }, arm_lion: { s: 0.55, px: 42, py: 38, hx: 65, hy: 172 },
+    leg_a: { s: 0.38, px: 60, py: 12 }, leg_b: { s: 0.44, px: 50, py: 15 },
+  },
+};
+function loadRig() {
+  if (typeof Image === 'undefined') return;
+  let n = 0;
+  for (const k of RIG_PARTS) {
+    const im = new Image();
+    im.onload = () => { RIG_IMG[k] = im; if (++n === RIG_PARTS.length) { rigReady = true; kick(); } };
+    im.onerror = () => {};
+    im.src = 'assets/rig/' + k + '.png';
+  }
+}
+const rigOn = () => rigReady && !SPRITES.player;
+const lerp = (a, b, u) => a + (b - a) * u;
+const SWING_MS = 300;
+// 姿勢：歩き（移動量に同期した脚と腕の振り）／攻撃（振りかぶり→振り下ろし→戻し）
+function rigPose(e, t) {
+  const ph = (e.vx + e.vy) * Math.PI, s = Math.sin(ph);
+  const P = { bob: -Math.abs(s) * 3, lean: 0, lunge: 0, head: 0, cape: s * 0.12, legA: s * 0.55, legB: -s * 0.55, sArm: -s * 0.3, wArm: s * 0.3, fwd: false, blade: 0.9 };
+  if (e.swing && t - e.swing < SWING_MS) {
+    const p = (t - e.swing) / SWING_MS;
+    if (p < 0.3) { const u = p / 0.3; P.wArm = lerp(0, 2.5, u); P.blade = lerp(0.9, -0.7, u); P.lean = -0.12 * u; P.head = -0.06 * u; }
+    else if (p < 0.55) { const u = (p - 0.3) / 0.25; P.wArm = lerp(2.5, -0.9, u); P.blade = lerp(-0.7, 1.9, u); P.lean = lerp(-0.12, 0.2, u); P.lunge = 10 * u; P.head = lerp(-0.06, 0.08, u); }
+    else { const u = (p - 0.55) / 0.45; P.wArm = lerp(-0.9, 0, u); P.blade = lerp(1.9, 0.9, u); P.lean = lerp(0.2, 0, u); P.lunge = 10 * (1 - u); P.head = lerp(0.08, 0, u); }
+    P.legA = P.legB = 0; P.sArm = -P.lean * 2; P.bob = 0; P.cape = -P.lean * 1.5;
+  }
+  return P;
+}
+function rigPart(g, name, x, y, ang) {
+  const d = RIG.part[name]; g.save(); g.translate(x, y); g.rotate(ang); g.scale(d.s, d.s); g.drawImage(RIG_IMG[name], -d.px, -d.py); g.restore();
+}
+// 武器：外部の絵があればそれを、なければ線で描いた剣・棒・斧。原点=手、上向きが刃
+function rigWeapon(g, it) {
+  const d = ITEMS[it.type], ext = SPRITES[extName(it.type)];
+  if (ext && ext.width > 64) { g.save(); g.translate(0, -26); g.rotate(-Math.PI / 4); g.drawImage(ext, -32, -32, 64, 64); g.restore(); return; }   // 絵は右上向きの斜め置きを想定（仮説）
+  g.save(); g.lineCap = 'round'; g.strokeStyle = '#2a1a0a'; g.lineWidth = 8;
+  if (it.type === 'stick') { g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -48); g.stroke(); g.strokeStyle = d.fg; g.lineWidth = 5; g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -48); g.stroke(); }
+  else if (it.type === 'axe') {
+    g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -46); g.stroke(); g.strokeStyle = '#8a5a2a'; g.lineWidth = 5; g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -46); g.stroke();
+    g.fillStyle = '#cfd6e2'; g.strokeStyle = '#2a1a0a'; g.lineWidth = 2; g.beginPath(); g.moveTo(0, -48); g.quadraticCurveTo(26, -52, 24, -24); g.lineTo(0, -28); g.closePath(); g.fill(); g.stroke();
+  } else {
+    g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -6); g.stroke(); g.strokeStyle = '#7a4a22'; g.lineWidth = 5; g.beginPath(); g.moveTo(0, 8); g.lineTo(0, -6); g.stroke();
+    g.fillStyle = '#e8eef8'; g.strokeStyle = '#2a3a55'; g.lineWidth = 2; g.beginPath(); g.moveTo(-5, -8); g.lineTo(5, -8); g.lineTo(4, -52); g.lineTo(0, -60); g.lineTo(-4, -52); g.closePath(); g.fill(); g.stroke();
+    g.fillStyle = '#d8b04a'; g.fillRect(-11, -10, 22, 5);
+  }
+  g.restore();
+}
+function rigShield(g, it) {                                      // 原点=手。腕の前に大きめに重ねる
+  const d = ITEMS[it.type], ext = SPRITES[extName(it.type)];
+  if (ext && ext.width > 64) { g.drawImage(ext, -8, -34, 56, 56); return; }
+  g.save(); g.translate(14, -8); g.fillStyle = d.fg; g.strokeStyle = '#1a1a24'; g.lineWidth = 3;
+  g.beginPath(); g.arc(0, 0, 24, 0, Math.PI * 2); g.fill(); g.stroke();
+  g.fillStyle = 'rgba(0,0,0,.25)'; g.beginPath(); g.arc(0, 0, 15, 0, Math.PI * 2); g.fill();
+  g.fillStyle = '#e8d28a'; g.beginPath(); g.arc(0, 0, 5, 0, Math.PI * 2); g.fill(); g.restore();
+}
+// 足元中央 (fx,fy) に高さ h で描く
+function drawRig(g, fx, fy, h, e, t) {
+  const P = rigPose(e, t), u = h / RIG.H;
+  g.save(); g.translate(fx, fy); g.scale(u, u); g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
+  rigPart(g, 'leg_a', -13, RIG.legY, P.legA);                    // 奥の脚→手前の脚
+  rigPart(g, 'leg_b', 14, RIG.legY, P.legB);
+  g.save(); g.translate(P.lunge, RIG.hipY + P.bob); g.rotate(P.lean);
+  rigPart(g, 'cape', RIG.neck[0], RIG.neck[1] + 4, P.cape);       // マント（胴の後ろ）
+  rigPart(g, 'torso', 0, 0, 0);
+  { const d = RIG.part.arm_lion;                                  // 盾側の腕（獅子の肩当て）
+    g.save(); g.translate(RIG.shL[0], RIG.shL[1]); g.rotate(P.sArm); rigPart(g, 'arm_lion', 0, 0, 0);
+    if (eqShield) { g.save(); g.translate((d.hx - d.px) * d.s, (d.hy - d.py) * d.s); g.rotate(-P.lean - P.sArm); rigShield(g, eqShield); g.restore(); }
+    g.restore(); }
+  const headFirst = P.wArm > 1.2;                                // 腕を振りかぶったときは頭の手前に腕を出す（頭を先に描く）
+  if (headFirst) rigPart(g, 'head', RIG.neck[0], RIG.neck[1], P.head);
+  { const nm = P.fwd ? 'arm_fwd' : 'arm_hang', d = RIG.part[nm];  // 武器側の腕
+    g.save(); g.translate(RIG.shR[0], RIG.shR[1]); g.rotate(P.wArm); rigPart(g, nm, 0, 0, 0);
+    g.save(); g.translate((d.hx - d.px) * d.s, (d.hy - d.py) * d.s); g.rotate(P.blade - P.lean - P.wArm); if (eqWeapon) rigWeapon(g, eqWeapon); g.restore();
+    g.restore(); }
+  if (!headFirst) rigPart(g, 'head', RIG.neck[0], RIG.neck[1], P.head);
+  g.restore(); g.restore();
+}
+// キャラを1体描く：パーツ表示が使えるときは主人公だけパーツで、それ以外は1枚絵
+function drawChar(key, x, y, g, k, e, t) {
+  if (key === 'player' && rigOn()) { const S = TS * k; drawRig(g, x - (S - TS) / 2 + S / 2, y - (S - TS) + S, S * 0.97, e, t); return; }
+  blit(key, x, y, g, k);
+}
+
 function entityOffset(e, t) {
   if (!e.bump) return [0, 0];
   const k = (t - e.bump.t0) / 150;
@@ -1194,11 +1294,11 @@ function drawEntity(key, e, t, camX, camY) {
   ctx.beginPath(); ctx.ellipse(px + TS / 2, py + TS * 0.9, TS * 0.32 * Math.min(ck, 1.25), TS * 0.1 * Math.min(ck, 1.25), 0, 0, Math.PI * 2); ctx.fill();
   ctx.save();
   if (e.fl) { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
-  blit(key, 0, 0, ctx, ck);
+  drawChar(key, 0, 0, ctx, ck, e, t);
   if (e.flash > t) {                                             // 被弾の白フラッシュ（絵の形のまま）。tmpは2マス四方：足元を(TS/2, TS)に置く
     const g = tmp.getContext('2d');
     g.clearRect(0, 0, TS * 2, TS * 2); g.globalCompositeOperation = 'source-over';
-    blit(key, TS / 2, TS, g, ck);
+    drawChar(key, TS / 2, TS, g, ck, e, t);
     g.globalCompositeOperation = 'source-atop'; g.fillStyle = '#fff'; g.fillRect(0, 0, TS * 2, TS * 2); g.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 0.75; ctx.drawImage(tmp, -TS / 2, -TS, TS * 2, TS * 2); ctx.globalAlpha = 1;
   }
@@ -1350,6 +1450,7 @@ function stepVis(dt) {
 }
 function animating(t) {
   if (t - fadeT < 350 || (hurtT && t - hurtT < 260) || fx.length) return true;
+  if (player.swing && t - player.swing < SWING_MS) return true;
   return [player, ...enemies].some(e => Math.abs(e.x - e.vx) > 0.001 || Math.abs(e.y - e.vy) > 0.001 || e.bump || e.flash > t);
 }
 function frame() {
@@ -1450,6 +1551,7 @@ addEventListener('resize', resize);
 
 resize();
 loadExternalAssets();
+loadRig();
 idbLoadAll();
 boot();
 </script>
