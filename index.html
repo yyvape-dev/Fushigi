@@ -1257,18 +1257,21 @@ function drawRig(g, fx, fy, h, e, t) {
   rigPart(g, 'leg_b', 14, RIG.legY, P.legB);
   g.save(); g.translate(P.lunge, RIG.hipY + P.bob); g.rotate(P.lean);
   rigPart(g, 'cape', RIG.neck[0], RIG.neck[1] + 4, P.cape);       // マント（胴の後ろ）
+  const headFirst = P.wArm > 1.2;                                // 腕を高く振りかぶったときだけ、奥の腕を頭の手前に出す（元絵と同じ）
+  const farArm = (arm, weapon) => {                               // 奥の腕（画面左・武器側）。腕はふだん胴の後ろ、武器は手前に見せる
+    const nm = P.fwd ? 'arm_fwd' : 'arm_hang', d = RIG.part[nm];
+    g.save(); g.translate(RIG.shL[0], RIG.shL[1]); g.rotate(P.wArm); if (arm) rigPart(g, nm, 0, 0, 0);
+    if (weapon && eqWeapon) { g.save(); g.translate((d.hx - d.px) * d.s, (d.hy - d.py) * d.s); g.rotate(P.blade - P.lean - P.wArm); rigWeapon(g, eqWeapon); g.restore(); }
+    g.restore();
+  };
+  if (!headFirst) farArm(true, false);
   rigPart(g, 'torso', 0, 0, 0);
-  { const d = RIG.part.arm_lion;                                  // 盾側の腕（獅子の肩当て）
+  { const d = RIG.part.arm_lion;                                  // 手前の腕（画面右・盾側。獅子の肩当て）
     g.save(); g.translate(RIG.shR[0], RIG.shR[1]); g.rotate(P.sArm); rigPart(g, 'arm_lion', 0, 0, 0);
     if (eqShield) { g.save(); g.translate((d.hx - d.px) * d.s, (d.hy - d.py) * d.s); g.rotate(-P.lean - P.sArm); rigShield(g, eqShield); g.restore(); }
     g.restore(); }
-  const headFirst = P.wArm > 1.2;                                // 腕を振りかぶったときは頭の手前に腕を出す（頭を先に描く）
-  if (headFirst) rigPart(g, 'head', RIG.neck[0], RIG.neck[1], P.head);
-  { const nm = P.fwd ? 'arm_fwd' : 'arm_hang', d = RIG.part[nm];  // 武器側の腕
-    g.save(); g.translate(RIG.shL[0], RIG.shL[1]); g.rotate(P.wArm); rigPart(g, nm, 0, 0, 0);
-    g.save(); g.translate((d.hx - d.px) * d.s, (d.hy - d.py) * d.s); g.rotate(P.blade - P.lean - P.wArm); if (eqWeapon) rigWeapon(g, eqWeapon); g.restore();
-    g.restore(); }
-  if (!headFirst) rigPart(g, 'head', RIG.neck[0], RIG.neck[1], P.head);
+  rigPart(g, 'head', RIG.neck[0], RIG.neck[1], P.head);
+  farArm(headFirst, true);
   g.restore(); g.restore();
 }
 // キャラを1体描く：パーツ表示が使えるときは主人公だけパーツで、それ以外は1枚絵
