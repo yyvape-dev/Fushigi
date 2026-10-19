@@ -132,7 +132,7 @@ const SAVE_KEY = 'fushigi_core_save_v1';
 const MAXBELLY = 100, HUNGER_TURNS = [10, 2];
 
 // ダンジョン定義：floors を増やせば多階層になる（最終階の階段 = 踏破）
-const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 1 } };
+const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 3 } };
 
 // =====================================================================
 //  アイテム定義：新アイテムはここに1項目足すだけ
@@ -367,7 +367,7 @@ const enemyAt = (x, y) => enemies.find(e => e.x === x && e.y === y);
 const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
 const mkItem = type => ({ id: ++uid, type });
 const itemName = it => ITEMS[it.type].name;
-let histOpen = false, logPos = 0, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
+let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
 const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen;
@@ -396,7 +396,7 @@ function loadGame() {
     charPref = [0, 1, 2].includes(s.charPref) ? s.charPref : 0;
     hungerPref = [0, 1].includes(s.hungerPref) ? s.hungerPref : 0;
     shadePref = [0, 1, 2].includes(s.shadePref) ? s.shadePref : 1;
-    logPos = [0, 1].includes(s.logPos) ? s.logPos : 0;
+    logPos = [0, 1].includes(s.logPos) ? s.logPos : 1;
     return true;
   } catch (_) { return false; }
 }

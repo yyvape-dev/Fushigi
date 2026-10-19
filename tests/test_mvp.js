@@ -10,6 +10,7 @@
   if (!okArt) for (const [k, rows] of Object.entries(ART)) rows.forEach((r, i) => { if (r.length !== 16) console.log('  bad row', k, i, r.length); });
 
   // --- 起動：町、倉庫に薬3個
+  DUNGEONS.first.floors = 1;                                       // 旧テストは1階想定（多階層は末尾で別に検証）
   ok('boot: starts in town at spawn', scene === 'town' && player.x === 11 && player.y === 9);
   ok('boot: fresh save has 3 potions in warehouse, bag empty', wcnt('potion') === 3 && inv.length === 0);
   fadeT = -1e9; draw(); __savePng(out('shot_town.png'));
@@ -298,5 +299,27 @@
   openCfg(); ok('cfg has log position row', cfgListEl.innerHTML.includes('メッセージ窓の位置')); closeCfg();
   { let th6 = null; try { for (const lp of [0, 1]) { logPos = lp; render(); } } catch (e) { th6 = e; console.log(e); } ok('refreshUI with log pos 0/1', !th6); logPos = 0; }
   toTown(false);
+  // ===== 追加：3階建て =====
+  DUNGEONS.first.floors = 3; logPos = 1;
+  scene = 'town'; dead = false; wh = []; inv = [mkItem('potion'), mkItem('onigiri')]; toTown(false); player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx();
+  ok('3F: enter dungeon on floor 1', scene === 'dungeon' && floorNo === 1);
+  const stepStairs = () => {
+    enemies = []; let st = null; for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (map[y][x] === STAIRS) st = [x, y];
+    for (const [dx, dy] of DIRS) { const x = st[0] - dx, y = st[1] - dy; if (inb(x, y) && map[y][x] === FLOOR && geomOK(x, y, dx, dy)) { player.x = x; player.y = y; snapVis(); playerMove(dx, dy); return true; } }
+    return false;
+  };
+  belly = 77; player.hp = 13; const bagCarry = inv.map(i => i.type).join();
+  ok('3F: step on stairs', stepStairs());
+  ok('3F: descends to floor 2 (still in dungeon)', floorNo === 2 && scene === 'dungeon');
+  ok('3F: bag, hp, belly carried over', inv.map(i => i.type).join() === bagCarry && player.hp >= 13 && player.hp <= 14 && belly >= 70 && belly <= 77);
+  ok('3F: floor 2 has stairs & enemies scale', enemies.length >= 5 && map.flat().includes(STAIRS));
+  stepStairs(); ok('3F: floor 3', floorNo === 3 && scene === 'dungeon');
+  const c0b = clears; stepStairs(); ok('3F: clearing floor 3 returns to town', scene === 'town' && clears === c0b + 1 && inv.length === 2);
+  // 3階で死亡：持ち物を失う
+  scene = 'town'; toTown(false); player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx(); stepStairs(); stepStairs();
+  player.hp = 1; dead = true; deadAt = -1e9; playerMove(0, 0);
+  ok('3F: death on floor 3 -> town, bag lost, deaths counted', scene === 'town' && inv.length === 0);
+  ok('log position default is bottom-right', logPos === 1);
+  DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
 })();
