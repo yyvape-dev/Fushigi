@@ -132,7 +132,7 @@ const SAVE_KEY = 'fushigi_core_save_v1';
 const MAXBELLY = 100, HUNGER_TURNS = [10, 2];
 
 // ダンジョン定義：floors を増やせば多階層になる（最終階の階段 = 踏破）
-const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 3 } };
+const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 5 } };
 
 // =====================================================================
 //  アイテム定義：新アイテムはここに1項目足すだけ
@@ -149,6 +149,20 @@ const ITEMS = {
       say(`回復薬を使った。HP+${player.hp - before}`); return true;
     },
   },
+  stick: { name: '木の棒', cat: '武器', ch: '/', fg: '#c89b5a', w: 3, equip: 'weapon', atk: 1, desc: '武器。攻撃+1。強化値の分だけさらに強くなる。' },
+  sword: { name: '鉄の剣', cat: '武器', ch: '†', fg: '#d8e2f0', w: 2, equip: 'weapon', atk: 3, desc: '武器。攻撃+3。強化値の分だけさらに強くなる。' },
+  axe: { name: '大斧', cat: '武器', ch: 'Ƭ', fg: '#e8b080', w: 1, equip: 'weapon', atk: 5, desc: '武器。攻撃+5。強化値の分だけさらに強くなる。' },
+  woodshield: { name: '木の盾', cat: '盾', ch: ')', fg: '#b88a50', w: 3, equip: 'shield', def: 1, desc: '盾。受けるダメージ-1。強化値の分だけさらに減る。' },
+  ironshield: { name: '鉄の盾', cat: '盾', ch: ']', fg: '#c8d4e4', w: 2, equip: 'shield', def: 2, desc: '盾。受けるダメージ-2。強化値の分だけさらに減る。' },
+  scroll: {
+    name: '強化の巻物', cat: '巻物', ch: '≡', fg: '#ffe9a8', w: 4, desc: '装備中の武器（なければ盾）の強化値を+1する。',
+    use() {
+      const t = eqWeapon || eqShield;
+      if (!t) { say('装備していないので効果がなかった。'); return false; }
+      t.plus++; fxText(player.x, player.y, '+1', '#ffe28a');
+      say(`${itemName(t)}が光った！ 強化値+1`); return true;
+    },
+  },
   onigiri: {
     name: 'おにぎり', cat: '食', ch: '●', fg: '#ffffff', w: 6, desc: '満腹度を50%回復する。',
     use() {
@@ -160,6 +174,25 @@ const ITEMS = {
     },
   },
 };
+
+// =====================================================================
+//  敵定義：新しい敵はここに1項目足すだけ（絵は assets/<キー>.png）
+//  from:出現し始める階 / w:出やすさ / hp(f),atk(f):階数fでの体力と攻撃[最小,最大] / spd:'slow'=2ターンに1歩 'fast'=1ターンに2歩
+// =====================================================================
+const ENEMIES = {
+  slime: { name: 'スライム', from: 1, w: 4, hp: f => 3 + f, atk: f => [1, 1 + Math.floor(f / 4)], spd: 'slow', col: '#5aa8ff' },
+  goblin: { name: 'ゴブリン', from: 1, w: 6, hp: f => 4 + f, atk: f => [1, 2 + Math.floor(f / 3)], col: '#4bb25a' },
+  bat: { name: 'コウモリ', from: 2, w: 4, hp: f => 3 + Math.floor(f / 2), atk: f => [1, 2], spd: 'fast', col: '#9a6ad8' },
+  skeleton: { name: 'スケルトン', from: 3, w: 4, hp: f => 7 + f, atk: f => [2, 3 + Math.floor(f / 2)], col: '#e8e8d8' },
+  ogre: { name: 'オーガ', from: 4, w: 3, hp: f => 12 + f * 2, atk: f => [3, 5 + Math.floor(f / 3)], spd: 'slow', col: '#c0623a' },
+};
+const eT = e => ENEMIES[e.kind] || ENEMIES.goblin;
+function rollEnemy(f) {
+  const ks = Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= f);
+  let r = Math.random() * ks.reduce((a, k) => a + ENEMIES[k].w, 0);
+  for (const k of ks) { r -= ENEMIES[k].w; if (r < 0) return k; }
+  return ks[0];
+}
 
 // =====================================================================
 //  グラフィック：内蔵ドット絵（16x16）＋ 外部AI画像で上書き
@@ -199,7 +232,8 @@ const ART = {
 const PAL = { k: '#14141e', h: '#d6a85a', H: '#a77a35', s: '#f1c9a0', r: '#c8372d', R: '#8f2620', b: '#6b4423',
   g: '#4bb25a', e: '#ff3b3b', w: '#ffffff', n: '#9a6a3a', p: '#ff5fd0', P: '#ffb0ea', G: '#1f3b2c', y: '#cfd3e6' };
 // ITEMSの各キーにドット絵があれば登録（無ければ文字表示にフォールバック）
-for (const k of ['player', 'goblin', 'potion', 'onigiri']) DEFAULT[k] = pixelArt(ART[k], k === 'potion' ? { ...PAL, w: '#cfe9ff' } : PAL);
+for (const k of Object.keys(ENEMIES)) DEFAULT[k] = pixelArt(ART.goblin, { ...PAL, g: ENEMIES[k].col });   // 敵の仮絵：ゴブリンの色違い
+for (const k of ['player', 'potion', 'onigiri']) DEFAULT[k] = pixelArt(ART[k], k === 'potion' ? { ...PAL, w: '#cfe9ff' } : PAL);
 
 // --- 床・壁など（手続き生成。位置ごとにバリエーション）
 for (let v = 0; v < 4; v++) {
@@ -287,7 +321,7 @@ function loadSprite(key, src) {
   im.onerror = () => {};
   im.src = src;
 }
-const ASSET_KEYS = ['player', 'goblin', 'floor', 'wall', 'stairs', 'ground', 'tree', 'roof', 'hwall', 'door', 'gate', 'pillar', 'town', ...Object.keys(ITEMS)];   // town = 町全体の一枚絵（あれば町のタイル絵より優先）
+const ASSET_KEYS = ['player', ...Object.keys(ENEMIES), 'floor', 'wall', 'stairs', 'ground', 'tree', 'roof', 'hwall', 'door', 'gate', 'pillar', 'town', ...Object.keys(ITEMS)];   // town = 町全体の一枚絵（あれば町のタイル絵より優先）
 function loadExternalAssets() {
   if (typeof Image === 'undefined' || typeof location === 'undefined' || location.protocol === 'file:') return;
   for (const k of ASSET_KEYS) loadSprite(k, `assets/${k}.png`);
@@ -346,6 +380,7 @@ let scene = 'town';               // 'town' | 'dungeon'
 let dungeonId = 'first';
 let map, rooms, player, enemies = [], floorItems = [], inv = [], wh = [], quick, floorNo, turn, dead, deadAt, vis, seen, logs = [];
 let clears = 0, deaths = 0;
+let eqWeapon = null, eqShield = null;   // 装備中の武器・盾（持ち物の中の1個を指す）
 let autoPick = false;             // 自動拾い（既定OFF：踏んでも拾わず、足元に載るだけ）
 let uid = 0;
 let bagOpen = false, bagTab = '全部', bagSel = null;
@@ -365,8 +400,15 @@ const rnd = (a, b) => a + Math.floor(Math.random() * (b - a + 1));
 const inb = (x, y) => x >= 0 && y >= 0 && x < MW && y < MH;
 const enemyAt = (x, y) => enemies.find(e => e.x === x && e.y === y);
 const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
-const mkItem = type => ({ id: ++uid, type });
-const itemName = it => ITEMS[it.type].name;
+function rollPlus() { const r = Math.random(); return r < 0.55 ? 0 : r < 0.75 ? 1 : r < 0.88 ? 2 : r < 0.95 ? -1 : 3; }
+const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip) it.plus = plus === undefined ? rollPlus() : plus; return it; };
+const isEq = it => it === eqWeapon || it === eqShield;
+const ikey = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (isEq(it) ? 'E' : '');   // 持ち物のまとめ表示・操作のキー
+const itemName = it => ITEMS[it.type].name + (it.plus !== undefined ? (it.plus >= 0 ? '+' : '') + it.plus : '');
+const atkBonus = () => eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0;
+const defBonus = () => eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0;
+const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '');
+const decItem = t => { const [ty, pl] = String(t).split(':'); return ITEMS[ty] ? mkItem(ty, pl === undefined ? undefined : (+pl | 0)) : null; };
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
@@ -380,16 +422,18 @@ function rollType() {
 // ===== 保存（倉庫・持ち物・記録）=====
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(i => i.type), bag: inv.map(i => i.type), quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos }));
   } catch (_) {}
 }
 function loadGame() {
   try {
     const s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
     if (!s || s.v !== 1) return false;
-    wh = (s.wh || []).filter(t => ITEMS[t]).map(mkItem);
-    inv = (s.bag || []).filter(t => ITEMS[t]).map(mkItem);
-    quick = s.quick === null || ITEMS[s.quick] ? s.quick : 'potion';
+    wh = (s.wh || []).map(decItem).filter(Boolean);
+    inv = (s.bag || []).map(decItem).filter(Boolean);
+    eqWeapon = eqShield = null;
+    if (Array.isArray(s.eq)) { eqWeapon = inv[s.eq[0]] || null; eqShield = inv[s.eq[1]] || null; if (eqWeapon && ITEMS[eqWeapon.type].equip !== 'weapon') eqWeapon = null; if (eqShield && ITEMS[eqShield.type].equip !== 'shield') eqShield = null; }
+    quick = s.quick === null || (ITEMS[s.quick] && !ITEMS[s.quick].equip) ? s.quick : 'potion';
     clears = s.clears | 0; deaths = s.deaths | 0; autoPick = !!s.autoPick;
     mapMode = [0, 1, 2].includes(s.mapMode) ? s.mapMode : 1;
     zoomPref = [0, 1, 2, 3, 4, 5].includes(s.zoomPref) ? s.zoomPref : 0;
@@ -471,8 +515,8 @@ function newFloor() {
     const r = rooms[rnd(1, rooms.length - 1)];
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
     if (map[y][x] !== FLOOR || enemyAt(x, y) || (x === player.x && y === player.y)) continue;
-    const hp = 4 + floorNo;
-    enemies.push({ x, y, vx: x, vy: y, hp, maxhp: hp, aware: false, lost: 0, flash: 0, bump: null, fl: false });
+    const kind = rollEnemy(floorNo), hp = ENEMIES[kind].hp(floorNo);
+    enemies.push({ kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: false, lost: 0, flash: 0, bump: null, fl: false });
   }
   floorItems = [];                                              // アイテム：1〜3個
   const ni = rnd(1, 3);
@@ -518,7 +562,7 @@ function clearDungeon() {
   saveGame(); render();
 }
 function afterDeath() {                                         // 死亡：持ち物を全て失う。倉庫は無事
-  inv = []; deaths++; dead = false;
+  inv = []; eqWeapon = eqShield = null; deaths++; dead = false;
   toTown(true);
   say('力尽きた…持ち物を全て失った。');
   say('倉庫の物は無事だ。');
@@ -603,7 +647,7 @@ function say(m) {
   logTimer = setTimeout(() => { const el = $('log'); if (el.classList) el.classList.add('off'); }, LOG_MS + 50);
 }
 function msgClass(m) {
-  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /^gの攻撃|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた/.test(m) ? 'good' : '';
+  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /の攻撃！|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物|外した/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた|強化値|装備した/.test(m) ? 'good' : '';
 }
 const logHtml = arr => arr.map(l => `<div class="${msgClass(l)}">${l}</div>`).join('');
 function openHist() { if (dead) { guardDead(); return; } if (bagOpen || whOpen || cfgOpen) return; holdStop(); histOpen = true; $('hist').hidden = false; $('histList').innerHTML = logHtml(msgHistory) || '<div>まだメッセージはありません。</div>'; const l = $('histList'); l.scrollTop = l.scrollHeight; render(); }
@@ -638,12 +682,12 @@ function endTurn() {
   render();
 }
 function hitEnemy(e) {
-  const dmg = rnd(2, 4); e.hp -= dmg; e.aware = true; e.flash = now() + 130;
+  const dmg = rnd(2, 4) + atkBonus(); e.hp -= dmg; e.aware = true; e.flash = now() + 130;
   if (e.x !== player.x) player.fl = e.x < player.x;
   bumpToward(player, e.x, e.y);
   fxText(e.x, e.y, '-' + dmg, '#ffffff');
-  if (e.hp <= 0) { enemies.splice(enemies.indexOf(e), 1); say(`gに${dmg}ダメージ。倒した！`); }
-  else say(`gに${dmg}ダメージ。`);
+  if (e.hp <= 0) { enemies.splice(enemies.indexOf(e), 1); say(`${eT(e).name}に${dmg}ダメージ。倒した！`); }
+  else say(`${eT(e).name}に${dmg}ダメージ。`);
 }
 // 床のアイテムを持ち物へ。入らなければ false
 function takeFloor(f) {
@@ -726,38 +770,44 @@ function playerAttack() {
 function enemyTurn() {
   const d = distMap();
   for (const e of [...enemies]) {
-    const dist = Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y));
-    if (dist <= SIGHT && los(e.x, e.y, player.x, player.y)) { e.aware = true; e.lost = 0; }
-    else if (e.aware && ++e.lost > 10) e.aware = false;
-    // 隣接なら攻撃
-    if (dist === 1 && geomOK(e.x, e.y, player.x - e.x, player.y - e.y)) {
-      const dmg = rnd(1, 2 + Math.floor(floorNo / 3)); player.hp -= dmg;
-      bumpToward(e, player.x, player.y); hurtT = now(); player.flash = now() + 130;
-      if (e.x !== player.x) e.fl = player.x < e.x;
-      fxText(player.x, player.y, '-' + dmg, '#ff6b6b');
-      say(`gの攻撃！ ${dmg}ダメージ。`);
-      if (player.hp <= 0) { player.hp = 0; dead = true; deadAt = now(); say(`力尽きた…（${floorNo}階）`); return; }
-      continue;
-    }
-    let mx = 0, my = 0;
-    if (e.aware && d[e.y][e.x] > 0) {
-      // 距離が最小の隣接マスへ
-      let best = d[e.y][e.x], cand = [];
-      for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
-        if (!dx && !dy) continue;
-        if (!geomOK(e.x, e.y, dx, dy)) continue;
-        const nx = e.x + dx, ny = e.y + dy;
-        if (d[ny][nx] < 0 || enemyAt(nx, ny) || (nx === player.x && ny === player.y)) continue;
-        if (d[ny][nx] < best) { best = d[ny][nx]; cand = [[dx, dy]]; }
-        else if (d[ny][nx] === best && cand.length) cand.push([dx, dy]);
+    const T = eT(e);
+    for (let step = 0; step < (T.spd === 'fast' ? 2 : 1); step++) {
+      if (!enemies.includes(e)) break;
+      const dist = Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y));
+      if (dist <= SIGHT && los(e.x, e.y, player.x, player.y)) { e.aware = true; e.lost = 0; }
+      else if (step === 0 && e.aware && ++e.lost > 10) e.aware = false;
+      // 隣接なら攻撃（1ターンに1回）
+      if (dist === 1 && geomOK(e.x, e.y, player.x - e.x, player.y - e.y)) {
+        const [lo, hi] = T.atk(floorNo);
+        const raw = rnd(lo, hi), dmg = Math.max(1, raw - defBonus()); player.hp -= dmg;
+        bumpToward(e, player.x, player.y); hurtT = now(); player.flash = now() + 130;
+        if (e.x !== player.x) e.fl = player.x < e.x;
+        fxText(player.x, player.y, '-' + dmg, '#ff6b6b');
+        say(`${T.name}の攻撃！ ${dmg}ダメージ。`);
+        if (player.hp <= 0) { player.hp = 0; dead = true; deadAt = now(); say(`力尽きた…（${floorNo}階）`); return; }
+        break;
       }
-      if (cand.length) [mx, my] = cand[rnd(0, cand.length - 1)];
-    } else if (Math.random() < 0.4) {
-      mx = rnd(-1, 1); my = rnd(-1, 1);
-    }
-    if ((mx || my) && geomOK(e.x, e.y, mx, my)) {
-      const nx = e.x + mx, ny = e.y + my;
-      if (!enemyAt(nx, ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
+      if (T.spd === 'slow' && turn % 2 === 1) break;               // 動きが遅い敵：2ターンに1歩
+      let mx = 0, my = 0;
+      if (e.aware && d[e.y][e.x] > 0 && !(T.spd === 'fast' && Math.random() < 0.25)) {
+        // 距離が最小の隣接マスへ
+        let best = d[e.y][e.x], cand = [];
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          if (!dx && !dy) continue;
+          if (!geomOK(e.x, e.y, dx, dy)) continue;
+          const nx = e.x + dx, ny = e.y + dy;
+          if (d[ny][nx] < 0 || enemyAt(nx, ny) || (nx === player.x && ny === player.y)) continue;
+          if (d[ny][nx] < best) { best = d[ny][nx]; cand = [[dx, dy]]; }
+          else if (d[ny][nx] === best && cand.length) cand.push([dx, dy]);
+        }
+        if (cand.length) [mx, my] = cand[rnd(0, cand.length - 1)];
+      } else if (Math.random() < (T.spd === 'fast' ? 0.8 : 0.4)) {
+        mx = rnd(-1, 1); my = rnd(-1, 1);
+      }
+      if ((mx || my) && geomOK(e.x, e.y, mx, my)) {
+        const nx = e.x + mx, ny = e.y + my;
+        if (!enemyAt(nx, ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
+      }
     }
   }
 }
@@ -766,12 +816,18 @@ function enemyTurn() {
 //  持ち物（バッグ）
 //   種類ごとにまとめて表示し、操作は「その種類の先頭の1個」に対して行う
 // =====================================================================
-const firstOf = type => inv.find(i => i.type === type);
-function useType(type) {
+const firstOf = key => inv.find(i => ikey(i) === key);
+function toggleEquip(it) {
+  const slot = ITEMS[it.type].equip;
+  if (slot === 'weapon') { if (eqWeapon === it) { eqWeapon = null; say(`${itemName(it)}を外した。`); } else { eqWeapon = it; say(`${itemName(it)}を装備した。`); } }
+  else { if (eqShield === it) { eqShield = null; say(`${itemName(it)}を外した。`); } else { eqShield = it; say(`${itemName(it)}を装備した。`); } }
+}
+function useType(key) {
   if (guardDead()) return;
-  const it = firstOf(type);
-  if (!it) { say(`${ITEMS[type].name}を持っていない。`); render(); return; }
-  if (!ITEMS[type].use(it)) { render(); renderBag(); return; }   // 効果なし：消費もターン経過もなし
+  const it = firstOf(key);
+  if (!it) { say(`${ITEMS[key] ? ITEMS[key].name : 'それ'}を持っていない。`); render(); return; }
+  if (ITEMS[it.type].equip) { toggleEquip(it); saveGame(); closeBag(); endTurn(); return; }   // 装備品：着脱でターン経過
+  if (!ITEMS[it.type].use(it)) { render(); renderBag(); return; }   // 効果なし：消費もターン経過もなし
   inv.splice(inv.indexOf(it), 1);
   closeBag(); endTurn();
 }
@@ -781,10 +837,11 @@ function useQuick() {
   useType(quick);
 }
 // 足元に置く。足元に既に物があれば交換する（ダンジョン内のみ。町では倉庫を使う）
-function dropType(type) {
+function dropType(key) {
   if (guardDead()) return;
-  const it = firstOf(type);
+  const it = firstOf(key);
   if (!it) return;
+  if (isEq(it) && scene === 'dungeon') { if (eqWeapon === it) eqWeapon = null; if (eqShield === it) eqShield = null; }
   if (scene === 'town') { say('町では置けない。倉庫に預けよう。'); closeBag(); render(); return; }
   const f = itemAt(player.x, player.y);
   if (f) {
@@ -805,14 +862,14 @@ function closeBag() { bagOpen = false; bagSel = null; bagEl.hidden = true; }
 function toggleBag() { if (bagOpen) { closeBag(); render(); } else openBag(); }
 function groups(list) {
   const m = new Map();
-  for (const it of list) { if (!m.has(it.type)) m.set(it.type, []); m.get(it.type).push(it); }
+  for (const it of list) { const k = ikey(it); if (!m.has(k)) m.set(k, []); m.get(k).push(it); }
   const order = Object.keys(ITEMS);
-  return [...m.entries()].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0])).map(([type, items]) => ({ type, items }));
+  return [...m.entries()].map(([key, items]) => ({ key, type: items[0].type, items })).sort((a, b) => order.indexOf(a.type) - order.indexOf(b.type) || b.items[0].plus - a.items[0].plus);
 }
 function rowHtml(g, sel, actsHtml) {
   const d = ITEMS[g.type];
-  return `<div class="row${sel ? ' sel' : ''}"><div class="main" data-sel="${g.type}"><span class="ic" style="color:${d.fg}">${d.ch}</span>` +
-    `<span class="nm">${d.name}${quick === g.type ? ' <i>★</i>' : ''}</span>${g.items.length > 1 ? `<span class="ct">×${g.items.length}</span>` : ''}</div>` +
+  return `<div class="row${sel ? ' sel' : ''}"><div class="main" data-sel="${g.key}"><span class="ic" style="color:${d.fg}">${d.ch}</span>` +
+    `<span class="nm">${itemName(g.items[0])}${quick === g.type ? ' <i>★</i>' : ''}${isEq(g.items[0]) ? ' <i>E</i>' : ''}</span>${g.items.length > 1 ? `<span class="ct">×${g.items.length}</span>` : ''}</div>` +
     (sel ? `<div class="acts">${actsHtml}</div><div class="ds">${d.desc || ''}</div>` : '') + `</div>`;
 }
 function renderBag() {
@@ -824,11 +881,11 @@ function renderBag() {
   if (!cats.includes(bagTab)) bagTab = '全部';
   tabsEl.innerHTML = cats.map(c => `<button class="tab${c === bagTab ? ' on' : ''}" data-tab="${c}">${c}</button>`).join('');
   const shown = gs.filter(g => bagTab === '全部' || ITEMS[g.type].cat === bagTab);
-  if (bagSel && !shown.some(g => g.type === bagSel)) bagSel = null;
+  if (bagSel && !shown.some(g => g.key === bagSel)) bagSel = null;
   const st = listEl.scrollTop;
-  listEl.innerHTML = shown.length ? shown.map(g => rowHtml(g, g.type === bagSel,
-    `<button data-act="use" data-type="${g.type}">使う</button><button data-act="drop" data-type="${g.type}">置く</button>` +
-    `<button data-act="quick" data-type="${g.type}">${quick === g.type ? '★解除' : '★クイック'}</button>`)).join('') : '<div class="empty">何も持っていない</div>';
+  listEl.innerHTML = shown.length ? shown.map(g => rowHtml(g, g.key === bagSel,
+    `<button data-act="use" data-type="${g.key}">${ITEMS[g.type].equip ? (isEq(g.items[0]) ? '外す' : '装備') : '使う'}</button><button data-act="drop" data-type="${g.key}">置く</button>` +
+    (ITEMS[g.type].equip ? '' : `<button data-act="quick" data-type="${g.type}">${quick === g.type ? '★解除' : '★クイック'}</button>`))).join('') : '<div class="empty">何も持っていない</div>';
   listEl.scrollTop = st;
 }
 listEl.addEventListener('click', ev => {
@@ -861,16 +918,17 @@ function moveItems(type, n, from, to, cap) {
   let moved = 0;
   for (let i = 0; i < n; i++) {
     if (to.length >= cap) break;
-    const k = from.findIndex(it => it.type === type);
+    const k = from.findIndex(it => ikey(it) === type);
     if (k < 0) break;
-    to.push(from.splice(k, 1)[0]); moved++;
+    const mv = from.splice(k, 1)[0]; if (eqWeapon === mv) eqWeapon = null; if (eqShield === mv) eqShield = null;
+    to.push(mv); moved++;
   }
   return moved;
 }
 function whTransfer(type, all) {
   const toWh = whSide === 'bag';
   const src = toWh ? inv : wh, dst = toWh ? wh : inv, cap = toWh ? MAXWH : MAXBAG;
-  const n = all ? src.filter(i => i.type === type).length : 1;
+  const n = all ? src.filter(i => ikey(i) === type).length : 1;
   const m = moveItems(type, n, src, dst, cap);
   whMsg = m === 0 ? (toWh ? '倉庫がいっぱいだ。' : '持ち物がいっぱいだ。') : (m < n ? '入りきらない分は残した。' : '');
   saveGame(); renderWh(); render();
@@ -882,12 +940,12 @@ function renderWh() {
   b.classList.toggle('on', whSide === 'bag'); w.classList.toggle('on', whSide === 'wh');
   $('whMsg').textContent = whMsg;
   const gs = groups(whSide === 'bag' ? inv : wh);
-  if (whSel && !gs.some(g => g.type === whSel)) whSel = null;
+  if (whSel && !gs.some(g => g.key === whSel)) whSel = null;
   const verb = whSide === 'bag' ? '預ける' : '出す';
   const st = whListEl.scrollTop;
-  whListEl.innerHTML = gs.length ? gs.map(g => rowHtml(g, g.type === whSel,
-    `<button data-act="one" data-type="${g.type}">${verb}(1)</button>` +
-    (g.items.length > 1 ? `<button data-act="all" data-type="${g.type}">全部${verb}(${g.items.length})</button>` : ''))).join('')
+  whListEl.innerHTML = gs.length ? gs.map(g => rowHtml(g, g.key === whSel,
+    `<button data-act="one" data-type="${g.key}">${verb}(1)</button>` +
+    (g.items.length > 1 ? `<button data-act="all" data-type="${g.key}">全部${verb}(${g.items.length})</button>` : ''))).join('')
     : `<div class="empty">${whSide === 'bag' ? '持ち物は空だ' : '倉庫は空だ'}</div>`;
   whListEl.scrollTop = st;
 }
@@ -908,8 +966,8 @@ $('histClose').addEventListener('click', closeHist);
 //   取り込んだ画像はこの端末のブラウザ(IndexedDB)に保存され、assets/ の画像より優先される
 // =====================================================================
 const cfgEl = $('cfg'), cfgListEl = $('cfgList'), artFileEl = $('artFile');
-const ART_LABELS = { player: '主人公', goblin: '敵（ゴブリン）', floor: 'ダンジョンの床', wall: 'ダンジョンの壁', stairs: '階段', ground: '町の地面', tree: '木', roof: '屋根', hwall: '家の壁', door: '倉庫の入口', gate: 'ダンジョンの入口', pillar: '柱', town: '町（一枚絵）' };
-const artLabel = k => ART_LABELS[k] || (ITEMS[k] && ITEMS[k].name) || k;
+const ART_LABELS = { player: '主人公', floor: 'ダンジョンの床', wall: 'ダンジョンの壁', stairs: '階段', ground: '町の地面', tree: '木', roof: '屋根', hwall: '家の壁', door: '倉庫の入口', gate: 'ダンジョンの入口', pillar: '柱', town: '町（一枚絵）' };
+const artLabel = k => ART_LABELS[k] || (ENEMIES[k] && '敵（' + ENEMIES[k].name + '）') || (ITEMS[k] && ITEMS[k].name) || k;
 const ZOOM_LABEL = ['自動', '小', '中', '大', '特大', '最大'], MAP_LABEL = ['OFF', '小', '大'];
 const defaultKey = k => k === 'floor' ? 'floor0' : k === 'ground' ? 'ground0' : k === 'wall' ? 'wallF' : k;
 let artTarget = null;
@@ -1168,7 +1226,7 @@ function draw() {
   if (scene === 'town' && showGrid) drawTownGrid(camX, camY);
   for (const f of floorItems) if (seen[f.y][f.x]) blit(f.item.type, camX + f.x * TS, camY + f.y * TS);
   for (const e of [...enemies].sort((a, b) => a.vy - b.vy)) if (vis[e.y][e.x]) {
-    const [px, py] = drawEntity('goblin', e, t, camX, camY);
+    const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
     ctx.fillStyle = '#000'; ctx.fillRect(px, py + TS - 3, TS, 3);
     ctx.fillStyle = '#e55'; ctx.fillRect(px, py + TS - 3, TS * e.hp / e.maxhp, 3);
   }
