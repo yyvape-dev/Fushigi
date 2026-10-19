@@ -158,8 +158,17 @@
   ok('goal bot can clear floor 1 in most runs (stairs path + combat + potion)', goal >= 45);
 
   // --- 描画：画面幅ごと（小型スマホ/タブレット相当）で例外が出ない
-  for (const [w, h] of [[320, 568], [360, 740], [414, 896], [1024, 768]]) { innerWidth = w; innerHeight = h; resize(); draw(); }
+  for (const [w, h] of [[320, 568], [360, 740], [414, 896]]) { innerWidth = w; innerHeight = h; zoomPref = 0; resize(); draw(); }
   ok('resize at various sizes', TS === 48 || TS === 32);
+  // 横持ち：縦に約6.5マス → 高さ390で64px、横は約13マス見える
+  innerWidth = 844; innerHeight = 390; zoomPref = 0; resize(); draw();
+  ok('landscape: auto tile 64px (about 13 tiles across)', TS === 64 && Math.round(844 / TS) === 13);
+  ok('landscape: focus at screen centre, portrait above centre', focusY() === 195 && (innerWidth = 390, innerHeight = 844, focusY() < 844 / 2));
+  innerWidth = 844; innerHeight = 390; resize(); mapMode = 1; scene = 'dungeon'; drawMinimap();
+  ok('landscape: minimap sits top-left', mmRect && mmRect.x < 20);
+  mapMode = 0;
+  for (const [w, h] of [[1024, 768], [844, 390], [667, 375]]) { innerWidth = w; innerHeight = h; resize(); draw(); }
+  ok('landscape sizes draw without error', true);
 
   // ===== 追加：地図・視界・高解像度・表示サイズ・向き =====
   innerWidth = 390; innerHeight = 800; zoomPref = 0; resize();

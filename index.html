@@ -7,15 +7,32 @@
 <style>
 html,body{margin:0;height:100%;background:#0d0d12;color:#ddd;font-family:monospace;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 canvas{display:block;touch-action:none}
-#hud{position:fixed;top:0;left:0;right:0;padding:6px 10px;display:flex;justify-content:space-between;align-items:center;background:#000b;z-index:2;font-size:15px;pointer-events:none}
-#hp{color:#ff7a7a}
-#log{position:fixed;top:36px;left:8px;max-width:min(62%,330px);padding:6px 10px;font-size:15px;line-height:1.4;z-index:2;background:rgba(8,10,24,.62);border:1px solid rgba(255,255,255,.28);border-radius:8px;transition:opacity .35s;text-shadow:0 1px 2px #000;opacity:1;pointer-events:none}
+#hud{position:fixed;top:0;left:0;right:0;padding:max(6px,env(safe-area-inset-top)) max(10px,env(safe-area-inset-right)) 8px max(10px,env(safe-area-inset-left));display:grid;grid-template-columns:1fr auto;grid-template-areas:"w c" "b b";gap:4px 8px;align-items:center;background:linear-gradient(#000c,#0000);z-index:2;font-size:14px;pointer-events:none;text-shadow:0 1px 2px #000}
+#where{grid-area:w}#bagc{grid-area:c;text-align:right}
+#bars{grid-area:b;display:flex;gap:8px}
+.bar{position:relative;flex:1;height:18px;background:#000a;border:1px solid #fff9;border-radius:9px;overflow:hidden}
+.bar i{position:absolute;left:0;top:0;bottom:0;width:100%;background:linear-gradient(#8dff98,#1fae3a);transition:width .2s}
+.bar.bl i{background:linear-gradient(#ffcf7a,#d8801a)}
+.bar b{position:relative;display:block;text-align:center;font-size:12px;line-height:16px}
+#log{position:fixed;top:64px;left:8px;max-width:min(62%,330px);padding:6px 10px;font-size:15px;line-height:1.4;z-index:2;background:rgba(8,10,24,.62);border:1px solid rgba(255,255,255,.28);border-radius:8px;transition:opacity .35s;text-shadow:0 1px 2px #000;opacity:1;pointer-events:none}
 #log.pos-b{top:auto;left:auto;right:max(12px,env(safe-area-inset-right));bottom:max(200px,calc(env(safe-area-inset-bottom) + 194px))}
 #log.off{opacity:0;pointer-events:none}
 #log .dmg{color:#ff9a9a}#log .item{color:#ffe28a}#log .hunger{color:#ffb347}#log .good{color:#9dffb0}
 #hist .plist div{padding:5px 12px;font-size:15px;line-height:1.45;border-bottom:1px solid #ffffff12}
 #hist .dmg{color:#ff9a9a}#hist .item{color:#ffe28a}#hist .hunger{color:#ffb347}#hist .good{color:#9dffb0}
 #logbtn{height:34px!important;font-size:12px!important}
+/* 横持ち：HUDは1行、操作ボタンは小さめ、メッセージは下中央 */
+@media (orientation:landscape){
+  #hud{grid-template-columns:1fr minmax(0,400px) 1fr;grid-template-areas:"w b c";padding-bottom:10px}
+  #bars{justify-self:center;width:100%}
+  #log{top:46px}
+  #log.pos-b{top:auto;left:50%;right:auto;transform:translateX(-50%);bottom:max(14px,env(safe-area-inset-bottom));max-width:34vw;width:max-content}
+  #pad{grid-template-columns:repeat(3,50px);grid-template-rows:repeat(3,50px);gap:5px}
+  #pad .btn{width:50px;height:50px}
+  #act{right:calc(max(12px,env(safe-area-inset-right)) + 176px)}
+  #atk{width:80px;height:80px}
+  #lft{display:grid;grid-template-columns:repeat(2,54px);gap:8px}
+}
 .btn{background:rgba(50,52,76,.78);color:#eee;border:2px solid #8a8aa8;border-radius:14px;font-family:inherit;font-size:24px;padding:0;margin:0;touch-action:none;-webkit-user-select:none;user-select:none;outline:none}
 .btn.on{background:rgba(120,130,200,.9);border-color:#fff}
 /* 右下：十字キー + Attack(町では「決定」) */
@@ -63,7 +80,7 @@ canvas{display:block;touch-action:none}
 </style>
 </head>
 <body>
-<div id="hud"><span id="where"></span><span id="bagc"></span><span id="belly"></span><span id="hp"></span></div>
+<div id="hud"><span id="where"></span><span id="bagc"></span><div id="bars"><div class="bar"><i id="hpf"></i><b id="hp"></b></div><div class="bar bl" id="blbar"><i id="blf"></i><b id="belly"></b></div></div></div>
 <div id="log"></div>
 <canvas id="c"></canvas>
 
@@ -465,7 +482,7 @@ let belly = MAXBELLY, bellyWarn = 99, hungerPref = 0;   // 満腹度（%）／�
 let roomGrid = [];                // ダンジョンの部屋番号マップ（部屋の中=番号、それ以外=-1）
 let mapMode = 1;                  // 地図：0=非表示 1=小 2=大
 let zoomPref = 0;                 // 表示サイズ：0=自動 1=小(32) 2=中(48) 3=大(64) 4=特大(80) 5=最大(96)
-let charPref = 0;                 // キャラの大きさ：マスの何倍で描くか（マスから上と左右にはみ出す。マス自体は大きくならない）
+let charPref = 2;                 // キャラの大きさ：マスの何倍で描くか（マスから上と左右にはみ出す。マス自体は大きくならない）
 const CHAR_K = [1, 1.3, 1.5, 1.8, 2.1];
 let showGrid = false;             // 町の当たり判定の表示（絵とのズレ確認用）
 let shadePref = 1;                // 陰影（立体感）：0=なし 1=標準 2=強
@@ -513,7 +530,7 @@ function loadGame() {
     clears = s.clears | 0; deaths = s.deaths | 0; autoPick = !!s.autoPick;
     mapMode = [0, 1, 2].includes(s.mapMode) ? s.mapMode : 1;
     zoomPref = [0, 1, 2, 3, 4, 5].includes(s.zoomPref) ? s.zoomPref : 0;
-    charPref = [0, 1, 2, 3, 4].includes(s.charPref) ? s.charPref : 0;
+    charPref = [0, 1, 2, 3, 4].includes(s.charPref) ? s.charPref : 2;
     hungerPref = [0, 1].includes(s.hungerPref) ? s.hungerPref : 0;
     rigPref = [0, 1].includes(s.rigPref) ? s.rigPref : 0;
     shadePref = [0, 1, 2].includes(s.shadePref) ? s.shadePref : 1;
@@ -1155,9 +1172,12 @@ async function idbLoadAll() {
 const cv = $('c'), ctx = cv.getContext('2d');
 let raf = 0, lastT = 0;
 const tmp = mkCanvas(64, 64);
+const isLand = () => innerWidth > innerHeight;
+const focusY = () => innerHeight * (isLand() ? 0.5 : 0.4);   // 自キャラの縦位置（縦持ちは下のボタンを避けて上寄り）
 function resize() {
   DPR = window.devicePixelRatio || 1;
-  const auto = BASE * Math.max(2, Math.min(3, Math.round(innerWidth / 11 / BASE)));
+  const auto = isLand() ? BASE * Math.max(3, Math.min(6, Math.round(innerHeight / 6.5 / BASE)))   // 横持ち：縦に約6.5マス
+                        : BASE * Math.max(2, Math.min(3, Math.round(innerWidth / 11 / BASE)));
   TS = [auto, 32, 48, 64, 80, 96][zoomPref];
   cv.width = innerWidth * DPR; cv.height = innerHeight * DPR;
   cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
@@ -1166,12 +1186,19 @@ function resize() {
   if (map) draw();
 }
 const cache = new Map();
+function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) { cache.set(k, v); $(id).style[prop] = v; } }
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
-  setH('where', scene === 'town' ? `町　踏破${clears}` : `${DUNGEONS[dungeonId].name} ${floorNo}F`);
+  setH('where', scene === 'town' ? `町　踏破${clears}` : `${DUNGEONS[dungeonId].name} 下り ${floorNo}F`);
   setH('bagc', `持${inv.length}/${MAXBAG}`);
-  setH('belly', scene === 'dungeon' ? `<span style="color:${belly <= 10 ? '#ff6b6b' : belly <= 20 ? '#ffb347' : '#fff'}">満${belly}%</span>` : '');
+  setH('belly', `満腹度 ${belly}/${MAXBELLY}`);
+  setS('blbar', 'display', scene === 'dungeon' ? 'block' : 'none');
+  setS('blf', 'width', Math.max(0, Math.min(100, belly)) + '%');
+  setS('blf', 'background', belly <= 10 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
   setH('hp', `HP ${player.hp}/${player.maxhp}`);
+  const hpr = Math.max(0, Math.min(1, player.hp / player.maxhp));
+  setS('hpf', 'width', (hpr * 100).toFixed(1) + '%');
+  setS('hpf', 'background', hpr <= 0.25 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
   setH('log', logHtml(logs));
   { const el = $('log'); if (el.classList) { el.classList.toggle('off', !logs.length || histOpen || now() - logT > LOG_MS); el.classList.toggle('pos-b', logPos === 1); } }
   setH('quick', quick ? `${ITEMS[quick].name}<br><small>×${inv.filter(i => i.type === quick).length}</small>` : '−');
@@ -1339,8 +1366,9 @@ function drawMinimap() {
   mmRect = null;
   if (scene !== 'dungeon' || mapMode === 0) return;
   let sc, bx, by;
-  if (mapMode === 1) { sc = Math.max(3, Math.min(6, Math.floor(innerWidth * 0.4 / MW))); bx = innerWidth - MW * sc - 8; by = 98; }
-  else { sc = Math.max(4, Math.floor(Math.min((innerWidth - 24) / MW, innerHeight * 0.62 / MH))); bx = Math.round((innerWidth - MW * sc) / 2); by = Math.round(innerHeight * 0.4 - MH * sc / 2); }
+  if (mapMode === 1 && isLand()) { sc = Math.max(3, Math.min(5, Math.floor(innerHeight * 0.3 / MH))); bx = 12; by = 60; }   // 横持ち：左上に半透明
+  else if (mapMode === 1) { sc = Math.max(3, Math.min(6, Math.floor(innerWidth * 0.4 / MW))); bx = innerWidth - MW * sc - 8; by = 98; }
+  else { sc = Math.max(4, Math.floor(Math.min((innerWidth - 24) / MW, innerHeight * 0.62 / MH))); bx = Math.round((innerWidth - MW * sc) / 2); by = Math.round(focusY() - MH * sc / 2); }
   mmRect = { x: bx - 4, y: by - 4, w: MW * sc + 8, h: MH * sc + 8 };
   ctx.fillStyle = mapMode === 2 ? 'rgba(0,0,0,.55)' : 'rgba(0,0,0,.35)'; ctx.fillRect(mmRect.x, mmRect.y, mmRect.w, mmRect.h);
   for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
@@ -1408,7 +1436,7 @@ function draw() {
   ctx.fillStyle = '#0d0d12'; ctx.fillRect(0, 0, innerWidth, innerHeight);
   // 自キャラは画面のやや上寄りに置く（下はコントローラーで隠れるため）
   const camX = Math.round(innerWidth / 2 - (player.vx + 0.5) * TS);
-  const camY = Math.round(innerHeight * 0.4 - (player.vy + 0.5) * TS);
+  const camY = Math.round(focusY() - (player.vy + 0.5) * TS);
   const x0 = Math.max(0, Math.floor(-camX / TS)), x1 = Math.min(MW - 1, Math.ceil((innerWidth - camX) / TS));
   const y0 = Math.max(0, Math.floor(-camY / TS)), y1 = Math.min(MH - 1, Math.ceil((innerHeight - camY) / TS));
   const dungeon = scene === 'dungeon', m = SHADE_K[shadePref];
@@ -1460,10 +1488,10 @@ function draw() {
   if (dead) {
     ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0, 0, innerWidth, innerHeight);
     ctx.fillStyle = '#ff7a7a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.font = 'bold 32px monospace'; ctx.fillText('YOU DIED', innerWidth / 2, innerHeight * 0.4 - 16);
+    ctx.font = 'bold 32px monospace'; ctx.fillText('YOU DIED', innerWidth / 2, focusY() - 16);
     ctx.fillStyle = '#ddd'; ctx.font = '16px monospace';
-    ctx.fillText(`${floorNo}階で力尽きた`, innerWidth / 2, innerHeight * 0.4 + 18);
-    ctx.fillText('持ち物は失われる。タップで町へ', innerWidth / 2, innerHeight * 0.4 + 44);
+    ctx.fillText(`${floorNo}階で力尽きた`, innerWidth / 2, focusY() + 18);
+    ctx.fillText('持ち物は失われる。タップで町へ', innerWidth / 2, focusY() + 44);
   }
   const fa = 1 - (t - fadeT) / 350;                                                // シーン切替のフェード
   if (fa > 0) { ctx.fillStyle = `rgba(0,0,0,${Math.min(1, fa).toFixed(3)})`; ctx.fillRect(0, 0, innerWidth, innerHeight); }
