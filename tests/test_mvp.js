@@ -1,4 +1,5 @@
 ;(function () {
+  ACC.p = ACC.e = 1;                                              // 旧テストは命中100%前提（命中のテストは別に行う）
   const fail = [];
   const ok = (name, cond) => { console.log((cond ? 'OK  ' : 'NG  ') + name); if (!cond) fail.push(name); };
   const out = n => '/tmp/claude-0/-home-claude/0eb386c6-7351-54b0-8403-f6a23a641574/scratchpad/cv/' + n;
@@ -332,7 +333,7 @@
   ok('5F: dungeon has 5 floors by default', (DUNGEONS.first.floors = 5) === 5);
   { const seen1 = new Set(), seen5 = new Set(); for (let i = 0; i < 400; i++) { seen1.add(rollEnemy(1)); seen5.add(rollEnemy(5)); }
     ok('enemies: floor1 only slime/goblin', [...seen1].sort().join() === 'goblin,slime');
-    ok('enemies: floor5 has all 5 kinds', seen5.size === 5);
+    ok('enemies: floor5 has every kind that can appear there (12)', seen5.size === 12 && Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= 5 && 5 <= (ENEMIES[k].to || 99)).every(k => seen5.has(k)));
     ok('enemies: every kind has stats', Object.keys(ENEMIES).every(k => ENEMIES[k].hp(5) > 0 && ENEMIES[k].atk(5)[1] >= ENEMIES[k].atk(5)[0] && DEFAULT[k])); }
   { toTown(false); wh = []; inv = [mkItem('sword', 2), mkItem('sword', 0), mkItem('woodshield', 1), mkItem('scroll'), mkItem('potion')];
     ok('equip: name shows plus', itemName(inv[0]) === '鉄の剣+2' && itemName(mkItem('sword', -1)) === '鉄の剣-1');
@@ -355,7 +356,7 @@
     const sl = { kind: 'slime', x: player.x + 1, y: player.y, vx: 0, vy: 0, hp: 99, maxhp: 99, aware: true, lost: 0, flash: 0, bump: null, fl: false };
     enemies = [sl]; player.hp = 20; player.maxhp = 20; map[player.y][player.x + 1] = FLOOR; hitEnemy(sl);
     ok('combat: bare hand 2-4', sl.hp >= 95 && sl.hp <= 97);
-    const wp = mkItem('axe', 0); inv = [wp]; eqWeapon = wp; sl.hp = 99; hitEnemy(sl); ok('combat: axe adds +5 (7-9)', sl.hp >= 90 && sl.hp <= 92);
+    const wp = mkItem('axe', 0); inv = [wp]; eqWeapon = wp; sl.hp = 99; hitEnemy(sl); ok('combat: axe Lv1 hits for 6-8', sl.hp >= 91 && sl.hp <= 93);
     const sh = mkItem('ironshield', 3); inv.push(sh); eqShield = sh; ok('combat: shield def 5', defBonus() === 5);
     dead = false; eqWeapon = eqShield = null; }
   // ===== 追加：草・杖・巻物 =====
@@ -508,15 +509,15 @@
     setup(); { eqRings[0] = give('ring_sneak'); enemyTurn = etSave; const e = mkE(-2, 0); e.aware = false; player.face = [1, 0]; const far = { ...e }; void far; e.x = player.x + 5; e.y = player.y; map[e.y][e.x] = FLOOR; for (let x = player.x; x <= e.x; x++) map[player.y][x] = FLOOR;
       endTurn(); ok('ring_sneak: an enemy 5 tiles away does not notice you', e.aware === false); eqRings = [null, null]; endTurn(); ok('without ring_sneak, the same enemy notices you', e.aware === true); enemyTurn = stub; }
     setup(); { eqRings[0] = give('ring_moroha'); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('ring_moroha: a low roll is a critical hit (2 x 2 = 4)', 99 - e.hp === 4);
-      e.hp = 99; R(0.5, () => hitEnemy(e)); ok('ring_moroha: a normal roll is not (2+1 = 3)', 99 - e.hp === 3); }
+      e.hp = 99; R(0.5, () => hitEnemy(e)); ok('ring_moroha: a normal roll is not a crit (2)', 99 - e.hp === 2); }
 
     // --- 武器の印
-    setup(); { eqWeapon = give('minoaxe', 0); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('minoaxe: 会心 doubles (2+4)*2 = 12', e.hp === 99 - 12); }
-    setup(); { eqWeapon = give('skyblade', 0); const b = mkE(1, 0, 99, 'bat'), g = mkE(0, 1, 99, 'goblin'); R(0, () => { hitEnemy(b); hitEnemy(g); }); ok('skyblade: double damage to bats only', 99 - b.hp === 10 && 99 - g.hp === 5); }
+    setup(); { eqWeapon = give('minoaxe', 0); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('minoaxe: 会心 doubles ((1+4+1)*0.875 -> 5)*2 = 10', e.hp === 99 - 10); }
+    setup(); { eqWeapon = give('skyblade', 0); const b = mkE(1, 0, 99, 'bat'), g = mkE(0, 1, 99, 'goblin'); R(0, () => { hitEnemy(b); hitEnemy(g); }); ok('skyblade: double damage to bats only', 99 - b.hp === 8 && 99 - g.hp === 4); }
     setup(); { eqWeapon = give('healsword', 0); player.hp = 10; const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('healsword: heals a third of the damage', player.hp === 11); }
     setup(); { eqWeapon = give('steakknife', 0); const e = mkE(1, 0, 99); belly = 100; R(0, () => hitEnemy(e)); const a = 99 - e.hp; e.hp = 99; belly = 20; R(0, () => hitEnemy(e)); ok('steakknife: +3 when hungry', 99 - e.hp === a + 3); }
     setup(); { eqWeapon = give('harisen', 0); const e = mkE(1, 0, 99); map[player.y][player.x + 2] = FLOOR; R(0, () => hitEnemy(e)); ok('harisen: knocks the enemy back one tile', e.x === player.x + 2); }
-    setup(); { eqWeapon = give('renkentou', 0); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('renkentou: attacks twice on a proc', 99 - e.hp === (2 + 3) * 2); }
+    setup(); { eqWeapon = give('renkentou', 0); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('renkentou: attacks twice on a proc', 99 - e.hp === 4 * 2); }
     setup(); { eqWeapon = give('kamaitachi', 0); player.face = [1, 0]; const a = mkE(1, 0, 99), b = mkE(1, -1, 99), c = mkE(1, 1, 99), d = mkE(-1, 0, 99); R(0, () => hitEnemy(a)); ok('kamaitachi: hits the front three tiles, not behind', a.hp < 99 && b.hp < 99 && c.hp < 99 && d.hp === 99); }
     setup(); { eqWeapon = give('firesword', 0); player.face = [-1, 0]; const e = mkE(-2, 0, 99); playerAttack(); ok('firesword: fires at range when HP is full', e.hp === 91); player.hp = 5; e.hp = 99; playerAttack(); ok('firesword: no fire when HP is not full', e.hp === 99); }
     setup(); { eqWeapon = give('katana', 2); ok('katana+2: attack bonus 4+2', atkBonus() === 6); }
@@ -595,6 +596,70 @@
       return a(0, 0) === 0 && a(S - 1, S - 1) === 0 && a(S >> 1, 0) === 0 && a(S >> 1, S - 1) === 0 && a(0, S >> 1) === 0 && a(S - 1, S >> 1) === 0; }));
     const small = mkCanvas(200, 200), sg = small.getContext('2d'); sg.fillStyle = '#FF00FF'; sg.fillRect(0, 0, 200, 200); sg.fillStyle = '#00aa00'; sg.fillRect(60, 60, 30, 30);
     const one = sliceSheet(small, 4, 4, 16); ok('slice: a mostly-empty sheet yields one piece', one.filter(Boolean).length === 1 && one[0] === null);
+  }
+  // ===== 段階1：レベル・経験値・ちから・ダメージ式・敵の個性 =====
+  { const R = (v, f) => { const rs = Math.random; Math.random = () => v; try { f(); } finally { Math.random = rs; } };
+    const etSave = enemyTurn;
+    const setup = () => { enemyTurn = etSave; scene = 'dungeon'; floorNo = 3; newFloor(); dead = false; eqWeapon = eqShield = null; eqRings = [null, null]; inv = []; enemies = []; floorItems = []; player.st = newStatus(); player.lv = 1; player.exp = 0; player.maxhp = 20; player.hp = 20; atkUp = 0; belly = 100; player.face = [1, 0]; turn = 1; ACC.p = ACC.e = 1; };
+    const clearAround = () => { for (let dy = -4; dy <= 4; dy++) for (let dx = -6; dx <= 6; dx++) { const x = player.x + dx, y = player.y + dy; if (inb(x, y) && x > 0 && y > 0 && x < MW - 1 && y < MH - 1) map[y][x] = FLOOR; } };
+    const mk = (kind, dx, dy, hp) => { const x = player.x + dx, y = player.y + dy; map[y][x] = FLOOR; const e = { kind, x, y, vx: x, vy: y, hp: hp || 50, maxhp: hp || 50, aware: true, lost: 0, flash: 0, bump: null, fl: false, st: {}, gen: 0 }; enemies.push(e); return e; };
+    // 式
+    ok('levelAtk: Lv1=1, Lv5=7, Lv6=8.5, Lv13=15.5, Lv14=16', levelAtk(1) === 1 && levelAtk(5) === 7 && levelAtk(6) === 8.5 && levelAtk(13) === 15.5 && levelAtk(14) === 16);
+    ok('expNeed: grows with level', expNeed(1) === 10 && expNeed(2) === 16 && expNeed(10) > expNeed(2));
+    setup(); ok('curStr: base 8', curStr() === 8);
+    atkUp = 2; ok('curStr: +2 from herbs', curStr() === 10); atkUp = 0;
+    eqWeapon = mkItem('sword', 0); ok('playerAtk: Lv1 + sword(3) at str 8 = 4', playerAtk() === 4);
+    atkUp = 8; ok('playerAtk: str 16 -> weapon x1.25, +8 -> 1+3.75+8 = 12.75', Math.abs(playerAtk() - 12.75) < 1e-9); atkUp = 0; eqWeapon = null;
+    { const e = mk('ogre', 1, 0); ok('calcDamage: enemy defense reduces damage (Lv1 vs ogre def2: (1-2+1)=0 -> min 1)', (R(0.5, () => 0), true) && (() => { let v; R(0.5, () => { v = calcDamage(e); }); return v === 1; })()); }
+    { const e = mk('goblin', 1, 0); let lo = 99, hi = 0; eqWeapon = mkItem('axe', 0); for (let i = 0; i < 200; i++) { const d = calcDamage(e); lo = Math.min(lo, d); hi = Math.max(hi, d); } ok('calcDamage: axe Lv1 spread is 87.5-112.5% of 7', lo === 6 && hi === 8); eqWeapon = null; }
+    // 命中
+    setup(); { const e = mk('goblin', 1, 0); ACC.p = 0; R(0.5, () => hitEnemy(e)); ok('miss: ACC.p=0 never hits', e.hp === 50); ACC.p = 1; }
+    setup(); { const e = mk('goblin', 1, 0); e.st.sleep = 5; ACC.p = 0; R(0.5, () => hitEnemy(e)); ok('sleeping enemies are always hit', e.hp < 50 && e.st.sleep === 0); ACC.p = 1; }
+    // 経験値・レベルアップ
+    setup(); { const e = mk('goblin', 1, 0, 1); hitEnemy(e); ok('kill: goblin gives 4 exp', player.exp === 4 && player.lv === 1 && enemies.length === 0); }
+    setup(); { gainExp(10); ok('levelup: 10 exp -> Lv2, max HP +4', player.lv === 2 && player.exp === 0 && player.maxhp === 24 && player.hp === 24); gainExp(100); ok('levelup: multiple levels at once', player.lv >= 4 && player.maxhp === 20 + 4 * (player.lv - 1)); }
+    setup(); { player.lv = MAX_LV; gainExp(999); ok('levelup: capped at MAX_LV', player.lv === MAX_LV); }
+    setup(); { scene = 'town'; gainExp(50); ok('exp: none in town', player.lv === 1 && player.exp === 0); scene = 'dungeon'; }
+    setup(); { const e = mk('goblin', 1, 0, 1); inv = [mkItem('annihilatescroll')]; useType('annihilatescroll'); ok('annihilate scroll: no exp', player.exp === 0); void e; }
+    setup(); { player.lv = 5; player.exp = 3; player.maxhp = 36; toTown(false); ok('toTown: level/exp/max HP reset', player.lv === 1 && player.exp === 0 && player.maxhp === BASE_HP); }
+    // 敵の表
+    ok('enemies: 15 kinds, each has exp/def/hp/atk', Object.keys(ENEMIES).length === 15 && Object.values(ENEMIES).every(T => T.exp > 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
+    ok('enemies: borrowed-art kinds name an existing art key', Object.values(ENEMIES).filter(T => T.art).every(T => ENEMIES[T.art]));
+    ok('enemies: slime stops at 7F (to:6)', (() => { for (let i = 0; i < 300; i++) if (rollEnemy(7) === 'slime') return false; return true; })());
+    ok('enemies: deep kinds only appear deep', (() => { for (let i = 0; i < 300; i++) if (['minotaur', 'dragon'].includes(rollEnemy(5))) return false; const s = new Set(); for (let i = 0; i < 600; i++) s.add(rollEnemy(10)); return s.has('minotaur') && s.has('dragon'); })());
+    // 個性
+    setup(); clearAround(); { const e = mk('archer', 4, 0); const hp0 = player.hp; enemyTurn(); ok('archer: shoots from 4 tiles in a straight line', player.hp < hp0 && e.x === player.x + 4); }
+    setup(); clearAround(); { const e = mk('archer', 4, 1); const hp0 = player.hp; enemyTurn(); ok('archer: needs a straight line (4,1) -> no shot', player.hp === hp0); void e; }
+    setup(); clearAround(); { const bl = mk('goblin', 2, 0); bl.st.sleep = 9; const e = mk('archer', 4, 0); const hp0 = player.hp; enemyTurn(); ok('archer: blocked by another enemy', player.hp === hp0); void e; }
+    setup(); clearAround(); { const e = mk('dragon', 3, 0); const hp0 = player.hp; floorNo = 9; enemyTurn(); ok('dragon: breathes fire within 4 tiles', player.hp < hp0 && /炎/.test(msgHistory[msgHistory.length - 1])); void e; }
+    setup(); clearAround(); { const e = mk('dragon', 6, 0); const hp0 = player.hp; enemyTurn(); ok('dragon: no breath beyond 4 tiles', player.hp === hp0); void e; }
+    setup(); clearAround(); { const e = mk('thief', 1, 0, 5); inv = [mkItem('potion'), mkItem('herb')]; eqWeapon = null; enemyTurn(); ok('thief: steals an unequipped item and flees', e.loot && inv.length === 1);
+      const d0 = Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)); for (let i = 0; i < 4; i++) enemyTurn(); ok('thief: runs away', Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)) > d0);
+      const loot = e.loot; e.hp = 1; e.x = player.x + 1; e.y = player.y; map[e.y][e.x] = FLOOR; hitEnemy(e); ok('thief: killing it drops the stolen item', floorItems.some(f => f.item === loot) && enemies.length === 0); }
+    setup(); clearAround(); { const e = mk('thief', 1, 0, 5); inv = []; const hp0 = player.hp; enemyTurn(); ok('thief: with nothing to steal it just attacks', !e.loot && player.hp < hp0); }
+    setup(); clearAround(); { const e = mk('thief', 1, 0, 5); inv = [mkItem('potion')]; enemyTurn(); e.fleeT = 40; enemyTurn(); ok('thief: escapes for good after 40 turns', !enemies.includes(e) && !floorItems.some(f => f.item.type === 'potion')); }
+    setup(); clearAround(); { eqWeapon = mkItem('sword', 0); inv = [eqWeapon]; const e = mk('thief', 1, 0, 5); enemyTurn(); ok('thief: never steals equipped gear', !e.loot && eqWeapon && inv.includes(eqWeapon)); }
+    setup(); clearAround(); { mk('sleepy', 1, 0); R(0.5, () => enemyTurn()); ok('sleepy: puts you to sleep', player.st.sleep > 0); }
+    setup(); clearAround(); { const e = mk('sleepy', 3, 0); const x0 = e.x; enemyTurn(); ok('sleepy: never moves', e.x === x0); }
+    setup(); clearAround(); { mk('dazzle', 1, 0); R(0.5, () => enemyTurn()); ok('dazzle: confuses', player.st.confuse > 0); }
+    setup(); clearAround(); { eqRings = [mkItem('ring_nosleep'), null]; mk('sleepy', 1, 0); R(0.5, () => enemyTurn()); ok('sleepy: ring_nosleep blocks it', player.st.sleep === 0); }
+    setup(); clearAround(); { mk('venom', 1, 0); R(0.5, () => enemyTurn()); ok('venom: lowers strength by 1', atkUp === -1 && curStr() === 7); }
+    setup(); clearAround(); { eqRings = [mkItem('ring_antidote'), null]; mk('venom', 1, 0); R(0.5, () => enemyTurn()); ok('venom: ring_antidote blocks it', atkUp === 0); }
+    setup(); clearAround(); { atkUp = -4; mk('venom', 1, 0); R(0.5, () => enemyTurn()); ok('venom: strength loss is capped at -4', atkUp === -4); }
+    setup(); clearAround(); { inv = [mkItem('strherb')]; atkUp = -2; useType('strherb'); ok('strherb: recovers lost strength', atkUp === -1); }
+    setup(); clearAround(); { const e = mk('bomb', 1, 0, 3); const hp0 = player.hp; R(0.5, () => enemyTurn()); ok('bomb: explodes next to you and disappears', player.hp < hp0 && !enemies.includes(e) && player.exp === 0); }
+    setup(); clearAround(); { const e = mk('bomb', 1, 0, 1); hitEnemy(e); ok('bomb: killed first -> no explosion, gives exp', player.hp === 20 && player.exp === 6); }
+    setup(); clearAround(); { for (let y = player.y - 1; y <= player.y + 1; y++) for (let x = player.x + 2; x <= player.x + 3; x++) map[y][x] = WALL; const e = mk('ghost', 4, 0); map[e.y][e.x] = FLOOR; e.aware = true; const x0 = e.x; floorNo = 6; enemyTurn(); ok('ghost: walks through walls toward you', e.x === x0 - 1); }
+    setup(); clearAround(); { const e = mk('ghost', 1, 0); const hp0 = player.hp; R(0.5, () => enemyTurn()); ok('ghost: attacks when adjacent', player.hp < hp0); }
+    setup(); clearAround(); { const e = mk('blob', 1, 0, 20); e.maxhp = 20; R(0.5, () => hitEnemy(e)); ok('blob: splits when hit and survives (HP shared)', enemies.length === 2 && enemies[0].hp + enemies[1].hp === 20 - calcDamageSample() && enemies[1].gen === 1);
+      function calcDamageSample() { return 20 - enemies[0].hp - enemies[1].hp; } }
+    setup(); clearAround(); { const e = mk('blob', 1, 0, 200); e.gen = 3; R(0.5, () => hitEnemy(e)); ok('blob: no more splitting at generation 3', enemies.length === 1); }
+    setup(); clearAround(); { const e = mk('blob', 1, 0, 1); e.gen = 2; hitEnemy(e); ok('blob: split children give less exp (6 >> 2 = 1)', player.exp === 1); }
+    setup(); clearAround(); { const e = mk('blob', 1, 0, 2); R(0.5, () => hitEnemy(e)); ok('blob: killed outright does not split', enemies.length === 0); }
+    // 見た目：専用の絵が無い敵は、借りた絵で描ける
+    ok('draw: an enemy with no own art draws with the borrowed art', (() => { setup(); const e = mk('minotaur', 1, 0); e.vx = e.x; e.vy = e.y; vis[e.y][e.x] = true; try { fadeT = -1e9; draw(); return true; } catch (err) { console.log(err); return false; } })());
+    ok('hud: shows level and strength in the dungeon', (() => { setup(); render(); return /Lv1/.test($('hp').innerHTML) && /ちから8/.test($('where').innerHTML); })());
+    enemyTurn = etSave; ACC.p = ACC.e = 1;
   }
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');

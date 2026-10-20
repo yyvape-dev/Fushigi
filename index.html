@@ -294,7 +294,7 @@ const ITEMS = {
   },
   annihilatescroll: {
     name: '全滅の巻物', cat: '巻物', ch: '≡', fg: '#ff7ad0', w: 1, from: 3, desc: '部屋の中の敵をすべて消滅させる。通路では周囲1マス。',
-    use() { const t = roomEnemies(); for (const e of t) { enemies.splice(enemies.indexOf(e), 1); fxText(e.x, e.y, '消滅', '#ff9be8'); } say(t.length ? `${t.length}体の敵が消え去った！` : 'だれもいなかった…'); return true; },
+    use() { const t = roomEnemies(); for (const e of t) { killEnemy(e, true); fxText(e.x, e.y, '消滅', '#ff9be8'); } say(t.length ? `${t.length}体の敵が消え去った！` : 'だれもいなかった…'); return true; },
   },
   lightscroll: {
     name: 'あかりの巻物', cat: '巻物', ch: '≡', fg: '#fff0a0', w: 2, from: 2, desc: 'この階の地形と、すべての敵・道具が地図に映る。',
@@ -449,12 +449,24 @@ for (const d of Object.values(ITEMS)) if (!d.icon && ICON_BY_CAT[d.cat]) d.icon 
 //  敵定義：新しい敵はここに1項目足すだけ（絵は assets/<キー>.png）
 //  from:出現し始める階 / w:出やすさ / hp(f),atk(f):階数fでの体力と攻撃[最小,最大] / spd:'slow'=2ターンに1歩 'fast'=1ターンに2歩
 // =====================================================================
+// 敵の表：ai=行動（無印=近づいて殴る）／def=守備／exp=倒したときの経験値／to=この階まで出る／art,hue=専用の絵が無いときに借りる絵と色相（assets/<キー>.png を置けば専用の絵が優先）
+//   split=ダメージで分裂 archer=離れて矢 thief=盗んで逃げる sleepy=眠らせる(動かない) bomb=隣で自爆 dazzle=混乱させる venom=ちからを下げる ghost=壁抜け breath=炎(射程4)
 const ENEMIES = {
-  slime: { name: 'スライム', from: 1, w: 4, hp: f => 3 + f, atk: f => [1, 1 + Math.floor(f / 4)], spd: 'slow', col: '#5aa8ff' },
-  goblin: { name: 'ゴブリン', from: 1, w: 6, hp: f => 4 + f, atk: f => [1, 2 + Math.floor(f / 3)], col: '#4bb25a' },
-  bat: { name: 'コウモリ', from: 2, w: 4, hp: f => 3 + Math.floor(f / 2), atk: f => [1, 2], spd: 'fast', col: '#9a6ad8' },
-  skeleton: { name: 'スケルトン', from: 3, w: 4, hp: f => 7 + f, atk: f => [2, 3 + Math.floor(f / 2)], col: '#e8e8d8' },
-  ogre: { name: 'オーガ', from: 4, w: 3, hp: f => 12 + f * 2, atk: f => [3, 5 + Math.floor(f / 3)], spd: 'slow', col: '#c0623a' },
+  slime: { name: 'スライム', from: 1, to: 6, w: 4, hp: f => 3 + f, atk: f => [1, 1 + Math.floor(f / 4)], def: 0, exp: 3, spd: 'slow', col: '#5aa8ff' },
+  goblin: { name: 'ゴブリン', from: 1, to: 8, w: 6, hp: f => 4 + f, atk: f => [1, 2 + Math.floor(f / 3)], def: 0, exp: 4, col: '#4bb25a' },
+  bat: { name: 'コウモリ', from: 2, to: 9, w: 4, hp: f => 3 + Math.floor(f / 2), atk: f => [1, 2], def: 0, exp: 4, spd: 'fast', col: '#9a6ad8' },
+  blob: { name: 'ブヨブヨ', from: 2, to: 8, w: 3, hp: f => 6 + f, atk: f => [1, 1 + Math.floor(f / 4)], def: 0, exp: 6, ai: 'split', art: 'slime', hue: 290, col: '#d070e0' },
+  skeleton: { name: 'スケルトン', from: 3, w: 4, hp: f => 7 + f, atk: f => [2, 3 + Math.floor(f / 2)], def: 1, exp: 7, col: '#e8e8d8' },
+  archer: { name: 'ゆみこぞう', from: 3, w: 3, hp: f => 4 + Math.floor(f * 0.8), atk: f => [2, 3 + Math.floor(f / 3)], def: 0, exp: 8, ai: 'archer', art: 'goblin', hue: 50, col: '#e0c050' },
+  thief: { name: 'どろぼうタヌキ', from: 3, w: 2, hp: f => 5 + f, atk: f => [1, 2], def: 0, exp: 9, ai: 'thief', art: 'goblin', hue: 300, col: '#a08060' },
+  sleepy: { name: 'ねむりダケ', from: 4, w: 2, hp: f => 6 + f, atk: f => [1, 2], def: 0, exp: 8, ai: 'sleepy', spd: 'still', art: 'slime', hue: 120, col: '#9ab0ff' },
+  bomb: { name: 'ばくだん虫', from: 4, w: 2, hp: f => 3 + Math.floor(f / 2), atk: f => [1, 1], def: 0, exp: 6, ai: 'bomb', art: 'bat', hue: 180, col: '#ff7a3a' },
+  ogre: { name: 'オーガ', from: 4, w: 3, hp: f => 12 + f * 2, atk: f => [3, 5 + Math.floor(f / 3)], def: 2, exp: 14, spd: 'slow', col: '#c0623a' },
+  dazzle: { name: 'めまいガエル', from: 5, w: 2, hp: f => 7 + f, atk: f => [1, 3], def: 0, exp: 10, ai: 'dazzle', art: 'slime', hue: 180, col: '#ff9be8' },
+  venom: { name: 'どくバチ', from: 5, w: 3, hp: f => 6 + f, atk: f => [2, 3 + Math.floor(f / 3)], def: 0, exp: 10, ai: 'venom', spd: 'fast', art: 'bat', hue: 80, col: '#c0e040' },
+  ghost: { name: 'ゴースト', from: 6, w: 2, hp: f => 8 + f, atk: f => [2, 3 + Math.floor(f / 3)], def: 0, exp: 14, ai: 'ghost', art: 'skeleton', hue: 200, col: '#a0d8ff' },
+  minotaur: { name: 'ミノタウロス', from: 8, w: 2, hp: f => 25 + f * 2, atk: f => [6, 9 + Math.floor(f / 2)], def: 3, exp: 40, art: 'ogre', hue: 20, col: '#d08040' },
+  dragon: { name: 'ドラゴン', from: 9, w: 1, hp: f => 40 + f * 2, atk: f => [5, 8 + Math.floor(f / 2)], breath: f => [4, 7 + Math.floor(f / 3)], def: 4, exp: 70, ai: 'breath', art: 'ogre', hue: 140, col: '#ff5030' },
 };
 const eT = e => ENEMIES[e.kind] || ENEMIES.goblin;
 // 杖・巻物の共通処理：向いている方向の最初の敵（射程8）／ダメージを与える
@@ -472,8 +484,56 @@ function lineTarget() {                                         // 向いてい�
 function zapTarget() { const t = lineTarget(); if (!t) say('しかし、何も起こらなかった。'); return t; }
 function zapHit(e, dmg, label) {
   e.hp -= dmg; e.aware = true; e.flash = now() + 130; if (e.st) e.st.sleep = 0; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
-  if (e.hp <= 0) { enemies.splice(enemies.indexOf(e), 1); say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); }
-  else say(`${label}で${eT(e).name}に${dmg}ダメージ。`);
+  if (e.hp <= 0) { say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); killEnemy(e); }
+  else { say(`${label}で${eT(e).name}に${dmg}ダメージ。`); afterDamage(e); }
+}
+// =====================================================================
+//  戦闘の骨格：レベル・経験値・ちから・ダメージ式（本家シレン6の式を、このゲームの規模に縮めた簡略版＝仮説）
+// =====================================================================
+const ACC = { p: 0.92, e: 0.92 };                               // 命中率（本家のシレン通常攻撃は約92%。敵側は同じにした＝仮説）
+const MAX_LV = 30;
+const levelAtk = lv => lv <= 5 ? 1 + (lv - 1) * 1.5 : lv <= 13 ? 7.5 + (lv - 5) : 15.5 + (lv - 13) * 0.5;   // 本家：レベル分の攻撃力
+const expNeed = lv => 10 + 6 * (lv - 1);                        // 次のレベルまでの経験値（このゲーム独自の仮の値）
+const curStr = () => Math.max(1, 8 + atkUp + 2 * ringN('strength') + (player.st.power > 0 ? 3 : 0) - (player.st.weak > 0 ? 2 : 0));
+const weaponPow = () => eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0;
+// 攻撃力＝レベル分＋武器×(0.75＋ちから/32)＋(ちから−8)。ダメージ＝(攻撃力−守備力＋1)×87.5〜112.5%
+function playerAtk() {
+  return levelAtk(player.lv) + weaponPow() * (0.75 + curStr() / 32) + (curStr() - 8) + (wSeal() === 'hungry' && belly <= 30 ? 3 : 0);
+}
+function calcDamage(e) {
+  return Math.max(1, Math.round((playerAtk() - (eT(e).def || 0) + 1) * (0.875 + Math.random() * 0.25)));
+}
+function gainExp(n) {
+  if (scene !== 'dungeon' || player.lv >= MAX_LV) return;
+  player.exp += n;
+  while (player.lv < MAX_LV && player.exp >= expNeed(player.lv)) {
+    player.exp -= expNeed(player.lv); player.lv++;
+    player.maxhp += 4; player.hp = Math.min(player.maxhp, player.hp + 4);
+    fxText(player.x, player.y, 'Lv' + player.lv, '#ffe28a'); vfxShake(3, 180); say(`レベルが${player.lv}に上がった！ 最大HP+4`);
+  }
+}
+function dropAt(x, y, it) {                                     // 盗まれた物などを、近くの空き床に置く
+  for (let r = 0; r <= 4; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
+    const nx = x + dx, ny = y + dy;
+    if (inb(nx, ny) && map[ny][nx] === FLOOR && !itemAt(nx, ny)) { floorItems.push({ x: nx, y: ny, item: it }); return true; }
+  }
+  return false;
+}
+// 敵を倒した：消す・経験値・盗んだ物を落とす。noExp=消滅の巻物など
+function killEnemy(e, noExp) {
+  const i = enemies.indexOf(e); if (i >= 0) enemies.splice(i, 1);
+  if (e.loot) { dropAt(e.x, e.y, e.loot); say(`盗まれた${itemName(e.loot)}を取り返した！`); e.loot = null; }
+  if (!noExp) gainExp(Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)))));
+}
+// ダメージを受けて生き残った後：ブヨブヨは分裂する（3回まで。子は経験値が半分ずつ）
+function afterDamage(e) {
+  if ((eT(e).ai !== 'split') || e.hp < 2 || (e.gen || 0) >= 3 || enemies.length >= 30) return;
+  for (const [dx, dy] of DIRS8) {
+    const nx = e.x + dx, ny = e.y + dy;
+    if (!geomOK(e.x, e.y, dx, dy) || enemyAt(nx, ny) || (nx === player.x && ny === player.y)) continue;
+    const c = { kind: e.kind, x: nx, y: ny, vx: e.x, vy: e.y, hp: Math.floor(e.hp / 2), maxhp: e.maxhp, aware: true, lost: 0, flash: 0, bump: null, fl: e.fl, st: {}, gen: (e.gen || 0) + 1 };
+    e.hp -= c.hp; e.gen = c.gen; enemies.push(c); say(`${eT(e).name}が分裂した！`); return;
+  }
 }
 // =====================================================================
 //  状態異常・腕輪・封印・復活の補助（効果の判定はここに集める）
@@ -566,7 +626,7 @@ function ringTick() {
 }
 
 function rollEnemy(f) {
-  const ks = Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= f);
+  const ks = Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= f && f <= (ENEMIES[k].to || 99));
   let r = Math.random() * ks.reduce((a, k) => a + ENEMIES[k].w, 0);
   for (const k of ks) { r -= ENEMIES[k].w; if (r < 0) return k; }
   return ks[0];
@@ -930,7 +990,7 @@ function snapVis() { for (const e of [player, ...enemies]) { e.vx = e.x; e.vy = 
 function toTown(fromDungeon) {
   scene = 'town'; buildTown();
   enemies = []; floorItems = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
-  player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus(); floorLight = false;
+  player.lv = 1; player.exp = 0; atkUp = 0; player.maxhp = BASE_HP; player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus(); floorLight = false;
   player.x = fromDungeon ? 17 : 11; player.y = fromDungeon ? 4 : 9;
   seen = Array.from({ length: MH }, () => new Array(MW).fill(true));
   snapVis(); updateVis();
@@ -940,7 +1000,7 @@ function toTown(fromDungeon) {
 function enterDungeon() {
   if (uiBlocked() || guardDead()) return;
   scene = 'dungeon'; floorNo = 1; turn = 0; logs = []; fx.length = 0; vfx.length = 0; shakeAmp = 0;
-  player.maxhp = BASE_HP; player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus();   // 体力はレベル1相当で毎回リセット（本家と同じ）
+  player.maxhp = BASE_HP; player.hp = player.maxhp; player.lv = 1; player.exp = 0; player.face = [0, 1]; player.st = newStatus();   // レベル・体力は毎回リセット（本家と同じ）
   atkUp = 0; bellyBonus = 0; floorLight = false; belly = maxBelly(); bellyWarn = 99;
   saveGame();                                                   // 出発時点の持ち物を保存
   newFloor();
@@ -962,7 +1022,7 @@ function afterDeath() {                                         // 死亡：持�
   saveGame(); render();
 }
 function boot() {
-  player = { x: 0, y: 0, vx: 0, vy: 0, hp: BASE_HP, maxhp: BASE_HP, face: [0, 1], bump: null, flash: 0, fl: false, st: newStatus() };
+  player = { x: 0, y: 0, vx: 0, vy: 0, hp: BASE_HP, maxhp: BASE_HP, lv: 1, exp: 0, face: [0, 1], bump: null, flash: 0, fl: false, st: newStatus() };
   dead = false; floorNo = 1; turn = 0;
   if (!loadGame()) { wh = [mkItem('potion'), mkItem('potion'), mkItem('potion'), mkItem('onigiri'), mkItem('onigiri')]; inv = []; quick = 'potion'; clears = 0; deaths = 0; }
   const giftMsg = !gift;
@@ -1095,7 +1155,7 @@ function say(m) {
   logTimer = setTimeout(() => { const el = $('log'); if (el.classList) el.classList.add('off'); }, LOG_MS + 50);
 }
 function msgClass(m) {
-  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /の攻撃！|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物|外した/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた|強化値|装備した|最大HP|地図/.test(m) ? 'good' : '';
+  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /の攻撃！|の矢！|の炎！|爆発|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物|外した/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた|強化値|装備した|最大HP|地図/.test(m) ? 'good' : '';
 }
 const logHtml = arr => arr.map(l => `<div class="${msgClass(l)}">${l}</div>`).join('');
 function openHist() { if (dead) { guardDead(); return; } if (bagOpen || whOpen || cfgOpen) return; holdStop(); histOpen = true; $('hist').hidden = false; $('histList').innerHTML = logHtml(msgHistory) || '<div>まだメッセージはありません。</div>'; const l = $('histList'); l.scrollTop = l.scrollHeight; render(); }
@@ -1158,7 +1218,11 @@ function hitEnemy(e) {
 }
 // 1体への攻撃。印・腕輪の効果（会心・特攻・回復・突き飛ばし・連続攻撃）もここ
 function strikeOne(e, again) {
-  let dmg = rnd(2, 4) + atkBonus(), crit = false;
+  const sleeping = e.st && e.st.sleep > 0;                       // 眠っている敵には必ず当たる（このゲームの決め＝仮説）
+  if (!sleeping && Math.random() >= ACC.p) {
+    e.aware = true; fxText(e.x, e.y, 'MISS', '#cfd8e8'); say(`${eT(e).name}への攻撃ははずれた。`); return;
+  }
+  let dmg = calcDamage(e), crit = false;
   if (Math.random() < 0.2 * ringN('moroha') + (wSeal() === 'crit' ? 0.25 : 0)) { dmg *= 2; crit = true; }
   if (wSeal() === 'bat' && e.kind === 'bat') dmg *= 2;
   e.hp -= dmg; e.aware = true; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
@@ -1166,8 +1230,8 @@ function strikeOne(e, again) {
   vfxHit(e.x, e.y, e.x - player.x, e.y - player.y, '#ffe9a0', e.hp <= 0 || crit);
   vfxShake(e.hp <= 0 ? 4 : crit ? 3 : 2, e.hp <= 0 ? 200 : 110);
   const pre = crit ? '会心の一撃！ ' : '';
-  if (e.hp <= 0) { enemies.splice(enemies.indexOf(e), 1); say(`${pre}${eT(e).name}に${dmg}ダメージ。倒した！`); }
-  else say(`${pre}${eT(e).name}に${dmg}ダメージ。`);
+  if (e.hp <= 0) { say(`${pre}${eT(e).name}に${dmg}ダメージ。倒した！`); killEnemy(e); }
+  else { say(`${pre}${eT(e).name}に${dmg}ダメージ。`); afterDamage(e); }
   if (wSeal() === 'drain' && player.hp < player.maxhp) {
     const b = player.hp; player.hp = Math.min(player.maxhp, player.hp + Math.max(1, Math.floor(dmg / 3))); fxText(player.x, player.y, '+' + (player.hp - b), '#7bff9a');
   }
@@ -1266,10 +1330,41 @@ function playerAttack() {
   endTurn();
 }
 
+const aligned = (ax, ay, bx, by) => { const dx = bx - ax, dy = by - ay; return dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy); };
+function clearShot(e) {                                          // 敵→プレイヤーの直線上に、壁も他の敵もない
+  const dx = Math.sign(player.x - e.x), dy = Math.sign(player.y - e.y); let x = e.x, y = e.y;
+  while (x !== player.x || y !== player.y) {
+    if (!geomOK(x, y, dx, dy)) return false;
+    x += dx; y += dy;
+    if ((x !== player.x || y !== player.y) && enemyAt(x, y)) return false;
+  }
+  return true;
+}
+// 敵1体の攻撃（近接も遠距離も共通）。結果 {dead, hit, dmg}
+function enemyStrike(e, T, range, verb) {
+  const [lo, hi] = range;
+  bumpToward(e, player.x, player.y);
+  if (e.x !== player.x) e.fl = player.x < e.x;
+  if (Math.random() >= ACC.e) { say(`${T.name}の${verb}！ はずれた。`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
+  if (sSeal() === 'dodge' && Math.random() < 0.25) { say(`${T.name}の${verb}！ ひらりとかわした！`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
+  let dmg = Math.max(1, rnd(lo, hi) - defBonus()), crit = false;
+  if (Math.random() < 0.1 * ringN('moroha') + 0.15 * ringN('tsukon')) { crit = true; if (sSeal() !== 'critguard') dmg *= 2; }
+  if (sSeal() === 'fullhalf' && player.hp >= player.maxhp) dmg = Math.max(1, Math.ceil(dmg / 2));
+  if (player.st.invinc > 0) dmg = 0;
+  player.hp -= dmg;
+  if (dmg > 0) { hurtT = now(); player.flash = now() + 130; vfxShake(Math.min(7, 3 + dmg * 0.5), 230); }
+  fxText(player.x, player.y, '-' + dmg, crit ? '#ffe28a' : '#ff6b6b');
+  vfxHit(player.x, player.y, player.x - e.x, player.y - e.y, '#ff6a4d', crit);
+  say(`${crit ? '痛恨の一撃！ ' : ''}${T.name}の${verb}！ ${dmg}ダメージ。`);
+  if (sSeal() === 'counter' && dmg > 0 && e.hp > 0) zapHit(e, Math.max(1, Math.ceil(dmg / 2)), 'カウンター');
+  if (player.hp <= 0 && sSeal() === 'guts' && Math.random() < 0.5) { player.hp = 1; say('根性で踏みとどまった！'); }
+  return { dead: checkDeath(`力尽きた…（${floorNo}階）`), hit: true, dmg };
+}
 function enemyTurn() {
   const d = distMap();
   for (const e of [...enemies]) {
-    const T = eT(e), S = e.st || (e.st = {});
+    const T = eT(e), S = e.st || (e.st = {}), ai = T.ai || 'melee';
+    if (e.mh) continue;                                           // 魔物部屋で眠っている敵（部屋に入ると目覚める）
     if (S.sleep > 0) { S.sleep--; continue; }                     // 眠っている敵は動かない（殴られると起きる）
     const confused = S.confuse > 0; if (confused) S.confuse--;
     if (S.boost > 0) S.boost--;
@@ -1278,27 +1373,57 @@ function enemyTurn() {
       const dist = Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y));
       if (dist <= (ringN('sneak') ? 3 : SIGHT) && los(e.x, e.y, player.x, player.y)) { e.aware = true; e.lost = 0; }
       else if (step === 0 && e.aware && ++e.lost > 10) e.aware = false;
-      // 隣接なら攻撃（1ターンに1回）
-      if (!confused && dist === 1 && geomOK(e.x, e.y, player.x - e.x, player.y - e.y)) {
-        const [lo, hi] = T.atk(floorNo);
-        bumpToward(e, player.x, player.y);
-        if (e.x !== player.x) e.fl = player.x < e.x;
-        if (sSeal() === 'dodge' && Math.random() < 0.25) { say(`${T.name}の攻撃！ ひらりとかわした！`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); break; }
-        let dmg = Math.max(1, rnd(lo, hi) - defBonus()), crit = false;
-        if (Math.random() < 0.1 * ringN('moroha') + 0.15 * ringN('tsukon')) { crit = true; if (sSeal() !== 'critguard') dmg *= 2; }
-        if (sSeal() === 'fullhalf' && player.hp >= player.maxhp) dmg = Math.max(1, Math.ceil(dmg / 2));
-        if (player.st.invinc > 0) dmg = 0;
-        player.hp -= dmg;
-        if (dmg > 0) { hurtT = now(); player.flash = now() + 130; vfxShake(Math.min(7, 3 + dmg * 0.5), 230); }
-        fxText(player.x, player.y, '-' + dmg, crit ? '#ffe28a' : '#ff6b6b');
-        vfxHit(player.x, player.y, player.x - e.x, player.y - e.y, '#ff6a4d', crit);
-        say(`${crit ? '痛恨の一撃！ ' : ''}${T.name}の攻撃！ ${dmg}ダメージ。`);
-        if (sSeal() === 'counter' && dmg > 0) zapHit(e, Math.max(1, Math.ceil(dmg / 2)), 'カウンター');
-        if (player.hp <= 0 && sSeal() === 'guts' && Math.random() < 0.5) { player.hp = 1; say('根性で踏みとどまった！'); }
-        if (checkDeath(`力尽きた…（${floorNo}階）`)) return;
+      if (e.loot) {                                               // 盗んだ後は逃げる。しばらく逃げ切られると消えて、盗んだ物は戻らない
+        if (++e.fleeT > 40) { enemies.splice(enemies.indexOf(e), 1); say(`${T.name}は盗んだ物を持って消えた…`); break; }
+        let best = null, bd = d[e.y][e.x];
+        for (const [dx, dy] of DIRS8) {
+          if (!geomOK(e.x, e.y, dx, dy)) continue;
+          const nx = e.x + dx, ny = e.y + dy;
+          if (d[ny][nx] > bd && !enemyAt(nx, ny) && !(nx === player.x && ny === player.y)) { bd = d[ny][nx]; best = [dx, dy]; }
+        }
+        if (best) { e.x += best[0]; e.y += best[1]; if (best[0]) e.fl = best[0] < 0; }
+        continue;
+      }
+      const range = ai === 'archer' ? 6 : ai === 'breath' ? 4 : 0;   // 遠距離攻撃：直線上で、間に何も無いとき
+      if (!confused && range && e.aware && dist > 1 && dist <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e)) {
+        const r = enemyStrike(e, T, ai === 'breath' ? T.breath(floorNo) : T.atk(floorNo), ai === 'breath' ? '炎' : '矢');
+        if (r.dead) return;
         break;
       }
+      const adj = dist === 1 && (ai === 'ghost' || geomOK(e.x, e.y, player.x - e.x, player.y - e.y));
+      if (!confused && adj) {                                     // 隣接なら攻撃（1ターンに1回）
+        if (ai === 'bomb') {                                      // 自爆：自分も消える
+          const dmg = Math.max(1, 5 + Math.floor(floorNo * 0.8) - Math.floor(defBonus() / 2));
+          enemies.splice(enemies.indexOf(e), 1); vfxShake(6, 300); fxText(e.x, e.y, '爆発', '#ff9a4a');
+          say(`${T.name}が爆発した！ ${dmg}ダメージ。`);
+          if (hurtPlayer(dmg, `力尽きた…（${floorNo}階）`)) return;
+          break;
+        }
+        if (ai === 'thief' && inv.some(i => !isEq(i))) {          // 盗む：装備していない物から1つ
+          const c = inv.filter(i => !isEq(i)), it = c[rnd(0, c.length - 1)];
+          inv.splice(inv.indexOf(it), 1); e.loot = it; e.fleeT = 0; bumpToward(e, player.x, player.y);
+          say(`${T.name}に${itemName(it)}を盗まれた！ 倒せば取り返せる。`); fxText(player.x, player.y, '盗まれた', '#ffb347');
+          break;
+        }
+        const r = enemyStrike(e, T, T.atk(floorNo), '攻撃');
+        if (r.dead) return;
+        if (r.hit && r.dmg > 0) {
+          if (ai === 'sleepy' && addStatus('sleep', 5)) say('眠ってしまった…');
+          else if (ai === 'dazzle' && addStatus('confuse', 8)) say('目が回って混乱した！');
+          else if (ai === 'venom') {
+            if (ringN('antidote')) say('腕輪の力で毒を防いだ！');
+            else if (atkUp > -4) { atkUp--; fxText(player.x, player.y, 'ちから-1', '#c0e040'); say('毒でちからが下がった！'); }
+          }
+        }
+        break;
+      }
+      if (T.spd === 'still') break;                               // 動かない敵
       if (T.spd === 'slow' && turn % 2 === 1) break;               // 動きが遅い敵：2ターンに1歩
+      if (ai === 'ghost' && !confused && e.aware) {               // 壁抜け：壁を無視してまっすぐ近づく
+        const mx = Math.sign(player.x - e.x), my = Math.sign(player.y - e.y), nx = e.x + mx, ny = e.y + my;
+        if (inb(nx, ny) && !enemyAt(nx, ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
+        continue;
+      }
       let mx = 0, my = 0;
       if (!confused && e.aware && d[e.y][e.x] > 0 && !(T.spd === 'fast' && Math.random() < 0.25)) {
         // 距離が最小の隣接マスへ
@@ -1571,13 +1696,13 @@ const cache = new Map();
 function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) { cache.set(k, v); $(id).style[prop] = v; } }
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
-  setH('where', scene === 'town' ? `町　踏破${clears}` : `${DUNGEONS[dungeonId].name} 下り ${floorNo}F${statusText() ? '　' + statusText() : ''}`);
+  setH('where', scene === 'town' ? `町　踏破${clears}` : `${DUNGEONS[dungeonId].name} 下り ${floorNo}F　ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}`);
   setH('bagc', `持${inv.length}/${MAXBAG}`);
   setH('belly', `満腹度 ${belly}/${maxBelly()}`);
   setS('blbar', 'display', scene === 'dungeon' ? 'block' : 'none');
   setS('blf', 'width', Math.max(0, Math.min(100, belly / maxBelly() * 100)).toFixed(1) + '%');
   setS('blf', 'background', belly <= 10 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
-  setH('hp', `HP ${player.hp}/${player.maxhp}`);
+  setH('hp', scene === 'dungeon' ? `Lv${player.lv}　HP ${player.hp}/${player.maxhp}` : `HP ${player.hp}/${player.maxhp}`);
   const hpr = Math.max(0, Math.min(1, player.hp / player.maxhp));
   setS('hpf', 'width', (hpr * 100).toFixed(1) + '%');
   setS('hpf', 'background', hpr <= 0.25 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
@@ -1723,6 +1848,8 @@ function entityOffset(e, t) {
   return [e.bump.dx * s, e.bump.dy * s];
 }
 function drawEntity(key, e, t, camX, camY) {
+  let hue = 0;
+  if (e.kind && ENEMIES[e.kind] && !SPRITES[e.kind] && !DEFAULT[e.kind]) { hue = ENEMIES[e.kind].hue || 0; key = ENEMIES[e.kind].art || 'goblin'; }   // 専用の絵が無い敵：借りた絵を色違いで
   const [ox, oy] = entityOffset(e, t);
   const px = Math.round(camX + (e.vx + ox) * TS), py = Math.round(camY + (e.vy + oy) * TS);
   const d = Math.hypot(e.x - e.vx, e.y - e.vy);
@@ -1732,7 +1859,9 @@ function drawEntity(key, e, t, camX, camY) {
   ctx.beginPath(); ctx.ellipse(px + TS / 2, py + TS * 0.9, TS * 0.32 * Math.min(ck, 1.25), TS * 0.1 * Math.min(ck, 1.25), 0, 0, Math.PI * 2); ctx.fill();
   ctx.save();
   if (e.fl) { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
+  if (hue && 'filter' in ctx) ctx.filter = `hue-rotate(${hue}deg)`;
   drawChar(key, 0, 0, ctx, ck, e, t);
+  if (hue && 'filter' in ctx) ctx.filter = 'none';
   if (e.flash > t) {                                             // 被弾の白フラッシュ（絵の形のまま）。tmpは3マス四方：マスの左上を(TS, 2TS)に置く
     const g = tmp.getContext('2d');
     g.clearRect(0, 0, TS * 3, TS * 3); g.globalCompositeOperation = 'source-over';
