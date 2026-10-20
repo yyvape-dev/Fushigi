@@ -1,0 +1,53 @@
+{
+  "prompt": "Produce an exact 4 column by 4 row sprite sheet on a fully TRANSPARENT background, sixteen equally sized square cells, 1024 by 1024 or larger square image. First attached image is the immutable approved SOUTH/front-facing character reference. Preserve EXACTLY that character identity, face, golden blonde bob haircut, black and gold armor design, RED short cape, body proportions, rendering style, anatomical asymmetry (large gold pauldron on character's LEFT / screen RIGHT). No helmet, no new armor, no hair redesign. Second attached image is the 4x4 neutral 3D pose guide; use its row/column poses but dress the figure as the approved character, not as the mannequin. Same slightly elevated orthographic camera and SOUTH facing orientation in every cell. All 16 characters use identical scale and foot baseline, head-to-planted-foot height 192 relative to a 256px cell, ground anchor at (128,224), complete body with generous transparent padding. NO shadows outside body, NO labels, NO borders, NO separators, NO drawn equipment, NO swords, NO shields, NO rice balls, NO scroll, NO staff: props will be separate sprites. Arms must connect naturally at shoulders, elbows bend anatomically, hands closed/curled to hold props. ROW 1: real four-frame walking cycle, left stride forward, left foot passing and right lifting, right stride forward, right foot passing and left lifting; actual alternating boots and knees, arms gently counter-swing, cape subtly responds, torso stable. Do not just bob an idle figure. ROW 2: using food/herb, right hand low preparing, right hand raised gently to mouth with bent elbow, hand at mouth with a small chewing/swallow pose (eyes relaxed), then hand lowering to chest; left hand lightly supports near chest. ROW 3: reading a scroll, both hands low, both hands in front of chest holding the two ends of an imaginary open scroll, small downward head glance while reading, then lower hands. ROW 4: staff casting, right hand holds imaginary staff at waist, right arm draws back/up with bent elbow, right hand extends slightly forward to point a spell in facing direction, then recover. Keep faces visible and recognizably identical in all rows; walk hands remain near hips. Render clean premium hand-painted chibi game sprites, not pixel art, retain crisp transparent edges and no fake checkerboard.",
+  "directions": [
+    {
+      "id": "S",
+      "source": "/workspace/generated_images/exec-d07512c1-83be-4c68-8072-efdbe0a95dbf.png",
+      "reference": "fushigi-equipment-v3/assets/hero-base/S.png",
+      "guide": "fushigi-actions-v1/guides/S-sheet.png"
+    },
+    {
+      "id": "SW",
+      "source": "/workspace/generated_images/exec-f0c9b141-303e-44c0-85b6-30132d4d1201.png",
+      "reference": "fushigi-equipment-v3/assets/hero-base/SW.png",
+      "guide": "fushigi-actions-v1/guides/SW-sheet.png"
+    },
+    {
+      "id": "W",
+      "source": "/workspace/generated_images/exec-193b942a-58a3-46fe-819a-ffb9dd2af95c.png",
+      "reference": "fushigi-equipment-v3/assets/hero-base/W.png",
+      "guide": "fushigi-actions-v1/guides/W-sheet.png"
+    },
+    {
+      "id": "NW",
+      "source": "/workspace/generated_images/exec-bd35f9d7-4224-4ce8-bed6-39b73287f03a.png",
+      "reference": "fushigi-equipment-v3/assets/hero-base/NW.png",
+      "guide": "fushigi-actions-v1/guides/NW-sheet.png"
+    },
+    {
+      "id": "N",
+      "source": "/workspace/generated_images/exec-4cbe563e-d647-4340-a63d-0c3b49235ed9.png",
+      "reference": "fushigi-equipment-v3/assets/hero-base/N.png",
+      "guide": "fushigi-actions-v1/guides/N-sheet.png"
+    },
+    {
+      "id": "NE",
+      "source": "/workspace/generated_images/exec-7e162286-8edc-42f1-a0d3-c3812e2ad6dd.png",
+      "reference": "fushigi-equipment-v3/assets/hero-base/NE.png",
+      "guide": "fushigi-actions-v1/guides/NE-sheet.png"
+    },
+    {
+      "id": "E",
+      "source": "/workspace/generated_images/exec-cc7268be-f58d-4467-a670-3680a5a530b3.png",
+      "reference": "fushigi-equipment-v3/assets/hero-base/E.png",
+      "guide": "fushigi-actions-v1/guides/E-sheet.png"
+    },
+    {
+      "id": "SE",
+      "source": "/workspace/generated_images/exec-b5130b79-d278-4037-91a7-9cd320bab7c2.png",
+      "reference": "fushigi-equipment-v3/assets/hero-base/SE.png",
+      "guide": "fushigi-actions-v1/guides/SE-sheet.png"
+    }
+  ]
+}

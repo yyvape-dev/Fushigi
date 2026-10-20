@@ -36,10 +36,16 @@
   const renderer=new HeroAttackRenderer(meta,state.baseImages,state.motion,state.atlases,equipment);
   state.cache.set(key,renderer);return renderer;
  };
- state.draw=function(g,face,x,y,height,elapsed,weapon,shield){
+ state.draw=function(g,face,x,y,height,elapsed,weapon,shield,entity,t){
   if(!state.ready){g.fillStyle='#ffe0a0';g.font='12px sans-serif';g.textAlign='center';g.fillText(state.error?'画像読込失敗':'読込中',x,y);return;}
   const [dx,dy]=face||[0,1],id=state.base.directions[(Math.round(Math.atan2(-dx,dy)/(Math.PI/4))+8)%8].id;
-  state.renderer(weapon,shield).draw(g,id,x,y,height,elapsed,{weapon:!!weapon,shield:!!shield});
+  const renderer=state.renderer(weapon,shield);
+  if(elapsed<0 && typeof HeroActions!=='undefined' && HeroActions.ready && entity){
+   const act=entity.action;
+   if(act && t-act.t0<act.duration){const [dx,dy]=act.face;const aid=state.base.directions[(Math.round(Math.atan2(-dx,dy)/(Math.PI/4))+8)%8].id;if(HeroActions.draw(g,aid,x,y,height,act.kind,t-act.t0,{renderer,prop:act.prop,face:act.face,weapon:!!weapon,shield:!!shield}))return;}
+   else if(entity.walkEnd && t<entity.walkEnd){if(HeroActions.draw(g,id,x,y,height,'walk',t-(entity.walkStart||t),{renderer,weapon:!!weapon,shield:!!shield,face}))return;}
+  }
+  renderer.draw(g,id,x,y,height,elapsed,{weapon:!!weapon,shield:!!shield});
  };
  root.ApprovedHero=state;
 })(typeof window==='undefined'?globalThis:window);
