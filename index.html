@@ -62,6 +62,7 @@ canvas{display:block;touch-action:none}
 .row.sel{border-color:#8a8aff;background:#262640}
 .main{display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 10px;touch-action:manipulation}
 .ic{width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:#11111a;font-weight:bold;font-size:20px}
+.ic img{width:32px;height:32px;object-fit:contain}
 .nm{flex:1;font-size:16px}.nm i{color:#ffd54a;font-style:normal}
 .ct{color:#aaa;font-size:14px}
 .acts{display:flex;gap:8px;padding:0 10px 8px}
@@ -208,11 +209,11 @@ const ITEMS = {
     use() { say('復活の草は、持っているだけで効果がある。'); return false; },
   },
   bellyup: {
-    name: '胃拡張の種', cat: '草', ch: '•', fg: '#ffb86a', w: 1, from: 2, desc: 'この冒険の間、最大満腹度が5増える。',
+    name: '胃拡張の種', cat: '種', ch: '•', fg: '#ffb86a', w: 1, from: 2, desc: 'この冒険の間、最大満腹度が5増える。',
     use() { bellyBonus += 5; say(`胃拡張の種を食べた。最大満腹度が${maxBelly()}%になった。`); return true; },
   },
   bellydown: {
-    name: '胃縮小の種', cat: '草', ch: '•', fg: '#9a8aa8', w: 1, from: 2, desc: 'この冒険の間、最大満腹度が5減る。',
+    name: '胃縮小の種', cat: '種', ch: '•', fg: '#9a8aa8', w: 1, from: 2, desc: 'この冒険の間、最大満腹度が5減る。',
     use() { bellyBonus -= 5; belly = Math.min(belly, maxBelly()); say(`胃縮小の種を食べた。最大満腹度が${maxBelly()}%になった。`); return true; },
   },
   dragonherb: {
@@ -393,7 +394,7 @@ const ITEMS = {
   skyblade: { name: '空の刃', cat: '武器', ch: '†', fg: '#a0e0ff', w: 1, from: 2, equip: 'weapon', atk: 3, seal: 'bat', desc: '武器。攻撃+3。印「浮遊特攻」：空を飛ぶ敵（コウモリ）に2倍のダメージ。' },
   firesword: { name: '火迅風魔刀', cat: '武器', ch: '†', fg: '#ff7a3a', w: 1, from: 4, equip: 'weapon', atk: 8, seal: 'fire', desc: '武器。攻撃+8。印「炎飛ばし」：HPが満タンのとき、離れた敵にAttackで炎を飛ばして8ダメージ。' },
   bronzeshield: { name: '青銅甲の盾', cat: '盾', ch: ')', fg: '#d8a060', w: 2, from: 2, equip: 'shield', def: 2, desc: '盾。受けるダメージ-2。強化値の分だけさらに減る。' },
-  ironshield2: { name: '鉄甲の盾', cat: '盾', ch: ']', fg: '#d8e0f0', w: 2, from: 3, equip: 'shield', def: 3, desc: '盾。受けるダメージ-3。強化値の分だけさらに減る。' },
+  tekkoshield: { name: '鉄甲の盾', cat: '盾', ch: ']', fg: '#d8e0f0', w: 2, from: 3, equip: 'shield', def: 3, desc: '盾。受けるダメージ-3。強化値の分だけさらに減る。' },
   onioookami: { name: 'おにおおかみ', cat: '盾', ch: ']', fg: '#c0c0d0', w: 1, from: 4, equip: 'shield', def: 4, desc: '盾。受けるダメージ-4。強化値の分だけさらに減る。' },
   battlecounter: { name: 'バトルカウンター', cat: '盾', ch: ')', fg: '#ff8a6a', w: 1, from: 2, equip: 'shield', def: 1, seal: 'counter', desc: '盾。受けるダメージ-1。印「カウンター」：敵の攻撃のダメージの半分を、攻撃してきた敵に返す。' },
   mikiri: { name: '見切りの盾', cat: '盾', ch: ')', fg: '#a0d0ff', w: 1, from: 2, equip: 'shield', def: 1, seal: 'dodge', desc: '盾。受けるダメージ-1。印「見切り」：25%で敵の攻撃をかわす。' },
@@ -437,6 +438,12 @@ const ITEMS = {
     },
   },
 };
+
+// 床・持ち物の絵はカテゴリで1つに固定する（のちの識別＝未鑑定の仕組みで、見た目から中身が分からないように）。
+//   草・種・巻物・腕輪・杖・剣・盾：assets/icon_<カテゴリ>.png ／ 回復薬・おにぎりは中身が最初から分かるので個別の絵。
+//   手持ちの絵（主人公が持つ剣・盾）だけは種類ごとに assets/<キー>.png（装備したときだけ見た目が変わる）
+const ICON_BY_CAT = { 草: 'icon_herb', 種: 'icon_seed', 巻物: 'icon_scroll', 腕輪: 'icon_ring', 杖: 'icon_staff', 武器: 'icon_sword', 盾: 'icon_shield' };
+for (const d of Object.values(ITEMS)) if (!d.icon && ICON_BY_CAT[d.cat]) d.icon = ICON_BY_CAT[d.cat];
 
 // =====================================================================
 //  敵定義：新しい敵はここに1項目足すだけ（絵は assets/<キー>.png）
@@ -691,12 +698,14 @@ function loadSprite(key, src) {
   im.onerror = () => {};
   im.src = src;
 }
-const ASSET_KEYS = ['player', ...Object.keys(ENEMIES), 'floor', 'wall', 'stairs', 'ground', 'tree', 'roof', 'hwall', 'door', 'gate', 'pillar', 'town', ...Object.keys(ITEMS)];   // town = 町全体の一枚絵（あれば町のタイル絵より優先）
+const ASSET_KEYS = ['player', ...Object.keys(ENEMIES), 'floor', 'wall', 'stairs', 'ground', 'tree', 'roof', 'hwall', 'door', 'gate', 'pillar', 'town', ...new Set(Object.values(ICON_BY_CAT)), ...Object.keys(ITEMS).filter(k => !ITEMS[k].icon || ITEMS[k].equip === 'weapon' || ITEMS[k].equip === 'shield')];   // town = 町全体の一枚絵（あれば町のタイル絵より優先）
 function loadExternalAssets() {
   if (typeof Image === 'undefined' || typeof location === 'undefined' || location.protocol === 'file:') return;
   for (const k of ASSET_KEYS) loadSprite(k, `assets/${k}.png`);
 }
 
+// 床・持ち物で使う絵のキー：共通アイコンの絵があればそれ、無ければそのアイテム自身のキー（仮表示）
+const iconOf = type => { const ic = ITEMS[type].icon; return ic && SPRITES[ic] ? ic : type; };
 const STYLE = {};                 // 絵が無いアイテムの文字表示
 for (const [k, d] of Object.entries(ITEMS)) STYLE[k] = { bg: '#272742', ch: d.ch, fg: d.fg };
 const extName = k => (k === 'wallF' || k === 'wallT') ? 'wall' : k.replace(/[0-9]$/, '');
@@ -1385,9 +1394,15 @@ function groups(list) {
   const order = Object.keys(ITEMS);
   return [...m.entries()].map(([key, items]) => ({ key, type: items[0].type, items })).sort((a, b) => order.indexOf(a.type) - order.indexOf(b.type) || b.items[0].plus - a.items[0].plus);
 }
+const iconCache = new Map();
+function iconUrl(type) {                                          // 持ち物・倉庫の一覧に出す絵（data URL）。絵が無ければ ''
+  const key = iconOf(type), hit = iconCache.get(key); if (hit) return hit;
+  const ext = SPRITES[extName(key)]; if (!ext || !ext.width || typeof ext.toDataURL !== 'function') return '';
+  try { const u = scaledOf(ext, 72, false).toDataURL(); iconCache.set(key, u); return u; } catch (_) { return ''; }
+}
 function rowHtml(g, sel, actsHtml) {
   const d = ITEMS[g.type];
-  return `<div class="row${sel ? ' sel' : ''}"><div class="main" data-sel="${g.key}"><span class="ic" style="color:${d.fg}">${d.ch}</span>` +
+  return `<div class="row${sel ? ' sel' : ''}"><div class="main" data-sel="${g.key}"><span class="ic" style="color:${d.fg}">${iconUrl(g.type) ? `<img src="${iconUrl(g.type)}" alt="">` : d.ch}</span>` +
     `<span class="nm">${itemName(g.items[0])}${quick === g.type ? ' <i>★</i>' : ''}${isEq(g.items[0]) ? ' <i>E</i>' : ''}</span>${g.items.length > 1 ? `<span class="ct">×${g.items.length}</span>` : ''}</div>` +
     (sel ? `<div class="acts">${actsHtml}</div><div class="ds">${d.desc || ''}</div>` : '') + `</div>`;
 }
@@ -1827,7 +1842,7 @@ function draw() {
     }
   }
   if (scene === 'town' && showGrid) drawTownGrid(camX, camY);
-  for (const f of floorItems) if (seen[f.y][f.x]) blit(f.item.type, camX + f.x * TS, camY + f.y * TS);
+  for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * TS);
   for (const e of [...enemies].sort((a, b) => a.vy - b.vy)) if (vis[e.y][e.x]) {
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
     ctx.fillStyle = '#000'; ctx.fillRect(px, py + TS - 3, TS, 3);

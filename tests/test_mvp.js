@@ -438,7 +438,7 @@
     ok('items: every item is usable, equippable or a staff', keys.every(k => typeof ITEMS[k].use === 'function' || ITEMS[k].equip));
     ok('items: weapons have atk, shields have def, seals are known', keys.every(k => { const d = ITEMS[k]; return (d.equip !== 'weapon' || d.atk > 0) && (d.equip !== 'shield' || d.def > 0) && (!d.seal || SEALS.has(d.seal)); }));
     ok('items: rings have no plus value, weapons do', mkItem('ring_regen').plus === undefined && itemName(mkItem('ring_regen')) === '回復の腕輪' && mkItem('katana', 1).plus === 1);
-    ok('items: 20+ herbs, 10+ scrolls, 15+ rings, 10+ weapons, 10+ shields', ['草', '巻物', '腕輪', '武器', '盾'].every((c, i) => keys.filter(k => ITEMS[k].cat === c).length >= [20, 10, 15, 10, 10][i]));
+    ok('items: 19+ herbs, 2 seeds, 10+ scrolls, 15+ rings, 10+ weapons, 10+ shields', ['草', '種', '巻物', '腕輪', '武器', '盾'].every((c, i) => keys.filter(k => ITEMS[k].cat === c).length >= [19, 2, 10, 15, 10, 10][i]));
     ok('items: save/load keeps ids of new items', keys.every(k => { const it = mkItem(k); const b = decItem(encItem(it)); return b && b.type === k && b.plus === it.plus; }));
     floorNo = 1; { let bad = 0; for (let i = 0; i < 600; i++) if ((ITEMS[rollType()].from || 1) > 1) bad++; ok('items: floor 1 never drops deeper items', bad === 0); }
     floorNo = 5; { const got = new Set(); for (let i = 0; i < 4000; i++) got.add(rollType()); ok('items: floor 5 can drop every item', keys.every(k => got.has(k))); }
@@ -530,7 +530,7 @@
     setup(); { const e = foe(); e.kind = 'ogre'; player.hp = 1; R(0, () => enemyTurn()); ok('without konjo the same hit kills', dead === true); enemyTurn = stub; dead = false; }
     setup(); { eqShield = give('steakplate', 0); belly = 100; const a = defBonus(); belly = 20; ok('steakplate: +2 defence when hungry', defBonus() === a + 2); }
     setup(); { eqShield = give('haramochi', 0); ok('haramochi: belly lasts longer', hungerIv() > HUNGER_TURNS[hungerPref] || HUNGER_TURNS[hungerPref] === 2 && hungerIv() === 3); }
-    setup(); { eqShield = give('ironshield2', 0); eqWeapon = give('dotanuki', 0); ok('catalogue: 鉄甲の盾 def 3, どうたぬき atk 6', defBonus() === 3 && atkBonus() === 6); }
+    setup(); { eqShield = give('tekkoshield', 0); eqWeapon = give('dotanuki', 0); ok('catalogue: 鉄甲の盾 def 3, どうたぬき atk 6', defBonus() === 3 && atkBonus() === 6); }
     setup(); { player.st.invinc = 5; const e = foe(); const hp0 = player.hp; R(0.99, () => enemyTurn()); ok('invincible: enemy hits do 0 damage', player.hp === hp0); enemyTurn = stub; }
     setup(); { eqRings[0] = give('ring_tsukon'); const e = foe(); R(0, () => enemyTurn()); const dm = 20 - player.hp; ok('ring_tsukon: enemy crits double the damage on a low roll', dm === 2); enemyTurn = stub; }
     setup(); { eqRings[0] = give('ring_tsukon'); eqShield = give('minoshield', 0); const e = foe(); R(0, () => enemyTurn()); ok('minoshield: crit damage is not doubled', 20 - player.hp === 1); enemyTurn = stub; }
@@ -549,14 +549,30 @@
     enemyTurn = etSave; eqRings = [null, null]; inv = []; wh = []; }
   // ===== 追加：シート取り込み（開発ツール tests/tools/sheets.js：切り分け・プロンプト）=====
   { const T = __require(process.cwd() + '/tests/tools/sheets.js'), SHEETS = T.SHEETS, HINT = T.HINT, sheetPrompt = T.sheetPrompt, sliceSheet = T.sliceSheet;
-    const allKeys = SHEETS.flatMap(sh => sh.keys), item = Object.keys(ITEMS);
-    ok('sheets: every key exists in ITEMS and appears once', allKeys.every(k => ITEMS[k]) && new Set(allKeys).size === allKeys.length);
-    ok('sheets: every new item (herb/scroll/ring/weapon/shield) is on a sheet', item.filter(k => ['草', '巻物', '腕輪', '武器', '盾'].includes(ITEMS[k].cat)).every(k => allKeys.includes(k)));
+    const allKeys = SHEETS.flatMap(sh => sh.keys), icons = Object.values(ICON_BY_CAT), hand = Object.keys(ITEMS).filter(k => ['weapon', 'shield'].includes(ITEMS[k].equip));
+    const already = ['stick', 'sword', 'axe', 'woodshield', 'ironshield'];                      // 手持ち絵が既にある5つ
+    ok('sheets: every key is an item or a shared icon, and appears once', allKeys.every(k => ITEMS[k] || icons.includes(k)) && new Set(allKeys).size === allKeys.length);
+    ok('sheets: every weapon/shield without hand art yet is on a sheet', hand.filter(k => !already.includes(k)).every(k => allKeys.includes(k)) && already.every(k => hand.includes(k)));
     ok('sheets: every key has a visual hint', allKeys.every(k => typeof HINT[k] === 'string' && HINT[k].length >= 3));
     ok('sheets: at most 16 per sheet', SHEETS.every(sh => sh.keys.length <= 16 && sh.keys.length >= 1));
-    const pr = sheetPrompt(SHEETS[0]);
-    ok('prompt: Japanese, names columns/rows, magenta, each item numbered in order', pr.includes('横4列×縦4行') && pr.includes('マゼンタ(#FF00FF)') && pr.includes('1.しなびた灰緑色の雑草') && pr.includes('16.水色の目の模様のある葉の草') && /[ぁ-ん]/.test(pr));
-    ok('prompt: odd-size sheet gets the right row count', sheetPrompt(SHEETS[1]).includes('横4列×縦3行') && sheetPrompt(SHEETS[5]).includes('横4列×縦4行'));
+    ok('sheets: hand-art keys never end in a digit (extName() would strip it)', hand.every(k => !/[0-9]$/.test(k)));
+    const pr = T.sheetPrompt(SHEETS[0]), pw = T.sheetPrompt(SHEETS[1]);
+    ok('prompt: Japanese, names columns/rows, magenta, each item numbered in order', pr.includes('横2列×縦2行') && pr.includes('マゼンタ(#FF00FF)') && pr.includes('1.紐で結んだ無地の巻物') && pr.includes('4.正面向きの丸い鉄の盾') && /[ぁ-ん]/.test(pr));
+    ok('prompt: the weapon sheet says blade-up, 4x3', pw.includes('横4列×縦3行') && pw.includes('刃（先端）を真上に向けて縦に置き') && pw.includes('12.炎をまとった刀'));
+    ok('prompt: shield sheet says frontal', T.sheetPrompt(SHEETS[2]).includes('正面向き'));
+    // --- 共通アイコン（識別のため、カテゴリで1つに固定）
+    { const herbs = Object.keys(ITEMS).filter(k => ITEMS[k].cat === '草');
+      ok('icons: every herb/seed/scroll/ring/staff/weapon/shield has a shared icon', Object.keys(ITEMS).filter(k => ITEMS[k].cat !== '薬' && ITEMS[k].cat !== '食').every(k => ITEMS[k].icon === ICON_BY_CAT[ITEMS[k].cat]));
+      ok('icons: potion and onigiri keep their own art', !ITEMS.potion.icon && !ITEMS.onigiri.icon && iconOf('potion') === 'potion' && iconOf('onigiri') === 'onigiri');
+      ok('icons: no shared art yet -> falls back to the item itself (placeholder)', iconOf('herb') === 'herb');
+      const was = { h: SPRITES.icon_herb, s: SPRITES.icon_sword };
+      const a = mkCanvas(64, 64); a.getContext('2d').fillStyle = '#0a0'; a.getContext('2d').fillRect(8, 8, 48, 48); SPRITES.icon_herb = a; SPRITES.icon_sword = a;
+      ok('icons: with shared art, every herb draws the SAME art key (identity not leaked)', herbs.every(k => iconOf(k) === 'icon_herb') && iconUrl('herb') === iconUrl('poisonherb') && iconUrl('herb') !== '');
+      ok('icons: all weapons share one floor icon; the hand art key stays per weapon', iconOf('sword') === 'icon_sword' && iconOf('katana') === 'icon_sword' && ITEMS.katana.equip === 'weapon');
+      ok('icons: bag rows show the picture when art exists, a glyph otherwise', rowHtml({ key: 'x', type: 'herb', items: [mkItem('herb')] }, false, '').includes('<img src="data:image/png') && !rowHtml({ key: 'y', type: 'scroll', items: [mkItem('scroll')] }, false, '').includes('<img'));
+      ok('icons: floor drawing works with shared art', (() => { let t = null; try { scene = 'dungeon'; floorNo = 3; newFloor(); floorItems = [{ x: player.x + 1, y: player.y, item: mkItem('herb') }]; map[player.y][player.x + 1] = FLOOR; draw(); } catch (e) { t = e; } return !t; })());
+      if (was.h) SPRITES.icon_herb = was.h; else delete SPRITES.icon_herb; if (was.s) SPRITES.icon_sword = was.s; else delete SPRITES.icon_sword; iconCache.clear();
+      ok('icons: asset list has the shared icons, hand art for weapons/shields, and no per-herb files', Object.values(ICON_BY_CAT).every(k => ASSET_KEYS.includes(k)) && ASSET_KEYS.includes('katana') && ASSET_KEYS.includes('tekkoshield') && ASSET_KEYS.includes('potion') && !ASSET_KEYS.includes('herb') && !ASSET_KEYS.includes('ring_regen') && ASSET_KEYS.length < 70); }
     // 合成シート：マゼンタ背景に、色の四角を1マスに1個。位置は少しズラし、2マスは空にする
     const W = 800, H = 800, cv = mkCanvas(W, H), g = cv.getContext('2d'); g.fillStyle = '#FF00FF'; g.fillRect(0, 0, W, H);
     const cols = 4, rows = 4, cw = W / cols, ch = H / rows, colors = [];

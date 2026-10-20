@@ -120,22 +120,15 @@
 - プロンプト例（盾）：`【画風】、獅子の紋章がついた金縁の丸い鉄の盾、正面向き、中央に配置、画像の85%の大きさ、背景は単色の真っ平らなマゼンタ(#FF00FF)、影なし、文字なし`
 - 主人公の画像を参照画像として添付し、`参照画像と同じ画風・同じ金属の質感で` を足す。
 
-## 8. 新アイテムの絵（草・巻物・腕輪・武器・盾）— 2026-10-20追加
-キー（`assets/<キー>.png`）は `index.html` の `ITEMS` のキーと同じ。絵が無いうちは文字＋色の仮表示（草=♣、巻物=≡、腕輪=○）で遊べる。
-型（4章のアイテムと同じ）：`【画風】、{見た目}、1個だけ中央に配置、余白をあける、背景は単色の真っ平らなマゼンタ(#FF00FF)、影なし、文字なし`
+## 8. 新アイテムの絵（2026-10-20改訂：カテゴリ共通アイコン方式）
+**設計（ユーザー決定）**：後で「未識別」システムを入れるため、床・持ち物の見た目は**カテゴリで1種類に固定**。個別の絵は武器・盾の「装備時の手持ち絵」だけ。
+- 共通アイコン（`assets/<キー>.png`）：`icon_herb`(草)・`icon_seed`(種)・`icon_staff`(杖)＝取り込み済み／`icon_scroll`(巻物)・`icon_ring`(腕輪)・`icon_sword`(武器の床絵)・`icon_shield`(盾の床絵)＝**未作成**。薬=`potion`、食=`onigiri` は個別のまま（取り込み済み）。
+- 武器・盾の個別絵（装備すると手に出る。キー＝ITEMSのキー、末尾に数字を付けない）：woodsword, bronzesword, katana, dotanuki, minoaxe, renkentou, kamaitachi, healsword, steakknife, harisen, skyblade, firesword／bronzeshield, tekkoshield, onioookami, battlecounter, mikiri, konjo, zekkocho, haramochi, steakplate, minoshield（＋既存 sword, axe, stick, woodshield, ironshield）。
+- 絵が無い間は、共通アイコンが無ければ文字＋色の仮表示で遊べる。
+- 将来の識別：名前だけ変える（巻物=動物／草・種=色／腕輪=宝石／杖=木。本家の表記テーマ）。絵は変えない。
 
-- 草（♣）：`{色}の葉の小さな草の束`。色と形だけ差し替える。
-  weed=しなびた灰緑／herb=明るい緑／outogiri=黄緑に黄色い小花／iyashi=青緑に白い花／lifeherb=金色に輝く／kaguwashi=淡い黄緑に光る粒／antidoteherb=水色／reviveherb=白金に光る羽のような葉／dragonherb=赤橙の炎のような葉／warpherb=水色の渦巻く葉／strherb=オレンジの太い茎／poisonherb=紫の斑点／confherb=ピンクの渦巻き／sleepherb=青紫の丸い葉／blindherb=黒い葉／eyeherb=水色の目の模様／hasteherb=黄色い羽のような葉／powerherb=赤い太い葉／invincherb=白く光る。
-  種（bellyup=橙の種、bellydown=灰紫の種）：`小さな{色}の木の実の種`
-- 巻物（≡）：`{色}の紐で結んだ巻物`。紐の色で区別する。
-  scroll=金／shieldscroll=茶／confscroll=ピンク／sleepscroll=青紫／vacuumscroll=水色／annihilatescroll=マゼンタ／lightscroll=黄／mapscroll=青／gatherscroll=橙／itemscroll=ピンク紫／housescroll=暗い赤／hastescroll=赤橙／helpscroll=薄緑／mutescroll=灰色／escscroll=緑／boomscroll=赤。
-- 腕輪（○）：`{色}の宝石がついた金属の腕輪`。宝石の色で区別する。
-  ring_regen=緑／ring_strength=橙／ring_bellyup=金／ring_bellydown=灰紫／ring_antidote=水色／ring_noconf=ピンク／ring_nosleep=青紫／ring_moroha=赤（刃の飾り）／ring_tsukon=暗い赤／ring_boom=橙（爆弾の飾り）／ring_warp=水色（渦）／ring_seeall=白（目の飾り）／ring_senseE=赤（目）／ring_senseI=ピンク（目）／ring_sneak=灰緑／ring_leak=茶（穴あき）／ring_summon=紫（角の飾り）。
-- 武器（†）：`{形}の剣／斧／棒`。woodsword=木の刀／bronzesword=青銅の太刀／katana=細身のカタナ／dotanuki=分厚い胴田貫／minoaxe=牛の角の飾りの斧／renkentou=二重の刃の刀／kamaitachi=三日月形の妖刀／healsword=緑の宝玉つきの剣／steakknife=巨大なステーキナイフ／harisen=紙の大きなハリセン／skyblade=水色の羽根つきの刃／firesword=炎をまとった刀。
-- 盾（)／]）：`{形}の盾`。bronzeshield=青銅の丸盾／ironshield2=鉄の四角い盾／onioookami=鬼と狼の顔の盾／battlecounter=とげのある赤い盾／mikiri=水色の細い盾／konjo=金の「根」の字の盾／zekkocho=黄色い笑顔の盾／haramochi=おにぎり形の盾／steakplate=肉の皿の盾／minoshield=牛の顔の盾。
-
-## 9. シート（アイテムの絵をまとめて作る）
-- 外部AIで、**1枚に16個以内のアイテムを4列×最大4行で並べたシート**を作る。左上から右へ、上から下の順。背景は単色マゼンタ。
-- できた画像をチャットに添付する → Claudeが `node tests/tools/sheets.js slice <シートID> <画像>` で切り分け（各マスの中身を自動で切り出し、256pxの正方形に収める。多少ズレていてもよい）→ `assets/<キー>.png` に置いて push。
-- プロンプト：`node tests/tools/sheets.js prompt <シートID>`（Claudeが毎回チャットに本文を貼る）。シート：herb1 / herb2 / scroll / ring / weapon / shield。
-- 仕上がりが悪いマスは、そのアイテムだけ8章の個別プロンプトで作り直して添付する（`assets/<キー>.png` を上書き）。
+## 9. シート（まとめて作る）
+- シートID：`icons`（2×2：巻物・腕輪・剣・盾の共通アイコン）／`weapon`（12個・4×3）／`shield`（10個・4×3）。`node tests/tools/sheets.js list` で一覧。
+- プロンプトは `node tests/tools/sheets.js prompt <ID>`。**Claudeが毎回チャットに本文を貼る**（スマホで使うため）。
+- できた画像をチャットに添付 → `node tests/tools/sheets.js slice <ID> <画像>` で各マスを自動で切り出し（256px正方形・背景マゼンタを透過）→ `assets/` に置いて push。一部だけ使う場合は `pick`。
+- 仕上がりが悪いマスは、そのアイテムだけ4章の型で作り直して添付（`assets/<キー>.png` を上書き）。
