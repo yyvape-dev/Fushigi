@@ -127,6 +127,10 @@ canvas{display:block;touch-action:none}
     <div class="plist" id="cfgList"></div>
 </div>
 
+<script src="fushigi-equipment-v3/hero-base-renderer.js"></script>
+<script src="fushigi-equipment-v3/hero-attack-renderer.js"></script>
+<script src="assets/approved-hero.js"></script>
+<script src="assets/dungeon-generator.js"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -855,6 +859,7 @@ function scaledOf(im, S, cover) {
 }
 // k>1 のとき：マスより大きく描く。足元（下端中央）はマスに合わせ、上と左右にはみ出す（キャラ用）
 function blit(key, px, py, g = ctx, k = 1) {
+  if (g === ctx && scene === 'dungeon' && drawDungeonArt(key, px, py, g)) return;
   const S = TS * k; px -= (S - TS) / 2; py -= (S - TS);
   const ext = SPRITES[extName(key)];
   if (ext && ext.width > 64) {
@@ -969,31 +974,16 @@ function loadGame() {
 //  マップ
 // =====================================================================
 // ダンジョン：ランダム部屋配置 + 順次L字通路接続（実装が単純で全部屋の連結が保証される）
+let floorPlan = null, floorShop = null;
 function genMap() {
   MW = DW; MH = DH;
-  for (;;) {
-    map = Array.from({ length: DH }, () => new Array(DW).fill(WALL));
-    rooms = [];
-    for (let i = 0; i < 80 && rooms.length < 9; i++) {
-      const w = rnd(4, 9), h = rnd(3, 6), x = rnd(1, DW - w - 1), y = rnd(1, DH - h - 1);
-      if (rooms.some(o => x < o.x + o.w + 2 && x + w + 2 > o.x && y < o.y + o.h + 2 && y + h + 2 > o.y)) continue;
-      rooms.push({ x, y, w, h, cx: x + (w >> 1), cy: y + (h >> 1) });
-      for (let yy = y; yy < y + h; yy++) for (let xx = x; xx < x + w; xx++) map[yy][xx] = FLOOR;
-    }
-    if (rooms.length < 3) continue;
-    for (let i = 1; i < rooms.length; i++) {
-      const a = rooms[i - 1], b = rooms[i];
-      let x = a.cx, y = a.cy;
-      const horizFirst = Math.random() < 0.5;
-      const hz = () => { while (x !== b.cx) { x += Math.sign(b.cx - x); map[y][x] = FLOOR; } };
-      const vt = () => { while (y !== b.cy) { y += Math.sign(b.cy - y); map[y][x] = FLOOR; } };
-      if (horizFirst) { hz(); vt(); } else { vt(); hz(); }
-    }
-    return;
-  }
+  const seed = (Math.random() * 4294967296) >>> 0;
+  floorPlan = DungeonGenerator.generate(DW, DH, seed, floorNo);
+  map = floorPlan.map; rooms = floorPlan.rooms;
 }
 // 町：固定マップ（倉庫の建物と、ダンジョンの入口）
 function buildTown() {
+  floorShop = null;
   MW = TW; MH = TH;
   map = Array.from({ length: TH }, () => new Array(TW).fill(FLOOR));
   // 配置は「町の一枚絵」(1519×1036)の実測に合わせてある（木は幹の根元、建物は足元の位置）
@@ -1051,11 +1041,28 @@ function newFloor() {
     if (map[y][x] !== FLOOR || itemAt(x, y) || (x === player.x && y === player.y)) continue;
     floorItems.push({ x, y, item: mkItem('gold', Math.round((12 + rnd(0, 18)) * (1 + floorNo * 0.35))) }); i--;
   }
-  placeTraps(far);
+  traps = [];
   placeHouse(far);
+  placeDungeonShop(far);
+  placeTraps(far);
   seen = Array.from({ length: MH }, () => new Array(MW).fill(false));
   snapVis();
   updateVis();
+}
+function atDungeonShop() { return scene === 'dungeon' && floorShop && playerRoom() === floorShop.room; }
+function activeShopStock() { return atDungeonShop() ? floorShop.stock : shopStock; }
+function placeDungeonShop(stairsRoom) {
+  floorShop = null;
+  rooms[0].role = 'start'; stairsRoom.role = 'stairs';
+  for (const r of rooms) if (r.mh) r.role = 'monster';
+  if (floorNo < 2 || Math.random() >= .25) return;
+  const candidates = rooms.map((r, i) => i).filter(i => i > 0 && rooms[i] !== stairsRoom && !rooms[i].mh);
+  if (!candidates.length) return;
+  const ri = candidates[rnd(0, candidates.length - 1)], r = rooms[ri]; r.role = 'shop';
+  const townStock = shopStock; rollShop(floorNo); const stock = shopStock; shopStock = townStock;
+  floorShop = {room: ri, stock, x: r.cx, y: r.cy};
+  const outside = o => roomGrid[o.y][o.x] !== ri;
+  enemies = enemies.filter(outside); traps = traps.filter(outside); floorItems = floorItems.filter(outside);
 }
 const corridorAdj = (x, y) => [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => inb(x + dx, y + dy) && map[y + dy][x + dx] !== WALL && roomGrid[y + dy][x + dx] < 0);   // 部屋の出入口（通路に面した床）
 function placeTraps(stairsRoom) {
@@ -1064,7 +1071,7 @@ function placeTraps(stairsRoom) {
   const kinds = Object.keys(TRAPS).filter(k => k !== 'pit' || floorNo < dg.floors);          // 最終階に穴は無い
   for (let i = 0, tries = 0; i < n && tries < 60; tries++) {
     const R = rooms[rnd(0, rooms.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
-    if (map[y][x] !== FLOOR || corridorAdj(x, y) || trapAt(x, y) || itemAt(x, y) || (x === player.x && y === player.y)) continue;
+    if (R.role === 'shop' || map[y][x] !== FLOOR || corridorAdj(x, y) || trapAt(x, y) || itemAt(x, y) || (x === player.x && y === player.y)) continue;
     traps.push({ x, y, kind: kinds[rnd(0, kinds.length - 1)], seen: false }); i++;
   }
 }
@@ -1321,7 +1328,7 @@ function endTurn() {
   render();
 }
 function hitEnemy(e) {
-  player.swing = now(); kick();
+  player.swing = now(); player.attackFace = player.face.slice(); kick();
   if (e.x !== player.x) player.fl = e.x < player.x;
   bumpToward(player, e.x, e.y);
   const targets = [e];
@@ -1405,7 +1412,10 @@ function playerMove(dx, dy) {
 // 状況ボタン：足元のアイテムを拾う / 倉庫に入る / ダンジョンへ潜る
 function ctxInfo() {
   if (dead) return null;
-  if (scene === 'dungeon') return itemAt(player.x, player.y) ? { label: '拾う', fn: playerPickUp } : null;
+  if (scene === 'dungeon') {
+    if (itemAt(player.x, player.y)) return { label: '拾う', fn: playerPickUp };
+    return atDungeonShop() ? { label: '店', fn: openWh } : null;
+  }
   const t = map[player.y][player.x];
   if (t === DOOR) return { label: '倉庫', fn: openWh };
   if (t === GATE) return { label: '潜る', fn: enterDungeon };
@@ -1427,11 +1437,11 @@ function playerPickUp() {
 // Attackボタン：向いている方向の敵を殴る。いなければ隣接する敵を自動で狙う。誰もいなければターン消費なし（町では「決定」）
 function playerAttack() {
   if (uiBlocked() || guardDead()) return;
-  if (scene === 'town') { const c = ctxInfo(); if (c) c.fn(); else { player.swing = now(); say('素振りをした。'); render(); } return; }
+  if (scene === 'town') { const c = ctxInfo(); if (c) c.fn(); else { player.swing = now(); player.attackFace = player.face.slice(); say('素振りをした。'); render(); } return; }
   if (player.st.confuse > 0) {                                  // 混乱：向きがでたらめ。敵がいなければ空振り
     const d = DIRS8[rnd(0, 7)]; player.face = d;
     const o = geomOK(player.x, player.y, d[0], d[1]) ? enemyAt(player.x + d[0], player.y + d[1]) : null;
-    if (o) hitEnemy(o); else { player.swing = now(); say('混乱していて空振りした！'); }
+    if (o) hitEnemy(o); else { player.swing = now(); player.attackFace = player.face.slice(); say('混乱していて空振りした！'); }
     endTurn(); return;
   }
   const [fx_, fy_] = player.face;
@@ -1446,11 +1456,11 @@ function playerAttack() {
   }
   if (!t && wSeal() === 'fire' && player.hp >= player.maxhp) {  // 炎飛ばし：HPが満タンなら、離れた敵に炎
     const z = lineTarget();
-    if (z) { player.swing = now(); kick(); zapHit(z.e, 8, '炎'); endTurn(); return; }
+    if (z) { player.swing = now(); player.attackFace = player.face.slice(); kick(); zapHit(z.e, 8, '炎'); endTurn(); return; }
   }
   if (!t) {
     const tr = trapAt(player.x + fx_, player.y + fy_);
-    if (tr && !tr.seen) { tr.seen = true; player.swing = now(); kick(); say(`${TRAPS[tr.kind].name}を見つけた！`); fxText(tr.x, tr.y, '罠！', TRAPS[tr.kind].col); endTurn(); return; }
+    if (tr && !tr.seen) { tr.seen = true; player.swing = now(); player.attackFace = player.face.slice(); kick(); say(`${TRAPS[tr.kind].name}を見つけた！`); fxText(tr.x, tr.y, '罠！', TRAPS[tr.kind].col); endTurn(); return; }
     say('周りに敵がいない。'); render(); return;
   }
   hitEnemy(t);
@@ -1588,18 +1598,19 @@ function priceOf(it) {                                          // 売値（買�
   return Math.max(10, Math.round(p / 10) * 10);
 }
 const sellPrice = it => Math.max(5, Math.floor(priceOf(it) / 2 / 5) * 5);
-function rollShop() {                                           // いつもの品（回復薬・おにぎり・矢）＋ランダム8個
+function rollShop(maxFloor = 5) {                                           // いつもの品（回復薬・おにぎり・矢）＋ランダム8個
   shopStock = [mkItem('potion'), mkItem('onigiri'), mkItem('arrow')];
-  const ks = Object.keys(ITEMS).filter(k => ITEMS[k].w > 0 && (ITEMS[k].from || 1) <= 5 && !['potion', 'onigiri', 'arrow', 'weed'].includes(k));
+  const ks = Object.keys(ITEMS).filter(k => ITEMS[k].w > 0 && (ITEMS[k].from || 1) <= maxFloor && !['potion', 'onigiri', 'arrow', 'weed'].includes(k));
   const tot = ks.reduce((a, k) => a + ITEMS[k].w, 0);
   for (let i = 0; i < 8; i++) { let r = Math.random() * tot, k = ks[0]; for (const c of ks) { r -= ITEMS[c].w; if (r < 0) { k = c; break; } } shopStock.push(mkItem(k)); }
 }
 function shopBuy(key) {
-  const it = shopStock.find(i => ikey(i) === key); if (!it) return;
+  const stock = activeShopStock();
+  const it = stock.find(i => ikey(i) === key); if (!it) return;
   const p = priceOf(it);
   if (gold < p) { whMsg = `お金が足りない。（${p}G）`; }
   else if (inv.length >= MAXBAG && !(ITEMS[it.type].stack && inv.some(i => i.type === it.type))) { whMsg = '持ち物がいっぱいだ。'; }
-  else { gold -= p; shopStock.splice(shopStock.indexOf(it), 1); inv.push(it); inv = mergeStacks(inv); whMsg = `${itemName(it)}を${p}Gで買った。`; }
+  else { gold -= p; stock.splice(stock.indexOf(it), 1); inv.push(it); inv = mergeStacks(inv); whMsg = `${itemName(it)}を${p}Gで買った。`; }
   saveGame(); renderWh(); render();
 }
 function shopSell(key) {
@@ -1608,6 +1619,7 @@ function shopSell(key) {
   saveGame(); renderWh(); render();
 }
 function bankMove(toBank) {
+  if (scene !== 'town') return;
   if (toBank) { bank += gold; whMsg = gold ? `${gold}Gを預けた。` : '預けるお金が無い。'; gold = 0; } else { gold += bank; whMsg = bank ? `${bank}Gを引き出した。` : '預金は空だ。'; bank = 0; }
   saveGame(); renderWh(); render();
 }
@@ -1626,7 +1638,7 @@ function throwType(key) {
     if (eqWeapon === it) eqWeapon = null; if (eqShield === it) eqShield = null; eqRings = eqRings.map(r => r === it ? null : r); belly = Math.min(belly, maxBelly());
     inv.splice(inv.indexOf(it), 1); one = it;
   }
-  const dir = player.st.confuse > 0 ? DIRS8[rnd(0, 7)] : player.face; player.face = dir; if (dir[0]) player.fl = dir[0] < 0; player.swing = now(); kick();
+  const dir = player.st.confuse > 0 ? DIRS8[rnd(0, 7)] : player.face; player.face = dir; if (dir[0]) player.fl = dir[0] < 0; player.swing = now(); player.attackFace = player.face.slice(); kick();
   let x = player.x, y = player.y, tgt = null;
   for (let i = 0; i < 8; i++) { if (!geomOK(x, y, dir[0], dir[1])) break; x += dir[0]; y += dir[1]; const e = enemyAt(x, y); if (e) { tgt = e; break; } }
   let lost = false;
@@ -1772,7 +1784,8 @@ $('bagbtn').addEventListener('click', toggleBag);
 //  倉庫（町）：預けた物だけが死亡後も残る
 // =====================================================================
 function openWh() {
-  if (scene !== 'town') return;
+  if (scene !== 'town' && !atDungeonShop()) return;
+  if (scene === 'dungeon') whSide = 'shop';
   holdStop(); closeBag(); whOpen = true; whEl.hidden = false; whSel = null; whMsg = '';
   renderWh(); render();
 }
@@ -1789,6 +1802,7 @@ function moveItems(type, n, from, to, cap) {
   return moved;
 }
 function whTransfer(type, all) {
+  if (scene !== 'town') return;
   const toWh = whSide === 'bag';
   const src = toWh ? inv : wh, dst = toWh ? wh : inv, cap = toWh ? MAXWH : MAXBAG;
   const n = all ? src.filter(i => ikey(i) === type).length : 1;
@@ -1797,14 +1811,16 @@ function whTransfer(type, all) {
   saveGame(); renderWh(); render();
 }
 function renderWh() {
+  if (scene === 'dungeon' && !['shop', 'sell'].includes(whSide)) whSide = 'shop';
   const shop = whSide === 'shop' || whSide === 'sell';
-  $('whTitle').textContent = shop ? `店（倉庫の窓口）` : `倉庫 ${wh.length}/${MAXWH}`;
+  $('bankIn').hidden = $('bankOut').hidden = scene !== 'town';
+  $('whTitle').textContent = shop ? (scene === 'dungeon' ? 'ダンジョンの店' : '店（倉庫の窓口）') : `倉庫 ${wh.length}/${MAXWH}`;
   const kids = [...whSegEl.children];
   kids[0].textContent = `預ける ${inv.length}/${MAXBAG}`; kids[1].textContent = `出す ${wh.length}/${MAXWH}`; kids[2].textContent = '買う'; kids[3].textContent = '売る';
-  for (const el of kids) el.classList.toggle('on', el.dataset.side === whSide);
-  $('whGold').textContent = `所持金 ${gold}G ／ 預金 ${bank}G`;
+  for (const el of kids) { el.hidden = scene === 'dungeon' && ['bag', 'wh'].includes(el.dataset.side); el.classList.toggle('on', el.dataset.side === whSide); }
+  $('whGold').textContent = `所持金 ${gold}G${scene === 'town' ? ' ／ 預金 ' + bank + 'G' : ''}`;
   $('whMsg').textContent = whMsg;
-  const src = whSide === 'bag' ? inv : whSide === 'wh' ? wh : whSide === 'shop' ? shopStock : inv.filter(i => !isEq(i));
+  const src = whSide === 'bag' ? inv : whSide === 'wh' ? wh : whSide === 'shop' ? activeShopStock() : inv.filter(i => !isEq(i));
   const gs = groups(src);
   if (whSel && !gs.some(g => g.key === whSel)) whSel = null;
   const verb = whSide === 'bag' ? '預ける' : '出す';
@@ -1855,7 +1871,7 @@ function renderCfg() {
     `<div class="set"><span class="lab">キャラの大きさ<br><small>1マスより大きく描く（頭が上にはみ出す）</small></span><button class="sm" data-cfg="char">×${CHAR_K[charPref]}</button></div>`,
     `<div class="set"><span class="lab">メッセージ窓の位置<br><small>下＝右下に表示（本家は右下に小さく出る）</small></span><button class="sm" data-cfg="logpos">${logPos ? '右下' : '上'}</button></div>`,
     `<div class="set"><span class="lab">町の判定を表示<br><small>町で、歩けない所(赤)・倉庫(緑)・入口(青)を重ねて表示。一枚絵とのズレ確認用</small></span><button class="sm" data-cfg="grid">${showGrid ? 'ON' : 'OFF'}</button></div>`,
-    `<div class="set"><span class="lab">主人公の表示<br><small>パーツ＝歩き・攻撃・装備が動く／1枚絵＝assets/player.png をそのまま表示</small></span><button class="sm" data-cfg="rig">${rigPref ? '1枚絵' : 'パーツ'}</button></div>`,
+    `<div class="set"><span class="lab">主人公の表示<br><small>承認済み8方向の基準絵・攻撃・所持品の武器盾を表示</small></span><span>承認済み8方向</span></div>`,
     `<div class="set"><span class="lab">陰影（立体感）<br><small>壁の高さ・壁際の影・暗がり。絵が平らに見えるとき「強」</small></span><button class="sm" data-cfg="shade">${['なし', '標準', '強'][shadePref]}</button></div>`,
     `<div class="set"><span class="lab">戦闘の演出<br><small>斬撃の弧・命中の火花・被弾や撃破での画面の揺れ。酔うときは「なし」</small></span><button class="sm" data-cfg="vfx">${['なし', '標準', '強'][vfxPref]}</button></div>`,
     `<div class="set"><span class="lab">満腹度の減り<br><small>「速い」は動作確認用（2ターンで1%）</small></span><button class="sm" data-cfg="hunger">${hungerPref ? '速い' : '標準'}</button></div>`,
@@ -1889,6 +1905,19 @@ function setMsg(t, ng) { artMsgEl.hidden = !t; artMsgEl.textContent = t || ''; i
 // =====================================================================
 //  描画
 // =====================================================================
+const dungeonArt = {}, dungeonArtCache = new Map();
+function loadDungeonArt() {
+  for (const key of ['floor0','floor1','floor2','floor3','wallF','wallT']) {
+    const im = new Image(); im.onload = () => { dungeonArt[key] = im; dungeonArtCache.clear(); render(); }; im.src = 'assets/dungeon/' + key + '.png';
+  }
+}
+function drawDungeonArt(key, px, py, g) {
+  const im = dungeonArt[key]; if (!im) return false;
+  const theme = floorPlan?.theme || DungeonGenerator.themes[0], cacheKey = theme.id + ':' + key;
+  let art = dungeonArtCache.get(cacheKey);
+  if (!art) { art = mkCanvas(256,256); const c = art.getContext('2d'); c.filter=theme.filter;c.drawImage(im,0,0);dungeonArtCache.set(cacheKey,art); }
+  g.imageSmoothingEnabled=true;g.drawImage(art,px,py,TS,TS);return true;
+}
 const cv = $('c'), ctx = cv.getContext('2d');
 let raf = 0, lastT = 0;
 const tmp = mkCanvas(64, 64);
@@ -1932,7 +1961,7 @@ function tileKey(x, y) {
   const t = map[y][x], v = (((x * 73856093) ^ (y * 19349663)) >>> 0) & 3;
   if (scene === 'town') return t === FLOOR ? 'ground' + v : t === GATE ? 'gate' : t === DOOR ? 'door' : t === TREE ? 'tree' : t === ROOF ? 'roof' : t === HWALL ? 'hwall' : 'pillar';
   if (t === WALL) return (inb(x, y + 1) && map[y + 1][x] !== WALL) ? 'wallF' : 'wallT';
-  return t === STAIRS ? 'stairs' : 'floor' + v;
+  return t === STAIRS ? 'stairs' : 'floor' + (floorPlan ? (((x*73856093)^(y*19349663)^floorPlan.artSeed)>>>0)&3 : v);
 }
 // =====================================================================
 //  パーツで動く主人公（切り絵リグ）：assets/rig/*.png の9パーツを回転させて描く
@@ -2049,6 +2078,11 @@ function drawRig(g, fx, fy, h, e, t) {
 }
 // キャラを1体描く：パーツ表示が使えるときは主人公だけパーツで、それ以外は1枚絵
 function drawChar(key, x, y, g, k, e, t) {
+  if (key === 'player' && typeof ApprovedHero !== 'undefined') {
+    const active = e.swing && t - e.swing < SWING_MS;
+    ApprovedHero.draw(g, active ? (e.attackFace || e.face) : e.face, x + TS / 2, y + TS * .9, TS * k, active ? t - e.swing : -1, eqWeapon?.type, eqShield?.type);
+    return;
+  }
   if (key === 'player' && rigOn()) { const S = TS * k; drawRig(g, x - (S - TS) / 2 + S / 2, y - (S - TS) + S, S * 0.97, e, t); return; }
   blit(key, x, y, g, k);
 }
@@ -2066,12 +2100,12 @@ function drawEntity(key, e, t, camX, camY) {
   const [ox, oy] = entityOffset(e, t);
   const px = Math.round(camX + (e.vx + ox) * TS), py = Math.round(camY + (e.vy + oy) * TS);
   const d = Math.hypot(e.x - e.vx, e.y - e.vy);
-  const hop = d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 歩くときの小さな跳ね
+  const hop = key !== 'player' && d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 歩くときの小さな跳ね
   ctx.fillStyle = 'rgba(0,0,0,.35)';
   const ck = CHAR_K[charPref];
   ctx.beginPath(); ctx.ellipse(px + TS / 2, py + TS * 0.9, TS * 0.32 * Math.min(ck, 1.25), TS * 0.1 * Math.min(ck, 1.25), 0, 0, Math.PI * 2); ctx.fill();
   ctx.save();
-  if (e.fl) { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
+  if (e.fl && key !== 'player') { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
   if (hue && 'filter' in ctx) ctx.filter = `hue-rotate(${hue}deg)`;
   drawChar(key, 0, 0, ctx, ck, e, t);
   if (hue && 'filter' in ctx) ctx.filter = 'none';
@@ -2182,6 +2216,11 @@ function draw() {
         if (a > 0.02) { ctx.fillStyle = `rgba(0,0,0,${a.toFixed(3)})`; ctx.fillRect(px, py, TS, TS); }
       } else { ctx.fillStyle = 'rgba(0,0,0,.62)'; ctx.fillRect(px, py, TS, TS); }
     }
+  }
+  if (dungeon && floorShop && seen[floorShop.y][floorShop.x]) {
+    const px=camX+floorShop.x*TS, py=camY+floorShop.y*TS;
+    ctx.fillStyle='#73502d';ctx.fillRect(px+TS*.12,py+TS*.22,TS*.76,TS*.55);
+    ctx.fillStyle='#ffdf82';ctx.font=Math.round(TS*.35)+'px sans-serif';ctx.textAlign='center';ctx.fillText('店',px+TS*.5,py+TS*.64);
   }
   if (scene === 'town' && showGrid) drawTownGrid(camX, camY);
   if (dungeon) for (const tr of traps) if (tr.seen && seen[tr.y][tr.x]) {                          // 見つけた罠：色つきのひし形
@@ -2351,6 +2390,7 @@ resize();
 loadExternalAssets();
 loadRig();
 boot();
+if (typeof Image !== 'undefined') { ApprovedHero.load(render); loadDungeonArt(); }
 </script>
 </body>
 </html>

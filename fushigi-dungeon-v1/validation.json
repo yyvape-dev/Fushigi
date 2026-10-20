@@ -1,0 +1,16 @@
+{
+  "browserErrors": [],
+  "landscape": [
+    844,
+    390,
+    64
+  ],
+  "portrait": [
+    390,
+    844,
+    32
+  ],
+  "route": "room \u2192 doorway \u2192 corridor \u2192 corner \u2192 end; wall collision passed",
+  "artToggle": true,
+  "gridToggle": true
+}
