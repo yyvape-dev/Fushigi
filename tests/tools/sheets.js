@@ -14,6 +14,11 @@ const SHEET_STYLE = '3Dレンダリングのビニールフィギュア風、柔
 const HINT = {
   // --- 床・持ち物の共通アイコン（カテゴリで1つ）
   icon_scroll: '紐で結んだ無地の巻物（羊皮紙色）', icon_ring: '赤い宝石のついた金の腕輪', icon_sword: '斜めに置いた鉄の剣', icon_shield: '正面向きの丸い鉄の盾',
+  // --- 敵（右向き・斜め前から・全身。足元をそろえて切り出す）
+  slime: '水色のぷるぷるしたスライム（目と口つき）', goblin: '緑の小さなゴブリン（とがった耳、棍棒を持つ）', bat: '紫のコウモリ（翼を広げている）', blob: 'ピンク紫のぶよぶよした塊（小さな顔つき）',
+  skeleton: '骨だけのスケルトン（剣と丸い盾を持つ）', archer: '黄色い帽子をかぶった小柄な弓兵（小さな弓を構える）', thief: '茶色のどろぼうタヌキ（大きな風呂敷包みを背負う）', sleepy: '青紫の眠そうなキノコ（目を閉じた顔）',
+  bomb: 'オレンジの丸い体のばくだん虫（頭に火のついた導火線）', ogre: '赤茶色の大柄なオーガ（金棒を持つ）', dazzle: '水色のカエル（目が渦巻き）', venom: '黄緑のどくバチ（大きな針）',
+  ghost: '薄青く半透明のゴースト（足がなくふわふわ浮く）', minotaur: '牛の頭を持つ大きな戦士ミノタウロス（大きな斧を持つ）', dragon: '赤い小型のドラゴン（翼を持ち、口から炎が漏れる）',
   // --- 手持ち用（主人公が持つ絵）：武器は刃を真上に向けて縦に置く
   woodsword: '木の刀', bronzesword: '青銅の太刀', katana: '細身のカタナ', dotanuki: '分厚い胴田貫（刀）',
   minoaxe: '牛の角の飾りがついた斧（刃は右側）', renkentou: '二重の刃の刀', kamaitachi: '三日月形の妖刀', healsword: '緑の宝玉がついた剣', steakknife: '巨大なステーキナイフ',
@@ -21,10 +26,13 @@ const HINT = {
   bronzeshield: '青銅の丸い盾', tekkoshield: '鉄の四角い盾', onioookami: '鬼と狼の顔の盾', battlecounter: 'とげのある赤い盾',
   mikiri: '水色の細長い盾', konjo: '金色で「根」の字が刻まれた盾', zekkocho: '黄色い笑顔の盾', haramochi: 'おにぎり形の盾', steakplate: '肉の皿の形をした盾', minoshield: '牛の顔の盾',
 };
+const ENEMY_NOTE = '全員、右向きで斜め前から見た全身。足元が下で、マスの高さいっぱいに描く。まるいデフォルメの怪物で、目はつぶらにして怖くしすぎない。';
 const SHEETS = [
   { id: 'icons', name: '共通アイコン（巻物・腕輪・剣・盾）', cols: 2, keys: ['icon_scroll', 'icon_ring', 'icon_sword', 'icon_shield'], note: 'どれも床に落ちている姿のアイコン。形は単純で、色は控えめにする。' },
   { id: 'weapon', name: '手持ちの武器', keys: ['woodsword', 'bronzesword', 'katana', 'dotanuki', 'minoaxe', 'renkentou', 'kamaitachi', 'healsword', 'steakknife', 'harisen', 'skyblade', 'firesword'], note: '武器はすべて、刃（先端）を真上に向けて縦に置き、マスの高さいっぱいに描く。握る柄の位置はマスの下から約20%。' },
   { id: 'shield', name: '手持ちの盾', keys: ['bronzeshield', 'tekkoshield', 'onioookami', 'battlecounter', 'mikiri', 'konjo', 'zekkocho', 'haramochi', 'steakplate', 'minoshield'], note: '盾はすべて正面向きで、マスの85%の大きさ。' },
+  { id: 'enemyA', name: '敵（前半8種）', foot: true, keys: ['slime', 'goblin', 'bat', 'blob', 'skeleton', 'archer', 'thief', 'sleepy'], note: ENEMY_NOTE },
+  { id: 'enemyB', name: '敵（後半7種）', foot: true, keys: ['bomb', 'ogre', 'dazzle', 'venom', 'ghost', 'minotaur', 'dragon'], note: ENEMY_NOTE },
 ];
 const sheetCols = sh => sh.cols || 4;
 const sheetRows = sh => Math.ceil(sh.keys.length / sheetCols(sh));
@@ -32,8 +40,9 @@ const sheetRows = sh => Math.ceil(sh.keys.length / sheetCols(sh));
 function sheetPrompt(sh) {
   const r = sheetRows(sh), n = sh.keys.length;
   const list = sh.keys.map((k, i) => `${i + 1}.${HINT[k] || k}`).join('、');
-  return `${SHEET_STYLE}。ゲームのアイテムアイコンのシート。横${sheetCols(sh)}列×縦${r}行の同じ大きさのマス目に、${n}個のアイテムを1マスに1個ずつ、中央に大きく描く。左上から右へ、上の行から下の行の順に：${list}。` +
-    `${sh.note ? sh.note : ''}各アイテムは単体で、ほかのマスにはみ出さず、余白をあける。背景は全面が単色の真っ平らなマゼンタ(#FF00FF)、マス目の線・影・文字・番号は描かない。正方形の画像。`;
+  const what = sh.foot ? '敵キャラクター' : 'アイテム';
+  return `${SHEET_STYLE}。ゲームの${what}${sh.foot ? '' : 'アイコン'}のシート。横${sheetCols(sh)}列×縦${r}行の同じ大きさのマス目に、${n}${sh.foot ? "体" : "個"}の${what}を1マスに1個ずつ、中央に大きく描く。左上から右へ、上の行から下の行の順に：${list}。` +
+    `${sh.note ? sh.note : ''}各${what}は単体で、ほかのマスにはみ出さず、余白をあける。背景は全面が単色の真っ平らなマゼンタ(#FF00FF)、マス目の線・影・文字・番号は描かない。正方形の画像。`;
 }
 // マゼンタ背景を透明にする。純マゼンタは完全に透明、絵との境目のにじみ（マゼンタ寄りの色）は半透明にして、ピンクの縁が残らないよう色も戻す
 function keyOut(canvas) {
@@ -49,7 +58,7 @@ function keyOut(canvas) {
   g.putImageData(d, 0, 0); return canvas;
 }
 // 画像を縦横に区切り、各マスの中身の外接矩形を、余白つきの正方形（長辺 size px）に収めて返す。空のマスは null
-function sliceSheet(im, cols, rows, n, size = 256, createCanvas = require('@napi-rs/canvas').createCanvas) {
+function sliceSheet(im, cols, rows, n, size = 256, createCanvas = require('@napi-rs/canvas').createCanvas, foot = false) {
   const W = im.width, H = im.height, cw = W / cols, ch = H / rows, out = [];
   for (let i = 0; i < n; i++) {
     const cx = (i % cols) * cw, cy = Math.floor(i / cols) * ch;
@@ -63,7 +72,7 @@ function sliceSheet(im, cols, rows, n, size = 256, createCanvas = require('@napi
     const bw = x1 - x0 + 1, bh = y1 - y0 + 1, side = Math.max(bw, bh), pad = Math.round(side * 0.06), full = side + 2 * pad;
     const o = createCanvas(size, size), g = o.getContext('2d'), k = size / full;       // 長辺を size に収め、余白つきで中央に置く
     g.imageSmoothingEnabled = true; g.imageSmoothingQuality = 'high';
-    g.drawImage(c, x0, y0, bw, bh, (size - bw * k) / 2, (size - bh * k) / 2, bw * k, bh * k);
+    g.drawImage(c, x0, y0, bw, bh, (size - bw * k) / 2, foot ? size - pad * k - bh * k : (size - bh * k) / 2, bw * k, bh * k);   // foot=足元をそろえる（敵）
     out.push(o);
   }
   return out;
@@ -77,7 +86,7 @@ if (require.main === module) {
   const run = (picks) => {
     const { loadImage } = require('@napi-rs/canvas'), size = +opt('size', 256), outDir = opt('out', 'assets');
     return loadImage(img).then(im => {
-      const cells = sliceSheet(im, sheetCols(sh), sheetRows(sh), sh.keys.length, size), empty = [], wrote = [];
+      const cells = sliceSheet(im, sheetCols(sh), sheetRows(sh), sh.keys.length, size, undefined, !!sh.foot), empty = [], wrote = [];
       fs.mkdirSync(outDir, { recursive: true });
       const targets = picks || cells.map((_, i) => [i + 1, sh.keys[i]]);
       for (const [no, key] of targets) {

@@ -12,7 +12,7 @@ const els = { c: real };
 const mkEl = id => els[id] || (els[id] = {
   id, hidden: false, scrollTop: 0, innerHTML: '', textContent: '', style: {}, dataset: {},
   classList: { add() {}, remove() {}, toggle() {} }, addEventListener() {}, setPointerCapture() {},
-  children: [{ textContent: '', classList: { toggle() {} } }, { textContent: '', classList: { toggle() {} } }],
+  children: ['bag', 'wh', 'shop', 'sell'].map(side => ({ textContent: '', dataset: { side }, classList: { toggle() {} } })),
 });
 const store = {};
 const g = globalThis;

@@ -69,6 +69,7 @@ canvas{display:block;touch-action:none}
 .acts button{flex:1;min-height:46px;background:#3a3a66;color:#fff;border:1px solid #8a8aff;border-radius:8px;font-family:inherit;font-size:14px;touch-action:manipulation}
 .ds{padding:0 12px 10px;color:#aab;font-size:12px}
 .empty{color:#778;text-align:center;padding:40px 0}
+#whBank{display:flex;gap:8px;align-items:center;padding:2px 12px 6px;font-size:13px;color:#ffd54a}#whBank span{flex:1}
 #whMsg{min-height:1.2em;padding:0 12px;color:#ffb070;font-size:13px}
 #cfg{z-index:11}
 #artMsg{white-space:pre-wrap;user-select:text;-webkit-user-select:text;max-height:40vh;overflow-y:auto;padding:8px 14px;background:#2b3a5a;color:#fff;font-size:13px;border-bottom:1px solid #4a5a8a}
@@ -109,7 +110,8 @@ canvas{display:block;touch-action:none}
 
 <div id="wh" class="panel" hidden>
   <div class="phead"><span class="ptitle" id="whTitle">倉庫</span><button class="sm" id="whClose">閉じる</button></div>
-  <div class="tabs" id="whSeg"><button class="tab on" data-side="bag"></button><button class="tab" data-side="wh"></button></div>
+  <div class="tabs" id="whSeg"><button class="tab on" data-side="bag"></button><button class="tab" data-side="wh"></button><button class="tab" data-side="shop"></button><button class="tab" data-side="sell"></button></div>
+  <div id="whBank"><span id="whGold"></span><button class="sm" id="bankIn">預金する</button><button class="sm" id="bankOut">引き出す</button></div>
   <div id="whMsg"></div>
   <div class="plist" id="whList"></div>
 </div>
@@ -146,7 +148,8 @@ const SAVE_KEY = 'fushigi_core_save_v1';
 const MAXBELLY = 100, HUNGER_TURNS = [10, 2];
 
 // ダンジョン定義：floors を増やせば多階層になる（最終階の階段 = 踏破）
-const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 5 } };
+const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 5 }, second: { name: 'ふかい洞窟', floors: 12, need: 1 } };   // need=この回数踏破すると行ける
+const unlocked = id => clears >= (DUNGEONS[id].need || 0);
 
 // 草の回復：HPが満タンなら、回復のかわりに最大HPが上がる（本家と同じ）。cure: 0=なし 1=混乱だけ 2=悪い状態すべて
 function healHerb(label, heal, up, cure) {
@@ -435,6 +438,8 @@ const ITEMS = {
     },
   },
   // ===== 食べ物 =====
+  gold: { name: 'ギタン', cat: '金', ch: '$', fg: '#ffd54a', w: 0, desc: 'お金。踏むと所持金に入る。死ぬと失う（預ければ残る）。', use() { return false; } },
+  arrow: { name: '木の矢', cat: '矢', ch: '↑', fg: '#d8b078', w: 5, from: 1, stack: [4, 8], throwOnly: true, desc: '向いている方向へ投げる。当たると5〜8ダメージ（敵の守備力ぶん減る）。命中は約84%。' , use() { return false; } },
   onigiri: {
     name: 'おにぎり', cat: '食', ch: '●', fg: '#ffffff', w: 9, desc: '満腹度を50%回復する。',
     use() {
@@ -576,6 +581,7 @@ function dropAt(x, y, it) {                                     // 盗まれた�
 function killEnemy(e, noExp) {
   const i = enemies.indexOf(e); if (i >= 0) enemies.splice(i, 1);
   if (e.loot) { dropAt(e.x, e.y, e.loot); say(`盗まれた${itemName(e.loot)}を取り返した！`); e.loot = null; }
+  if (!noExp && Math.random() < 0.25) dropAt(e.x, e.y, mkItem('gold', rnd(5, 15) + floorNo * 3));
   if (!noExp) gainExp(Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)))));
 }
 // ダメージを受けて生き残った後：ブヨブヨは分裂する（3回まで。子は経験値が半分ずつ）
@@ -872,6 +878,7 @@ let scene = 'town';               // 'town' | 'dungeon'
 let dungeonId = 'first';
 let map, rooms, player, enemies = [], floorItems = [], inv = [], wh = [], quick, floorNo, turn, dead, deadAt, vis, seen, logs = [];
 let clears = 0, deaths = 0;
+let gold = 0, bank = 0, shopStock = [];   // 所持金（死ぬと失う）／預金（残る）／店の品ぞろえ（町に戻るたびに入れ替わる）
 let rigPref = 0;                  // 主人公の表示：0=パーツで動く 1=1枚絵（取り込んだ絵があるときはこちらを選ぶ）
 let gift = false;                 // お試し装備を倉庫に配ったか（1回だけ）
 let eqWeapon = null, eqShield = null;   // 装備中の武器・盾（持ち物の中の1個を指す）
@@ -900,12 +907,18 @@ const inb = (x, y) => x >= 0 && y >= 0 && x < MW && y < MH;
 const enemyAt = (x, y) => enemies.find(e => e.x === x && e.y === y);
 const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
 function rollPlus() { const r = Math.random(); return r < 0.55 ? 0 : r < 0.75 ? 1 : r < 0.88 ? 2 : r < 0.95 ? -1 : 3; }
-const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip && ITEMS[type].equip !== 'ring') it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; return it; };
+const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip && ITEMS[type].equip !== 'ring') it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; else if (ITEMS[type].stack) it.plus = plus === undefined ? rnd(...ITEMS[type].stack) : plus; else if (type === 'gold') it.plus = plus === undefined ? 10 : plus; return it; };
 const isEq = it => it === eqWeapon || it === eqShield || eqRings.includes(it);
-const ikey = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (isEq(it) ? 'E' : '');   // 持ち物のまとめ表示・操作のキー
-const itemName = it => dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus);
+const ikey = it => it.type + (it.plus !== undefined && !ITEMS[it.type].stack ? ':' + it.plus : '') + (isEq(it) ? 'E' : '');   // 持ち物のまとめ表示・操作のキー
+const itemName = it => it.type === 'gold' ? `${it.plus}ギタン` : dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].stack ? `×${it.plus}` : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus);
 const atkBonus = () => (eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0) + atkUp + 2 * ringN('strength') + (player.st.power > 0 ? 3 : 0) - (player.st.weak > 0 ? 2 : 0) + (wSeal() === 'hungry' && belly <= 30 ? 3 : 0);
 const defBonus = () => (eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0) + (sSeal() === 'hungryDef' && belly <= 30 ? 2 : 0);
+function mergeStacks(list) {                                     // 矢などの「たば」は1つにまとめる
+  const out = [];
+  for (const it of list) { const ex = ITEMS[it.type].stack && out.find(o => o.type === it.type); if (ex) ex.plus += it.plus; else out.push(it); }
+  return out;
+}
+const invCount = type => ITEMS[type].stack ? inv.filter(i => i.type === type).reduce((a, i) => a + i.plus, 0) : inv.filter(i => i.type === type).length;
 const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '');
 const decItem = t => { const [ty, pl] = String(t).split(':'); return ITEMS[ty] ? mkItem(ty, pl === undefined ? undefined : (+pl | 0)) : null; };
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
@@ -922,7 +935,7 @@ function rollType() {
 // ===== 保存（倉庫・持ち物・記録）=====
 function saveGame() {
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], rings: eqRings.map(r => inv.indexOf(r)), gift, quick, clears, deaths, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref, vfxPref }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: inv.map(encItem), eq: [inv.indexOf(eqWeapon), inv.indexOf(eqShield)], rings: eqRings.map(r => inv.indexOf(r)), gift, quick, clears, deaths, gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref, vfxPref }));
   } catch (_) {}
 }
 function loadGame() {
@@ -938,6 +951,8 @@ function loadGame() {
     gift = !!s.gift;
     quick = s.quick === null || (ITEMS[s.quick] && !ITEMS[s.quick].equip && !ITEMS[s.quick].charges) ? s.quick : 'potion';
     clears = s.clears | 0; deaths = s.deaths | 0; autoPick = !!s.autoPick;
+    gold = Math.max(0, s.gold | 0); bank = Math.max(0, s.bank | 0); shopStock = (s.shop || []).map(decItem).filter(Boolean); dungeonId = DUNGEONS[s.dungeonId] ? s.dungeonId : 'first';
+    inv = mergeStacks(inv); wh = mergeStacks(wh);
     mapMode = [0, 1, 2].includes(s.mapMode) ? s.mapMode : 1;
     zoomPref = [0, 1, 2, 3, 4, 5].includes(s.zoomPref) ? s.zoomPref : 0;
     charPref = [0, 1, 2, 3, 4].includes(s.charPref) ? s.charPref : 2;
@@ -1016,7 +1031,7 @@ function newFloor() {
   for (const r of rooms) { const d = Math.abs(r.cx - start.cx) + Math.abs(r.cy - start.cy); if (d > fd) { fd = d; far = r; } }
   map[far.cy][far.cx] = STAIRS;
   enemies = [];
-  const n = 3 + floorNo;
+  const n = 3 + Math.min(floorNo, 7);
   for (let i = 0; i < n; i++) {
     const r = rooms[rnd(1, rooms.length - 1)];
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
@@ -1030,6 +1045,11 @@ function newFloor() {
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
     if (map[y][x] !== FLOOR || itemAt(x, y) || (x === player.x && y === player.y)) continue;
     floorItems.push({ x, y, item: mkItem(rollType()) });
+  }
+  for (let i = rnd(1, 3), tries = 0; i > 0 && tries < 30; tries++) {   // お金：1〜3つ（深いほど多い）
+    const r = rooms[rnd(0, rooms.length - 1)], x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
+    if (map[y][x] !== FLOOR || itemAt(x, y) || (x === player.x && y === player.y)) continue;
+    floorItems.push({ x, y, item: mkItem('gold', Math.round((12 + rnd(0, 18)) * (1 + floorNo * 0.35))) }); i--;
   }
   placeTraps(far);
   placeHouse(far);
@@ -1089,10 +1109,12 @@ function toTown(fromDungeon) {
   seen = Array.from({ length: MH }, () => new Array(MW).fill(true));
   snapVis(); updateVis();
   closeBag(); closeWh();
+  if (fromDungeon || !shopStock.length) rollShop();
   startFade(); saveGame();
 }
 function enterDungeon() {
   if (uiBlocked() || guardDead()) return;
+  if (!unlocked(dungeonId)) dungeonId = 'first';
   scene = 'dungeon'; floorNo = 1; turn = 0; logs = []; fx.length = 0; vfx.length = 0; shakeAmp = 0;
   player.maxhp = BASE_HP; player.hp = player.maxhp; player.lv = 1; player.exp = 0; player.face = [0, 1]; player.st = newStatus();   // レベル・体力は毎回リセット（本家と同じ）
   atkUp = 0; bellyBonus = 0; floorLight = false; belly = maxBelly(); bellyWarn = 99;
@@ -1110,9 +1132,9 @@ function clearDungeon() {
   saveGame(); render();
 }
 function afterDeath() {                                         // 死亡：持ち物を全て失う。倉庫は無事
-  inv = []; eqWeapon = eqShield = null; eqRings = [null, null]; deaths++; dead = false;
+  const lostG = gold; inv = []; eqWeapon = eqShield = null; eqRings = [null, null]; gold = 0; deaths++; dead = false;
   toTown(true);
-  say('力尽きた…持ち物を全て失った。');
+  say('力尽きた…持ち物を全て失った。'); if (lostG) say(`所持金${lostG}Gも失った。（預金は無事）`);
   say('倉庫の物は無事だ。');
   saveGame(); render();
 }
@@ -1120,6 +1142,7 @@ function boot() {
   player = { x: 0, y: 0, vx: 0, vy: 0, hp: BASE_HP, maxhp: BASE_HP, lv: 1, exp: 0, face: [0, 1], bump: null, flash: 0, fl: false, st: newStatus() };
   dead = false; floorNo = 1; turn = 0;
   if (!loadGame()) { wh = [mkItem('potion'), mkItem('potion'), mkItem('potion'), mkItem('onigiri'), mkItem('onigiri')]; inv = []; quick = 'potion'; clears = 0; deaths = 0; }
+  if (!shopStock.length) rollShop();
   const giftMsg = !gift;
   if (!gift) { for (const t of ['stick', 'sword', 'axe', 'woodshield', 'ironshield']) wh.push(mkItem(t, 0)); gift = true; }   // 動作確認用：武器と盾を倉庫へ（1回だけ）
   toTown(false);
@@ -1250,7 +1273,7 @@ function say(m) {
   logTimer = setTimeout(() => { const el = $('log'); if (el.classList) el.classList.add('off'); }, LOG_MS + 50);
 }
 function msgClass(m) {
-  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /の攻撃！|の矢！|の炎！|爆発|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物|外した/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた|強化値|装備した|最大HP|地図/.test(m) ? 'good' : '';
+  return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /の攻撃！|の矢！|の炎！|爆発|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物|外した|ギタン|盗まれた/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた|強化値|装備した|最大HP|地図/.test(m) ? 'good' : '';
 }
 const logHtml = arr => arr.map(l => `<div class="${msgClass(l)}">${l}</div>`).join('');
 function openHist() { if (dead) { guardDead(); return; } if (bagOpen || whOpen || cfgOpen) return; holdStop(); histOpen = true; $('hist').hidden = false; $('histList').innerHTML = logHtml(msgHistory) || '<div>まだメッセージはありません。</div>'; const l = $('histList'); l.scrollTop = l.scrollHeight; render(); }
@@ -1339,8 +1362,8 @@ function strikeOne(e, again) {
 }
 // 床のアイテムを持ち物へ。入らなければ false
 function takeFloor(f) {
-  if (inv.length >= MAXBAG) { say('持ち物がいっぱいだ。（持ち物から「置く」で交換できる）'); return false; }
-  inv.push(f.item); floorItems.splice(floorItems.indexOf(f), 1);
+  if (inv.length >= MAXBAG && !(ITEMS[f.item.type].stack && inv.some(i => i.type === f.item.type))) { say('持ち物がいっぱいだ。（持ち物から「置く」で交換できる）'); return false; }
+  inv.push(f.item); floorItems.splice(floorItems.indexOf(f), 1); inv = mergeStacks(inv);
   say(`${itemName(f.item)}を拾った。（${inv.length}/${MAXBAG}）`);
   return true;
 }
@@ -1361,7 +1384,7 @@ function playerMove(dx, dy) {
     const t = map[ny][nx];
     if (scene === 'town') {
       if (t === DOOR) { openWh(); return; }                     // 倉庫の入口を踏むと倉庫が開く
-      if (t === GATE) say('ダンジョンの入口だ。「潜る」で出発。');
+      if (t === GATE) say(`ダンジョンの入口だ。行き先：${DUNGEONS[dungeonId].name}（${DUNGEONS[dungeonId].floors}階）。「潜る」で出発。${Object.keys(DUNGEONS).filter(unlocked).length > 1 ? '行き先は設定で変えられる。' : ''}`);
     } else {
       if (t === STAIRS) {
         const dg = DUNGEONS[dungeonId];
@@ -1372,7 +1395,8 @@ function playerMove(dx, dy) {
       if (tr && triggerTrap(tr)) return;
       checkHouse();
       const f = itemAt(player.x, player.y);
-      if (f) { if (autoPick) takeFloor(f); else say(`足元に${itemName(f.item)}がある。`); }
+      if (f && f.item.type === 'gold') { gold += f.item.plus; floorItems.splice(floorItems.indexOf(f), 1); fxText(player.x, player.y, '+' + f.item.plus + 'G', '#ffd54a'); say(`${f.item.plus}ギタンを拾った。（所持金 ${gold}G）`); }
+      else if (f) { if (autoPick) takeFloor(f); else say(`足元に${itemName(f.item)}がある。`); }
     }
   }
   endTurn();
@@ -1552,6 +1576,78 @@ function enemyTurn() {
 }
 
 // =====================================================================
+//  店（町。倉庫の窓口に仮置き。店の建物の絵ができたら入口を分ける）・預金
+// =====================================================================
+const PRICE_BASE = { 薬: 60, 食: 40, 草: 100, 種: 180, 巻物: 150, 杖: 350, 腕輪: 500, 武器: 250, 盾: 250, 矢: 6 };
+function priceOf(it) {                                          // 売値（買うとき）。仮の値。珍しい物ほど高く、強化値・杖の回数で上がる
+  const d = ITEMS[it.type]; let p = PRICE_BASE[d.cat] || 100;
+  if (d.stack) return Math.max(10, p * it.plus);
+  p *= d.w >= 6 ? 1 : d.w >= 3 ? 1.3 : d.w >= 2 ? 1.8 : 2.5;
+  if (d.equip && d.equip !== 'ring' && it.plus) p += 60 * it.plus;
+  if (d.charges) p += 40 * it.plus;
+  return Math.max(10, Math.round(p / 10) * 10);
+}
+const sellPrice = it => Math.max(5, Math.floor(priceOf(it) / 2 / 5) * 5);
+function rollShop() {                                           // いつもの品（回復薬・おにぎり・矢）＋ランダム8個
+  shopStock = [mkItem('potion'), mkItem('onigiri'), mkItem('arrow')];
+  const ks = Object.keys(ITEMS).filter(k => ITEMS[k].w > 0 && (ITEMS[k].from || 1) <= 5 && !['potion', 'onigiri', 'arrow', 'weed'].includes(k));
+  const tot = ks.reduce((a, k) => a + ITEMS[k].w, 0);
+  for (let i = 0; i < 8; i++) { let r = Math.random() * tot, k = ks[0]; for (const c of ks) { r -= ITEMS[c].w; if (r < 0) { k = c; break; } } shopStock.push(mkItem(k)); }
+}
+function shopBuy(key) {
+  const it = shopStock.find(i => ikey(i) === key); if (!it) return;
+  const p = priceOf(it);
+  if (gold < p) { whMsg = `お金が足りない。（${p}G）`; }
+  else if (inv.length >= MAXBAG && !(ITEMS[it.type].stack && inv.some(i => i.type === it.type))) { whMsg = '持ち物がいっぱいだ。'; }
+  else { gold -= p; shopStock.splice(shopStock.indexOf(it), 1); inv.push(it); inv = mergeStacks(inv); whMsg = `${itemName(it)}を${p}Gで買った。`; }
+  saveGame(); renderWh(); render();
+}
+function shopSell(key) {
+  const it = inv.find(i => ikey(i) === key && !isEq(i)); if (!it) { whMsg = '装備中の物は売れない。外してから。'; renderWh(); return; }
+  const p = sellPrice(it); gold += p; inv.splice(inv.indexOf(it), 1); whMsg = `${itemName(it)}を${p}Gで売った。`;
+  saveGame(); renderWh(); render();
+}
+function bankMove(toBank) {
+  if (toBank) { bank += gold; whMsg = gold ? `${gold}Gを預けた。` : '預けるお金が無い。'; gold = 0; } else { gold += bank; whMsg = bank ? `${bank}Gを引き出した。` : '預金は空だ。'; bank = 0; }
+  saveGame(); renderWh(); render();
+}
+// =====================================================================
+//  投げる：向いている方向へ最大8マス。最初の敵に当たる（矢は約84%）。当たらなければ床に落ちる
+//   矢は当たると5〜8ダメージ。草を投げると、眠り・混乱・毒の草は敵にも効く。それ以外は1ダメージ
+// =====================================================================
+ACC.t = 0.84;
+function throwType(key) {
+  if (guardDead()) return;
+  const it = firstOf(key); if (!it) return;
+  if (scene !== 'dungeon') { say('町では投げられない。'); closeBag(); render(); return; }
+  const d = ITEMS[it.type]; let one;
+  if (d.stack) { it.plus--; one = { id: ++uid, type: it.type, plus: 1 }; if (it.plus <= 0) inv.splice(inv.indexOf(it), 1); }
+  else {
+    if (eqWeapon === it) eqWeapon = null; if (eqShield === it) eqShield = null; eqRings = eqRings.map(r => r === it ? null : r); belly = Math.min(belly, maxBelly());
+    inv.splice(inv.indexOf(it), 1); one = it;
+  }
+  const dir = player.st.confuse > 0 ? DIRS8[rnd(0, 7)] : player.face; player.face = dir; if (dir[0]) player.fl = dir[0] < 0; player.swing = now(); kick();
+  let x = player.x, y = player.y, tgt = null;
+  for (let i = 0; i < 8; i++) { if (!geomOK(x, y, dir[0], dir[1])) break; x += dir[0]; y += dir[1]; const e = enemyAt(x, y); if (e) { tgt = e; break; } }
+  let lost = false;
+  if (tgt) {
+    const T = eT(tgt), sleeping = tgt.st && tgt.st.sleep > 0;
+    if (!sleeping && Math.random() >= ACC.t) { say(`${itemName(one)}を投げたが、はずれた。`); fxText(tgt.x, tgt.y, 'MISS', '#cfd8e8'); tgt.aware = true; }
+    else {
+      let dmg = d.stack ? Math.max(1, rnd(5, 8) - (T.def || 0)) : 1, extra = '';
+      if (one.type === 'sleepherb') { tgt.st.sleep = 8; extra = '眠ってしまった！'; } else if (one.type === 'confherb') { tgt.st.confuse = 8; extra = '混乱した！'; }
+      else if (one.type === 'poisonherb') { dmg = 6; }
+      tgt.hp -= dmg; tgt.aware = true; tgt.flash = now() + 130; if (tgt.st && !extra.startsWith('眠')) tgt.st.sleep = 0;
+      fxText(tgt.x, tgt.y, '-' + dmg, '#ffffff'); vfxHit(tgt.x, tgt.y, dir[0], dir[1], '#ffe9a0', tgt.hp <= 0);
+      say(`${itemName(one)}を投げた！ ${T.name}に${dmg}ダメージ。${extra}`);
+      if (tgt.hp <= 0) { say(`${T.name}を倒した！`); killEnemy(tgt); } else afterDamage(tgt);
+      lost = d.stack ? Math.random() < 0.5 : (one.type === 'sleepherb' || one.type === 'confherb' || one.type === 'poisonherb');   // 矢は半分こわれる。草は使われる
+    }
+  } else say(`${itemName(one)}を投げた。`);
+  if (!lost) dropAt(x, y, one);
+  closeBag(); endTurn();
+}
+// =====================================================================
 //  持ち物（バッグ）
 //   種類ごとにまとめて表示し、操作は「その種類の先頭の1個」に対して行う
 // =====================================================================
@@ -1579,6 +1675,7 @@ function useType(key) {
   if (!it) { say(`${ITEMS[key] ? dispName(key) : 'それ'}を持っていない。`); render(); return; }
   if (ITEMS[it.type].equip) { if (!toggleEquip(it)) { render(); renderBag(); return; } saveGame(); closeBag(); endTurn(); return; }   // 装備品：着脱でターン経過
   if (player.st.mute > 0 && (ITEMS[it.type].cat === '草' || ITEMS[it.type].cat === '巻物')) { say('くちなし状態で使えない！'); render(); renderBag(); return; }
+  if (ITEMS[it.type].throwOnly) { throwType(key); return; }
   const nm0 = dispName(it.type), wasKnown = isKnown(it.type);
   const idAfter = () => { if (!wasKnown && identify(it.type)) void nm0; };
   if (ITEMS[it.type].staff) {                                    // 杖：回数を1つ消費。0回でも振れる（何も起こらない）
@@ -1634,7 +1731,7 @@ function iconUrl(type) {                                          // 持ち物�
 function rowHtml(g, sel, actsHtml) {
   const d = ITEMS[g.type];
   return `<div class="row${sel ? ' sel' : ''}"><div class="main" data-sel="${g.key}"><span class="ic" style="color:${d.fg}">${iconUrl(g.type) ? `<img src="${iconUrl(g.type)}" alt="">` : d.ch}</span>` +
-    `<span class="nm">${itemName(g.items[0])}${quick === g.type ? ' <i>★</i>' : ''}${isEq(g.items[0]) ? ' <i>E</i>' : ''}${isKnown(g.type) ? '' : ' <i>?</i>'}</span>${g.items.length > 1 ? `<span class="ct">×${g.items.length}</span>` : ''}</div>` +
+    `<span class="nm">${itemName(g.items[0])}${quick === g.type ? ' <i>★</i>' : ''}${isEq(g.items[0]) ? ' <i>E</i>' : ''}${isKnown(g.type) ? '' : ' <i>?</i>'}</span>${g.items.length > 1 && !ITEMS[g.type].stack ? `<span class="ct">×${g.items.length}</span>` : ''}</div>` +
     (sel ? `<div class="acts">${actsHtml}</div><div class="ds">${isKnown(g.type) ? (d.desc || '') : '効果はわからない。使うか身につけると分かる。'}</div>` : '') + `</div>`;
 }
 function renderBag() {
@@ -1649,7 +1746,7 @@ function renderBag() {
   if (bagSel && !shown.some(g => g.key === bagSel)) bagSel = null;
   const st = listEl.scrollTop;
   listEl.innerHTML = shown.length ? shown.map(g => rowHtml(g, g.key === bagSel,
-    `<button data-act="use" data-type="${g.key}">${ITEMS[g.type].equip ? (isEq(g.items[0]) ? '外す' : '装備') : '使う'}</button><button data-act="drop" data-type="${g.key}">置く</button>` +
+    `<button data-act="use" data-type="${g.key}">${ITEMS[g.type].equip ? (isEq(g.items[0]) ? '外す' : '装備') : ITEMS[g.type].throwOnly ? '投げる' : '使う'}</button><button data-act="drop" data-type="${g.key}">置く</button>` + (ITEMS[g.type].throwOnly ? '' : `<button data-act="throw" data-type="${g.key}">投げる</button>`) +
     (ITEMS[g.type].equip || ITEMS[g.type].charges ? '' : `<button data-act="quick" data-type="${g.type}">${quick === g.type ? '★解除' : '★クイック'}</button>`))).join('') : '<div class="empty">何も持っていない</div>';
   listEl.scrollTop = st;
 }
@@ -1659,6 +1756,7 @@ listEl.addEventListener('click', ev => {
     const type = a.dataset.type;
     if (a.dataset.act === 'use') useType(type);
     else if (a.dataset.act === 'drop') dropType(type);
+    else if (a.dataset.act === 'throw') throwType(type);
     else if (a.dataset.act === 'quick') { quick = quick === type ? null : type; saveGame(); renderBag(); render(); }
     return;
   }
@@ -1699,29 +1797,35 @@ function whTransfer(type, all) {
   saveGame(); renderWh(); render();
 }
 function renderWh() {
-  $('whTitle').textContent = `倉庫 ${wh.length}/${MAXWH}`;
-  const [b, w] = whSegEl.children;
-  b.textContent = `持ち物 ${inv.length}/${MAXBAG} → 預ける`; w.textContent = `倉庫 ${wh.length}/${MAXWH} → 出す`;
-  b.classList.toggle('on', whSide === 'bag'); w.classList.toggle('on', whSide === 'wh');
+  const shop = whSide === 'shop' || whSide === 'sell';
+  $('whTitle').textContent = shop ? `店（倉庫の窓口）` : `倉庫 ${wh.length}/${MAXWH}`;
+  const kids = [...whSegEl.children];
+  kids[0].textContent = `預ける ${inv.length}/${MAXBAG}`; kids[1].textContent = `出す ${wh.length}/${MAXWH}`; kids[2].textContent = '買う'; kids[3].textContent = '売る';
+  for (const el of kids) el.classList.toggle('on', el.dataset.side === whSide);
+  $('whGold').textContent = `所持金 ${gold}G ／ 預金 ${bank}G`;
   $('whMsg').textContent = whMsg;
-  const gs = groups(whSide === 'bag' ? inv : wh);
+  const src = whSide === 'bag' ? inv : whSide === 'wh' ? wh : whSide === 'shop' ? shopStock : inv.filter(i => !isEq(i));
+  const gs = groups(src);
   if (whSel && !gs.some(g => g.key === whSel)) whSel = null;
   const verb = whSide === 'bag' ? '預ける' : '出す';
+  const acts = g => whSide === 'shop' ? `<button data-act="buy" data-type="${g.key}">買う ${priceOf(g.items[0])}G</button>`
+    : whSide === 'sell' ? `<button data-act="sell" data-type="${g.key}">売る ${sellPrice(g.items[0])}G</button>`
+    : `<button data-act="one" data-type="${g.key}">${verb}(1)</button>` + (g.items.length > 1 && !ITEMS[g.type].stack ? `<button data-act="all" data-type="${g.key}">全部${verb}(${g.items.length})</button>` : '');
   const st = whListEl.scrollTop;
-  whListEl.innerHTML = gs.length ? gs.map(g => rowHtml(g, g.key === whSel,
-    `<button data-act="one" data-type="${g.key}">${verb}(1)</button>` +
-    (g.items.length > 1 ? `<button data-act="all" data-type="${g.key}">全部${verb}(${g.items.length})</button>` : ''))).join('')
-    : `<div class="empty">${whSide === 'bag' ? '持ち物は空だ' : '倉庫は空だ'}</div>`;
+  whListEl.innerHTML = gs.length ? gs.map(g => rowHtml(g, g.key === whSel, acts(g))).join('')
+    : `<div class="empty">${{ bag: '持ち物は空だ', wh: '倉庫は空だ', shop: '売り切れ', sell: '売れる物が無い' }[whSide]}</div>`;
   whListEl.scrollTop = st;
 }
 whListEl.addEventListener('click', ev => {
   const a = ev.target.closest('[data-act]');
-  if (a) { whTransfer(a.dataset.type, a.dataset.act === 'all'); return; }
+  if (a) { if (a.dataset.act === 'buy') shopBuy(a.dataset.type); else if (a.dataset.act === 'sell') shopSell(a.dataset.type); else whTransfer(a.dataset.type, a.dataset.act === 'all'); return; }
   const s = ev.target.closest('[data-sel]');
   if (s) { whSel = whSel === s.dataset.sel ? null : s.dataset.sel; renderWh(); }
 });
 whSegEl.addEventListener('click', ev => { const t = ev.target.closest('[data-side]'); if (t) { whSide = t.dataset.side; whSel = null; whMsg = ''; renderWh(); } });
 $('whClose').addEventListener('click', () => { closeWh(); render(); });
+$('bankIn').addEventListener('click', () => bankMove(true));
+$('bankOut').addEventListener('click', () => bankMove(false));
 $('logbtn').addEventListener('click', toggleHist);
 $('histClose').addEventListener('click', closeHist);
 
@@ -1737,6 +1841,7 @@ function giftAll() {
   let n = 0;
   for (const k of Object.keys(ITEMS)) {
     if (wh.length >= MAXWH) break;
+    if (k === 'gold') continue;
     if (wh.some(i => i.type === k) || inv.some(i => i.type === k)) continue;
     wh.push(mkItem(k, ITEMS[k].equip && ITEMS[k].equip !== 'ring' ? 0 : undefined)); n++;
   }
@@ -1744,6 +1849,7 @@ function giftAll() {
 }
 function renderCfg() {
   const rows = [
+    `<div class="set"><span class="lab">行き先<br><small>ふかい洞窟は、はじまりの洞窟を1回踏破すると行ける（12階）</small></span><button class="sm" data-cfg="dungeon">${DUNGEONS[dungeonId].name}（${DUNGEONS[dungeonId].floors}階）</button></div>`,
     `<div class="set"><span class="lab">自動拾い<br><small>踏んだだけで拾う</small></span><button class="sm" data-cfg="auto">${autoPick ? 'ON' : 'OFF'}</button></div>`,
     `<div class="set"><span class="lab">表示サイズ<br><small>絵が細かいほど「中」「大」が映える</small></span><button class="sm" data-cfg="zoom">${ZOOM_LABEL[zoomPref]}</button></div>`,
     `<div class="set"><span class="lab">キャラの大きさ<br><small>1マスより大きく描く（頭が上にはみ出す）</small></span><button class="sm" data-cfg="char">×${CHAR_K[charPref]}</button></div>`,
@@ -1762,6 +1868,7 @@ cfgListEl.addEventListener('click', ev => {
   const b = ev.target.closest('[data-cfg]'); if (!b) return;
   const a = b.dataset.cfg;
   if (a === 'auto') autoPick = !autoPick;
+  else if (a === 'dungeon') { const ids = Object.keys(DUNGEONS).filter(unlocked); dungeonId = ids[(ids.indexOf(dungeonId) + 1) % ids.length]; }
   else if (a === 'zoom') { zoomPref = (zoomPref + 1) % 6; resize(); }
   else if (a === 'logpos') logPos = 1 - logPos;
   else if (a === 'grid') showGrid = !showGrid;
@@ -1802,8 +1909,8 @@ const cache = new Map();
 function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) { cache.set(k, v); $(id).style[prop] = v; } }
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
-  setH('where', scene === 'town' ? `町　踏破${clears}` : `${DUNGEONS[dungeonId].name} 下り ${floorNo}F　ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}`);
-  setH('bagc', `持${inv.length}/${MAXBAG}`);
+  setH('where', scene === 'town' ? `町　踏破${clears}　${DUNGEONS[dungeonId].name}` : `${DUNGEONS[dungeonId].name} ${floorNo}F<br><small>ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}</small>`);
+  setH('bagc', `持${inv.length}/${MAXBAG}　${gold}G`);
   setH('belly', `満腹度 ${belly}/${maxBelly()}`);
   setS('blbar', 'display', scene === 'dungeon' ? 'block' : 'none');
   setS('blf', 'width', Math.max(0, Math.min(100, belly / maxBelly() * 100)).toFixed(1) + '%');
@@ -1814,7 +1921,7 @@ function refreshUI() {
   setS('hpf', 'background', hpr <= 0.25 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
   setH('log', logHtml(logs));
   { const el = $('log'); if (el.classList) { el.classList.toggle('off', !logs.length || histOpen || now() - logT > LOG_MS); el.classList.toggle('pos-b', logPos === 1); } }
-  setH('quick', quick ? `${dispName(quick)}<br><small>×${inv.filter(i => i.type === quick).length}</small>` : '−');
+  setH('quick', quick ? `${dispName(quick)}<br><small>×${invCount(quick)}</small>` : '−');
   setH('bagbtn', `持物<br><small>${inv.length}/${MAXBAG}</small>`);
   const c = ctxInfo();
   setH('pick', c ? c.label : '');

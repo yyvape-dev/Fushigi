@@ -435,14 +435,14 @@
 
     // --- 一覧の整合
     const keys = Object.keys(ITEMS);
-    ok('items: every item has name/cat/ch/fg/weight/desc', keys.every(k => { const d = ITEMS[k]; return d.name && d.cat && d.ch && d.fg && d.w > 0 && typeof d.desc === 'string' && d.desc.length > 4; }));
+    ok('items: every item has name/cat/ch/fg/weight/desc', keys.every(k => { const d = ITEMS[k]; return d.name && d.cat && d.ch && d.fg && (d.w > 0 || k === 'gold') && typeof d.desc === 'string' && d.desc.length > 4; }));
     ok('items: every item is usable, equippable or a staff', keys.every(k => typeof ITEMS[k].use === 'function' || ITEMS[k].equip));
     ok('items: weapons have atk, shields have def, seals are known', keys.every(k => { const d = ITEMS[k]; return (d.equip !== 'weapon' || d.atk > 0) && (d.equip !== 'shield' || d.def > 0) && (!d.seal || SEALS.has(d.seal)); }));
     ok('items: rings have no plus value, weapons do', mkItem('ring_regen').plus === undefined && itemName(mkItem('ring_regen')) === '回復の腕輪' && mkItem('katana', 1).plus === 1);
     ok('items: 19+ herbs, 2 seeds, 10+ scrolls, 15+ rings, 10+ weapons, 10+ shields', ['草', '種', '巻物', '腕輪', '武器', '盾'].every((c, i) => keys.filter(k => ITEMS[k].cat === c).length >= [19, 2, 10, 15, 10, 10][i]));
     ok('items: save/load keeps ids of new items', keys.every(k => { const it = mkItem(k); const b = decItem(encItem(it)); return b && b.type === k && b.plus === it.plus; }));
     floorNo = 1; { let bad = 0; for (let i = 0; i < 600; i++) if ((ITEMS[rollType()].from || 1) > 1) bad++; ok('items: floor 1 never drops deeper items', bad === 0); }
-    floorNo = 5; { const got = new Set(); for (let i = 0; i < 4000; i++) got.add(rollType()); ok('items: floor 5 can drop every item', keys.every(k => got.has(k))); }
+    floorNo = 5; { const got = new Set(); for (let i = 0; i < 4000; i++) got.add(rollType()); ok('items: floor 5 can drop every item (gold is placed separately)', keys.every(k => k === 'gold' || got.has(k)) && !got.has('gold')); }
 
     // --- 草
     setup(); inv = [give('herb'), give('outogiri'), give('iyashi')]; player.hp = 10; useType('herb');
@@ -552,7 +552,7 @@
   { const T = __require(process.cwd() + '/tests/tools/sheets.js'), SHEETS = T.SHEETS, HINT = T.HINT, sheetPrompt = T.sheetPrompt, sliceSheet = T.sliceSheet;
     const allKeys = SHEETS.flatMap(sh => sh.keys), icons = Object.values(ICON_BY_CAT), hand = Object.keys(ITEMS).filter(k => ['weapon', 'shield'].includes(ITEMS[k].equip));
     const already = ['stick', 'sword', 'axe', 'woodshield', 'ironshield'];                      // 手持ち絵が既にある5つ
-    ok('sheets: every key is an item or a shared icon, and appears once', allKeys.every(k => ITEMS[k] || icons.includes(k)) && new Set(allKeys).size === allKeys.length);
+    ok('sheets: every key is an item or a shared icon, and appears once', allKeys.every(k => ITEMS[k] || ENEMIES[k] || icons.includes(k)) && new Set(allKeys).size === allKeys.length);
     ok('sheets: every weapon/shield without hand art yet is on a sheet', hand.filter(k => !already.includes(k)).every(k => allKeys.includes(k)) && already.every(k => hand.includes(k)));
     ok('sheets: every key has a visual hint', allKeys.every(k => typeof HINT[k] === 'string' && HINT[k].length >= 3));
     ok('sheets: at most 16 per sheet', SHEETS.every(sh => sh.keys.length <= 16 && sh.keys.length >= 1));
@@ -716,6 +716,68 @@
     setup(); { inv = []; useType('herb'); ok('use: "not carrying" message uses the alias', /持っていない/.test(msgHistory[msgHistory.length - 1]) && msgHistory[msgHistory.length - 1].includes(alias.herb)); }
     setup(); { identify('herb'); toTown(false); enterDungeon(); ok('enterDungeon: identification resets', !isKnown('herb') && Object.keys(alias).length > 10); }
     enemyTurn = etSave; ACC.p = ACC.e = 1; DUNGEONS.first.floors = 3; toTown(false);
+  }
+  // ===== 段階3：お金・店・投擲・階層拡大 =====
+  { const R = (v, f) => { const rs = Math.random; Math.random = () => v; try { f(); } finally { Math.random = rs; } };
+    const etSave = enemyTurn;
+    const setup = (fl = 3) => { enemyTurn = etSave; scene = 'dungeon'; dungeonId = 'first'; floorNo = fl; shuffleAliases(); newFloor(); dead = false; eqWeapon = eqShield = null; eqRings = [null, null]; inv = []; enemies = []; floorItems = []; traps = []; player.st = newStatus(); player.lv = 1; player.exp = 0; player.maxhp = 20; player.hp = 20; atkUp = 0; belly = 100; player.face = [1, 0]; turn = 1; ACC.p = ACC.e = ACC.t = 1; gold = 0; bank = 0; };
+    const flat = () => { for (let dy = -3; dy <= 3; dy++) for (let dx = -8; dx <= 8; dx++) { const x = player.x + dx, y = player.y + dy; if (inb(x, y) && x > 0 && y > 0 && x < MW - 1 && y < MH - 1) map[y][x] = FLOOR; } };
+    const mkE = (kind, dx, dy, hp = 30) => { const x = player.x + dx, y = player.y + dy; map[y][x] = FLOOR; const e = { kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: true, lost: 0, flash: 0, bump: null, fl: false, st: {}, gen: 0 }; enemies.push(e); return e; };
+    // --- お金
+    ok('gold: every floor has 1-3 piles of gold', (() => { for (let i = 0; i < 20; i++) { floorNo = 1 + (i % 5); newFloor(); const n = floorItems.filter(f => f.item.type === 'gold').length; if (n < 1 || n > 3) return false; } return true; })());
+    ok('gold: deeper floors have bigger piles', (() => { const avg = fl => { let t = 0, n = 0; for (let i = 0; i < 30; i++) { floorNo = fl; newFloor(); for (const f of floorItems) if (f.item.type === 'gold') { t += f.item.plus; n++; } } return t / n; }; return avg(10) > avg(1) * 1.5; })());
+    setup(); flat(); { floorItems = [{ x: player.x + 1, y: player.y, item: mkItem('gold', 40) }]; playerMove(1, 0); ok('gold: walking over it picks it up (no bag slot, no "pick" needed)', gold === 40 && floorItems.length === 0 && inv.length === 0); }
+    setup(); flat(); { inv = []; for (let i = 0; i < MAXBAG; i++) inv.push(mkItem('potion')); floorItems = [{ x: player.x + 1, y: player.y, item: mkItem('gold', 10) }]; playerMove(1, 0); ok('gold: a full bag does not block it', gold === 10); }
+    setup(); flat(); { const e = mkE('goblin', 1, 0, 1); R(0, () => hitEnemy(e)); ok('gold: enemies sometimes drop it when killed (roll 0)', floorItems.some(f => f.item.type === 'gold' && f.item.plus >= 5)); }
+    setup(); flat(); { const e = mkE('goblin', 1, 0, 1); R(0.99, () => hitEnemy(e)); ok('gold: no drop on a high roll', !floorItems.some(f => f.item.type === 'gold')); }
+    setup(); { gold = 120; bank = 300; player.hp = 1; dead = true; deadAt = -1e9; enemyTurn = etSave; playerMove(0, 0); ok('death: carried gold is lost, the bank is kept', scene === 'town' && gold === 0 && bank === 300 && msgHistory.some(m => /所持金120G/.test(m))); }
+    setup(); { gold = 120; DUNGEONS.first.floors = 1; clearDungeon(); ok('clear: gold is kept', gold === 120); DUNGEONS.first.floors = 5; }
+    { gold = 50; bank = 0; openWh(); bankMove(true); ok('bank: deposit all', gold === 0 && bank === 50); bankMove(false); ok('bank: withdraw all', gold === 50 && bank === 0); bankMove(false); ok('bank: empty withdraw is harmless', gold === 50 && /空/.test(whMsg)); closeWh(); }
+    // --- 店
+    ok('shop: always stocks potion/onigiri/arrow + 8 random', (() => { for (let i = 0; i < 20; i++) { rollShop(); if (shopStock.length !== 11 || !['potion', 'onigiri', 'arrow'].every(k => shopStock.some(s => s.type === k))) return false; if (shopStock.some(s => s.type === 'gold' || s.type === 'weed')) return false; } return true; })());
+    ok('shop: stock changes when you come back to town', (() => { const a = JSON.stringify(shopStock.map(encItem)); let diff = false; for (let i = 0; i < 6 && !diff; i++) { toTown(true); diff = JSON.stringify(shopStock.map(encItem)) !== a; } return diff; })());
+    ok('price: rarer is dearer; enhanced equipment costs more; arrows by count', (() => { const p = t => priceOf(mkItem(t, t === 'arrow' ? 5 : 0)); return p('katana') > p('woodsword') - 1 && priceOf(mkItem('sword', 3)) > priceOf(mkItem('sword', 0)) && p('arrow') === 30 && priceOf(mkItem('herb')) >= 100; })());
+    ok('price: sell price is half or less, in steps of 5', (() => { const it = mkItem('herb'); return sellPrice(it) <= priceOf(it) / 2 && sellPrice(it) % 5 === 0 && sellPrice(it) > 0; })());
+    { toTown(false); inv = []; gold = 1000; shopStock = [mkItem('potion'), mkItem('herb')]; openWh(); whSide = 'shop'; renderWh();
+      const key = ikey(shopStock[0]), p = priceOf(shopStock[0]); shopBuy(key); ok('shop: buy takes the gold and moves the item to the bag', gold === 1000 - p && inv.length === 1 && inv[0].type === 'potion' && shopStock.length === 1);
+      gold = 1; shopBuy(ikey(shopStock[0])); ok('shop: not enough gold -> nothing happens', shopStock.length === 1 && /足りない/.test(whMsg));
+      gold = 1000; inv = []; for (let i = 0; i < MAXBAG; i++) inv.push(mkItem('onigiri')); shopBuy(ikey(shopStock[0])); ok('shop: full bag -> nothing happens', shopStock.length === 1 && /いっぱい/.test(whMsg));
+      inv = [mkItem('herb'), mkItem('sword', 1)]; eqWeapon = inv[1]; whSide = 'sell'; renderWh(); const g0 = gold; shopSell('sword:1E'); ok('shop: equipped gear cannot be sold', inv.length === 2 && gold === g0);
+      shopSell('herb'); ok('shop: selling gives the sell price', inv.length === 1 && gold > g0);
+      renderWh(); ok('shop: tabs render without errors (buy/sell)', (() => { try { whSide = 'shop'; renderWh(); whSide = 'sell'; renderWh(); whSide = 'bag'; renderWh(); return /所持金/.test($('whGold').textContent); } catch (e) { console.log(e); return false; } })());
+      eqWeapon = null; closeWh(); whSide = 'bag'; inv = []; }
+    // --- 矢・投擲
+    ok('arrow: stacks of 4-8, quick-able, throw-only', (() => { const a = mkItem('arrow'); return a.plus >= 4 && a.plus <= 8 && ITEMS.arrow.throwOnly && ITEMS.arrow.stack.length === 2; })());
+    ok('arrow: separate stacks merge', (() => { const m = mergeStacks([mkItem('arrow', 3), mkItem('potion'), mkItem('arrow', 4)]); return m.length === 2 && m[0].plus === 7; })());
+    setup(); flat(); { inv = [mkItem('arrow', 3), mkItem('arrow', 4)]; floorItems = [{ x: player.x, y: player.y, item: mkItem('arrow', 5) }]; takeFloor(floorItems[0]); ok('arrow: picking up merges into the stack', inv.length === 1 && inv[0].plus === 12 || (inv.length === 2 && invCount('arrow') === 12)); }
+    setup(); flat(); { inv = []; for (let i = 0; i < MAXBAG; i++) inv.push(mkItem('potion')); inv[0] = mkItem('arrow', 2); floorItems = [{ x: player.x, y: player.y, item: mkItem('arrow', 3) }]; ok('arrow: merging works even with a full bag', takeFloor(floorItems[0]) && invCount('arrow') === 5); }
+    setup(); flat(); { const e = mkE('goblin', 3, 0, 30); inv = [mkItem('arrow', 4)]; throwType('arrow'); ok('throw: an arrow hits the first enemy in line for 5-8', e.hp >= 22 && e.hp <= 25 && invCount('arrow') === 3 && e.aware); }
+    setup(); flat(); { const e = mkE('ogre', 3, 0, 30); inv = [mkItem('arrow', 1)]; R(0, () => throwType('arrow')); ok('throw: enemy defense reduces it (roll 5 - ogre def 2 = 3)', e.hp === 27); }
+    setup(); flat(); { const e = mkE('goblin', 3, 0, 4); inv = [mkItem('arrow', 4)]; R(0.99, () => throwType('arrow')); ok('throw: kills give exp', !enemies.includes(e) && player.exp > 0); }
+    setup(); flat(); { const e = mkE('goblin', 3, 0, 30); inv = [mkItem('arrow', 1)]; ACC.t = 0; throwType('arrow'); ok('throw: a miss drops it on the floor', e.hp === 30 && floorItems.some(f => f.item.type === 'arrow')); ACC.t = 1; }
+    setup(); flat(); { inv = [mkItem('arrow', 2)]; throwType('arrow'); ok('throw: with no target it flies up to 8 tiles and lands', floorItems.some(f => f.item.type === 'arrow' && f.x > player.x + 3) && invCount('arrow') === 1); }
+    setup(); flat(); { inv = [mkItem('arrow', 1)]; throwType('arrow'); ok('throw: the last arrow leaves the bag', inv.length === 0); }
+    setup(); flat(); { for (let i = 1; i <= 3; i++) map[player.y][player.x + i] = WALL; inv = [mkItem('arrow', 2)]; throwType('arrow'); ok('throw: a wall stops it right at your feet', floorItems.some(f => f.item.type === 'arrow' && f.x === player.x && f.y === player.y)); }
+    setup(); flat(); { const e = mkE('goblin', 2, 0, 30); inv = [mkItem('sleepherb')]; throwType('sleepherb'); ok('throw: a sleep herb puts the enemy to sleep (8, minus this turn) and is used up', e.st.sleep === 7 && floorItems.every(f => f.item.type !== 'sleepherb')); }
+    setup(); flat(); { const e = mkE('goblin', 2, 0, 30); inv = [mkItem('confherb')]; throwType('confherb'); ok('throw: a confusion herb confuses', e.st.confuse === 7); }
+    setup(); flat(); { const e = mkE('goblin', 2, 0, 30); inv = [mkItem('poisonherb')]; throwType('poisonherb'); ok('throw: a poison herb hurts for 6', e.hp === 24); }
+    setup(); flat(); { const e = mkE('goblin', 2, 0, 30); inv = [mkItem('potion')]; throwType('potion'); ok('throw: other items do 1 damage and land', e.hp === 29 && floorItems.some(f => f.item.type === 'potion')); }
+    setup(); flat(); { const w = mkItem('sword', 0); inv = [w]; eqWeapon = w; throwType('sword:0E'); ok('throw: a worn weapon is taken off and thrown', eqWeapon === null && inv.length === 0 && floorItems.some(f => f.item === w)); }
+    setup(); flat(); { const e = mkE('goblin', 3, 0, 30); e.st.sleep = 5; ACC.t = 0; inv = [mkItem('arrow', 1)]; throwType('arrow'); ok('throw: sleeping enemies are always hit', e.hp < 30); ACC.t = 1; }
+    setup(); { scene = 'town'; inv = [mkItem('arrow', 3)]; throwType('arrow'); ok('throw: not in town', invCount('arrow') === 3); scene = 'dungeon'; }
+    setup(); flat(); { inv = [mkItem('arrow', 3)]; quick = 'arrow'; useQuick(); ok('quick slot: arrows can be thrown from the quick button', invCount('arrow') === 2); render(); ok('quick slot: shows the arrow count', /×2/.test($('quick').innerHTML)); quick = 'potion'; }
+    setup(); flat(); { inv = [mkItem('arrow', 3)]; renderBag(); bagSel = 'arrow'; renderBag(); ok('bag: arrows show one 投げる button and no separate throw action', (listEl.innerHTML.match(/投げる<\/button>/g) || []).length === 1 && !/data-act="throw"/.test(listEl.innerHTML)); bagSel = null; closeBag(); }
+    setup(); flat(); { inv = [mkItem('potion')]; renderBag(); bagSel = 'potion'; renderBag(); ok('bag: other items get a 投げる button', /data-act="throw"/.test(listEl.innerHTML)); bagSel = null; closeBag(); }
+    // --- 保存
+    { toTown(false); gold = 77; bank = 123; shopStock = [mkItem('potion'), mkItem('arrow', 6)]; dungeonId = 'first'; wh = [mkItem('arrow', 3), mkItem('arrow', 4)]; saveGame(); gold = 0; bank = 0; shopStock = []; wh = []; loadGame();
+      ok('save: gold, bank, shop stock and merged arrow stacks survive', gold === 77 && bank === 123 && shopStock.length === 2 && shopStock[1].plus === 6 && wh.length === 1 && wh[0].plus === 7); wh = []; }
+    // --- ダンジョン2つ
+    ok('dungeons: two, the deep one has 12 floors and needs 1 clear', DUNGEONS.second.floors === 12 && DUNGEONS.second.need === 1);
+    { clears = 0; dungeonId = 'second'; ok('dungeons: locked at 0 clears', !unlocked('second')); toTown(false); enterDungeon(); ok('dungeons: entering a locked one falls back to the first', dungeonId === 'first');
+      clears = 1; ok('dungeons: unlocked after a clear', unlocked('second')); toTown(false); dungeonId = 'second'; enterDungeon(); ok('dungeons: deep cave starts at 1F', dungeonId === 'second' && scene === 'dungeon' && floorNo === 1); dungeonId = 'first'; toTown(false); clears = 0; }
+    { clears = 1; toTown(false); openCfg(); dungeonId = 'first'; const b = cfgListEl; ok('settings: dungeon row exists', /行き先/.test(cfgListEl.innerHTML)); closeCfg(); dungeonId = 'first'; clears = 0; }
+    ok('12F: deep cave floors generate (enemies capped, deep kinds appear)', (() => { dungeonId = 'second'; scene = 'dungeon'; const kinds = new Set(); for (let i = 0; i < 40; i++) { floorNo = 12; newFloor(); if (enemies.filter(e => !e.mh).length > 10) return false; enemies.forEach(e => kinds.add(e.kind)); } dungeonId = 'first'; return kinds.has('minotaur') || kinds.has('dragon') || kinds.size > 6; })());
+    enemyTurn = etSave; ACC.p = ACC.e = 1; gold = 0; bank = 0; DUNGEONS.first.floors = 3; toTown(false);
   }
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
