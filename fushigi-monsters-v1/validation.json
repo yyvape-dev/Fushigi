@@ -1,0 +1,267 @@
+{
+  "sprites": {
+    "slime": {
+      "S": {
+        "visibleBounds": [
+          62,
+          132,
+          194,
+          223
+        ],
+        "mirror": false
+      },
+      "SE": {
+        "visibleBounds": [
+          62,
+          131,
+          194,
+          223
+        ],
+        "mirror": false
+      },
+      "E": {
+        "visibleBounds": [
+          66,
+          132,
+          191,
+          223
+        ],
+        "mirror": false
+      },
+      "NE": {
+        "visibleBounds": [
+          63,
+          132,
+          194,
+          223
+        ],
+        "mirror": false
+      },
+      "N": {
+        "visibleBounds": [
+          62,
+          132,
+          194,
+          223
+        ],
+        "mirror": false
+      },
+      "SW": {
+        "visibleBounds": [
+          63,
+          131,
+          195,
+          223
+        ],
+        "mirror": true
+      },
+      "W": {
+        "visibleBounds": [
+          66,
+          132,
+          191,
+          223
+        ],
+        "mirror": true
+      },
+      "NW": {
+        "visibleBounds": [
+          63,
+          132,
+          194,
+          223
+        ],
+        "mirror": true
+      }
+    },
+    "goblin": {
+      "S": {
+        "visibleBounds": [
+          64,
+          73,
+          192,
+          223
+        ],
+        "mirror": false
+      },
+      "SW": {
+        "visibleBounds": [
+          65,
+          72,
+          191,
+          223
+        ],
+        "mirror": false
+      },
+      "W": {
+        "visibleBounds": [
+          80,
+          69,
+          177,
+          223
+        ],
+        "mirror": false
+      },
+      "NW": {
+        "visibleBounds": [
+          71,
+          75,
+          186,
+          223
+        ],
+        "mirror": false
+      },
+      "N": {
+        "visibleBounds": [
+          63,
+          76,
+          193,
+          223
+        ],
+        "mirror": false
+      },
+      "NE": {
+        "visibleBounds": [
+          70,
+          76,
+          186,
+          223
+        ],
+        "mirror": false
+      },
+      "E": {
+        "visibleBounds": [
+          80,
+          72,
+          177,
+          223
+        ],
+        "mirror": false
+      },
+      "SE": {
+        "visibleBounds": [
+          73,
+          77,
+          183,
+          223
+        ],
+        "mirror": false
+      }
+    },
+    "bat": {
+      "S": {
+        "visibleBounds": [
+          41,
+          88,
+          216,
+          195
+        ],
+        "mirror": false
+      },
+      "SE": {
+        "visibleBounds": [
+          55,
+          87,
+          201,
+          195
+        ],
+        "mirror": false
+      },
+      "E": {
+        "visibleBounds": [
+          86,
+          83,
+          171,
+          195
+        ],
+        "mirror": false
+      },
+      "NE": {
+        "visibleBounds": [
+          55,
+          83,
+          202,
+          195
+        ],
+        "mirror": false
+      },
+      "N": {
+        "visibleBounds": [
+          42,
+          88,
+          214,
+          195
+        ],
+        "mirror": false
+      },
+      "SW": {
+        "visibleBounds": [
+          56,
+          87,
+          202,
+          195
+        ],
+        "mirror": true
+      },
+      "W": {
+        "visibleBounds": [
+          86,
+          83,
+          171,
+          195
+        ],
+        "mirror": true
+      },
+      "NW": {
+        "visibleBounds": [
+          55,
+          83,
+          202,
+          195
+        ],
+        "mirror": true
+      }
+    }
+  },
+  "browsers": [
+    {
+      "name": "desktop",
+      "viewport": [
+        1100,
+        900
+      ],
+      "ready": true,
+      "errors": [],
+      "failedRequests": [],
+      "noPageOverflow": true,
+      "floorThemes": 5,
+      "directions": 8
+    },
+    {
+      "name": "portrait",
+      "viewport": [
+        390,
+        844
+      ],
+      "ready": true,
+      "errors": [],
+      "failedRequests": [],
+      "noPageOverflow": true,
+      "floorThemes": 5,
+      "directions": 8
+    },
+    {
+      "name": "landscape",
+      "viewport": [
+        844,
+        390
+      ],
+      "ready": true,
+      "errors": [],
+      "failedRequests": [],
+      "noPageOverflow": true,
+      "floorThemes": 5,
+      "directions": 8
+    }
+  ]
+}
