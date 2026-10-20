@@ -1,0 +1,11 @@
+{
+  "mainCommit": "8371630377ba8210159bc471ab5503b29e16635a",
+  "indexSha256": "8971dacc9beec9007033c468973ef37c6c840856cc86225d5b832234292495e5",
+  "room": [
+    7,
+    5
+  ],
+  "corridorWidth": 1,
+  "projection": "square grid, orthographic overhead floor; wall face separately baked",
+  "art": "Blender procedural stone model and Cycles renders; no AI image editing"
+}
