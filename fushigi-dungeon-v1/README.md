@@ -20,7 +20,7 @@
 - `model-overview.png`：立体の確認用斜視図。本編カメラではない。
 - `room-overhead.png`：真上からの寸法確認図。
 - `floor0..3.png` / `wallF.png` / `wallT.png`：Blender Cyclesによる256pxのベイク画像。床は真上、壁正面は別撮影して正方形タイルへ収める。本編の擬似立体表現に合わせた方式。
-- `preview.html`：画像を内包した実ゲームカメラでの確認画面。既存キャラは本編の素材を参照。
+- `preview.html`：生成洞窟画像を標準とする実ゲームカメラでの確認画面（旧石室の比較切替あり）。既存キャラは本編の素材を参照。
 - `game-landscape.png` / `game-portrait.png` / `validation.json`：ブラウザ確認結果。
 
 ## 再現

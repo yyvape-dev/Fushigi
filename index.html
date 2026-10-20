@@ -131,6 +131,7 @@ canvas{display:block;touch-action:none}
 <script src="fushigi-equipment-v3/hero-attack-renderer.js"></script>
 <script src="assets/approved-hero.js"></script>
 <script src="assets/dungeon-generator.js"></script>
+<script src="assets/cave-terrain.js"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -858,8 +859,8 @@ function scaledOf(im, S, cover) {
   return out;
 }
 // k>1 のとき：マスより大きく描く。足元（下端中央）はマスに合わせ、上と左右にはみ出す（キャラ用）
-function blit(key, px, py, g = ctx, k = 1) {
-  if (g === ctx && scene === 'dungeon' && drawDungeonArt(key, px, py, g)) return;
+function blit(key, px, py, g = ctx, k = 1, tileX, tileY) {
+  if (g === ctx && scene === 'dungeon' && drawDungeonArt(key, px, py, g, tileX, tileY)) return;
   const S = TS * k; px -= (S - TS) / 2; py -= (S - TS);
   const ext = SPRITES[extName(key)];
   if (ext && ext.width > 64) {
@@ -1905,18 +1906,9 @@ function setMsg(t, ng) { artMsgEl.hidden = !t; artMsgEl.textContent = t || ''; i
 // =====================================================================
 //  描画
 // =====================================================================
-const dungeonArt = {}, dungeonArtCache = new Map();
-function loadDungeonArt() {
-  for (const key of ['floor0','floor1','floor2','floor3','wallF','wallT']) {
-    const im = new Image(); im.onload = () => { dungeonArt[key] = im; dungeonArtCache.clear(); render(); }; im.src = 'assets/dungeon/' + key + '.png';
-  }
-}
-function drawDungeonArt(key, px, py, g) {
-  const im = dungeonArt[key]; if (!im) return false;
-  const theme = floorPlan?.theme || DungeonGenerator.themes[0], cacheKey = theme.id + ':' + key;
-  let art = dungeonArtCache.get(cacheKey);
-  if (!art) { art = mkCanvas(256,256); const c = art.getContext('2d'); c.filter=theme.filter;c.drawImage(im,0,0);dungeonArtCache.set(cacheKey,art); }
-  g.imageSmoothingEnabled=true;g.drawImage(art,px,py,TS,TS);return true;
+function loadDungeonArt() { CaveTerrain.load(render); }
+function drawDungeonArt(key, px, py, g, x, y) {
+  return CaveTerrain.draw(g,key,px,py,TS,{map,x,y,theme:floorPlan?.theme || DungeonGenerator.themes[0]});
 }
 const cv = $('c'), ctx = cv.getContext('2d');
 let raf = 0, lastT = 0;
@@ -2146,6 +2138,7 @@ function grad(x0, y0, x1, y1, c0, c1, px, py, w, h) {
 }
 function shadeTile(key, x, y, px, py, m) {
   const a = v => Math.min(0.9, v * m).toFixed(3);
+  if (typeof CaveTerrain !== 'undefined' && CaveTerrain.ready && (key === 'wallF' || key === 'wallT')) return;
   if (key === 'wallF') {
     const h = Math.round(TS * 0.3);
     grad(0, py, 0, py + h, `rgba(255,255,255,${a(0.26)})`, 'rgba(255,255,255,0)', px, py, TS, h);                       // 上端の明るいふち（壁の天面が光る）
@@ -2160,7 +2153,7 @@ function shadeTile(key, x, y, px, py, m) {
     const w = Math.round(TS * 0.22);
     if (x > 0 && map[y][x - 1] === WALL) grad(px, 0, px + w, 0, `rgba(0,0,0,${a(0.3)})`, 'rgba(0,0,0,0)', px, py, w, TS);
     if (x < MW - 1 && map[y][x + 1] === WALL) grad(px + TS - w, 0, px + TS, 0, 'rgba(0,0,0,0)', `rgba(0,0,0,${a(0.3)})`, px + TS - w, py, w, TS);
-    if (SPRITES.floor && key.startsWith('floor')) {                                                                      // 外部の床：タイルのふち取りで段差感
+    if (!(typeof CaveTerrain !== 'undefined' && CaveTerrain.ready) && SPRITES.floor && key.startsWith('floor')) {                                                                      // 外部の床：タイルのふち取りで段差感
       const t = Math.max(1, Math.round(TS / 40));
       ctx.fillStyle = `rgba(255,255,255,${a(0.06)})`; ctx.fillRect(px, py, TS, t); ctx.fillRect(px, py, t, TS);
       ctx.fillStyle = `rgba(0,0,0,${a(0.22)})`; ctx.fillRect(px, py + TS - t, TS, t); ctx.fillRect(px + TS - t, py, t, TS);
@@ -2208,7 +2201,7 @@ function draw() {
     const key = tileKey(x, y);
     if (!dungeon && !key.startsWith('ground')) blit('ground0', px, py);          // 透過画像の下地
     else if (dungeon && key === 'stairs') blit('floor0', px, py);
-    blit(key, px, py);
+    blit(key, px, py, ctx, 1, x, y);
     if (dungeon) {
       if (m > 0) shadeTile(key, x, y, px, py, m);
       if (vis[y][x]) {                                                             // 視界の明暗：離れるほど暗く

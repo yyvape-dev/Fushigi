@@ -6,7 +6,7 @@ with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox'])
  page=b.new_page(viewport={'width':844,'height':390}); errors=[]
  page.on('pageerror',lambda e:errors.append(str(e)))
- page.goto('http://127.0.0.1:8000/fushigi-dungeon-v1/preview.html');page.wait_for_timeout(1200)
+ page.goto('http://127.0.0.1:8001/fushigi-dungeon-v1/preview.html');page.wait_for_function('CaveTerrain.ready && ApprovedHero.ready')
  assert not errors,errors
  assert page.evaluate('TS===64 && scene==="dungeon" && Object.values(previewImages).every(i=>i.naturalWidth===256)')
  page.screenshot(path=str(P/'game-landscape.png'))
@@ -17,8 +17,8 @@ with sync_playwright() as p:
  assert page.evaluate('player.x===14 && player.y===9')
  page.keyboard.press('ArrowRight');assert page.evaluate('player.x===14 && player.y===9')
  page.get_by_text('マス線',exact=True).click()
- page.get_by_text('元絵と比較',exact=True).click();assert page.evaluate('blit===originalBlit')
- page.get_by_text('元絵と比較',exact=True).click();assert page.evaluate('blit===previewBlit')
+ page.get_by_text('旧石室と比較',exact=True).click();assert page.evaluate('blit===previewBlit')
+ page.get_by_text('旧石室と比較',exact=True).click();assert page.evaluate('blit===originalBlit')
  page.set_viewport_size({'width':390,'height':844});page.wait_for_timeout(250)
  assert page.evaluate('TS===32')
  page.screenshot(path=str(P/'game-portrait.png'))
