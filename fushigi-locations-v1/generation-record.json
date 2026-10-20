@@ -1,0 +1,43 @@
+{
+  "prompt": "Create ORIGINAL production environment art for a charming Japanese fantasy roguelike with a blonde chibi knight, softly sculpted painterly 3D-like rendering, clean readable forms at 64 pixels. CAMERA CONSISTENCY: orthographic camera looking down at approximately 55 degrees from horizontal toward north; ground recedes gently, wall TOPS and vertical FRONT FACES are visible, never an isometric diamond grid and never a straight vertical photograph of a rock face. A square 3 by 3 TILE ATLAS with NINE perfectly equal square cells; full bleed, no gutters, no black divider lines, no labels, no text, no characters, no UI, no objects crossing cells. Each cell is one reusable material tile, NOT a room or a vignette. Ground-plane tiles are flat material patches intended to be projected by the game; avoid painting a different horizon or perspective into each tile. ONE shared lighting direction upper left. Top row cells 1,2,3 AND middle-left cell 4 are FOUR DIFFERENT but matching quiet floor surface variations, edge-to-edge, no border shadow or strong vignette, no repeated central motif, same neutral edge tones, low contrast microdetails, variant4 has a sparse small location-specific decorative detail near center only. Middle-center and middle-right cells 5,6 are TWO distinctly shaped variations of WALL TOP / raised ground surface of this location, covering every edge, strong natural silhouette implied by clustered forms, broadly top-facing surfaces consistent with elevated camera, NO surrounding floor. Bottom-left and bottom-center cells 7,8 are TWO matching horizontal wall FRONT FACE segments, with a narrow top lip in upper 10% and real vertical height in lower 90%, no floor and no sky, repeating horizontally, soft sculpted depth rather than flat noisy texture. Bottom-right cell9 is a downward staircase on this same floor: central worn four horizontal treads descending toward a dark opening at top center, blending into ground around edges. All nine cells must share the location's visual concept but provide meaningfully different shapes and surface patterns, NOT just hue shifts. ",
+  "concepts": [
+    {
+      "id": "forest",
+      "name": "苔むす樹林",
+      "detail": "an ancient shaded forest: soft earthen paths with restrained sparse grass, roots, dry leaves; dense raised mossy root banks with low ferns, rounded boulders and cut root surfaces. Colors sage green, warm brown earth, soft emerald moss. Walls are root-and-stone embankments, not square hedges."
+    },
+    {
+      "id": "limestone",
+      "name": "鍾乳洞",
+      "detail": "a limestone cavern: smooth worn pale taupe stone floor with fine damp mineral veins and sparse small puddle stains; raised gray-beige layered limestone masses, rounded stalagmite clusters and calcite columns. Restrained cool blue-gray shade, warm cream mineral highlights. Avoid regular bricks."
+    },
+    {
+      "id": "ruins",
+      "name": "風化遺跡",
+      "detail": "weathered ancient ruins: large irregular warm gray stone paving fragments partly buried in dust, subtle broken grout and sparse tiny plants; raised walls made from old carved stone blocks of varied sizes, chipped capitals and low worn masonry. Warm sand, desaturated olive, old limestone. No writing or symbols."
+    },
+    {
+      "id": "ice",
+      "name": "氷晶洞",
+      "detail": "an ice crystal grotto: quiet frosty pale blue-gray ground, fine short ice veins and sparse powder snow; raised thick translucent glacial ice banks with angular chunky blue crystal clusters, soft cyan interiors and white frosted caps. Soft turquoise, muted navy shadows, pale blue floor. No neon glowing crystals."
+    },
+    {
+      "id": "volcano",
+      "name": "火山洞",
+      "detail": "a volcanic cavern: quiet dark warm-gray basalt ground, restrained ash and a few fine faint reddish hairline fissures, no floor-filling lava; raised charcoal basalt columns and coarse layered volcanic rock walls, sparse subdued orange light in deep cracks. Dark slate, warm ash, muted ember accents. Keep floor bright enough to see small items."
+    }
+  ],
+  "engine": "image_gen",
+  "referenceResearch": "README.md",
+  "cells": [
+    "floor0",
+    "floor1",
+    "floor2",
+    "floor3",
+    "wallT0",
+    "wallT1",
+    "wallF0",
+    "wallF1",
+    "stairs"
+  ]
+}

@@ -24,7 +24,7 @@ seen=Array.from({length:DH},()=>Array(DW).fill(false));
 zoomPref=0;charPref=2;shadePref=1;mapMode=1;fadeT=0;
 updateVis();resize();render();
 const originalDraw=draw;let gridOn=false;
-draw=function(){originalDraw();if(!gridOn)return;const cx=Math.round(innerWidth/2-(player.vx+.5)*TS),cy=Math.round(focusY()-(player.vy+.5)*TS);ctx.strokeStyle='#ffe7a575';ctx.lineWidth=1;for(const [x,y] of WALK_DATA)ctx.strokeRect(cx+x*TS,cy+y*TS,TS,TS);};
+draw=function(){originalDraw();if(!gridOn)return;const cx=Math.round(innerWidth/2-(player.vx+.5)*TS),cy=Math.round(focusY()-(player.vy+.5)*tilePitchY());ctx.strokeStyle='#ffe7a575';ctx.lineWidth=1;for(const [x,y] of WALK_DATA)ctx.strokeRect(cx+x*TS,cy+y*tilePitchY(),TS,tilePitchY());};
 document.getElementById('gridToggle').onclick=()=>{gridOn=!gridOn;render();};
 document.getElementById('artToggle').onclick=()=>{blit=blit===originalBlit?previewBlit:originalBlit;render();};
 

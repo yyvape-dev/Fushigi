@@ -1,85 +1,34 @@
-// Generated painterly cave art + topology-driven wall silhouettes.
-// All drawing stays inside its logical cell. Collision never depends on artwork.
+// Five original location sets; projected floor + raised, topology-aware banks.
 (function(root){
- const SIZE=128, images={},cache=new Map();
- const state={ready:false,error:null,version:'cave-v1',images,cache};
- state.load=async function(redraw){
-  try{
-   await Promise.all(['floor0','floor1','floor2','wallT','wallF','stairs'].map(key=>new Promise((resolve,reject)=>{
-    const im=new Image();im.onload=()=>{images[key]=im;resolve();};im.onerror=()=>reject(Error(key));im.src='assets/dungeon/cave-v1/'+key+'.webp';
-   })));
-   state.ready=true;redraw();
-  }catch(e){state.error=e.message;console.error('洞窟画像を読み込めません',e);redraw();}
- };
- state.topology=function(map,x,y){
-  const floor=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;
-  let edges=0,diagonals=0;
-  [[0,-1],[1,0],[0,1],[-1,0]].forEach(([dx,dy],i)=>{if(floor(x+dx,y+dy))edges|=1<<i;});
-  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([dx,dy],i)=>{if(floor(x+dx,y+dy))diagonals|=1<<i;});
-  return {edges,diagonals};
- };
- function canvas(){const c=document.createElement('canvas');c.width=c.height=SIZE;return c;}
- function painted(key,theme){
-  const id=theme.id+':'+key;if(cache.has(id))return cache.get(id);
-  const c=canvas(),g=c.getContext('2d');g.filter=theme.filter||'none';g.drawImage(images[key],0,0,SIZE,SIZE);g.filter='none';
-  cache.set(id,c);return c;
+ const SIZE=128,PITCH=.82,images={},cache=new Map();
+ const ids=['forest','limestone','ruins','ice','volcano'];
+ const state={ready:false,error:null,version:'locations-v1',images,cache,pitch:PITCH,ids};
+ const keys=['floor0','floor1','floor2','floor3','wallT0','wallT1','wallF0','wallF1','stairs'];
+ state.load=async function(redraw){try{await Promise.all(ids.flatMap(id=>keys.map(key=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{images[id+':'+key]=im;resolve();};im.onerror=()=>reject(Error(id+'/'+key));im.src='assets/dungeon/locations-v1/'+id+'/'+key+'.webp';}))));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('ロケーション画像読込失敗',e);redraw();}};
+ state.topology=function(map,x,y){const f=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;let edges=0,diagonals=0;[[0,-1],[1,0],[0,1],[-1,0]].forEach(([dx,dy],i)=>{if(f(x+dx,y+dy))edges|=1<<i;});[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([dx,dy],i)=>{if(f(x+dx,y+dy))diagonals|=1<<i;});return {edges,diagonals};};
+ state.rise=(map,x,y,size)=>size*((state.topology(map,x,y).edges&1)?.10:.36);
+ function canvas(w=SIZE,h=SIZE){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
+ function art(id,key){return images[id+':'+key];}
+ function patch(id,key){const k=id+':patch:'+key;if(cache.has(k))return cache.get(k);const c=canvas(),g=c.getContext('2d');g.drawImage(art(id,key),0,0,SIZE,SIZE);g.globalCompositeOperation='destination-in';const r=g.createRadialGradient(64,64,18,64,64,62);r.addColorStop(0,'#000');r.addColorStop(1,'#0000');g.fillStyle=r;g.fillRect(0,0,SIZE,SIZE);cache.set(k,c);return c;}
+ function base(id){
+  const k=id+':base';if(cache.has(k))return cache.get(k);const c=canvas(),g=c.getContext('2d');g.drawImage(art(id,'floor1'),0,0,128,128);const original=g.getImageData(0,0,128,128),out=g.createImageData(128,128),d=original.data;
+  // Blend only an eight-pixel material border. Interior art is never mirrored.
+  for(let y=0;y<128;y++)for(let x=0;x<128;x++){const wx=Math.max(0,(1-Math.min(x,127-x)/8))*.5,wy=Math.max(0,(1-Math.min(y,127-y)/8))*.5;for(let ch=0;ch<4;ch++){const sample=(xx,yy)=>d[(yy*128+xx)*4+ch];out.data[(y*128+x)*4+ch]=sample(x,y)*(1-wx)*(1-wy)+sample(127-x,y)*wx*(1-wy)+sample(x,127-y)*(1-wx)*wy+sample(127-x,127-y)*wx*wy;}}
+  g.putImageData(out,0,0);cache.set(k,c);return c;
  }
- function overlay(key,theme){
-  const id=theme.id+':overlay:'+key;if(cache.has(id))return cache.get(id);
-  const c=canvas(),g=c.getContext('2d');g.drawImage(painted(key,theme),0,0);
-  g.globalCompositeOperation='destination-in';
-  if(key==='stairs'){
-   // Retain every stair tread; blend just the outer 5% into the common floor.
-   for(const vertical of [true,false]){const grad=g.createLinearGradient(0,0,vertical?0:SIZE,vertical?SIZE:0);grad.addColorStop(0,'#0000');grad.addColorStop(.05,'#000');grad.addColorStop(.95,'#000');grad.addColorStop(1,'#0000');g.fillStyle=grad;g.fillRect(0,0,SIZE,SIZE);}
-  }else{
-   const grad=g.createRadialGradient(SIZE/2,SIZE/2,SIZE*.15,SIZE/2,SIZE/2,SIZE*.49);grad.addColorStop(0,'#000');grad.addColorStop(1,'#0000');g.fillStyle=grad;g.fillRect(0,0,SIZE,SIZE);
-  }
-  cache.set(id,c);return c;
+ function ground(g,px,py,size,h,id,x=0,y=0,variant=0){g.drawImage(base(id),px,py,size,h);if(variant!==1)g.drawImage(patch(id,'floor'+variant),px,py,size,h);}
+ function silhouette(g,edges){const n=edges&1,e=edges&2,s=edges&4,w=edges&8;const l=w?3:0,t=n?3:0,r=e?125:128,b=s?125:128,a=n&&w?17:0,c=n&&e?17:0,d=s&&e?17:0,f=s&&w?17:0;g.beginPath();g.moveTo(l+a,t);g.lineTo(r-c,t);g.quadraticCurveTo(r,t,r,t+c);g.lineTo(r,b-d);g.quadraticCurveTo(r,b,r-d,b);g.lineTo(l+f,b);g.quadraticCurveTo(l,b,l,b-f);g.lineTo(l,t+a);g.quadraticCurveTo(l,t,l+a,t);g.closePath();}
+ function bank(id,edges,diag,variant,phaseX,phaseY){const k=[id,edges,diag,variant,phaseX,phaseY].join(':');if(cache.has(k))return cache.get(k);const rise=(edges&1)?13:46,p=105,c=canvas(128,160),g=c.getContext('2d');
+  g.save();g.translate(0,46-rise);g.scale(1,PITCH);silhouette(g,edges);g.clip();const im=art(id,'wallT'+variant);g.drawImage(im,phaseX*128,phaseY*64,128,128,0,0,128,128);g.restore();
+  if(edges&4){g.save();g.beginPath();g.roundRect((edges&8)?3:0,46+p-rise-2,(edges&8||edges&2)?125:128,rise+2,7);g.clip();g.drawImage(art(id,'wallF'+variant),phaseX*128,0,128,256,0,46+p-rise,128,rise);g.restore();}
+  // Small side lips preserve legibility of width-one corridors.
+  for(const [bit,x]of [[8,0],[2,122]])if(edges&bit){g.fillStyle='#10181d55';g.fillRect(x,46-rise+10,6,p-8);}
+  if(cache.size>240)cache.clear();cache.set(k,c);return c;
  }
- function floor(g,px,py,size,theme,x=0,y=0){
-  // Mirrored repeat gives identical shared boundary samples. Interior variants
-  // fade into this common ground, so any variant can neighbor any other.
-  const flipX=(x&1)!==0,flipY=(y&1)!==0;
-  g.save();g.translate(px+(flipX?size:0),py+(flipY?size:0));g.scale(flipX?-1:1,flipY?-1:1);g.drawImage(painted('floor0',theme),0,0,size,size);g.restore();
- }
- function wallPath(g,edges){
-  const n=edges&1,e=edges&2,s=edges&4,w=edges&8;
-  const x=w?SIZE*.035:0,y=n?SIZE*.035:0,r=e?SIZE*.965:SIZE,b=s?SIZE*.965:SIZE;
-  const nw=n&&w?SIZE*.16:0,ne=n&&e?SIZE*.16:0,se=s&&e?SIZE*.14:0,sw=s&&w?SIZE*.14:0;
-  g.beginPath();g.moveTo(x+nw,y);g.lineTo(r-ne,y);g.quadraticCurveTo(r,y,r,y+ne);
-  g.lineTo(r,b-se);g.quadraticCurveTo(r,b,r-se,b);g.lineTo(x+sw,b);g.quadraticCurveTo(x,b,x,b-sw);
-  g.lineTo(x,y+nw);g.quadraticCurveTo(x,y,x+nw,y);g.closePath();
- }
- function wall(key,edges,diagonals,theme,x,y){
-  const id=theme.id+':'+key+':'+edges+':'+diagonals+':'+(x&1)+':'+(y&1);if(cache.has(id))return cache.get(id);
-  const c=canvas(),g=c.getContext('2d');
-  g.save();wallPath(g,edges);g.clip();
-  // Sample one continuous two-cell-wide painting; do not mirror the rocks.
-  const sx=(x&1)*SIZE/2,sy=key==='wallT'?(y&1)*SIZE/2:0,sh=key==='wallT'?SIZE/2:SIZE;
-  g.drawImage(painted(key,theme),sx,sy,SIZE/2,sh,0,0,SIZE,SIZE);
-  // Side faces remain narrow, keeping width-one corridors fully visible.
-  for(const [bit,left]of [[8,true],[2,false]])if(edges&bit){const x=left?SIZE*.035:SIZE*.88,grad=g.createLinearGradient(x,0,x+SIZE*.09,0);grad.addColorStop(0,left?'#060b1055':'#060b1000');grad.addColorStop(1,left?'#060b1000':'#060b1077');g.fillStyle=grad;g.fillRect(x,0,SIZE*.09,SIZE);}
-  g.restore();
-  // Carve tiny concave joins only where an exposed diagonal floor meets two walls.
-  g.globalCompositeOperation='destination-out';
-  for(const [i,a,b,x,y]of [[0,1,8,0,0],[1,1,2,SIZE,0],[2,4,2,SIZE,SIZE],[3,4,8,0,SIZE]]){
-   if((diagonals&(1<<i))&&!(edges&a)&&!(edges&b)){g.beginPath();g.arc(x,y,SIZE*.07,0,Math.PI*2);g.fill();}
-  }
-  g.globalCompositeOperation='source-over';
-  if(cache.size>220)cache.clear();cache.set(id,c);return c;
- }
- state.draw=function(g,key,px,py,size,options){
-  if(!state.ready)return false;
-  const {map,x,y,theme}=options;
-  if(key.startsWith('floor')){g.imageSmoothingEnabled=true;floor(g,px,py,size,theme,x,y);const variant=(+key.slice(5))%3;if(variant)g.drawImage(overlay('floor'+variant,theme),px,py,size,size);return true;}
-  if(key==='stairs'){g.imageSmoothingEnabled=true;floor(g,px,py,size,theme,x,y);g.drawImage(overlay('stairs',theme),px,py,size,size);return true;}
-  if(key!=='wallT'&&key!=='wallF')return false;
-  if(!Number.isInteger(x)||!Number.isInteger(y))return false;
-  const {edges,diagonals}=state.topology(map,x,y);
-  g.imageSmoothingEnabled=true;
-  floor(g,px,py,size,theme,x,y);
-  g.drawImage(wall(key,edges,diagonals,theme,x,y),px,py,size,size);
-  return true;
+ state.draw=function(g,key,px,py,size,{map,x=0,y=0,theme,seed=0}){if(!state.ready)return false;const id=ids.includes(theme?.id)?theme.id:'limestone',h=size*PITCH;g.imageSmoothingEnabled=true;
+  if(key.startsWith('floor')){const hash=(((x*73856093)^(y*19349663)^seed)>>>0),v=hash%31===0?3:hash%3;ground(g,px,py,size,h,id,x,y,v);return true;}
+  if(key==='stairs'){ground(g,px,py,size,h,id,x,y,1);g.drawImage(patch(id,'stairs'),px,py,size,h);return true;}
+  if(key!=='wallF'&&key!=='wallT')return false;const {edges,diagonals}=state.topology(map,x,y);ground(g,px,py,size,h,id,x,y,1);const v=(((x>>1)*37^(y>>1)*71^seed)>>>0)&1;g.drawImage(bank(id,edges,diagonals,v,x&1,y&1),px,py-size*46/128,size,size*160/128);return true;
  };
  root.CaveTerrain=state;
 })(typeof window==='undefined'?globalThis:window);
