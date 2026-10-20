@@ -1,0 +1,13 @@
+{
+  "walkRenders": 3840,
+  "useFrames": 144,
+  "idleEndpoints": 48,
+  "nwPreservation": 40,
+  "actualUseActions": {
+    "food": "consume",
+    "herb": "consume",
+    "scroll": "scroll",
+    "staff": "staff"
+  },
+  "browserErrors": []
+}

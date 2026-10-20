@@ -1,0 +1,5415 @@
+{
+  "version": 1,
+  "frameSize": 256,
+  "groundAnchor": [
+    128,
+    224
+  ],
+  "heightToGround": 192,
+  "directions": {
+    "S": {
+      "actions": {
+        "walk": {
+          "path": "assets/hero-actions-v1/S-walk.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  96,
+                  158
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  155,
+                  158
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  104,
+                  154
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  154,
+                  170
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  98,
+                  158
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  155,
+                  157
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  96,
+                  169
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  150,
+                  153
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            55,
+            55,
+            55,
+            55
+          ],
+          "durationMs": 220
+        },
+        "consume": {
+          "path": "assets/hero-actions-v1/S-consume.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  81,
+                  172
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  175,
+                  172
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  99,
+                  159
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  145,
+                  161
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  120,
+                  120
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  148,
+                  158
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  118,
+                  122
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  145,
+                  160
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  119,
+                  156
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  147,
+                  158
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  81,
+                  172
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  175,
+                  172
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            85,
+            100,
+            160,
+            85,
+            45
+          ],
+          "durationMs": 520
+        },
+        "scroll": {
+          "path": "assets/hero-actions-v1/S-scroll.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  81,
+                  172
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  175,
+                  172
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  100,
+                  159
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  151,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  104,
+                  143
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  155,
+                  142
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  96,
+                  146
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  152,
+                  145
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  100,
+                  160
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  151,
+                  161
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  81,
+                  172
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  175,
+                  172
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            95,
+            120,
+            160,
+            95,
+            45
+          ],
+          "durationMs": 560
+        },
+        "staff": {
+          "path": "assets/hero-actions-v1/S-staff.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  81,
+                  172
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  175,
+                  172
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  100,
+                  157
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  151,
+                  158
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  78,
+                  104
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  148,
+                  156
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  81,
+                  127
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  151,
+                  157
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  101,
+                  159
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  152,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  81,
+                  172
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.35
+              },
+              "left": {
+                "position": [
+                  175,
+                  172
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            35,
+            65,
+            75,
+            100,
+            70,
+            35
+          ],
+          "durationMs": 380
+        }
+      },
+      "commonScale": 0.6587837837837838,
+      "transforms": [
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            19,
+            29
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            24,
+            32
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            26,
+            29
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            45,
+            31
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            15,
+            31
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            20,
+            31
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            31,
+            32
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            40,
+            32
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            13,
+            31
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            20,
+            31
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            30,
+            31
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            40,
+            31
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            13,
+            33
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            19,
+            32
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            30,
+            31
+          ]
+        },
+        {
+          "scale": 0.6587837837837838,
+          "translate": [
+            40,
+            33
+          ]
+        }
+      ],
+      "baseSha256": "f91ec65097b59a4f7138303e162408e14cf4d0de88b3718d5c962f08e263a5d5",
+      "sourceSha256": "57729243bba4cc7f5e61bebac035eb13b377dd77ab3e5bc4ca93db28a0f5ab47"
+    },
+    "SW": {
+      "actions": {
+        "walk": {
+          "path": "assets/hero-actions-v1/SW-walk.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  81,
+                  161
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  169,
+                  161
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  82,
+                  160
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  163,
+                  167
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  85,
+                  160
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  168,
+                  169
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  82,
+                  163
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  164,
+                  169
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            55,
+            55,
+            55,
+            55
+          ],
+          "durationMs": 220
+        },
+        "consume": {
+          "path": "assets/hero-actions-v1/SW-consume.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  88,
+                  169
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  163,
+                  173
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  88,
+                  160
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  132,
+                  157
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  96,
+                  126
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  130,
+                  156
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  96,
+                  128
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  127,
+                  160
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  92,
+                  156
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  129,
+                  161
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  88,
+                  169
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  163,
+                  173
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            85,
+            100,
+            160,
+            85,
+            45
+          ],
+          "durationMs": 520
+        },
+        "scroll": {
+          "path": "assets/hero-actions-v1/SW-scroll.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  88,
+                  169
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  163,
+                  173
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  91,
+                  162
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  134,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  84,
+                  137
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  130,
+                  155
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  88,
+                  152
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  121,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  97,
+                  162
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  133,
+                  162
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  88,
+                  169
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  163,
+                  173
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            95,
+            120,
+            160,
+            95,
+            45
+          ],
+          "durationMs": 560
+        },
+        "staff": {
+          "path": "assets/hero-actions-v1/SW-staff.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  88,
+                  169
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  163,
+                  173
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  83,
+                  157
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  128,
+                  157
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  75,
+                  114
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  134,
+                  160
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  65,
+                  132
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  136,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  85,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  130,
+                  158
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  88,
+                  169
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  163,
+                  173
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            35,
+            65,
+            75,
+            100,
+            70,
+            35
+          ],
+          "durationMs": 380
+        }
+      },
+      "commonScale": 0.6768707482993197,
+      "transforms": [
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            15,
+            18
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            13,
+            18
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            26,
+            18
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            24,
+            18
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            14,
+            20
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            13,
+            20
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            23,
+            21
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            25,
+            20
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            14,
+            24
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            12,
+            23
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            24,
+            24
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            24,
+            23
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            12,
+            29
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            16,
+            30
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            23,
+            28
+          ]
+        },
+        {
+          "scale": 0.6768707482993197,
+          "translate": [
+            26,
+            29
+          ]
+        }
+      ],
+      "baseSha256": "2d2201931a30a26c9cca35aaa1100dadcb2d5c69169237fb66a225a011e15fc6",
+      "sourceSha256": "5303566032276e4ab153b316c3ced0f047d5c321e1ae1c9ef0c72c3688223795"
+    },
+    "W": {
+      "actions": {
+        "walk": {
+          "path": "assets/hero-actions-v1/W-walk.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  96,
+                  163
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  133,
+                  177
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  103,
+                  167
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  125,
+                  181
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  91,
+                  171
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  118,
+                  165
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  101,
+                  170
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  123,
+                  181
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            55,
+            55,
+            55,
+            55
+          ],
+          "durationMs": 220
+        },
+        "consume": {
+          "path": "assets/hero-actions-v1/W-consume.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  108,
+                  172
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  126,
+                  183
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  93,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  117,
+                  163
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  90,
+                  126
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  123,
+                  161
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  88,
+                  126
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  123,
+                  161
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  96,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  119,
+                  165
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  108,
+                  172
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  126,
+                  183
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            85,
+            100,
+            160,
+            85,
+            45
+          ],
+          "durationMs": 520
+        },
+        "scroll": {
+          "path": "assets/hero-actions-v1/W-scroll.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  108,
+                  172
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  126,
+                  183
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  94,
+                  163
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  113,
+                  172
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  86,
+                  137
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  107,
+                  152
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  85,
+                  139
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  107,
+                  156
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  96,
+                  161
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  117,
+                  172
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  108,
+                  172
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  126,
+                  183
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            95,
+            120,
+            160,
+            95,
+            45
+          ],
+          "durationMs": 560
+        },
+        "staff": {
+          "path": "assets/hero-actions-v1/W-staff.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  108,
+                  172
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  126,
+                  183
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  101,
+                  165
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  123,
+                  175
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  141,
+                  107
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  123,
+                  175
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  70,
+                  131
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  126,
+                  175
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  101,
+                  166
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  123,
+                  176
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  108,
+                  172
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.45
+              },
+              "left": {
+                "position": [
+                  126,
+                  183
+                ],
+                "layer": "front",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            35,
+            65,
+            75,
+            100,
+            70,
+            35
+          ],
+          "durationMs": 380
+        }
+      },
+      "commonScale": 0.7184115523465704,
+      "transforms": [
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            12,
+            16
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            -5,
+            15
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            18,
+            15
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            11,
+            15
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            6,
+            15
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            7,
+            15
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            12,
+            15
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            11,
+            15
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            7,
+            16
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            8,
+            17
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            12,
+            16
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            11,
+            16
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            6,
+            18
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            8,
+            19
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            12,
+            18
+          ]
+        },
+        {
+          "scale": 0.7184115523465704,
+          "translate": [
+            11,
+            18
+          ]
+        }
+      ],
+      "baseSha256": "fd50076b6f3f00a0339f0639aa006021bf6ca7d86a2975e55a2206bb13c289cf",
+      "sourceSha256": "cf97292417fa4536285bbebcd24894b0799dba53c71efca149c04c1901943722"
+    },
+    "NW": {
+      "actions": {
+        "walk": {
+          "path": "assets/hero-actions-v1/NW-walk.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  144,
+                  160
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  79,
+                  164
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  143,
+                  160
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  81,
+                  151
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  143,
+                  161
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  77,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  142,
+                  161
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  78,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            }
+          ],
+          "frameMs": [
+            55,
+            55,
+            55,
+            55
+          ],
+          "durationMs": 220
+        },
+        "consume": {
+          "path": "assets/hero-actions-v1/NW-consume.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  160,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  85,
+                  171
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  83,
+                  144
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  78,
+                  151
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  79,
+                  118
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  76,
+                  143
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  79,
+                  122
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  77,
+                  144
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  95,
+                  150
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  80,
+                  149
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  160,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  85,
+                  171
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            85,
+            100,
+            160,
+            85,
+            45
+          ],
+          "durationMs": 520
+        },
+        "scroll": {
+          "path": "assets/hero-actions-v1/NW-scroll.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  160,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  85,
+                  171
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  75,
+                  141
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  89,
+                  149
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  71,
+                  128
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  87,
+                  143
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  69,
+                  131
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  88,
+                  144
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  78,
+                  159
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  87,
+                  160
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  160,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  85,
+                  171
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            95,
+            120,
+            160,
+            95,
+            45
+          ],
+          "durationMs": 560
+        },
+        "staff": {
+          "path": "assets/hero-actions-v1/NW-staff.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  160,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  85,
+                  171
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  82,
+                  159
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  91,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  76,
+                  115
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  90,
+                  162
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  54,
+                  118
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  90,
+                  164
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  79,
+                  157
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  91,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  160,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  85,
+                  171
+                ],
+                "layer": "back",
+                "angle": 0,
+                "handOverShield": false,
+                "gripMask": {
+                  "rx": 9,
+                  "ry": 8
+                }
+              }
+            }
+          ],
+          "frameMs": [
+            35,
+            65,
+            75,
+            100,
+            70,
+            35
+          ],
+          "durationMs": 380
+        }
+      },
+      "commonScale": 0.6901408450704225,
+      "transforms": [
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            9,
+            15
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            6,
+            13
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            2,
+            14
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            3,
+            13
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            5,
+            14
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            9,
+            15
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            5,
+            14
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            5,
+            14
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            6,
+            15
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            7,
+            15
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            5,
+            15
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            6,
+            15
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            7,
+            17
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            9,
+            16
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            6,
+            17
+          ]
+        },
+        {
+          "scale": 0.6901408450704225,
+          "translate": [
+            6,
+            17
+          ]
+        }
+      ],
+      "baseSha256": "85ff6e579ad94077bd5a65ca9ff442fd5c40f451dc27891fc83101018ec76a73",
+      "sourceSha256": "fa5ddadc9c81d65b9b05cd89715459ab2dffe6837d532530dd41dd8211208cee"
+    },
+    "N": {
+      "actions": {
+        "walk": {
+          "path": "assets/hero-actions-v1/N-walk.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  159,
+                  151
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  76,
+                  161
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  159,
+                  154
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  78,
+                  160
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  160,
+                  154
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  78,
+                  155
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  157,
+                  158
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  81,
+                  164
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            55,
+            55,
+            55,
+            55
+          ],
+          "durationMs": 220
+        },
+        "consume": {
+          "path": "assets/hero-actions-v1/N-consume.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  175,
+                  168
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  81,
+                  168
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  157,
+                  149
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  79,
+                  161
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  158,
+                  136
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  91,
+                  150
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  157,
+                  135
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  92,
+                  150
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  158,
+                  145
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  86,
+                  154
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  175,
+                  168
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  81,
+                  168
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            85,
+            100,
+            160,
+            85,
+            45
+          ],
+          "durationMs": 520
+        },
+        "scroll": {
+          "path": "assets/hero-actions-v1/N-scroll.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  175,
+                  168
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  81,
+                  168
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  160,
+                  145
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  87,
+                  154
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  163,
+                  140
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  89,
+                  145
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  163,
+                  140
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  90,
+                  145
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  160,
+                  145
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  86,
+                  153
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  175,
+                  168
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  81,
+                  168
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            95,
+            120,
+            160,
+            95,
+            45
+          ],
+          "durationMs": 560
+        },
+        "staff": {
+          "path": "assets/hero-actions-v1/N-staff.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  175,
+                  168
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  81,
+                  168
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  157,
+                  155
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  78,
+                  164
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  194,
+                  96
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  79,
+                  164
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  195,
+                  118
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  80,
+                  165
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  158,
+                  155
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  80,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  175,
+                  168
+                ],
+                "layer": "back",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.45
+              },
+              "left": {
+                "position": [
+                  81,
+                  168
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            35,
+            65,
+            75,
+            100,
+            70,
+            35
+          ],
+          "durationMs": 380
+        }
+      },
+      "commonScale": 0.7470817120622568,
+      "transforms": [
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            4,
+            3
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            0,
+            3
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            5,
+            3
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            0,
+            3
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            7,
+            3
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            7,
+            3
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            6,
+            3
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            6,
+            3
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            11,
+            11
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            11,
+            11
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            11,
+            11
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            10,
+            11
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            11,
+            10
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            12,
+            9
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            11,
+            9
+          ]
+        },
+        {
+          "scale": 0.7470817120622568,
+          "translate": [
+            10,
+            9
+          ]
+        }
+      ],
+      "baseSha256": "4f4e9c5a31ef6ff3bac3efd3094c85298139043fb033f169747b98d624e7806c",
+      "sourceSha256": "ab08839b5456484b04d059699f9fcaf7694dc6667684ea6cd16ec1fcfbbcfe15"
+    },
+    "NE": {
+      "actions": {
+        "walk": {
+          "path": "assets/hero-actions-v1/NE-walk.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  173,
+                  153
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  99,
+                  153
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  169,
+                  147
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  95,
+                  149
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  175,
+                  152
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  102,
+                  151
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  173,
+                  154
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  101,
+                  149
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            55,
+            55,
+            55,
+            55
+          ],
+          "durationMs": 220
+        },
+        "consume": {
+          "path": "assets/hero-actions-v1/NE-consume.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  174,
+                  171
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  88,
+                  160
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  171,
+                  158
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  103,
+                  151
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  169,
+                  122
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  105,
+                  151
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  168,
+                  126
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  104,
+                  154
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  168,
+                  149
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  103,
+                  153
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  174,
+                  171
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  88,
+                  160
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            85,
+            100,
+            160,
+            85,
+            45
+          ],
+          "durationMs": 520
+        },
+        "scroll": {
+          "path": "assets/hero-actions-v1/NE-scroll.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  174,
+                  171
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  88,
+                  160
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  170,
+                  140
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  101,
+                  156
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  170,
+                  130
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  107,
+                  151
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  172,
+                  132
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  106,
+                  152
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  172,
+                  144
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  107,
+                  154
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  174,
+                  171
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  88,
+                  160
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            95,
+            120,
+            160,
+            95,
+            45
+          ],
+          "durationMs": 560
+        },
+        "staff": {
+          "path": "assets/hero-actions-v1/NE-staff.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  174,
+                  171
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  88,
+                  160
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  172,
+                  155
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  103,
+                  154
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  182,
+                  105
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  104,
+                  154
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  191,
+                  115
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  105,
+                  155
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  176,
+                  151
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  104,
+                  154
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  174,
+                  171
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.55
+              },
+              "left": {
+                "position": [
+                  88,
+                  160
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            35,
+            65,
+            75,
+            100,
+            70,
+            35
+          ],
+          "durationMs": 380
+        }
+      },
+      "commonScale": 0.7309833024118738,
+      "transforms": [
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            11,
+            5
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            18,
+            5
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            14,
+            5
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            12,
+            7
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            8
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            8
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            8
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            8,
+            8
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            8
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            8
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            8
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            8
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            7
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            7
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            9,
+            7
+          ]
+        },
+        {
+          "scale": 0.7309833024118738,
+          "translate": [
+            8,
+            7
+          ]
+        }
+      ],
+      "baseSha256": "93265fc4bcc9405b8dee370d89e28a4f1101579d083b685b6bc76be2169b2045",
+      "sourceSha256": "cdc2fc3a3061de7d89318fbe672b4d3e985b377fde5de42f0d2fae785450ebe8"
+    },
+    "E": {
+      "actions": {
+        "walk": {
+          "path": "assets/hero-actions-v1/E-walk.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  108,
+                  180
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  159,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  145,
+                  168
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  151,
+                  164
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  112,
+                  179
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  161,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  141,
+                  169
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  153,
+                  162
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            55,
+            55,
+            55,
+            55
+          ],
+          "durationMs": 220
+        },
+        "consume": {
+          "path": "assets/hero-actions-v1/E-consume.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  132,
+                  183
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  150,
+                  169
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  140,
+                  167
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  155,
+                  168
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  170,
+                  121
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  150,
+                  163
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  169,
+                  125
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  149,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  147,
+                  153
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  155,
+                  165
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  132,
+                  183
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  150,
+                  169
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            85,
+            100,
+            160,
+            85,
+            45
+          ],
+          "durationMs": 520
+        },
+        "scroll": {
+          "path": "assets/hero-actions-v1/E-scroll.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  132,
+                  183
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  150,
+                  169
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  147,
+                  160
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  156,
+                  150
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  170,
+                  138
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  155,
+                  146
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  169,
+                  142
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  159,
+                  149
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  154,
+                  156
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  160,
+                  153
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  132,
+                  183
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  150,
+                  169
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            95,
+            120,
+            160,
+            95,
+            45
+          ],
+          "durationMs": 560
+        },
+        "staff": {
+          "path": "assets/hero-actions-v1/E-staff.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  132,
+                  183
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  150,
+                  169
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  142,
+                  172
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  154,
+                  163
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  104,
+                  104
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  154,
+                  164
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  189,
+                  123
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  151,
+                  166
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  145,
+                  171
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  154,
+                  165
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  132,
+                  183
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": 0.65
+              },
+              "left": {
+                "position": [
+                  150,
+                  169
+                ],
+                "layer": "back",
+                "angle": 0
+              }
+            }
+          ],
+          "frameMs": [
+            35,
+            65,
+            75,
+            100,
+            70,
+            35
+          ],
+          "durationMs": 380
+        }
+      },
+      "commonScale": 0.6970227670753065,
+      "transforms": [
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            -7,
+            21
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            13,
+            23
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            15,
+            20
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            22,
+            21
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            -5,
+            21
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            9,
+            22
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            15,
+            21
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            23,
+            21
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            -3,
+            22
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            7,
+            22
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            18,
+            22
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            19,
+            22
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            -4,
+            25
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            10,
+            25
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            16,
+            25
+          ]
+        },
+        {
+          "scale": 0.6970227670753065,
+          "translate": [
+            22,
+            25
+          ]
+        }
+      ],
+      "baseSha256": "2b2ad0ddb24d8e0bdec25174444c5a32e58dab96293384300608d2afe96b1e45",
+      "sourceSha256": "9bffa225444bd8cf444e22b4d608769091ac5a843c72b96316b6d45e59f30b58"
+    },
+    "SE": {
+      "actions": {
+        "walk": {
+          "path": "assets/hero-actions-v1/SE-walk.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  122,
+                  173
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  163,
+                  161
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  125,
+                  168
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  164,
+                  165
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  125,
+                  172
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  167,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  96,
+                  174
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  157,
+                  164
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            }
+          ],
+          "frameMs": [
+            55,
+            55,
+            55,
+            55
+          ],
+          "durationMs": 220
+        },
+        "consume": {
+          "path": "assets/hero-actions-v1/SE-consume.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  85,
+                  177
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  173,
+                  167
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  117,
+                  166
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  166,
+                  151
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  144,
+                  123
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  165,
+                  152
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  142,
+                  130
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  167,
+                  155
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  121,
+                  162
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  165,
+                  154
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  85,
+                  177
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  173,
+                  167
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            85,
+            100,
+            160,
+            85,
+            45
+          ],
+          "durationMs": 520
+        },
+        "scroll": {
+          "path": "assets/hero-actions-v1/SE-scroll.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  85,
+                  177
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  173,
+                  167
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  124,
+                  160
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  165,
+                  156
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  141,
+                  139
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  174,
+                  136
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  142,
+                  156
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  173,
+                  153
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  118,
+                  168
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  167,
+                  164
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  85,
+                  177
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  173,
+                  167
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            }
+          ],
+          "frameMs": [
+            45,
+            95,
+            120,
+            160,
+            95,
+            45
+          ],
+          "durationMs": 560
+        },
+        "staff": {
+          "path": "assets/hero-actions-v1/SE-staff.webp",
+          "frames": [
+            {
+              "right": {
+                "position": [
+                  85,
+                  177
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  173,
+                  167
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  104,
+                  165
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  165,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  89,
+                  105
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  165,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  183,
+                  123
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  163,
+                  158
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  97,
+                  176
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  164,
+                  159
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            },
+            {
+              "right": {
+                "position": [
+                  85,
+                  177
+                ],
+                "layer": "front",
+                "gripMask": {
+                  "rx": 7,
+                  "ry": 6
+                },
+                "angle": -0.55
+              },
+              "left": {
+                "position": [
+                  173,
+                  167
+                ],
+                "layer": "front",
+                "angle": 0,
+                "handOverShield": false
+              }
+            }
+          ],
+          "frameMs": [
+            35,
+            65,
+            75,
+            100,
+            70,
+            35
+          ],
+          "durationMs": 380
+        }
+      },
+      "commonScale": 0.6600660066006601,
+      "transforms": [
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            8,
+            29
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            15,
+            32
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            18,
+            29
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            16,
+            30
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            16,
+            25
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            18,
+            25
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            20,
+            25
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            20,
+            25
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            16,
+            27
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            17,
+            27
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            21,
+            27
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            21,
+            27
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            13,
+            32
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            22,
+            29
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            20,
+            29
+          ]
+        },
+        {
+          "scale": 0.6600660066006601,
+          "translate": [
+            17,
+            30
+          ]
+        }
+      ],
+      "baseSha256": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d",
+      "sourceSha256": "e6e9e30946d4872780204e59e5df65b92111cfc83621d1616c35de38aa2286b5"
+    }
+  }
+}

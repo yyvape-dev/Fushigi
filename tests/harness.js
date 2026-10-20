@@ -4,7 +4,7 @@ const { createCanvas } = require('@napi-rs/canvas');
 
 const html = fs.readFileSync(process.argv[2], 'utf8');
 const path = require('path');
-const js = [...html.matchAll(/<script(?: src="([^"]+)")?>([\s\S]*?)<\/script>/g)].map(m => m[1] ? fs.readFileSync(path.resolve(path.dirname(process.argv[2]), m[1]), 'utf8') : m[2]).join('\n');
+const js = [...html.matchAll(/<script(?: src="([^"]+)")?>([\s\S]*?)<\/script>/g)].map(m => m[1] ? fs.readFileSync(path.resolve(path.dirname(process.argv[2]), m[1].split('?')[0]), 'utf8') : m[2]).join('\n');
 const W_ = +process.env.VW || 390, H_ = +process.env.VH || 800;
 
 const real = createCanvas(W_, H_);
