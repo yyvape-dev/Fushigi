@@ -21,7 +21,7 @@ g.document = { getElementById: mkEl, querySelectorAll: () => [], addEventListene
 g.addEventListener = () => {};
 g.localStorage = { getItem: k => (k in store ? store[k] : null), setItem: (k, v) => { store[k] = String(v); }, removeItem: k => { delete store[k]; } };
 g.__savePng = (name) => fs.writeFileSync(name, real.toBuffer('image/png'));
-g.__store = store; g.__loadImage = require('@napi-rs/canvas').loadImage; g.__fs = fs;
+g.__require = require; g.__store = store; g.__loadImage = require('@napi-rs/canvas').loadImage; g.__fs = fs;
 
 const test = process.argv[3] ? fs.readFileSync(process.argv[3], 'utf8') : '';
 vm.runInThisContext(js + '\n' + test, { filename: 'game.js' });

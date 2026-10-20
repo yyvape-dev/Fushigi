@@ -292,7 +292,7 @@
     const d = ctx.getImageData(Math.round(camX + 9.5 * TS), Math.round(camY + 5.5 * TS), 1, 1).data;
     ok('grid marks solid tiles red', d[0] > d[2] && d[0] > 200); }
   showGrid = false; delete SPRITES.town; zoomPref = 0; resize(); draw();
-  openCfg(); ok('cfg has grid row', cfgListEl.innerHTML.includes('町の判定を表示') && cfgListEl.innerHTML.includes('町（一枚絵）')); closeCfg();
+  openCfg(); ok('cfg has grid row', cfgListEl.innerHTML.includes('町の判定を表示')); ok('cfg: no in-game image import UI (art comes only from assets/)', !/シート取り込み|画像を選ぶ|素材|data-cfg="(pick|reset|sheet)/.test(cfgListEl.innerHTML) && typeof setArtFromBlob === 'undefined' && typeof importSheet === 'undefined' && typeof idbPut === 'undefined'); closeCfg();
   // ===== 追加：メッセージ窓 =====
   scene = 'town'; dead = false; enterDungeon(); enemies = []; floorItems = [];
   turn = 5; logTurn = -1; logs = []; say('A'); say('B');
@@ -547,8 +547,9 @@
     wh = []; inv = [mkItem('potion')]; const g1 = giftAll(); ok('giftall: fills the warehouse up to its cap, skipping what the bag has', g1 === MAXWH && wh.length === MAXWH && !wh.some(i => i.type === 'potion') && wh.filter(i => i.plus !== undefined && ITEMS[i.type].equip).every(i => i.plus === 0));
     wh = wh.slice(0, MAXWH - 3); ok('giftall: refills what was removed', giftAll() >= 3 && wh.length <= MAXWH);
     enemyTurn = etSave; eqRings = [null, null]; inv = []; wh = []; }
-  // ===== 追加：シート取り込み（切り分け・プロンプト）=====
-  { const allKeys = SHEETS.flatMap(sh => sh.keys), item = Object.keys(ITEMS);
+  // ===== 追加：シート取り込み（開発ツール tests/tools/sheets.js：切り分け・プロンプト）=====
+  { const T = __require(process.cwd() + '/tests/tools/sheets.js'), SHEETS = T.SHEETS, HINT = T.HINT, sheetPrompt = T.sheetPrompt, sliceSheet = T.sliceSheet;
+    const allKeys = SHEETS.flatMap(sh => sh.keys), item = Object.keys(ITEMS);
     ok('sheets: every key exists in ITEMS and appears once', allKeys.every(k => ITEMS[k]) && new Set(allKeys).size === allKeys.length);
     ok('sheets: every new item (herb/scroll/ring/weapon/shield) is on a sheet', item.filter(k => ['草', '巻物', '腕輪', '武器', '盾'].includes(ITEMS[k].cat)).every(k => allKeys.includes(k)));
     ok('sheets: every key has a visual hint', allKeys.every(k => typeof HINT[k] === 'string' && HINT[k].length >= 3));
@@ -565,23 +566,19 @@
       const w = 60 + (i % 3) * 30, h = 90 + (i % 4) * 10, ox = ((i * 37) % 31) - 15, oy = ((i * 53) % 29) - 14;
       g.fillRect(Math.round((i % cols) * cw + (cw - w) / 2 + ox), Math.round(Math.floor(i / cols) * ch + (ch - h) / 2 + oy), w, h);
     }
-    const cells = sliceSheet(cv, cols, rows, 16);
+    const cells = sliceSheet(cv, cols, rows, 16, 128);
     ok('slice: 16 cells, the two blank ones are null', cells.length === 16 && cells[5] === null && cells[10] === null && cells.filter(Boolean).length === 14);
     ok('slice: each piece is square and filled mostly by its colour, with transparent margin', cells.every((c, i) => {
-      if (!c) return true; if (c.width !== c.height) return false;
+      if (!c) return true; if (c.width !== 128 || c.height !== 128) return false;
       const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data; let on = 0, off = 0, hit = 0;
       const want = colors[i].match(/\d+/g).map(Number);
       for (let p = 0; p < d.length; p += 4) { if (d[p + 3] > 200) { on++; if (Math.abs(d[p] - want[0]) < 6 && Math.abs(d[p + 1] - want[1]) < 6 && Math.abs(d[p + 2] - want[2]) < 6) hit++; } else off++; }
-      return on > 0 && off > 0 && hit / on > 0.99;
+      return on > 0 && off > 0 && hit / on > 0.9;
     }));
     ok('slice: the piece is centred (margin on all four sides)', cells.every(c => { if (!c) return true; const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data, S = c.width; const a = (x, y) => d[(y * S + x) * 4 + 3];
       return a(0, 0) === 0 && a(S - 1, S - 1) === 0 && a(S >> 1, 0) === 0 && a(S >> 1, S - 1) === 0 && a(0, S >> 1) === 0 && a(S - 1, S >> 1) === 0; }));
-    // 取り込み：FileReader/Imageが無い環境でもロジックを通すため、sliceSheetの結果をそのまま使う経路を検証
-    const sh = { id: 't', name: 'テスト', keys: ['herb', 'weed', 'scroll', 'ring_regen', 'katana', 'ironshield2', 'mikiri', 'konjo', 'zekkocho', 'haramochi', 'steakplate', 'minoshield', 'potion', 'onigiri', 'stick', 'axe'] };
     const small = mkCanvas(200, 200), sg = small.getContext('2d'); sg.fillStyle = '#FF00FF'; sg.fillRect(0, 0, 200, 200); sg.fillStyle = '#00aa00'; sg.fillRect(60, 60, 30, 30);
     const one = sliceSheet(small, 4, 4, 16); ok('slice: a mostly-empty sheet yields one piece', one.filter(Boolean).length === 1 && one[0] === null);
-    ok('slice: pieces from a sheet survive blit() as item art', (() => { SPRITES.herb = cells[0]; let t = null; try { blit('herb', 10, 10); } catch (e) { t = e; } delete SPRITES.herb; return !t; })());
-    ok('copyText: exists', typeof copyText === 'function' && typeof importSheet === 'function');
   }
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
