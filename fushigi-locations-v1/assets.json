@@ -1,0 +1,541 @@
+{
+  "version": 2,
+  "pitchY": 0.82,
+  "locations": [
+    {
+      "id": "forest",
+      "name": "苔むす樹林",
+      "filter": "none",
+      "sourceSha256": "fd2fcfa01b66ffee702d5fac721aa6ea79ddc20a4313d746d8d7d904bf4254c3",
+      "assets": {
+        "floor0": {
+          "path": "assets/dungeon/locations-v1/forest/floor0.webp",
+          "sourceBox": [
+            4,
+            4,
+            414,
+            414
+          ],
+          "bytes": 26184,
+          "sha256": "f4510b09ffc7d324a69414e98d980faa9762700adaeb443491a97d262d9317af"
+        },
+        "floor1": {
+          "path": "assets/dungeon/locations-v1/forest/floor1.webp",
+          "sourceBox": [
+            422,
+            4,
+            832,
+            414
+          ],
+          "bytes": 25402,
+          "sha256": "1b6ed41f6c13f8a40076454c9c0d53296c8a35034d055efd52f86fedd1fee496"
+        },
+        "floor2": {
+          "path": "assets/dungeon/locations-v1/forest/floor2.webp",
+          "sourceBox": [
+            840,
+            4,
+            1250,
+            414
+          ],
+          "bytes": 28752,
+          "sha256": "7699486d31bcc50063dce83dfb09263d7567524356cfec523b5fdc82e2634a72"
+        },
+        "floor3": {
+          "path": "assets/dungeon/locations-v1/forest/floor3.webp",
+          "sourceBox": [
+            4,
+            422,
+            414,
+            832
+          ],
+          "bytes": 28608,
+          "sha256": "e7b5420603e2480866b42196d2cf3c60df4ebca43be0b29921e40419268e9232"
+        },
+        "wallT0": {
+          "path": "assets/dungeon/locations-v1/forest/wallT0.webp",
+          "sourceBox": [
+            422,
+            422,
+            832,
+            832
+          ],
+          "bytes": 25542,
+          "sha256": "5a7947d5c41c5c965988ef8a2ad2892172ae5e2c0c402d81920baa7871f5462e"
+        },
+        "wallT1": {
+          "path": "assets/dungeon/locations-v1/forest/wallT1.webp",
+          "sourceBox": [
+            840,
+            422,
+            1250,
+            832
+          ],
+          "bytes": 27390,
+          "sha256": "515fbb6780b2413eb290ea15578185df471f3d24f2346a7bd1385511cd785bb0"
+        },
+        "wallF0": {
+          "path": "assets/dungeon/locations-v1/forest/wallF0.webp",
+          "sourceBox": [
+            4,
+            840,
+            414,
+            1250
+          ],
+          "bytes": 22940,
+          "sha256": "04d61ab71e2f80989b94f78770017cc6fe36b35f38a547b3a0ff266233d56251"
+        },
+        "wallF1": {
+          "path": "assets/dungeon/locations-v1/forest/wallF1.webp",
+          "sourceBox": [
+            422,
+            840,
+            832,
+            1250
+          ],
+          "bytes": 21576,
+          "sha256": "497dabad5d55e07346826c7f4eb667c33bb8718bae858f0d065664d4972d3623"
+        },
+        "stairs": {
+          "path": "assets/dungeon/locations-v1/forest/stairs.webp",
+          "sourceBox": [
+            840,
+            840,
+            1250,
+            1250
+          ],
+          "bytes": 23668,
+          "sha256": "34bb4c1ea1fae89e0caaf297675d97f86b59c918d98dfab75b195d933144413f"
+        }
+      }
+    },
+    {
+      "id": "limestone",
+      "name": "鍾乳洞",
+      "filter": "none",
+      "sourceSha256": "bc93dbbdffe242e52c1aa28693c706208692cb20bf2a2ff8f0775bdd8fa88ccd",
+      "assets": {
+        "floor0": {
+          "path": "assets/dungeon/locations-v1/limestone/floor0.webp",
+          "sourceBox": [
+            4,
+            4,
+            414,
+            414
+          ],
+          "bytes": 16902,
+          "sha256": "b8bf099fbbfe1877ca3f463b5770bbeef6541a1488d1c4073ae38de7369b0ffe"
+        },
+        "floor1": {
+          "path": "assets/dungeon/locations-v1/limestone/floor1.webp",
+          "sourceBox": [
+            422,
+            4,
+            832,
+            414
+          ],
+          "bytes": 18138,
+          "sha256": "07d0d184f66dceaef1d34584fcb00b0471967a1996c28617861bb8787cabac7d"
+        },
+        "floor2": {
+          "path": "assets/dungeon/locations-v1/limestone/floor2.webp",
+          "sourceBox": [
+            840,
+            4,
+            1250,
+            414
+          ],
+          "bytes": 19724,
+          "sha256": "6c76f8c20b429ec0e232a3b151af68d5e8336bf4df2b9670f418bfb5d78a6160"
+        },
+        "floor3": {
+          "path": "assets/dungeon/locations-v1/limestone/floor3.webp",
+          "sourceBox": [
+            4,
+            422,
+            414,
+            832
+          ],
+          "bytes": 18724,
+          "sha256": "a884eb8b023a0fb6c51f47c41d39452f4507f30e866f81140574a61a3adf1a85"
+        },
+        "wallT0": {
+          "path": "assets/dungeon/locations-v1/limestone/wallT0.webp",
+          "sourceBox": [
+            422,
+            422,
+            832,
+            832
+          ],
+          "bytes": 19084,
+          "sha256": "51330ea6588c77cfe7208272fae981a671342dd3a77bc595a7033912b912ab35"
+        },
+        "wallT1": {
+          "path": "assets/dungeon/locations-v1/limestone/wallT1.webp",
+          "sourceBox": [
+            840,
+            422,
+            1250,
+            832
+          ],
+          "bytes": 20196,
+          "sha256": "d51dbb1d64acec875d534ccfe0653410c9097239ebc77366836fa77c3b8a0cc6"
+        },
+        "wallF0": {
+          "path": "assets/dungeon/locations-v1/limestone/wallF0.webp",
+          "sourceBox": [
+            4,
+            840,
+            414,
+            1250
+          ],
+          "bytes": 18698,
+          "sha256": "abbda9f975db228be1b1dd61ae4eb7af48abc966294cbfdc42ff07253a1ce93d"
+        },
+        "wallF1": {
+          "path": "assets/dungeon/locations-v1/limestone/wallF1.webp",
+          "sourceBox": [
+            422,
+            840,
+            832,
+            1250
+          ],
+          "bytes": 18410,
+          "sha256": "ddd50a50d5000cfb1b54b03a1c4591a076f8c4a0ffb39c35cf2b3345562864ef"
+        },
+        "stairs": {
+          "path": "assets/dungeon/locations-v1/limestone/stairs.webp",
+          "sourceBox": [
+            840,
+            840,
+            1250,
+            1250
+          ],
+          "bytes": 19116,
+          "sha256": "38612c14ba6284b2afcc3a0a3fb5a720ae322128db7ca9400ea9ec731bf2fc80"
+        }
+      }
+    },
+    {
+      "id": "ruins",
+      "name": "風化遺跡",
+      "filter": "none",
+      "sourceSha256": "d9e4aca39ffe7a4869de95cc9135db7a68f0c330aafca3d7fa94fc3a7e0adf73",
+      "assets": {
+        "floor0": {
+          "path": "assets/dungeon/locations-v1/ruins/floor0.webp",
+          "sourceBox": [
+            4,
+            4,
+            414,
+            414
+          ],
+          "bytes": 20102,
+          "sha256": "5e856f34b0ed229d6acf2fb9501ff61c05a09eb4f3ae126245ea3bf20092b2c6"
+        },
+        "floor1": {
+          "path": "assets/dungeon/locations-v1/ruins/floor1.webp",
+          "sourceBox": [
+            422,
+            4,
+            832,
+            414
+          ],
+          "bytes": 20792,
+          "sha256": "450766559c9e3d3884d39851486b0576f0efb1a7cc16dd880e89821b689c35d7"
+        },
+        "floor2": {
+          "path": "assets/dungeon/locations-v1/ruins/floor2.webp",
+          "sourceBox": [
+            840,
+            4,
+            1250,
+            414
+          ],
+          "bytes": 18958,
+          "sha256": "e6fda8c56c06dce8af269de506c4e903da21e0bd80a57213af8a17082913244c"
+        },
+        "floor3": {
+          "path": "assets/dungeon/locations-v1/ruins/floor3.webp",
+          "sourceBox": [
+            4,
+            422,
+            414,
+            832
+          ],
+          "bytes": 21630,
+          "sha256": "9add2bef4dec4cab434022fa95e64440a8e456fef52940a707fa3c2a4994b30b"
+        },
+        "wallT0": {
+          "path": "assets/dungeon/locations-v1/ruins/wallT0.webp",
+          "sourceBox": [
+            422,
+            422,
+            832,
+            832
+          ],
+          "bytes": 20308,
+          "sha256": "d1fff1fdebd5bfe8a787705fcf4ba958eaa595ac191d088f19eac642cf15e2f0"
+        },
+        "wallT1": {
+          "path": "assets/dungeon/locations-v1/ruins/wallT1.webp",
+          "sourceBox": [
+            840,
+            422,
+            1250,
+            832
+          ],
+          "bytes": 19544,
+          "sha256": "bebda7c241bea8021aabe6246d960f658fd6d87c5148a4379c506d5ff204eba4"
+        },
+        "wallF0": {
+          "path": "assets/dungeon/locations-v1/ruins/wallF0.webp",
+          "sourceBox": [
+            4,
+            840,
+            414,
+            1250
+          ],
+          "bytes": 15300,
+          "sha256": "4f2ed36ab98cf482213cb60f92f10b94fbfdcd24d1440ea2b03f3104759f943a"
+        },
+        "wallF1": {
+          "path": "assets/dungeon/locations-v1/ruins/wallF1.webp",
+          "sourceBox": [
+            422,
+            840,
+            832,
+            1250
+          ],
+          "bytes": 15376,
+          "sha256": "d29503325f5c8d981cc685a31d90b562248b948b2d7981615bd640f4546209a1"
+        },
+        "stairs": {
+          "path": "assets/dungeon/locations-v1/ruins/stairs.webp",
+          "sourceBox": [
+            840,
+            840,
+            1250,
+            1250
+          ],
+          "bytes": 19382,
+          "sha256": "9f718dc38044799e2771885ccad5888688595eb581df1846a7bdb29f65e93856"
+        }
+      }
+    },
+    {
+      "id": "ice",
+      "name": "氷晶洞",
+      "filter": "none",
+      "sourceSha256": "b0a1bc9b5d55da4ccbc8161c3546af29ac1e7736da37bf9471dbb30a82848c50",
+      "assets": {
+        "floor0": {
+          "path": "assets/dungeon/locations-v1/ice/floor0.webp",
+          "sourceBox": [
+            4,
+            4,
+            414,
+            414
+          ],
+          "bytes": 21172,
+          "sha256": "ab748ca53f958ddb829fc83758cf58545a804d0ae88a56f727afd7c5a9b60262"
+        },
+        "floor1": {
+          "path": "assets/dungeon/locations-v1/ice/floor1.webp",
+          "sourceBox": [
+            422,
+            4,
+            832,
+            414
+          ],
+          "bytes": 22332,
+          "sha256": "43b22d4391c72bfcf0ef8660a47164850fd45c57ea87759ef44c175325d69fb6"
+        },
+        "floor2": {
+          "path": "assets/dungeon/locations-v1/ice/floor2.webp",
+          "sourceBox": [
+            840,
+            4,
+            1250,
+            414
+          ],
+          "bytes": 18552,
+          "sha256": "1c2eef1c443721f6a24a658ee2135ad68aa0f34d755a02a3580c0ef88626fabe"
+        },
+        "floor3": {
+          "path": "assets/dungeon/locations-v1/ice/floor3.webp",
+          "sourceBox": [
+            4,
+            422,
+            414,
+            832
+          ],
+          "bytes": 22460,
+          "sha256": "a721d285cbc7887b66c3b712e8aa7bcb32b36cc709de9da3d3d20e78ba9c2e34"
+        },
+        "wallT0": {
+          "path": "assets/dungeon/locations-v1/ice/wallT0.webp",
+          "sourceBox": [
+            422,
+            422,
+            832,
+            832
+          ],
+          "bytes": 19126,
+          "sha256": "b1fc45f9640d8e25bdc3a5627fe75cc376bfeeb04d29b25567cc482cfa3f5cd2"
+        },
+        "wallT1": {
+          "path": "assets/dungeon/locations-v1/ice/wallT1.webp",
+          "sourceBox": [
+            840,
+            422,
+            1250,
+            832
+          ],
+          "bytes": 19154,
+          "sha256": "cfb612e83335f15140e6b54f5e266a997645fd687adf4d063cf5f32b5c33b434"
+        },
+        "wallF0": {
+          "path": "assets/dungeon/locations-v1/ice/wallF0.webp",
+          "sourceBox": [
+            4,
+            840,
+            414,
+            1250
+          ],
+          "bytes": 18020,
+          "sha256": "9cc229810cda84966721098a6d819ccb64ff9991e222e9af5e7940c83b403779"
+        },
+        "wallF1": {
+          "path": "assets/dungeon/locations-v1/ice/wallF1.webp",
+          "sourceBox": [
+            422,
+            840,
+            832,
+            1250
+          ],
+          "bytes": 18954,
+          "sha256": "78e51217ee688fe66b216a8cc870fcd22d629967e9044c6d900c1f912a5b097f"
+        },
+        "stairs": {
+          "path": "assets/dungeon/locations-v1/ice/stairs.webp",
+          "sourceBox": [
+            840,
+            840,
+            1250,
+            1250
+          ],
+          "bytes": 22564,
+          "sha256": "e19844ab92dccd936d6ce04831b9fc4e7c08e607eae98dce373f6dafc77ae1cb"
+        }
+      }
+    },
+    {
+      "id": "volcano",
+      "name": "火山洞",
+      "filter": "none",
+      "sourceSha256": "7feef9a1cf15e522664a8593f9cb2f8026840b7ca6d380e7c391514ee1de2c0c",
+      "assets": {
+        "floor0": {
+          "path": "assets/dungeon/locations-v1/volcano/floor0.webp",
+          "sourceBox": [
+            4,
+            4,
+            414,
+            414
+          ],
+          "bytes": 22280,
+          "sha256": "f008e7b1ced2235df6d41d1e35d866afd344a27018cbbc447a9a48384840c5b9"
+        },
+        "floor1": {
+          "path": "assets/dungeon/locations-v1/volcano/floor1.webp",
+          "sourceBox": [
+            422,
+            4,
+            832,
+            414
+          ],
+          "bytes": 21606,
+          "sha256": "1e3f408a98bbdd2cf987f832aa025ca9ddfcacbfdb440d5c06fdb49f564b06d7"
+        },
+        "floor2": {
+          "path": "assets/dungeon/locations-v1/volcano/floor2.webp",
+          "sourceBox": [
+            840,
+            4,
+            1250,
+            414
+          ],
+          "bytes": 23504,
+          "sha256": "d184c79a78eb2b8a0bd0529ff99d87924d5fbcf4e14327935cf85a697f31996f"
+        },
+        "floor3": {
+          "path": "assets/dungeon/locations-v1/volcano/floor3.webp",
+          "sourceBox": [
+            4,
+            422,
+            414,
+            832
+          ],
+          "bytes": 24610,
+          "sha256": "38891132a8b2ccb1756dfc0f789168d690632b4bee03ce55dc10c49d7b91b8bc"
+        },
+        "wallT0": {
+          "path": "assets/dungeon/locations-v1/volcano/wallT0.webp",
+          "sourceBox": [
+            422,
+            422,
+            832,
+            832
+          ],
+          "bytes": 17866,
+          "sha256": "7da0e993469a0bef35f1316da863440042f7e864907ab44577358cfeb2e9f77a"
+        },
+        "wallT1": {
+          "path": "assets/dungeon/locations-v1/volcano/wallT1.webp",
+          "sourceBox": [
+            840,
+            422,
+            1250,
+            832
+          ],
+          "bytes": 19980,
+          "sha256": "a97e5e6f98191e21a042cbea1e5bdc50cf1b1fa9c9999d1630b2d5d5c0a9ca9a"
+        },
+        "wallF0": {
+          "path": "assets/dungeon/locations-v1/volcano/wallF0.webp",
+          "sourceBox": [
+            4,
+            840,
+            414,
+            1250
+          ],
+          "bytes": 14810,
+          "sha256": "8c0ef71954731faee4cf420dd52faaffecc0c63ca4e9ce693a85fae38662888a"
+        },
+        "wallF1": {
+          "path": "assets/dungeon/locations-v1/volcano/wallF1.webp",
+          "sourceBox": [
+            422,
+            840,
+            832,
+            1250
+          ],
+          "bytes": 15624,
+          "sha256": "eb652b40ea284c0de131ee213b564c8781ee60e8e16ce615e1792247f7ce8a25"
+        },
+        "stairs": {
+          "path": "assets/dungeon/locations-v1/volcano/stairs.webp",
+          "sourceBox": [
+            840,
+            840,
+            1250,
+            1250
+          ],
+          "bytes": 20066,
+          "sha256": "6c0582da043715217996b4d301b3087b817a1e7838d9429b8505d6127b25910e"
+        }
+      }
+    }
+  ]
+}

@@ -24,7 +24,7 @@
    closeWh();openWh();assert(floorShop.stock.length===count-1,'stock reset on reopen');closeWh();
   }
  }
- assert(shops>0&&houses>0&&layouts.size===3&&themes.size===3,'missing modules');
+ assert(shops>0&&houses>0&&layouts.size===3&&themes.size===5,'missing modules');
  toTown(false);assert(!floorShop,'shop persisted into town');
  console.log('ALL OK: 200 floors, shops='+shops+', monster rooms='+houses+', connected rooms/stairs, placement, transactions, warehouse/bank isolation');
 }

@@ -1246,7 +1246,7 @@ function drawVfx(t, camX, camY) {
   ctx.save(); ctx.lineCap = 'round';
   for (const v of vfx) {
     const k = (t - v.t0) / v.life; if (k < 0) continue;
-    const cx = camX + (v.x + 0.5) * TS, cy = camY + (v.y + 0.5) * TS;
+    const cx = camX + (v.x + 0.5) * TS, cy = camY + (v.y + 0.5) * tilePitchY();
     if (v.kind === 'slash') {
       // 三日月：打った向きに対して±62°の弧を、前半で一気に描き、後半で消える（外側は太く、先端は細く）
       const R = TS * 0.7, sw = 1.1, head = Math.min(1, k * 2.2), tail = Math.max(0, (k - 0.35) / 0.65);
@@ -1908,12 +1908,13 @@ function setMsg(t, ng) { artMsgEl.hidden = !t; artMsgEl.textContent = t || ''; i
 // =====================================================================
 function loadDungeonArt() { CaveTerrain.load(render); }
 function drawDungeonArt(key, px, py, g, x, y) {
-  return CaveTerrain.draw(g,key,px,py,TS,{map,x,y,theme:floorPlan?.theme || DungeonGenerator.themes[0]});
+  return CaveTerrain.draw(g,key,px,py,TS,{map,x,y,seed:floorPlan?.artSeed || 0,theme:floorPlan?.theme || DungeonGenerator.themes[0]});
 }
 const cv = $('c'), ctx = cv.getContext('2d');
 let raf = 0, lastT = 0;
 const tmp = mkCanvas(64, 64);
 const isLand = () => innerWidth > innerHeight;
+const tilePitchY = () => scene === 'dungeon' ? TS * .82 : TS;
 const focusY = () => innerHeight * (isLand() ? 0.5 : 0.4);   // 自キャラの縦位置（縦持ちは下のボタンを避けて上寄り）
 function resize() {
   DPR = window.devicePixelRatio || 1;
@@ -1930,7 +1931,7 @@ const cache = new Map();
 function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) { cache.set(k, v); $(id).style[prop] = v; } }
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
-  setH('where', scene === 'town' ? `町　踏破${clears}　${DUNGEONS[dungeonId].name}` : `${DUNGEONS[dungeonId].name} ${floorNo}F<br><small>ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}</small>`);
+  setH('where', scene === 'town' ? `町　踏破${clears}　${DUNGEONS[dungeonId].name}` : `${DUNGEONS[dungeonId].name} ${floorNo}F ${floorPlan?.theme.name || ''}<br><small>ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}</small>`);
   setH('bagc', `持${inv.length}/${MAXBAG}　${gold}G`);
   setH('belly', `満腹度 ${belly}/${maxBelly()}`);
   setS('blbar', 'display', scene === 'dungeon' ? 'block' : 'none');
@@ -2072,7 +2073,7 @@ function drawRig(g, fx, fy, h, e, t) {
 function drawChar(key, x, y, g, k, e, t) {
   if (key === 'player' && typeof ApprovedHero !== 'undefined') {
     const active = e.swing && t - e.swing < SWING_MS;
-    ApprovedHero.draw(g, active ? (e.attackFace || e.face) : e.face, x + TS / 2, y + TS * .9, TS * k, active ? t - e.swing : -1, eqWeapon?.type, eqShield?.type);
+    ApprovedHero.draw(g, active ? (e.attackFace || e.face) : e.face, x + TS / 2, y + tilePitchY() * .9, TS * k, active ? t - e.swing : -1, eqWeapon?.type, eqShield?.type);
     return;
   }
   if (key === 'player' && rigOn()) { const S = TS * k; drawRig(g, x - (S - TS) / 2 + S / 2, y - (S - TS) + S, S * 0.97, e, t); return; }
@@ -2090,16 +2091,16 @@ function drawEntity(key, e, t, camX, camY) {
   let hue = 0;
   if (e.kind && ENEMIES[e.kind] && !SPRITES[e.kind] && !DEFAULT[e.kind]) { hue = ENEMIES[e.kind].hue || 0; key = ENEMIES[e.kind].art || 'goblin'; }   // 専用の絵が無い敵：借りた絵を色違いで
   const [ox, oy] = entityOffset(e, t);
-  const px = Math.round(camX + (e.vx + ox) * TS), py = Math.round(camY + (e.vy + oy) * TS);
+  const px = Math.round(camX + (e.vx + ox) * TS), py = Math.round(camY + (e.vy + oy) * tilePitchY());
   const d = Math.hypot(e.x - e.vx, e.y - e.vy);
   const hop = key !== 'player' && d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 歩くときの小さな跳ね
   ctx.fillStyle = 'rgba(0,0,0,.35)';
   const ck = CHAR_K[charPref];
-  ctx.beginPath(); ctx.ellipse(px + TS / 2, py + TS * 0.9, TS * 0.32 * Math.min(ck, 1.25), TS * 0.1 * Math.min(ck, 1.25), 0, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(px + TS / 2, py + tilePitchY() * 0.9, TS * 0.32 * Math.min(ck, 1.25), TS * 0.1 * Math.min(ck, 1.25), 0, 0, Math.PI * 2); ctx.fill();
   ctx.save();
   if (e.fl && key !== 'player') { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
   if (hue && 'filter' in ctx) ctx.filter = `hue-rotate(${hue}deg)`;
-  drawChar(key, 0, 0, ctx, ck, e, t);
+  drawChar(key, 0, key === 'player' ? 0 : tilePitchY() - TS, ctx, ck, e, t);
   if (hue && 'filter' in ctx) ctx.filter = 'none';
   if (e.flash > t) {                                             // 被弾の白フラッシュ（絵の形のまま）。tmpは3マス四方：マスの左上を(TS, 2TS)に置く
     const g = tmp.getContext('2d');
@@ -2142,16 +2143,16 @@ function shadeTile(key, x, y, px, py, m) {
   if (key === 'wallF') {
     const h = Math.round(TS * 0.3);
     grad(0, py, 0, py + h, `rgba(255,255,255,${a(0.26)})`, 'rgba(255,255,255,0)', px, py, TS, h);                       // 上端の明るいふち（壁の天面が光る）
-    grad(0, py + TS - h, 0, py + TS, 'rgba(0,0,0,0)', `rgba(0,0,0,${a(0.34)})`, px, py + TS - h, TS, h);                // 足元の影
+    grad(0, py + tilePitchY() - h, 0, py + TS, 'rgba(0,0,0,0)', `rgba(0,0,0,${a(0.34)})`, px, py + tilePitchY() - h, TS, h);                // 足元の影
   } else if (key === 'wallT') {
     if (SPRITES.wall) { ctx.fillStyle = `rgba(8,10,26,${a(0.38)})`; ctx.fillRect(px, py, TS, TS); }                       // 外部画像は正面と同じ絵なので、上面は暗くして区別
     const w = Math.round(TS * 0.2);                                                                                      // 部屋に面した側の縁は明るく（壁の側面）
     if (x < MW - 1 && map[y][x + 1] !== WALL) grad(px + TS - w, 0, px + TS, 0, 'rgba(255,255,255,0)', `rgba(255,255,255,${a(0.16)})`, px + TS - w, py, w, TS);
-    if (x > 0 && map[y][x - 1] !== WALL) grad(px, 0, px + w, 0, `rgba(255,255,255,${a(0.16)})`, 'rgba(255,255,255,0)', px, py, w, TS);
+    if (x > 0 && map[y][x - 1] !== WALL) grad(px, 0, px + w, 0, `rgba(255,255,255,${a(0.16)})`, 'rgba(255,255,255,0)', px, py, w, tilePitchY());
   } else if (map[y][x] !== WALL) {
     if (y > 0 && map[y - 1][x] === WALL) { const h = Math.round(TS * 0.5); grad(0, py, 0, py + h, `rgba(0,0,0,${a(0.5)})`, 'rgba(0,0,0,0)', px, py, TS, h); }   // 壁際の落ち影
     const w = Math.round(TS * 0.22);
-    if (x > 0 && map[y][x - 1] === WALL) grad(px, 0, px + w, 0, `rgba(0,0,0,${a(0.3)})`, 'rgba(0,0,0,0)', px, py, w, TS);
+    if (x > 0 && map[y][x - 1] === WALL) grad(px, 0, px + w, 0, `rgba(0,0,0,${a(0.3)})`, 'rgba(0,0,0,0)', px, py, w, tilePitchY());
     if (x < MW - 1 && map[y][x + 1] === WALL) grad(px + TS - w, 0, px + TS, 0, 'rgba(0,0,0,0)', `rgba(0,0,0,${a(0.3)})`, px + TS - w, py, w, TS);
     if (!(typeof CaveTerrain !== 'undefined' && CaveTerrain.ready) && SPRITES.floor && key.startsWith('floor')) {                                                                      // 外部の床：タイルのふち取りで段差感
       const t = Math.max(1, Math.round(TS / 40));
@@ -2171,7 +2172,7 @@ function drawTownArt(camX, camY) {
 // 判定表示：歩けない所=赤、倉庫の入口=緑、ダンジョンの入口=青、格子線
 function drawTownGrid(camX, camY) {
   for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) {
-    const t = map[y][x], px = camX + x * TS, py = camY + y * TS;
+    const t = map[y][x], px = camX + x * TS, py = camY + y * tilePitchY();
     if (solid(t)) { ctx.fillStyle = 'rgba(255,60,60,.32)'; ctx.fillRect(px, py, TS, TS); }
     else if (t === DOOR) { ctx.fillStyle = 'rgba(60,255,120,.45)'; ctx.fillRect(px, py, TS, TS); }
     else if (t === GATE) { ctx.fillStyle = 'rgba(70,140,255,.5)'; ctx.fillRect(px, py, TS, TS); }
@@ -2189,15 +2190,15 @@ function draw() {
   ctx.save(); ctx.translate(Math.round(shx), Math.round(shy));                     // 画面の揺れ：世界だけ揺らす（地図・HUDは揺らさない）
   // 自キャラは画面のやや上寄りに置く（下はコントローラーで隠れるため）
   const camX = Math.round(innerWidth / 2 - (player.vx + 0.5) * TS);
-  const camY = Math.round(focusY() - (player.vy + 0.5) * TS);
+  const camY = Math.round(focusY() - (player.vy + 0.5) * tilePitchY());
   const x0 = Math.max(0, Math.floor(-camX / TS)), x1 = Math.min(MW - 1, Math.ceil((innerWidth - camX) / TS));
-  const y0 = Math.max(0, Math.floor(-camY / TS)), y1 = Math.min(MH - 1, Math.ceil((innerHeight - camY) / TS));
+  const y0 = Math.max(0, Math.floor(-camY / tilePitchY()) - 1), y1 = Math.min(MH - 1, Math.ceil((innerHeight - camY) / tilePitchY()) + 1);
   const dungeon = scene === 'dungeon', m = SHADE_K[shadePref];
   const townArt = scene === 'town' && SPRITES.town;
   if (townArt) drawTownArt(camX, camY);                                          // 町は一枚絵（判定は内部の格子のまま）
   for (let y = y0; y <= y1 && !townArt; y++) for (let x = x0; x <= x1; x++) {
     if (!seen[y][x]) continue;
-    const px = camX + x * TS, py = camY + y * TS;
+    const px = camX + x * TS, py = camY + y * tilePitchY();
     const key = tileKey(x, y);
     if (!dungeon && !key.startsWith('ground')) blit('ground0', px, py);          // 透過画像の下地
     else if (dungeon && key === 'stairs') blit('floor0', px, py);
@@ -2206,27 +2207,27 @@ function draw() {
       if (m > 0) shadeTile(key, x, y, px, py, m);
       if (vis[y][x]) {                                                             // 視界の明暗：離れるほど暗く
         const a = Math.min(0.3 + 0.12 * m, (((x - player.vx) ** 2 + (y - player.vy) ** 2) / (SIGHT * SIGHT)) * (0.3 + 0.12 * m));
-        if (a > 0.02) { ctx.fillStyle = `rgba(0,0,0,${a.toFixed(3)})`; ctx.fillRect(px, py, TS, TS); }
-      } else { ctx.fillStyle = 'rgba(0,0,0,.62)'; ctx.fillRect(px, py, TS, TS); }
+        if (a > 0.02) { ctx.fillStyle = `rgba(0,0,0,${a.toFixed(3)})`; ctx.fillRect(px, py, TS, tilePitchY()); }
+      } else { ctx.fillStyle = 'rgba(0,0,0,.62)'; const rise=map[y][x]===WALL&&CaveTerrain.ready?CaveTerrain.rise(map,x,y,TS):0;ctx.fillRect(px,py-rise,TS,tilePitchY()+rise); }
     }
   }
   if (dungeon && floorShop && seen[floorShop.y][floorShop.x]) {
-    const px=camX+floorShop.x*TS, py=camY+floorShop.y*TS;
+    const px=camX+floorShop.x*TS, py=camY+floorShop.y*tilePitchY();
     ctx.fillStyle='#73502d';ctx.fillRect(px+TS*.12,py+TS*.22,TS*.76,TS*.55);
     ctx.fillStyle='#ffdf82';ctx.font=Math.round(TS*.35)+'px sans-serif';ctx.textAlign='center';ctx.fillText('店',px+TS*.5,py+TS*.64);
   }
   if (scene === 'town' && showGrid) drawTownGrid(camX, camY);
   if (dungeon) for (const tr of traps) if (tr.seen && seen[tr.y][tr.x]) {                          // 見つけた罠：色つきのひし形
-    const cx = camX + (tr.x + 0.5) * TS, cy = camY + (tr.y + 0.55) * TS, r = TS * 0.32;
+    const cx = camX + (tr.x + 0.5) * TS, cy = camY + (tr.y + 0.55) * tilePitchY(), r = TS * 0.32;
     ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.beginPath(); ctx.moveTo(cx, cy - r); ctx.lineTo(cx + r, cy); ctx.lineTo(cx, cy + r); ctx.lineTo(cx - r, cy); ctx.closePath(); ctx.fill();
     ctx.strokeStyle = TRAPS[tr.kind].col; ctx.lineWidth = Math.max(2, TS * 0.07); ctx.stroke();
     ctx.fillStyle = TRAPS[tr.kind].col; ctx.font = 'bold ' + Math.round(TS * 0.34) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('!', cx, cy + 1);
   }
-  for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * TS);
+  for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
   for (const e of [...enemies].sort((a, b) => a.vy - b.vy)) if (vis[e.y][e.x]) {
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
-    ctx.fillStyle = '#000'; ctx.fillRect(px, py + TS - 3, TS, 3);
-    ctx.fillStyle = '#e55'; ctx.fillRect(px, py + TS - 3, TS * e.hp / e.maxhp, 3);
+    ctx.fillStyle = '#000'; ctx.fillRect(px, py + tilePitchY() - 3, TS, 3);
+    ctx.fillStyle = '#e55'; ctx.fillRect(px, py + tilePitchY() - 3, TS * e.hp / e.maxhp, 3);
     const S = e.st;                                                                // 敵の状態：眠り・混乱の目印
     if (e.mh || (S && (S.sleep > 0 || S.confuse > 0 || S.boost > 0))) {
       ctx.font = 'bold ' + Math.round(TS * 0.3) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
@@ -2236,7 +2237,7 @@ function draw() {
   }
   const [ppx, ppy] = drawEntity('player', player, t, camX, camY);
   ctx.fillStyle = '#ffd54a';                                                       // 向きの目印（Attackの狙い先）
-  ctx.beginPath(); ctx.arc(ppx + TS / 2 + player.face[0] * TS * 0.42, ppy + TS / 2 + player.face[1] * TS * 0.42, Math.max(2, TS * 0.07), 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath(); ctx.arc(ppx + TS / 2 + player.face[0] * TS * 0.42, ppy + tilePitchY() / 2 + player.face[1] * tilePitchY() * 0.42, Math.max(2, TS * 0.07), 0, Math.PI * 2); ctx.fill();
   const under = dungeon ? itemAt(player.x, player.y) : null;                       // 足元のアイテム名
   if (under) {
     ctx.font = '12px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
@@ -2248,7 +2249,7 @@ function draw() {
   for (const f of fx) {
     const k = (t - f.t0) / 700;
     ctx.globalAlpha = 1 - k * k; ctx.font = 'bold 16px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    const tx = camX + (f.x + 0.5) * TS, ty = camY + f.y * TS - k * 20;
+    const tx = camX + (f.x + 0.5) * TS, ty = camY + f.y * tilePitchY() - k * 20;
     ctx.fillStyle = '#000'; ctx.fillText(f.text, tx + 1, ty + 1);
     ctx.fillStyle = f.color; ctx.fillText(f.text, tx, ty);
     ctx.globalAlpha = 1;

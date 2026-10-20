@@ -1,10 +1,6 @@
 // Layout modules produce logical cells. Art never changes collision.
 (function(root){
- const THEMES=[
-  {id:'slate',name:'苔むす洞窟',filter:'none',moss:'#617950'},
-  {id:'sand',name:'乾いた岩窟',filter:'sepia(.25) saturate(.85) brightness(1.05)',moss:'#a28856'},
-  {id:'deep',name:'青岩の洞窟',filter:'hue-rotate(20deg) saturate(.7) brightness(.9)',moss:'#657887'}
- ];
+ const THEMES=[{"id": "forest", "name": "苔むす樹林", "filter": "none"}, {"id": "limestone", "name": "鍾乳洞", "filter": "none"}, {"id": "ruins", "name": "風化遺跡", "filter": "none"}, {"id": "ice", "name": "氷晶洞", "filter": "none"}, {"id": "volcano", "name": "火山洞", "filter": "none"}];
  function random(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;};}
  function generate(width,height,seed,depth=1){
   const rng=random(seed),int=(a,b)=>a+Math.floor(rng()*(b-a+1));
@@ -28,7 +24,7 @@
    // Chain, branching tree, or a tree with loops, selected independently of art.
    for(let i=1;i<rooms.length;i++)connect(style===0?i-1:int(0,i-1),i);
    if(style===2)for(let n=0;n<2;n++){let a=int(0,rooms.length-1),b=int(0,rooms.length-1);if(a!==b)connect(a,b);}
-   const theme=THEMES[int(0,THEMES.length-1)],artSeed=int(1,0x7fffffff);
+   const theme=THEMES[(depth-1)%THEMES.length],artSeed=int(1,0x7fffffff);
    return {seed:seed>>>0,map,rooms,links,style:['chain','branch','loop'][style],theme,artSeed,depth};
   }
   const map=Array.from({length:height},()=>Array(width).fill(0)),rooms=[];
