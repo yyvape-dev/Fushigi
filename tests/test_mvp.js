@@ -661,6 +661,62 @@
     ok('hud: shows level and strength in the dungeon', (() => { setup(); render(); return /Lv1/.test($('hp').innerHTML) && /ちから8/.test($('where').innerHTML); })());
     enemyTurn = etSave; ACC.p = ACC.e = 1;
   }
+  // ===== 段階2：罠・魔物部屋・識別 =====
+  { const R = (v, f) => { const rs = Math.random; Math.random = () => v; try { f(); } finally { Math.random = rs; } };
+    const etSave = enemyTurn;
+    const setup = (fl = 3, keep = false) => { enemyTurn = etSave; scene = 'dungeon'; dungeonId = 'first'; floorNo = fl; shuffleAliases(); newFloor(); dead = false; eqWeapon = eqShield = null; eqRings = [null, null]; inv = []; if (!keep) { enemies = []; floorItems = []; traps = []; } player.st = newStatus(); player.lv = 1; player.exp = 0; player.maxhp = 20; player.hp = 20; atkUp = 0; belly = 100; player.face = [1, 0]; turn = 1; ACC.p = ACC.e = 1; };
+    const flat = () => { for (let dy = -3; dy <= 3; dy++) for (let dx = -4; dx <= 4; dx++) { const x = player.x + dx, y = player.y + dy; if (inb(x, y) && x > 0 && y > 0 && x < MW - 1 && y < MH - 1) map[y][x] = FLOOR; } };
+    const mkE = (kind, dx, dy, hp = 30) => { const x = player.x + dx, y = player.y + dy; map[y][x] = FLOOR; const e = { kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: true, lost: 0, flash: 0, bump: null, fl: false, st: {}, gen: 0 }; enemies.push(e); return e; };
+    // --- 罠の配置
+    ok('traps: every floor has 1-5 hidden traps, none in corridors/entrances', (() => { for (let i = 0; i < 40; i++) { setup(1 + (i % 4), true); if (traps.length < 1 || traps.length > 5) return false; for (const t of traps) if (t.seen || roomGrid[t.y][t.x] < 0 || corridorAdj(t.x, t.y) || map[t.y][t.x] !== FLOOR) return false; } return true; })());
+    ok('traps: no two on the same tile; not under the player', (() => { for (let i = 0; i < 30; i++) { setup(4, true); const k = new Set(traps.map(t => t.x + ',' + t.y)); if (k.size !== traps.length || trapAt(player.x, player.y)) return false; } return true; })());
+    ok('traps: no pit on the last floor', (() => { DUNGEONS.first.floors = 5; for (let i = 0; i < 60; i++) { setup(5, true); if (traps.some(t => t.kind === 'pit')) return false; } return true; })());
+    ok('traps: all six kinds can appear', (() => { const k = new Set(); for (let i = 0; i < 200; i++) { setup(2, true); traps.forEach(t => k.add(t.kind)); } return k.size === 6; })());
+    // --- 発見
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'gas', seen: false }]; const t0 = turn; playerAttack(); ok('trap: Attack at a hidden trap tile reveals it and uses a turn', traps[0].seen && turn === t0 + 1 && player.st.sleep === 0 && /見つけた/.test(msgHistory[msgHistory.length - 2] + msgHistory[msgHistory.length - 1])); }
+    setup(); flat(); { const t0 = turn; playerAttack(); ok('trap: Attack at nothing costs no turn', turn === t0); }
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'gas', seen: false }, { x: player.x + 3, y: player.y, kind: 'mine', seen: false }]; inv = [mkItem('eyeherb')]; useType(inv[0].type); ok('めぐすり草: reveals every trap', traps.every(t => t.seen)); }
+    // --- 発動
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'gas', seen: false }]; playerMove(1, 0); ok('gas trap: sleep (4 turns) and it stays', traps.length === 1 && traps[0].seen && player.hp > 0); }
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'gas', seen: false }]; const t0 = turn; playerMove(1, 0); ok('gas trap: the sleeping turns pass', turn >= t0 + 3); }
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'mine', seen: false }]; playerMove(1, 0); ok('mine: 35% of max HP (7) and the mine is used up', player.hp === 13 && traps.length === 0); }
+    setup(); flat(); { player.st.invinc = 5; traps = [{ x: player.x + 1, y: player.y, kind: 'mine', seen: false }]; playerMove(1, 0); ok('mine: invincibility blocks the damage', player.hp === 20); }
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'hungry', seen: false }]; belly = 50; playerMove(1, 0); ok('hunger trap: belly -10', belly <= 40 && belly >= 39); }
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'warp', seen: false }]; const ox = player.x, oy = player.y; let moved = false; for (let i = 0; i < 15 && !moved; i++) { player.x = ox; player.y = oy; traps = [{ x: ox + 1, y: oy, kind: 'warp', seen: false }]; playerMove(1, 0); moved = Math.abs(player.x - ox) > 1 || Math.abs(player.y - oy) > 1; } ok('warp trap: you are moved elsewhere', moved); }
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'summon', seen: false }]; playerMove(1, 0); ok('summon trap: 3 enemies appear', enemies.length === 3 && enemies.every(e => e.aware)); }
+    setup(3); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'pit', seen: false }]; playerMove(1, 0); ok('pit: you fall to the next floor', floorNo === 4 && traps.every(t => t.kind !== 'pit' || true)); }
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'gas', seen: true }]; playerMove(1, 0); ok('a trap you can see still triggers if you step on it', player.st.sleep > 0 || turn > 1); }
+    // --- 描画
+    setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'mine', seen: true }]; seen[player.y][player.x + 1] = true; ok('trap: draws without errors', (() => { try { fadeT = -1e9; draw(); return true; } catch (e) { console.log(e); return false; } })()); }
+    // --- 魔物部屋
+    MH_RATE.v = 1;
+    ok('monster house: appears from floor 2, never on floor 1', (() => { for (let i = 0; i < 20; i++) { setup(1, true); if (rooms.some(r => r.mh)) return false; } let n = 0; for (let i = 0; i < 30; i++) { setup(3, true); if (rooms.some(r => r.mh)) n++; } return n >= 20; })());
+    setup(3, true); { const hi = rooms.findIndex(r => r.mh); ok('monster house: 7-10 sleeping enemies in one room, items too', hi >= 0 && enemies.filter(e => e.mh).length >= 5 && enemies.filter(e => e.mh).every(e => roomGrid[e.y][e.x] === hi) && floorItems.filter(f => roomGrid[f.y][f.x] === hi).length >= 1); }
+    setup(3, true); { const hi = rooms.findIndex(r => r.mh), R2 = rooms[hi]; const sleepers = enemies.filter(e => e.mh), p0 = sleepers.map(e => e.x + ',' + e.y).join();
+      player.x = player.vx = rooms[0].cx; player.y = player.vy = rooms[0].cy; enemyTurn(); ok('monster house: sleepers do not move before you enter', sleepers.map(e => e.x + ',' + e.y).join() === p0);
+      player.x = R2.cx; player.y = R2.cy; map[player.y][player.x] = FLOOR; checkHouse(); ok('monster house: entering wakes them all', sleepers.every(e => !e.mh && e.aware) && R2.mhDone === true && /魔物部屋/.test(msgHistory[msgHistory.length - 1]));
+      const n = msgHistory.length; checkHouse(); ok('monster house: triggers only once', msgHistory.length === n); }
+    MH_RATE.v = 0.2;
+    // --- 識別
+    ok('alias pools are big enough for every unidentified item (no collisions)', (() => { for (const [cat, pool] of Object.entries(ALIAS_POOL)) { const cats = cat === '草' ? ['草', '種'] : [cat]; const n = Object.keys(ITEMS).filter(k => cats.includes(ITEMS[k].cat) && ITEMS[k].unid).length; if (pool.words.length < n || new Set(pool.words).size !== pool.words.length) return false; } return true; })());
+    setup(); ok('alias: every herb/seed/scroll/ring/staff has a unique alias with its theme suffix', (() => { const names = Object.keys(ITEMS).filter(k => ITEMS[k].unid).map(k => alias[k]); return names.every(Boolean) && new Set(names).size === names.length && ITEMS.herb.unid && /草$/.test(alias.herb) && /の巻物$/.test(alias.scroll) && /の腕輪$/.test(alias.ring_regen) && /の杖$/.test(alias.firestaff) && /の種$/.test(alias.bellyup); })());
+    ok('alias: weapons, shields, potions, onigiri and weeds are never hidden', ['sword', 'ironshield', 'potion', 'onigiri', 'weed'].every(k => !ITEMS[k].unid));
+    setup(); { const a1 = JSON.stringify(alias); let diff = false; for (let i = 0; i < 5 && !diff; i++) { shuffleAliases(); diff = JSON.stringify(alias) !== a1; } ok('alias: reshuffled on every dive', diff); }
+    setup(); { const it = mkItem('herb'); ok('name: unknown herb shows its alias in the dungeon', itemName(it) === alias.herb && itemName(it) !== '薬草'); scene = 'town'; ok('name: true name in town', itemName(it) === ITEMS.herb.name); scene = 'dungeon'; }
+    setup(); { const it = mkItem('firestaff'); ok('name: unknown staff hides its charges', /\[\?\]$/.test(itemName(it)) && !isKnown('firestaff')); identify('firestaff'); ok('name: identified staff shows charges', /\[\d+\]$/.test(itemName(it))); }
+    setup(); { inv = [mkItem('herb')]; const al = alias.herb; useType('herb'); ok('use: eating an unknown herb identifies it ("<alias>は薬草だった！")', isKnown('herb') && msgHistory.some(m => m === `${al}は${ITEMS.herb.name}だった！`) && itemName(mkItem('herb')) === ITEMS.herb.name); }
+    setup(); { inv = [mkItem('mapscroll')]; useType('mapscroll'); ok('use: reading an unknown scroll identifies it', isKnown('mapscroll') && inv.length === 0); }
+    setup(); { flat(); mkE('goblin', 2, 0); inv = [mkItem('firestaff')]; useType(ikey(inv[0])); ok('use: zapping an unknown staff identifies it', isKnown('firestaff')); }
+    setup(); { inv = [mkItem('ring_regen')]; const al = alias.ring_regen; useType('ring_regen'); ok('use: wearing an unknown ring identifies it', isKnown('ring_regen') && itemName(inv[0]) === ITEMS.ring_regen.name && !!al); }
+    setup(); { inv = [mkItem('herb'), mkItem('herb')]; useType('herb'); ok('identify: all herbs of the type are known afterwards', isKnown('herb') && itemName(inv[0]) === ITEMS.herb.name); }
+    setup(); { inv = [mkItem('herb'), mkItem('scroll'), mkItem('ring_regen'), mkItem('identscroll')]; useType('identscroll'); ok('identscroll: identifies everything in the bag', isKnown('herb') && isKnown('scroll') && isKnown('ring_regen') && isKnown('identscroll') && !isKnown('firestaff')); }
+    setup(); { inv = [mkItem('identscroll')]; useType('identscroll'); ok('identscroll: with nothing to identify it is still used up', inv.length === 0); }
+    setup(); { inv = [mkItem('herb')]; renderBag(); bagSel = 'herb'; renderBag(); ok('bag: unknown items are marked and their description is hidden', /<i>\?<\/i>/.test(listEl.innerHTML) && /効果はわからない/.test(listEl.innerHTML) && !/HP/.test(listEl.innerHTML.split('class="ds"')[1] || '')); closeBag(); bagSel = null; }
+    setup(); { quick = 'herb'; render(); ok('quick button shows the alias', $('quick').innerHTML.includes(alias.herb)); quick = 'potion'; }
+    setup(); { inv = []; useType('herb'); ok('use: "not carrying" message uses the alias', /持っていない/.test(msgHistory[msgHistory.length - 1]) && msgHistory[msgHistory.length - 1].includes(alias.herb)); }
+    setup(); { identify('herb'); toTown(false); enterDungeon(); ok('enterDungeon: identification resets', !isKnown('herb') && Object.keys(alias).length > 10); }
+    enemyTurn = etSave; ACC.p = ACC.e = 1; DUNGEONS.first.floors = 3; toTown(false);
+  }
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
 })();

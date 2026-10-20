@@ -245,8 +245,8 @@ const ITEMS = {
     use() { say('目つぶし草を食べた。目の前が真っ暗だ！'); addStatus('blind', 12); return true; },
   },
   eyeherb: {
-    name: 'めぐすり草', cat: '草', ch: '♣', fg: '#80f0ff', w: 2, from: 2, desc: '目つぶしが治り、40ターンの間「よく見え」状態になる（地図にこの階の敵が全部映る）。本家は隠れた罠が見える。',
-    use() { player.st.blind = 0; player.st.seeing = 40; say('めぐすり草を食べた。よく見える！'); return true; },
+    name: 'めぐすり草', cat: '草', ch: '♣', fg: '#80f0ff', w: 2, from: 2, desc: '目つぶしが治り、40ターンの間「よく見え」状態になる（地図にこの階の敵が全部映る）。この階の隠れた罠も見える。',
+    use() { player.st.blind = 0; player.st.seeing = 40; const n = traps.filter(t => !t.seen).length; for (const t of traps) t.seen = true; say('めぐすり草を食べた。よく見える！' + (n ? `隠れた罠が${n}個見えた。` : '')); return true; },
   },
   hasteherb: {
     name: 'すばやさ草', cat: '草', ch: '♣', fg: '#ffe040', w: 2, from: 2, desc: '25ターンの間、倍速になる（敵が2回に1回しか動かない）。',
@@ -405,6 +405,14 @@ const ITEMS = {
   minoshield: { name: 'ミノタウロスの盾', cat: '盾', ch: ']', fg: '#d89060', w: 1, from: 3, equip: 'shield', def: 2, seal: 'critguard', desc: '盾。受けるダメージ-2。印「痛恨耐性」：痛恨の一撃を受けても、ダメージが2倍にならない。' },
 
   // ===== 杖（振る。回数つき）=====
+  identscroll: {
+    name: '識別の巻物', cat: '巻物', ch: '≡', fg: '#ffe9a0', w: 4, from: 2, desc: '持ち物の中の、正体が分からない物をすべて識別する。',
+    use() {
+      const u = [...new Set(inv.map(i => i.type).filter(t => !isKnown(t)))];
+      if (!u.length) { say('識別できる物は無かった。'); return true; }
+      for (const t of u) identify(t); say(`${u.length}種類を識別した！`); return true;
+    },
+  },
   firestaff: {
     name: '火の杖', cat: '杖', ch: '/', fg: '#ff7a3a', w: 2, charges: [3, 5], staff: true, desc: '向いている方向の最初の敵に8ダメージ。[ ]は残り回数。',
     use() { const t = zapTarget(); if (!t) return true; zapHit(t.e, 8, '火の玉'); return true; },
@@ -442,6 +450,51 @@ const ITEMS = {
 // 床・持ち物の絵はカテゴリで1つに固定する（のちの識別＝未鑑定の仕組みで、見た目から中身が分からないように）。
 //   草・種・巻物・腕輪・杖・剣・盾：assets/icon_<カテゴリ>.png ／ 回復薬・おにぎりは中身が最初から分かるので個別の絵。
 //   手持ちの絵（主人公が持つ剣・盾）だけは種類ごとに assets/<キー>.png（装備したときだけ見た目が変わる）
+// =====================================================================
+//  識別：草・種・巻物・腕輪・杖は、ダンジョンの中では仮の名前で出る（潜るたびに入れ替わる）。使う・装備すると、その種類が分かる
+//   仮名のテーマは本家に倣う：巻物=動物／草と種=色／腕輪=宝石／杖=木。町では本当の名前
+// =====================================================================
+const UNID_CATS = ['草', '種', '巻物', '腕輪', '杖'];
+for (const d of Object.values(ITEMS)) d.unid = UNID_CATS.includes(d.cat);
+ITEMS.weed.unid = false;                                          // 雑草は見れば分かる
+const ALIAS_POOL = {
+  巻物: { suffix: 'の巻物', words: ['ネコ', 'イヌ', 'ウサギ', 'キツネ', 'タヌキ', 'クマ', 'シカ', 'サル', 'トラ', 'ライオン', 'ゾウ', 'ウマ', 'ヒツジ', 'ヤギ', 'イタチ', 'リス', 'ネズミ', 'カエル', 'ヘビ', 'ワシ', 'フクロウ', 'カラス'] },
+  草: { suffix: '草', words: ['赤', '青', '黄', '緑', '白', '黒', '紫', '橙', '桃', '水色', '茶', '灰', '金', '銀', '藍', '朱', '紺', '空色', '薄紅', '黄緑', '深緑', '桜色', '栗色', '紅', '萌黄', '鼠'] },
+  腕輪: { suffix: 'の腕輪', words: ['ルビー', 'サファイア', 'エメラルド', 'ダイヤ', 'アメジスト', 'トパーズ', 'オパール', '真珠', '琥珀', '翡翠', 'めのう', '水晶', '黒曜石', '珊瑚', 'ラピス', 'ガーネット', 'ムーンストーン', 'ターコイズ', '孔雀石', '蛍石', '月長石'] },
+  杖: { suffix: 'の杖', words: ['杉', '檜', '松', '桜', '樫', '楓', '竹', '柳', '桐', '欅', '梅', '栗', '楠', '栃', '椿', '柿'] },
+};
+let alias = {}, known = new Set();
+const isKnown = type => !ITEMS[type].unid || scene !== 'dungeon' || known.has(type);
+const dispName = type => isKnown(type) ? ITEMS[type].name : (alias[type] || ITEMS[type].name);
+function shuffleAliases() {                                       // 潜るたびに仮名を割り当て直す。草と種は同じ色の名前を分け合う（重ならない）
+  alias = {}; known = new Set();
+  const shuf = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = rnd(0, i); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  for (const [cat, pool] of Object.entries(ALIAS_POOL)) {
+    const cats = cat === '草' ? ['草', '種'] : [cat], words = shuf(pool.words);
+    for (const t of Object.keys(ITEMS).filter(k => cats.includes(ITEMS[k].cat) && ITEMS[k].unid)) alias[t] = words.pop() + (ITEMS[t].cat === '種' ? 'の種' : pool.suffix);
+  }
+}
+function identify(type) {
+  if (!ITEMS[type].unid || known.has(type)) return false;
+  const was = dispName(type); known.add(type);
+  if (scene === 'dungeon') say(`${was}は${ITEMS[type].name}だった！`);
+  return true;
+}
+// =====================================================================
+//  罠：隠れていて、踏むと発動する。何も無い所を攻撃（Attack）すると、その場所の罠が見つかる／めぐすり草で全部見える
+//   通路と、部屋の出入口には無い（本家と同じ）。敵は罠を踏まない（簡略化）
+// =====================================================================
+let traps = [];
+const TRAPS = {
+  pit: { name: '落とし穴', col: '#a0784a' },
+  mine: { name: '地雷', col: '#ff7a3a' },
+  gas: { name: '睡眠ガスの罠', col: '#9ab0ff' },
+  hungry: { name: '空腹の罠', col: '#ffd070' },
+  warp: { name: 'ワープの罠', col: '#80e0ff' },
+  summon: { name: '魔物の罠', col: '#ff6a9a' },
+};
+const trapAt = (x, y) => traps.find(t => t.x === x && t.y === y);
+const MH_RATE = { v: 0.2 };                                       // 魔物部屋になる確率（2階から）
 const ICON_BY_CAT = { 草: 'icon_herb', 種: 'icon_seed', 巻物: 'icon_scroll', 腕輪: 'icon_ring', 杖: 'icon_staff', 武器: 'icon_sword', 盾: 'icon_shield' };
 for (const d of Object.values(ITEMS)) if (!d.icon && ICON_BY_CAT[d.cat]) d.icon = ICON_BY_CAT[d.cat];
 
@@ -850,7 +903,7 @@ function rollPlus() { const r = Math.random(); return r < 0.55 ? 0 : r < 0.75 ? 
 const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip && ITEMS[type].equip !== 'ring') it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; return it; };
 const isEq = it => it === eqWeapon || it === eqShield || eqRings.includes(it);
 const ikey = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (isEq(it) ? 'E' : '');   // 持ち物のまとめ表示・操作のキー
-const itemName = it => ITEMS[it.type].name + (it.plus === undefined ? '' : ITEMS[it.type].charges ? `[${it.plus}]` : (it.plus >= 0 ? '+' : '') + it.plus);
+const itemName = it => dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus);
 const atkBonus = () => (eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0) + atkUp + 2 * ringN('strength') + (player.st.power > 0 ? 3 : 0) - (player.st.weak > 0 ? 2 : 0) + (wSeal() === 'hungry' && belly <= 30 ? 3 : 0);
 const defBonus = () => (eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0) + (sSeal() === 'hungryDef' && belly <= 30 ? 2 : 0);
 const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '');
@@ -978,9 +1031,50 @@ function newFloor() {
     if (map[y][x] !== FLOOR || itemAt(x, y) || (x === player.x && y === player.y)) continue;
     floorItems.push({ x, y, item: mkItem(rollType()) });
   }
+  placeTraps(far);
+  placeHouse(far);
   seen = Array.from({ length: MH }, () => new Array(MW).fill(false));
   snapVis();
   updateVis();
+}
+const corridorAdj = (x, y) => [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => inb(x + dx, y + dy) && map[y + dy][x + dx] !== WALL && roomGrid[y + dy][x + dx] < 0);   // 部屋の出入口（通路に面した床）
+function placeTraps(stairsRoom) {
+  traps = [];
+  const dg = DUNGEONS[dungeonId], n = Math.min(5, 1 + Math.floor(floorNo / 3) + rnd(0, 1));
+  const kinds = Object.keys(TRAPS).filter(k => k !== 'pit' || floorNo < dg.floors);          // 最終階に穴は無い
+  for (let i = 0, tries = 0; i < n && tries < 60; tries++) {
+    const R = rooms[rnd(0, rooms.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
+    if (map[y][x] !== FLOOR || corridorAdj(x, y) || trapAt(x, y) || itemAt(x, y) || (x === player.x && y === player.y)) continue;
+    traps.push({ x, y, kind: kinds[rnd(0, kinds.length - 1)], seen: false }); i++;
+  }
+}
+// 魔物部屋：入ると眠っていた敵が一斉に起きる（通常型）。部屋にはアイテムも多め
+function placeHouse(stairsRoom) {
+  if (floorNo < 2 || rooms.length < 4 || Math.random() >= MH_RATE.v) return;
+  const c = rooms.map((r, i) => i).filter(i => i > 0 && rooms[i] !== stairsRoom && rooms[i].w * rooms[i].h >= 12);
+  if (!c.length) return;
+  const ri = c[rnd(0, c.length - 1)], R = rooms[ri]; R.mh = true;
+  const free = () => { for (let k = 0; k < 40; k++) { const x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1); if (map[y][x] === FLOOR && !enemyAt(x, y) && !itemAt(x, y) && !trapAt(x, y) && !corridorAdj(x, y)) return [x, y]; } return null; };
+  for (let i = 0, n = rnd(7, 10); i < n; i++) { const p = free(); if (p) spawnEnemy(p[0], p[1], false).mh = true; }
+  for (let i = 0; i < 3; i++) { const p = free(); if (p) floorItems.push({ x: p[0], y: p[1], item: mkItem(rollType()) }); }
+}
+function checkHouse() {                                           // 魔物部屋に入ったら、部屋の敵が全員起きる
+  if (scene !== 'dungeon') return;
+  const ri = roomGrid[player.y][player.x]; if (ri < 0 || !rooms[ri].mh || rooms[ri].mhDone) return;
+  rooms[ri].mhDone = true;
+  for (const e of enemies) if (e.mh) { e.mh = false; e.aware = true; }
+  say('魔物部屋だ！ 眠っていた敵が一斉に襲いかかってきた！'); fxText(player.x, player.y, '魔物部屋！', '#ff6b6b'); vfxShake(6, 400);
+}
+function triggerTrap(tr) {                                        // 罠を踏んだ。落とし穴で階が変わったら true
+  tr.seen = true; const T = TRAPS[tr.kind];
+  say(`${T.name}を踏んだ！`); fxText(player.x, player.y, T.name, T.col);
+  if (tr.kind === 'pit') { floorNo++; say(`${floorNo}階へ落ちた！`); newFloor(); startFade(); render(); return true; }
+  if (tr.kind === 'mine') { traps.splice(traps.indexOf(tr), 1); hurtPlayer(Math.max(3, Math.floor(player.maxhp * 0.35)), `地雷で力尽きた…（${floorNo}階）`); vfxShake(7, 300); }
+  else if (tr.kind === 'gas') { if (addStatus('sleep', 4)) say('眠ってしまった…'); }
+  else if (tr.kind === 'hungry') { belly = Math.max(0, belly - 10); say('おなかがすいた…（満腹度-10）'); }
+  else if (tr.kind === 'warp') { warpPlayer(); }
+  else if (tr.kind === 'summon') { const c = freeNear(3); for (const [x, y] of c) spawnEnemy(x, y, true); say('魔物が現れた！'); }
+  return false;
 }
 
 // =====================================================================
@@ -989,7 +1083,7 @@ function newFloor() {
 function snapVis() { for (const e of [player, ...enemies]) { e.vx = e.x; e.vy = e.y; e.bump = null; } }
 function toTown(fromDungeon) {
   scene = 'town'; buildTown();
-  enemies = []; floorItems = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
+  enemies = []; floorItems = []; traps = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
   player.lv = 1; player.exp = 0; atkUp = 0; player.maxhp = BASE_HP; player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus(); floorLight = false;
   player.x = fromDungeon ? 17 : 11; player.y = fromDungeon ? 4 : 9;
   seen = Array.from({ length: MH }, () => new Array(MW).fill(true));
@@ -1002,6 +1096,7 @@ function enterDungeon() {
   scene = 'dungeon'; floorNo = 1; turn = 0; logs = []; fx.length = 0; vfx.length = 0; shakeAmp = 0;
   player.maxhp = BASE_HP; player.hp = player.maxhp; player.lv = 1; player.exp = 0; player.face = [0, 1]; player.st = newStatus();   // レベル・体力は毎回リセット（本家と同じ）
   atkUp = 0; bellyBonus = 0; floorLight = false; belly = maxBelly(); bellyWarn = 99;
+  shuffleAliases();                                             // 草・巻物・腕輪・杖の仮名を入れ替える（識別はリセット）
   saveGame();                                                   // 出発時点の持ち物を保存
   newFloor();
   say(`${DUNGEONS[dungeonId].name}に入った。`);
@@ -1196,6 +1291,7 @@ function turnCore() {
   if (!dead) tickStatus();
 }
 function endTurn() {
+  checkHouse();
   turnCore();
   for (let g = 0; g < 12 && !dead && scene === 'dungeon' && player.st.sleep > 0; g++) turnCore();   // 眠っている間は、敵だけが動く
   updateVis();
@@ -1272,7 +1368,10 @@ function playerMove(dx, dy) {
         if (floorNo >= dg.floors) { clearDungeon(); return; }
         floorNo++; say(`${floorNo}階へ降りた。`); newFloor(); startFade(); render(); return;
       }
-      const f = itemAt(nx, ny);
+      const tr = trapAt(nx, ny);
+      if (tr && triggerTrap(tr)) return;
+      checkHouse();
+      const f = itemAt(player.x, player.y);
       if (f) { if (autoPick) takeFloor(f); else say(`足元に${itemName(f.item)}がある。`); }
     }
   }
@@ -1325,7 +1424,11 @@ function playerAttack() {
     const z = lineTarget();
     if (z) { player.swing = now(); kick(); zapHit(z.e, 8, '炎'); endTurn(); return; }
   }
-  if (!t) { say('周りに敵がいない。'); render(); return; }
+  if (!t) {
+    const tr = trapAt(player.x + fx_, player.y + fy_);
+    if (tr && !tr.seen) { tr.seen = true; player.swing = now(); kick(); say(`${TRAPS[tr.kind].name}を見つけた！`); fxText(tr.x, tr.y, '罠！', TRAPS[tr.kind].col); endTurn(); return; }
+    say('周りに敵がいない。'); render(); return;
+  }
   hitEnemy(t);
   endTurn();
 }
@@ -1456,6 +1559,7 @@ const firstOf = key => inv.find(i => ikey(i) === key);
 function toggleEquip(it) {                                      // 着脱できたら true
   const slot = ITEMS[it.type].equip;
   if (slot === 'ring') {
+    identify(it.type);
     const i = eqRings.indexOf(it);
     if (i >= 0) { eqRings[i] = null; say(`${itemName(it)}を外した。`); }
     else {
@@ -1472,16 +1576,18 @@ function toggleEquip(it) {                                      // 着脱でき�
 function useType(key) {
   if (guardDead()) return;
   const it = firstOf(key);
-  if (!it) { say(`${ITEMS[key] ? ITEMS[key].name : 'それ'}を持っていない。`); render(); return; }
+  if (!it) { say(`${ITEMS[key] ? dispName(key) : 'それ'}を持っていない。`); render(); return; }
   if (ITEMS[it.type].equip) { if (!toggleEquip(it)) { render(); renderBag(); return; } saveGame(); closeBag(); endTurn(); return; }   // 装備品：着脱でターン経過
   if (player.st.mute > 0 && (ITEMS[it.type].cat === '草' || ITEMS[it.type].cat === '巻物')) { say('くちなし状態で使えない！'); render(); renderBag(); return; }
+  const nm0 = dispName(it.type), wasKnown = isKnown(it.type);
+  const idAfter = () => { if (!wasKnown && identify(it.type)) void nm0; };
   if (ITEMS[it.type].staff) {                                    // 杖：回数を1つ消費。0回でも振れる（何も起こらない）
     if (it.plus <= 0) say('しかし、何も起こらなかった。（回数切れ）');
-    else { it.plus--; ITEMS[it.type].use(it); }
+    else { it.plus--; ITEMS[it.type].use(it); idAfter(); }
     closeBag(); endTurn(); return;
   }
   if (!ITEMS[it.type].use(it)) { render(); renderBag(); return; }
-  inv.splice(inv.indexOf(it), 1);
+  inv.splice(inv.indexOf(it), 1); idAfter();
   closeBag(); endTurn();
 }
 function useQuick() {
@@ -1528,8 +1634,8 @@ function iconUrl(type) {                                          // 持ち物�
 function rowHtml(g, sel, actsHtml) {
   const d = ITEMS[g.type];
   return `<div class="row${sel ? ' sel' : ''}"><div class="main" data-sel="${g.key}"><span class="ic" style="color:${d.fg}">${iconUrl(g.type) ? `<img src="${iconUrl(g.type)}" alt="">` : d.ch}</span>` +
-    `<span class="nm">${itemName(g.items[0])}${quick === g.type ? ' <i>★</i>' : ''}${isEq(g.items[0]) ? ' <i>E</i>' : ''}</span>${g.items.length > 1 ? `<span class="ct">×${g.items.length}</span>` : ''}</div>` +
-    (sel ? `<div class="acts">${actsHtml}</div><div class="ds">${d.desc || ''}</div>` : '') + `</div>`;
+    `<span class="nm">${itemName(g.items[0])}${quick === g.type ? ' <i>★</i>' : ''}${isEq(g.items[0]) ? ' <i>E</i>' : ''}${isKnown(g.type) ? '' : ' <i>?</i>'}</span>${g.items.length > 1 ? `<span class="ct">×${g.items.length}</span>` : ''}</div>` +
+    (sel ? `<div class="acts">${actsHtml}</div><div class="ds">${isKnown(g.type) ? (d.desc || '') : '効果はわからない。使うか身につけると分かる。'}</div>` : '') + `</div>`;
 }
 function renderBag() {
   $('bagTitle').textContent = `持ち物 ${inv.length}/${MAXBAG}`;
@@ -1708,7 +1814,7 @@ function refreshUI() {
   setS('hpf', 'background', hpr <= 0.25 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
   setH('log', logHtml(logs));
   { const el = $('log'); if (el.classList) { el.classList.toggle('off', !logs.length || histOpen || now() - logT > LOG_MS); el.classList.toggle('pos-b', logPos === 1); } }
-  setH('quick', quick ? `${ITEMS[quick].name}<br><small>×${inv.filter(i => i.type === quick).length}</small>` : '−');
+  setH('quick', quick ? `${dispName(quick)}<br><small>×${inv.filter(i => i.type === quick).length}</small>` : '−');
   setH('bagbtn', `持物<br><small>${inv.length}/${MAXBAG}</small>`);
   const c = ctxInfo();
   setH('pick', c ? c.label : '');
@@ -1971,15 +2077,21 @@ function draw() {
     }
   }
   if (scene === 'town' && showGrid) drawTownGrid(camX, camY);
+  if (dungeon) for (const tr of traps) if (tr.seen && seen[tr.y][tr.x]) {                          // 見つけた罠：色つきのひし形
+    const cx = camX + (tr.x + 0.5) * TS, cy = camY + (tr.y + 0.55) * TS, r = TS * 0.32;
+    ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.beginPath(); ctx.moveTo(cx, cy - r); ctx.lineTo(cx + r, cy); ctx.lineTo(cx, cy + r); ctx.lineTo(cx - r, cy); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = TRAPS[tr.kind].col; ctx.lineWidth = Math.max(2, TS * 0.07); ctx.stroke();
+    ctx.fillStyle = TRAPS[tr.kind].col; ctx.font = 'bold ' + Math.round(TS * 0.34) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('!', cx, cy + 1);
+  }
   for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * TS);
   for (const e of [...enemies].sort((a, b) => a.vy - b.vy)) if (vis[e.y][e.x]) {
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
     ctx.fillStyle = '#000'; ctx.fillRect(px, py + TS - 3, TS, 3);
     ctx.fillStyle = '#e55'; ctx.fillRect(px, py + TS - 3, TS * e.hp / e.maxhp, 3);
     const S = e.st;                                                                // 敵の状態：眠り・混乱の目印
-    if (S && (S.sleep > 0 || S.confuse > 0 || S.boost > 0)) {
+    if (e.mh || (S && (S.sleep > 0 || S.confuse > 0 || S.boost > 0))) {
       ctx.font = 'bold ' + Math.round(TS * 0.3) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
-      const mk = S.sleep > 0 ? ['Zzz', '#9ab0ff'] : S.confuse > 0 ? ['?', '#ff9be8'] : ['≫', '#ffb060'];
+      const mk = e.mh || S.sleep > 0 ? ['Zzz', '#9ab0ff'] : S.confuse > 0 ? ['?', '#ff9be8'] : ['≫', '#ffb060'];
       ctx.fillStyle = '#000'; ctx.fillText(mk[0], px + TS / 2 + 1, py - TS * 0.45 + 1); ctx.fillStyle = mk[1]; ctx.fillText(mk[0], px + TS / 2, py - TS * 0.45);
     }
   }
