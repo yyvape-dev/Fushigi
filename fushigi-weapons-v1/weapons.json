@@ -1,0 +1,386 @@
+{
+  "version": 1,
+  "status": "12 weapon candidates; approval pending",
+  "approvedBaseline": "../fushigi-equipment-v3/",
+  "shieldRenderScale": 0.59,
+  "weapons": [
+    {
+      "key": "woodsword",
+      "name": "木刀",
+      "path": "assets/woodsword.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        0,
+        0,
+        362,
+        365
+      ],
+      "sourceGrip": [
+        195,
+        310
+      ],
+      "sourceToSpriteScale": 0.587248322147651,
+      "spriteSha256": "33273ef7c8207e4d33d1d0815f5014c1401a665fea7b7326820fae6479135277",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "bronzesword",
+      "name": "青銅の太刀",
+      "path": "assets/bronzesword.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        362,
+        0,
+        724,
+        365
+      ],
+      "sourceGrip": [
+        556,
+        311
+      ],
+      "sourceToSpriteScale": 0.5737704918032787,
+      "spriteSha256": "3ae070d6adf0b5c6c5445d26df091d7d1b997d8b7a518857972a9f47403d79ab",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "katana",
+      "name": "カタナ",
+      "path": "assets/katana.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        724,
+        0,
+        1086,
+        365
+      ],
+      "sourceGrip": [
+        903,
+        311
+      ],
+      "sourceToSpriteScale": 0.5737704918032787,
+      "spriteSha256": "4b75e8a7dea220a9d2021dd25704f509335f495618d137b89e2738c7be8dcd64",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "dotanuki",
+      "name": "どうたぬき",
+      "path": "assets/dotanuki.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        1086,
+        0,
+        1448,
+        365
+      ],
+      "sourceGrip": [
+        1280,
+        310
+      ],
+      "sourceToSpriteScale": 0.5813953488372093,
+      "spriteSha256": "7ee8388c63d0a3c0086ef60965b8b0854e052389086e6904531e350f0bdf132e",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "minoaxe",
+      "name": "ミノタウロスの斧",
+      "path": "assets/minoaxe.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        0,
+        365,
+        362,
+        704
+      ],
+      "sourceGrip": [
+        200,
+        644
+      ],
+      "sourceToSpriteScale": 0.6433823529411765,
+      "spriteSha256": "8f95f9124a20cbf604be8d029899f1f2058f1ccb475e912ab2b5d44ef1fa1f73",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "renkentou",
+      "name": "連撃刀",
+      "path": "assets/renkentou.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        362,
+        365,
+        724,
+        704
+      ],
+      "sourceGrip": [
+        544,
+        644
+      ],
+      "sourceToSpriteScale": 0.6410256410256411,
+      "spriteSha256": "f6fff849f4d735e22cd774271ae70b29bbc385402703fb7ace129e9c0d6ad635",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "kamaitachi",
+      "name": "妖刀かまいたち",
+      "path": "assets/kamaitachi.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        724,
+        365,
+        1086,
+        704
+      ],
+      "sourceGrip": [
+        917,
+        643
+      ],
+      "sourceToSpriteScale": 0.6410256410256411,
+      "spriteSha256": "03f38c6b5099edc246d87215357432f5a52161448c22e65d0bf50d0b40b3336f",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "healsword",
+      "name": "回復の剣",
+      "path": "assets/healsword.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        1086,
+        365,
+        1448,
+        704
+      ],
+      "sourceGrip": [
+        1280,
+        644
+      ],
+      "sourceToSpriteScale": 0.6340579710144928,
+      "spriteSha256": "2db5c1cb067bd023499829b6c4451b0ae93d65dce9bfa41a166375ca7802dd1a",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "steakknife",
+      "name": "ステーキナイフ",
+      "path": "assets/steakknife.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        0,
+        704,
+        362,
+        1086
+      ],
+      "sourceGrip": [
+        210,
+        995
+      ],
+      "sourceToSpriteScale": 0.6118881118881119,
+      "spriteSha256": "7d4a79d1d10a45eeea081561f0ab41140d10d4dc791a9f513a8e1e2e287b771f",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "harisen",
+      "name": "巨大ハリセン",
+      "path": "assets/harisen.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/harisen.png",
+      "sourceSha256": "6a8453d5e24d08ab9a4040f8c3a42d07c734ab9ebd4c0cfa64ec85f6bde55948",
+      "sourceCell": [
+        0,
+        0,
+        1024,
+        1536
+      ],
+      "sourceGrip": [
+        514,
+        1240
+      ],
+      "sourceToSpriteScale": 0.1483050847457627,
+      "spriteSha256": "3271c331409ebca88691c5a8259938e8678d483841e7bc6f23ad88af062db1b5",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "skyblade",
+      "name": "空の刃",
+      "path": "assets/skyblade.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        724,
+        704,
+        1086,
+        1086
+      ],
+      "sourceGrip": [
+        912,
+        1000
+      ],
+      "sourceToSpriteScale": 0.6097560975609756,
+      "spriteSha256": "c1f4303a7be8a5584ff218ff78f5316ee625dc9544a13730d6f4e42f4494f683",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    },
+    {
+      "key": "firesword",
+      "name": "火迅風魔刀",
+      "path": "assets/firesword.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/weapons-12.png",
+      "sourceSha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed",
+      "sourceCell": [
+        1086,
+        704,
+        1448,
+        1086
+      ],
+      "sourceGrip": [
+        1278,
+        1002
+      ],
+      "sourceToSpriteScale": 0.5972696245733788,
+      "spriteSha256": "7141f95869479e6e813321fc6ea4f561eaaaacadefe6893ce0f3e4e47d05ae78",
+      "view": "front",
+      "reviewStatus": "candidate",
+      "limitations": "One weapon view; existing v3 rotation and foreshortening retained. One-handed axe and harisen need visual review."
+    }
+  ],
+  "baselineHashes": {
+    "assets/hero-base/base.json": "7d72788499d88df14d47b707b23c451d9e8bd8915a251800b4a5d25867b2c686",
+    "assets/hero-attack/attack.json": "9fb6ffee0e7c2ce03c718c34d6d5b739bfd0b03d19569a96ff8f3aa9a644559e",
+    "hero-base-renderer.js": "d2df10ab0acb355ab3c56f148e14a8026ec465964ac5e6bfb8f9ba27ef98c997",
+    "hero-attack-renderer.js": "06264e1d9f3bebe814b377e9ad023e3aacef8912ce440c6d8013ba854ab69020"
+  }
+}

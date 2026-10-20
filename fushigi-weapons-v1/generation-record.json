@@ -1,0 +1,24 @@
+{
+  "tool": "image_gen.imagegen",
+  "date": "2026-10-20",
+  "reference": "fushigi-equipment-v3/source-art/approved-sword-shield.png",
+  "referenceSha256": "ca6f550c6f2e88217dfa2fb329c201ba819133e6d4b67e8dc70fd8946fec8496",
+  "transparentBackgroundRequested": true,
+  "generations": [
+    {
+      "output": "source-art/weapons-12.png",
+      "promptSummary": "4 columns x 3 rows; twelve isolated vertically upward weapons in repository weapon order. Match approved sword painterly forged silver/brass warm material and bold silhouette. Handle centres near 82 percent height. No text, shadows, character, or hands. Individual weapon descriptions follow tests/tools/sheets.js HINT.",
+      "localGenerationOriginal": "/workspace/generated_images/exec-7a2f823a-3c2a-40ad-b51d-574eb9c3204e.png",
+      "sha256": "171aab8bc9aac8489ea1256ed29b6dbab7fdb0f86477a56bd960c4fd503e16ed"
+    },
+    {
+      "output": "source-art/harisen.png",
+      "promptSummary": "Single folded accordion ivory-paper Japanese harisen slapstick, long rectangular pleated paddle, zigzag top, red-brown leather handle. Not a radial open hand fan. Match approved sword painterly texture. Transparent background.",
+      "localGenerationOriginal": "/workspace/generated_images/exec-2ffe47b4-11e5-43eb-9704-fa5d457b5144.png",
+      "sha256": "6a8453d5e24d08ab9a4040f8c3a42d07c734ab9ebd4c0cfa64ec85f6bde55948"
+    }
+  ],
+  "correction": "Original sheet harisen was an open fan; replaced by separately generated folded-paper harisen.",
+  "processing": "build.py; hand-calibrated original grip centres; aspect ratio preserved; tip-to-grip 175px; sprite grip (96,210); renderScale 0.66; alpha below 40 cleared; source hashes in weapons.json.",
+  "approval": "Candidates only; no new user approval claimed."
+}
