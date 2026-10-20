@@ -1,0 +1,20 @@
+{
+  "count": 256,
+  "joins": [
+    {
+      "theme": "slate",
+      "maxBoundaryDelta": 0
+    },
+    {
+      "theme": "sand",
+      "maxBoundaryDelta": 0
+    },
+    {
+      "theme": "deep",
+      "maxBoundaryDelta": 0
+    }
+  ],
+  "randomFloors": 40,
+  "errors": [],
+  "failedArtRequests": []
+}

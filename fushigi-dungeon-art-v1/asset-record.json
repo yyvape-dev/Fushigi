@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "source": "fushigi-dungeon-art-v1/source-art/cave-atlas.png",
+  "sourceSha256": "7e8896391e514f2f6ff2be9e673ab1b18a22f42550a2ab4cc11edd64ac25c7b6",
+  "sourceSize": [
+    1536,
+    1024
+  ],
+  "tileSize": 256,
+  "assets": {
+    "floor0": {
+      "path": "assets/dungeon/cave-v1/floor0.webp",
+      "sourceBox": [
+        4,
+        4,
+        508,
+        508
+      ],
+      "sha256": "cd319dfe23d8c659d4f96856f1078483af51c7d4cb6134aabe8a81d95f761809",
+      "bytes": 25262
+    },
+    "floor1": {
+      "path": "assets/dungeon/cave-v1/floor1.webp",
+      "sourceBox": [
+        516,
+        4,
+        1020,
+        508
+      ],
+      "sha256": "9c4de797c4d7da470fe23a168283773e4a061304287a8fcc690972b6bcff432c",
+      "bytes": 25622
+    },
+    "floor2": {
+      "path": "assets/dungeon/cave-v1/floor2.webp",
+      "sourceBox": [
+        1028,
+        4,
+        1532,
+        508
+      ],
+      "sha256": "2648b862aeb0052a434128533ff92e9e061d9f19b35a5d97378a6518390c0c8d",
+      "bytes": 26496
+    },
+    "wallT": {
+      "path": "assets/dungeon/cave-v1/wallT.webp",
+      "sourceBox": [
+        4,
+        516,
+        508,
+        1020
+      ],
+      "sha256": "0d12681a7d33326953d369008ed4c01d5bce69bbe889f6f7ddffb0dfacbdaa8a",
+      "bytes": 23998
+    },
+    "wallF": {
+      "path": "assets/dungeon/cave-v1/wallF.webp",
+      "sourceBox": [
+        516,
+        516,
+        1020,
+        1020
+      ],
+      "sha256": "f2025b6598de0c3132b4be5e3f120b8474f4471ede0350a4caf600a5f303bbfe",
+      "bytes": 16440
+    },
+    "stairs": {
+      "path": "assets/dungeon/cave-v1/stairs.webp",
+      "sourceBox": [
+        1028,
+        516,
+        1532,
+        1020
+      ],
+      "sha256": "0ab886d6cd989e1fa6c4dc5911989de32ddc485013356156d917841d4f63d554",
+      "bytes": 23594
+    }
+  }
+}

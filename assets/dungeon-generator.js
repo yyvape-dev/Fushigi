@@ -1,9 +1,9 @@
 // Layout modules produce logical cells. Art never changes collision.
 (function(root){
  const THEMES=[
-  {id:'slate',name:'青岩の石室',filter:'none',moss:'#617950'},
-  {id:'sand',name:'砂岩の石室',filter:'sepia(.55) saturate(.8) brightness(1.18)',moss:'#a28856'},
-  {id:'deep',name:'深層の石室',filter:'hue-rotate(22deg) saturate(.7) brightness(.8)',moss:'#657887'}
+  {id:'slate',name:'苔むす洞窟',filter:'none',moss:'#617950'},
+  {id:'sand',name:'乾いた岩窟',filter:'sepia(.25) saturate(.85) brightness(1.05)',moss:'#a28856'},
+  {id:'deep',name:'青岩の洞窟',filter:'hue-rotate(20deg) saturate(.7) brightness(.9)',moss:'#657887'}
  ];
  function random(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;};}
  function generate(width,height,seed,depth=1){
