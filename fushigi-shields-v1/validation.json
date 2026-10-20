@@ -1,0 +1,6515 @@
+{
+  "shieldDirectionFrameChecks": 480,
+  "equipmentCombinationFrameChecks": 6240,
+  "shieldImagesLoaded": 40,
+  "NWPixelChecks": 60,
+  "pageErrors": [],
+  "mobileLayout": true,
+  "approvedBaselineUnchanged": true,
+  "checks": [
+    {
+      "shield": "bronzeshield",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "bronzeshield",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "tekkoshield",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "onioookami",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "battlecounter",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "mikiri",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "konjo",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "zekkocho",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "haramochi",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "steakplate",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "S",
+      "frame": 0,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "S",
+      "frame": 1,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "S",
+      "frame": 2,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "S",
+      "frame": 3,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "S",
+      "frame": 4,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "S",
+      "frame": 5,
+      "view": "front",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-front"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SW",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SW",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SW",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SW",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SW",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SW",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "W",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "W",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "W",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "W",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "W",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "W",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "weapon",
+        "body",
+        "shield-side"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NW",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NW",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NW",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NW",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NW",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NW",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "N",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "N",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "N",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "N",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "N",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "N",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "weapon",
+        "shield-back",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NE",
+      "frame": 0,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NE",
+      "frame": 1,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NE",
+      "frame": 2,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NE",
+      "frame": 3,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NE",
+      "frame": 4,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "NE",
+      "frame": 5,
+      "view": "back",
+      "drawOrder": [
+        "shield-back",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "E",
+      "frame": 0,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "E",
+      "frame": 1,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "E",
+      "frame": 2,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "E",
+      "frame": 3,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "E",
+      "frame": 4,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "E",
+      "frame": 5,
+      "view": "side",
+      "drawOrder": [
+        "shield-side",
+        "body",
+        "weapon",
+        "body"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SE",
+      "frame": 0,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SE",
+      "frame": 1,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SE",
+      "frame": 2,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SE",
+      "frame": 3,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SE",
+      "frame": 4,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    },
+    {
+      "shield": "minoshield",
+      "direction": "SE",
+      "frame": 5,
+      "view": "quarter",
+      "drawOrder": [
+        "body",
+        "weapon",
+        "body",
+        "shield-quarter"
+      ]
+    }
+  ],
+  "pixels": [
+    {
+      "shield": "bronzeshield",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "bronzeshield",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "bronzeshield",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "bronzeshield",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "bronzeshield",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "bronzeshield",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "tekkoshield",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "tekkoshield",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "tekkoshield",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "tekkoshield",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "tekkoshield",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "tekkoshield",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "onioookami",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "onioookami",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "onioookami",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "onioookami",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "onioookami",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "onioookami",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "battlecounter",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "battlecounter",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "battlecounter",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "battlecounter",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "battlecounter",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "battlecounter",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "mikiri",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "mikiri",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "mikiri",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "mikiri",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "mikiri",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "mikiri",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "konjo",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "konjo",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "konjo",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "konjo",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "konjo",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "konjo",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "zekkocho",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "zekkocho",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "zekkocho",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "zekkocho",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "zekkocho",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "zekkocho",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "haramochi",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "haramochi",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "haramochi",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "haramochi",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "haramochi",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "haramochi",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "steakplate",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "steakplate",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "steakplate",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "steakplate",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "steakplate",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "steakplate",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "minoshield",
+      "ms": 17,
+      "opaqueBodyPixelsPreserved": 56
+    },
+    {
+      "shield": "minoshield",
+      "ms": 70,
+      "opaqueBodyPixelsPreserved": 569
+    },
+    {
+      "shield": "minoshield",
+      "ms": 120,
+      "opaqueBodyPixelsPreserved": 620
+    },
+    {
+      "shield": "minoshield",
+      "ms": 170,
+      "opaqueBodyPixelsPreserved": 574
+    },
+    {
+      "shield": "minoshield",
+      "ms": 230,
+      "opaqueBodyPixelsPreserved": 469
+    },
+    {
+      "shield": "minoshield",
+      "ms": 280,
+      "opaqueBodyPixelsPreserved": 56
+    }
+  ],
+  "combinations": [
+    {
+      "shield": "bronzeshield",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "bronzeshield",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "tekkoshield",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "onioookami",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "battlecounter",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "mikiri",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "konjo",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "zekkocho",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "haramochi",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "steakplate",
+      "weapon": "firesword",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "approved",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "woodsword",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "bronzesword",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "katana",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "dotanuki",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "minoaxe",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "renkentou",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "kamaitachi",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "healsword",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "steakknife",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "harisen",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "skyblade",
+      "frames": 48
+    },
+    {
+      "shield": "minoshield",
+      "weapon": "firesword",
+      "frames": 48
+    }
+  ]
+}

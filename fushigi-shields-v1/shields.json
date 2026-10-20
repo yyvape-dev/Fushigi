@@ -1,0 +1,1055 @@
+{
+  "version": 1,
+  "status": "Ten four-view shield candidates; user visual review pending",
+  "approvedBaseline": "../fushigi-equipment-v3/",
+  "shieldRenderScale": 0.59,
+  "weaponRenderScale": 0.66,
+  "viewMapping": {
+    "S": "front",
+    "SW": "quarter",
+    "W": "side",
+    "NW": "back",
+    "N": "back",
+    "NE": "back",
+    "E": "side",
+    "SE": "quarter"
+  },
+  "shields": [
+    {
+      "key": "bronzeshield",
+      "name": "青銅甲の盾",
+      "renderScale": 0.59,
+      "source": "source-art/shields-a.png",
+      "sourceSha256": "2d3685033407c672779a327f332a1ad524f00aec09866cff99e2a0756d4c9215",
+      "registeredHeight": 144.0,
+      "views": {
+        "front": {
+          "path": "assets/bronzeshield/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            61,
+            26,
+            290,
+            255
+          ],
+          "sourceGrip": [
+            175.5,
+            140.5
+          ],
+          "scale": 0.62882096069869,
+          "sha256": "87dca4f2cf2eeec3ecadf097d1e860ba6a5e62f58b3f174171c94c2f5b3900b6"
+        },
+        "quarter": {
+          "path": "assets/bronzeshield/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            371,
+            24,
+            550,
+            255
+          ],
+          "sourceGrip": [
+            460.5,
+            139.5
+          ],
+          "scale": 0.6233766233766234,
+          "sha256": "19a8a4851f758773f190b216ddf7a91c761b5462c9c236dd7eae265ef767ab12"
+        },
+        "side": {
+          "path": "assets/bronzeshield/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            681,
+            26,
+            761,
+            255
+          ],
+          "sourceGrip": [
+            721.0,
+            140.5
+          ],
+          "scale": 0.62882096069869,
+          "sha256": "c0542c5b855c1035e1a4af08c3ad680f4a4ec334ab8aa5bc2d985c2e6af9ed95"
+        },
+        "back": {
+          "path": "assets/bronzeshield/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            833,
+            24,
+            1061,
+            255
+          ],
+          "sourceGrip": [
+            948,
+            141
+          ],
+          "scale": 0.6233766233766234,
+          "sha256": "800ea9ed84cead9c5c64d4c7ed706451fe7f9f7c63bf57cbf84f83b5cebae77b"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "tekkoshield",
+      "name": "鉄甲の盾",
+      "renderScale": 0.59,
+      "source": "source-art/shields-a.png",
+      "sourceSha256": "2d3685033407c672779a327f332a1ad524f00aec09866cff99e2a0756d4c9215",
+      "registeredHeight": 138.16216216216216,
+      "views": {
+        "front": {
+          "path": "assets/tekkoshield/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            64,
+            282,
+            286,
+            495
+          ],
+          "sourceGrip": [
+            175.0,
+            388.5
+          ],
+          "scale": 0.6486486486486487,
+          "sha256": "28a838d531b34aa1f47bb120bbe61070143fae8289d16d9b904de39910e780cf"
+        },
+        "quarter": {
+          "path": "assets/tekkoshield/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            381,
+            276,
+            555,
+            503
+          ],
+          "sourceGrip": [
+            468.0,
+            389.5
+          ],
+          "scale": 0.6086438861769258,
+          "sha256": "5941af3d40623e60d6497ccdb3a34c669269d435d6e847e03786f5dfa152ffe3"
+        },
+        "side": {
+          "path": "assets/tekkoshield/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            678,
+            278,
+            737,
+            497
+          ],
+          "sourceGrip": [
+            707.5,
+            387.5
+          ],
+          "scale": 0.630877452795261,
+          "sha256": "9ecb8af367f1dda2183c2d5db82a713ab4f3c457593e2a40236c89073ff11e00"
+        },
+        "back": {
+          "path": "assets/tekkoshield/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            839,
+            280,
+            1063,
+            496
+          ],
+          "sourceGrip": [
+            950,
+            390
+          ],
+          "scale": 0.6396396396396397,
+          "sha256": "bdbd5360b33a8556bd96765a0560935a896de60362f93fe914f4e91df3c240c1"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "onioookami",
+      "name": "おにおおかみ",
+      "renderScale": 0.59,
+      "source": "source-art/shields-a.png",
+      "sourceSha256": "2d3685033407c672779a327f332a1ad524f00aec09866cff99e2a0756d4c9215",
+      "registeredHeight": 152,
+      "views": {
+        "front": {
+          "path": "assets/onioookami/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            72,
+            514,
+            279,
+            779
+          ],
+          "sourceGrip": [
+            175.5,
+            646.5
+          ],
+          "scale": 0.5735849056603773,
+          "sha256": "005742a2859389eac4298d67a68da1c7b179bb5830a5903df4f9eddb88773fd2"
+        },
+        "quarter": {
+          "path": "assets/onioookami/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            382,
+            511,
+            558,
+            778
+          ],
+          "sourceGrip": [
+            470.0,
+            644.5
+          ],
+          "scale": 0.5692883895131086,
+          "sha256": "e7b2f43e78777b83b66902a1b21919c5ca20766c55cf0d4cf29fbc314f0246c0"
+        },
+        "side": {
+          "path": "assets/onioookami/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            681,
+            515,
+            777,
+            778
+          ],
+          "sourceGrip": [
+            729.0,
+            646.5
+          ],
+          "scale": 0.5779467680608364,
+          "sha256": "211e2b3a3f36748932865361ef88360fb65e59bc184fdfed223428abf9d582a5"
+        },
+        "back": {
+          "path": "assets/onioookami/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            845,
+            513,
+            1050,
+            778
+          ],
+          "sourceGrip": [
+            947,
+            647
+          ],
+          "scale": 0.5735849056603773,
+          "sha256": "eb9db4b21dd2588c6277fb4f9356dff297c1c734a595c10109202386ffec8e6c"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "battlecounter",
+      "name": "バトルカウンター",
+      "renderScale": 0.59,
+      "source": "source-art/shields-a.png",
+      "sourceSha256": "2d3685033407c672779a327f332a1ad524f00aec09866cff99e2a0756d4c9215",
+      "registeredHeight": 133.56521739130434,
+      "views": {
+        "front": {
+          "path": "assets/battlecounter/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            54,
+            788,
+            294,
+            1044
+          ],
+          "sourceGrip": [
+            174.0,
+            916.0
+          ],
+          "scale": 0.5217391304347826,
+          "sha256": "c38d12f587ce0d5a7a788255ee7b7aba7d12faab01e7a3e113a8ea79febb5ba4"
+        },
+        "quarter": {
+          "path": "assets/battlecounter/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            362,
+            788,
+            565,
+            1038
+          ],
+          "sourceGrip": [
+            463.5,
+            913.0
+          ],
+          "scale": 0.5342608695652173,
+          "sha256": "f2eea7c7663ecb5d98fe66102ab23d68d9d6bd25bf789b2f3a67c0ff38926867"
+        },
+        "side": {
+          "path": "assets/battlecounter/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            652,
+            797,
+            767,
+            1037
+          ],
+          "sourceGrip": [
+            709.5,
+            917.0
+          ],
+          "scale": 0.5565217391304348,
+          "sha256": "19095606f28ed6b7bcde8b90b2f5504af7758b126ddff514f70d935db5c6dd98"
+        },
+        "back": {
+          "path": "assets/battlecounter/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            807,
+            788,
+            1084,
+            1045
+          ],
+          "sourceGrip": [
+            949,
+            917
+          ],
+          "scale": 0.5197090170867873,
+          "sha256": "91570d976d9bbe3f48fa78d9845cb0f331b45fa984f4b01b2d5beb3b243ec35b"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "mikiri",
+      "name": "見切りの盾",
+      "renderScale": 0.59,
+      "source": "source-art/shields-a.png",
+      "sourceSha256": "2d3685033407c672779a327f332a1ad524f00aec09866cff99e2a0756d4c9215",
+      "registeredHeight": 152,
+      "views": {
+        "front": {
+          "path": "assets/mikiri/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            92,
+            1054,
+            258,
+            1363
+          ],
+          "sourceGrip": [
+            175.0,
+            1208.5
+          ],
+          "scale": 0.4919093851132686,
+          "sha256": "6d73eb21b7ac4b406ccd2e85beca5f90d80b3f283196a0bd050d2e3d170f084f"
+        },
+        "quarter": {
+          "path": "assets/mikiri/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            389,
+            1051,
+            526,
+            1359
+          ],
+          "sourceGrip": [
+            457.5,
+            1205.0
+          ],
+          "scale": 0.4935064935064935,
+          "sha256": "97e6a8619c7efc4c978f57935a25aa91e3a7f850cb1d59f3fc252e703762c12f"
+        },
+        "side": {
+          "path": "assets/mikiri/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            668,
+            1055,
+            734,
+            1359
+          ],
+          "sourceGrip": [
+            701.0,
+            1207.0
+          ],
+          "scale": 0.5,
+          "sha256": "d383878af640e78fd2bc6459201a8895932b75051e53fcfb6d3a2c4b7c7b6df3"
+        },
+        "back": {
+          "path": "assets/mikiri/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            867,
+            1053,
+            1031,
+            1362
+          ],
+          "sourceGrip": [
+            949,
+            1182
+          ],
+          "scale": 0.4919093851132686,
+          "sha256": "59e5e7ad828655fbf7bbd259176884d3dc131357de29656cf990947678d604ea"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "konjo",
+      "name": "根性の盾",
+      "renderScale": 0.59,
+      "source": "source-art/shields-b.png",
+      "sourceSha256": "d67dff98d5acc28595aa9bb814c412611bb5b2f267bf234d73703533988345be",
+      "registeredHeight": 140.22707423580786,
+      "views": {
+        "front": {
+          "path": "assets/konjo/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            126,
+            9,
+            352,
+            231
+          ],
+          "sourceGrip": [
+            239.0,
+            120.0
+          ],
+          "scale": 0.6316534875486841,
+          "sha256": "f2858d65879c29145059b5fc9a660e0d6975ee1a8334e777ffbeff74e4989afd"
+        },
+        "quarter": {
+          "path": "assets/konjo/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            460,
+            9,
+            634,
+            228
+          ],
+          "sourceGrip": [
+            547.0,
+            118.5
+          ],
+          "scale": 0.640306275049351,
+          "sha256": "01e0251a7eff73a3eee7708fad8d057576683626f9bc90f23dc752d3890893a6"
+        },
+        "side": {
+          "path": "assets/konjo/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            753,
+            10,
+            826,
+            229
+          ],
+          "sourceGrip": [
+            789.5,
+            119.5
+          ],
+          "scale": 0.640306275049351,
+          "sha256": "6c232f28d40c02abce055c3fe8ba54b80d0c967a192e8a0f6cddf26665fe55fc"
+        },
+        "back": {
+          "path": "assets/konjo/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            960,
+            8,
+            1189,
+            231
+          ],
+          "sourceGrip": [
+            1075,
+            121
+          ],
+          "scale": 0.62882096069869,
+          "sha256": "91a37a820c8d62445d78146688de6b8b434c1669ce4b947b464e02dff92e11a5"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "zekkocho",
+      "name": "絶好調の盾",
+      "renderScale": 0.59,
+      "source": "source-art/shields-b.png",
+      "sourceSha256": "d67dff98d5acc28595aa9bb814c412611bb5b2f267bf234d73703533988345be",
+      "registeredHeight": 133.5614973262032,
+      "views": {
+        "front": {
+          "path": "assets/zekkocho/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            126,
+            239,
+            352,
+            463
+          ],
+          "sourceGrip": [
+            239.0,
+            351.0
+          ],
+          "scale": 0.5962566844919787,
+          "sha256": "2f9c06cd0bea72c2c2d5159e060abe541ba3e2d7b0e0e579a09cd8ff9fa7eec2"
+        },
+        "quarter": {
+          "path": "assets/zekkocho/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            450,
+            239,
+            637,
+            462
+          ],
+          "sourceGrip": [
+            543.5,
+            350.5
+          ],
+          "scale": 0.5989304812834224,
+          "sha256": "6e3409611444a4c36f7ad7ec17f2ce3dbe088fc1d05b75d683030aa19fdbbded"
+        },
+        "side": {
+          "path": "assets/zekkocho/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            753,
+            239,
+            832,
+            463
+          ],
+          "sourceGrip": [
+            792.5,
+            351.0
+          ],
+          "scale": 0.5962566844919787,
+          "sha256": "08c21ed6e04a0767c065a755ec1a8d13ce490b066f3da0197310444f074c6c70"
+        },
+        "back": {
+          "path": "assets/zekkocho/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            957,
+            237,
+            1190,
+            464
+          ],
+          "sourceGrip": [
+            1073,
+            351
+          ],
+          "scale": 0.5883766402035384,
+          "sha256": "12e2e9c284eafbb68b7f71226d887c0fef576143d9c4eacb048c5e76e2e2bed6"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "haramochi",
+      "name": "ハラモチの盾",
+      "renderScale": 0.59,
+      "source": "source-art/shields-b.png",
+      "sourceSha256": "d67dff98d5acc28595aa9bb814c412611bb5b2f267bf234d73703533988345be",
+      "registeredHeight": 120.61538461538461,
+      "views": {
+        "front": {
+          "path": "assets/haramochi/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            117,
+            473,
+            361,
+            697
+          ],
+          "sourceGrip": [
+            239.0,
+            585.0
+          ],
+          "scale": 0.5384615384615384,
+          "sha256": "c8cee7bdc721d2e4aba915bc53d088d897660c683ddc19a16d049cdba5173a0b"
+        },
+        "quarter": {
+          "path": "assets/haramochi/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            450,
+            473,
+            658,
+            697
+          ],
+          "sourceGrip": [
+            554.0,
+            585.0
+          ],
+          "scale": 0.5384615384615384,
+          "sha256": "d732dc9ad1e9011174ba62d0838a89dd77a23461b1ee12222fe355acf859539c"
+        },
+        "side": {
+          "path": "assets/haramochi/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            753,
+            473,
+            837,
+            697
+          ],
+          "sourceGrip": [
+            795.0,
+            585.0
+          ],
+          "scale": 0.5384615384615384,
+          "sha256": "8b7ed3f6cfef5cec103e23d52f3bf21f806d69492534973b6b02a1e8f934fd97"
+        },
+        "back": {
+          "path": "assets/haramochi/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            949,
+            472,
+            1197,
+            698
+          ],
+          "sourceGrip": [
+            1075,
+            598
+          ],
+          "scale": 0.5336963921034718,
+          "sha256": "cfae68d0ee023877622b3d1297ce6e1a48a2a92b9fb06a07194092b962562069"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "steakplate",
+      "name": "ステーキプレート",
+      "renderScale": 0.59,
+      "source": "source-art/shields-b.png",
+      "sourceSha256": "d67dff98d5acc28595aa9bb814c412611bb5b2f267bf234d73703533988345be",
+      "registeredHeight": 98.47741935483872,
+      "views": {
+        "front": {
+          "path": "assets/steakplate/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            89,
+            706,
+            389,
+            918
+          ],
+          "sourceGrip": [
+            239.0,
+            812.0
+          ],
+          "scale": 0.4645161290322581,
+          "sha256": "ebcb99c30a25c0773e76e96fdc4cd42f4ffb4a262b3a9013dd1cfadf2a6d6d04"
+        },
+        "quarter": {
+          "path": "assets/steakplate/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            443,
+            705,
+            674,
+            915
+          ],
+          "sourceGrip": [
+            558.5,
+            810.0
+          ],
+          "scale": 0.46894009216589866,
+          "sha256": "240815a27e7e67d7afb8006080335e878c043c8ccd0471c4cc2b7f57aff6a5c0"
+        },
+        "side": {
+          "path": "assets/steakplate/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            755,
+            707,
+            841,
+            915
+          ],
+          "sourceGrip": [
+            798.0,
+            811.0
+          ],
+          "scale": 0.47344913151364765,
+          "sha256": "e8bec7ea4ba469583a4898ee62c2342b4f8bc6c340deb16918f3f92acb1f5fc5"
+        },
+        "back": {
+          "path": "assets/steakplate/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            921,
+            706,
+            1231,
+            918
+          ],
+          "sourceGrip": [
+            1071,
+            814
+          ],
+          "scale": 0.4645161290322581,
+          "sha256": "4424bce91b77c9e82bd3894449b346d8eacd62d7c22eec1557c0b3c4a73fc664"
+        }
+      },
+      "reviewStatus": "candidate"
+    },
+    {
+      "key": "minoshield",
+      "name": "ミノタウロスの盾",
+      "renderScale": 0.59,
+      "source": "source-art/shields-b.png",
+      "sourceSha256": "d67dff98d5acc28595aa9bb814c412611bb5b2f267bf234d73703533988345be",
+      "registeredHeight": 125.33333333333333,
+      "views": {
+        "front": {
+          "path": "assets/minoshield/front.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            110,
+            922,
+            358,
+            1163
+          ],
+          "sourceGrip": [
+            234.0,
+            1042.5
+          ],
+          "scale": 0.5200553250345781,
+          "sha256": "880a1156d8ada962cc895b78e46edc11277477c277bd8bc8e4cc88d843deb452"
+        },
+        "quarter": {
+          "path": "assets/minoshield/quarter.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            453,
+            924,
+            663,
+            1159
+          ],
+          "sourceGrip": [
+            558.0,
+            1041.5
+          ],
+          "scale": 0.5333333333333333,
+          "sha256": "21da0d7a9422081810b97fec2f14c9e6d0142a3be7cd309c4290a26da6ad8f95"
+        },
+        "side": {
+          "path": "assets/minoshield/side.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            752,
+            924,
+            855,
+            1155
+          ],
+          "sourceGrip": [
+            803.5,
+            1039.5
+          ],
+          "scale": 0.5425685425685426,
+          "sha256": "a521e9b9df9ac4b0676ab7dd2f93d6a99825dacb371277639f0c4785a878c67a"
+        },
+        "back": {
+          "path": "assets/minoshield/back.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "sourceBox": [
+            956,
+            922,
+            1199,
+            1163
+          ],
+          "sourceGrip": [
+            1075,
+            1041
+          ],
+          "scale": 0.5200553250345781,
+          "sha256": "05a95c62d4b3dcdb0a76796921f3eb52e42a75e820ca110a839f55bf8bd364c2"
+        }
+      },
+      "reviewStatus": "candidate"
+    }
+  ],
+  "baselineHashes": {
+    "assets/hero-base/base.json": "7d72788499d88df14d47b707b23c451d9e8bd8915a251800b4a5d25867b2c686",
+    "assets/hero-attack/attack.json": "9fb6ffee0e7c2ce03c718c34d6d5b739bfd0b03d19569a96ff8f3aa9a644559e",
+    "hero-base-renderer.js": "d2df10ab0acb355ab3c56f148e14a8026ec465964ac5e6bfb8f9ba27ef98c997",
+    "hero-attack-renderer.js": "06264e1d9f3bebe814b377e9ad023e3aacef8912ce440c6d8013ba854ab69020"
+  }
+}
