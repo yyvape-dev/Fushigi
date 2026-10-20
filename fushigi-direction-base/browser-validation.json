@@ -1,0 +1,136 @@
+{
+  "page_errors": [],
+  "direction_mapping": [
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE",
+    "E",
+    "SE"
+  ],
+  "equipment_socket_checks": [
+    {
+      "dir": "S",
+      "tile": 48,
+      "items": 2
+    },
+    {
+      "dir": "SW",
+      "tile": 48,
+      "items": 2
+    },
+    {
+      "dir": "W",
+      "tile": 48,
+      "items": 2
+    },
+    {
+      "dir": "NW",
+      "tile": 48,
+      "items": 2
+    },
+    {
+      "dir": "N",
+      "tile": 48,
+      "items": 2
+    },
+    {
+      "dir": "NE",
+      "tile": 48,
+      "items": 2
+    },
+    {
+      "dir": "E",
+      "tile": 48,
+      "items": 2
+    },
+    {
+      "dir": "SE",
+      "tile": 48,
+      "items": 2
+    },
+    {
+      "dir": "S",
+      "tile": 64,
+      "items": 2
+    },
+    {
+      "dir": "SW",
+      "tile": 64,
+      "items": 2
+    },
+    {
+      "dir": "W",
+      "tile": 64,
+      "items": 2
+    },
+    {
+      "dir": "NW",
+      "tile": 64,
+      "items": 2
+    },
+    {
+      "dir": "N",
+      "tile": 64,
+      "items": 2
+    },
+    {
+      "dir": "NE",
+      "tile": 64,
+      "items": 2
+    },
+    {
+      "dir": "E",
+      "tile": 64,
+      "items": 2
+    },
+    {
+      "dir": "SE",
+      "tile": 64,
+      "items": 2
+    },
+    {
+      "dir": "S",
+      "tile": 96,
+      "items": 2
+    },
+    {
+      "dir": "SW",
+      "tile": 96,
+      "items": 2
+    },
+    {
+      "dir": "W",
+      "tile": 96,
+      "items": 2
+    },
+    {
+      "dir": "NW",
+      "tile": 96,
+      "items": 2
+    },
+    {
+      "dir": "N",
+      "tile": 96,
+      "items": 2
+    },
+    {
+      "dir": "NE",
+      "tile": 96,
+      "items": 2
+    },
+    {
+      "dir": "E",
+      "tile": 96,
+      "items": 2
+    },
+    {
+      "dir": "SE",
+      "tile": 96,
+      "items": 2
+    }
+  ],
+  "context": "actual Fushigi HTML and repository town asset, local only"
+}

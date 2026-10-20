@@ -1,0 +1,266 @@
+[
+  {
+    "id": "S",
+    "index": 0,
+    "right": {
+      "position": [
+        94.0,
+        159.63
+      ],
+      "layer": "front"
+    },
+    "left": {
+      "position": [
+        162.0,
+        159.63
+      ],
+      "layer": "front"
+    },
+    "shieldWidth": 1.0,
+    "sourceTransform": {
+      "scale": 0.4683545213316924,
+      "translate": [
+        16.054574701453276,
+        25.443036701356306
+      ]
+    },
+    "sourceAlphaBox": [
+      111,
+      14,
+      371,
+      433
+    ],
+    "socketStatus": "guide projection, requires art calibration"
+  },
+  {
+    "id": "SW",
+    "index": 1,
+    "right": {
+      "position": [
+        97.95,
+        148.06
+      ],
+      "layer": "back"
+    },
+    "left": {
+      "position": [
+        146.03,
+        169.02
+      ],
+      "layer": "front"
+    },
+    "shieldWidth": 0.707,
+    "sourceTransform": {
+      "scale": 0.4675427444756731,
+      "translate": [
+        31.334115612670175,
+        26.857029810767614
+      ]
+    },
+    "sourceAlphaBox": [
+      104,
+      11,
+      340,
+      438
+    ],
+    "socketStatus": "guide projection, requires art calibration"
+  },
+  {
+    "id": "W",
+    "index": 2,
+    "right": {
+      "position": [
+        119.5,
+        141.09
+      ],
+      "layer": "back"
+    },
+    "left": {
+      "position": [
+        119.5,
+        170.74
+      ],
+      "layer": "front"
+    },
+    "shieldWidth": 0.2,
+    "sourceTransform": {
+      "scale": 0.46450847087973085,
+      "translate": [
+        37.159991204657956,
+        27.819423762082437
+      ]
+    },
+    "sourceAlphaBox": [
+      111,
+      9,
+      339,
+      439
+    ],
+    "socketStatus": "guide projection, requires art calibration"
+  },
+  {
+    "id": "NW",
+    "index": 3,
+    "right": {
+      "position": [
+        146.03,
+        142.82
+      ],
+      "layer": "back"
+    },
+    "left": {
+      "position": [
+        97.95,
+        163.78
+      ],
+      "layer": "front"
+    },
+    "shieldWidth": 0.707,
+    "sourceTransform": {
+      "scale": 0.2375304220862943,
+      "translate": [
+        -3.3107761696716125,
+        25.586678603670066
+      ]
+    },
+    "sourceAlphaBox": [
+      333,
+      27,
+      786,
+      856
+    ],
+    "socketStatus": "guide projection, requires art calibration"
+  },
+  {
+    "id": "N",
+    "index": 4,
+    "right": {
+      "position": [
+        162.0,
+        152.21
+      ],
+      "layer": "back"
+    },
+    "left": {
+      "position": [
+        94.0,
+        152.21
+      ],
+      "layer": "back"
+    },
+    "shieldWidth": 1.0,
+    "sourceTransform": {
+      "scale": 0.4591300531527691,
+      "translate": [
+        21.224641181564238,
+        29.245219681083398
+      ]
+    },
+    "sourceAlphaBox": [
+      107,
+      6,
+      368,
+      425
+    ],
+    "socketStatus": "guide projection, requires art calibration"
+  },
+  {
+    "id": "NE",
+    "index": 5,
+    "right": {
+      "position": [
+        158.05,
+        163.78
+      ],
+      "layer": "front"
+    },
+    "left": {
+      "position": [
+        109.97,
+        142.82
+      ],
+      "layer": "back"
+    },
+    "shieldWidth": 0.707,
+    "sourceTransform": {
+      "scale": 0.24161069927550669,
+      "translate": [
+        39.71142363974192,
+        22.577182728255252
+      ]
+    },
+    "sourceAlphaBox": [
+      129,
+      39,
+      591,
+      854
+    ],
+    "socketStatus": "guide projection, requires art calibration"
+  },
+  {
+    "id": "E",
+    "index": 6,
+    "right": {
+      "position": [
+        136.5,
+        170.74
+      ],
+      "layer": "front"
+    },
+    "left": {
+      "position": [
+        136.5,
+        141.09
+      ],
+      "layer": "back"
+    },
+    "shieldWidth": 0.2,
+    "sourceTransform": {
+      "scale": 0.46667907121094454,
+      "translate": [
+        26.258215196811975,
+        30.13328371515624
+      ]
+    },
+    "sourceAlphaBox": [
+      85,
+      4,
+      312,
+      432
+    ],
+    "socketStatus": "guide projection, requires art calibration"
+  },
+  {
+    "id": "SE",
+    "index": 7,
+    "right": {
+      "position": [
+        109.97,
+        169.02
+      ],
+      "layer": "front"
+    },
+    "left": {
+      "position": [
+        158.05,
+        148.06
+      ],
+      "layer": "back"
+    },
+    "shieldWidth": 0.707,
+    "sourceTransform": {
+      "scale": 0.4697429456261469,
+      "translate": [
+        23.821072416620638,
+        28.71179938061698
+      ]
+    },
+    "sourceAlphaBox": [
+      77,
+      7,
+      330,
+      432
+    ],
+    "socketStatus": "guide projection, requires art calibration"
+  }
+]

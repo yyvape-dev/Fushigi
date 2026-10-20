@@ -1,0 +1,66 @@
+[
+  {
+    "direction": "S",
+    "canonical_reference": "assets/hero-base/S.png",
+    "canonical_sha256": "f91ec65097b59a4f7138303e162408e14cf4d0de88b3718d5c962f08e263a5d5",
+    "guide_reference": "guides/S-sheet.png",
+    "guide_sha256": "1a1e293f0bbf95c2b7c9d5b96bb2c3c6a509d5ccdf640ada9e55668d05435b3a",
+    "generation_policy": "One independent image generation per direction using that exact canonical reference; no whole-character mirroring."
+  },
+  {
+    "direction": "SW",
+    "canonical_reference": "assets/hero-base/SW.png",
+    "canonical_sha256": "2d2201931a30a26c9cca35aaa1100dadcb2d5c69169237fb66a225a011e15fc6",
+    "guide_reference": "guides/SW-sheet.png",
+    "guide_sha256": "be22eb611881b94ff37cb21a90605dc138c3f3147d1090229b8fe0866dfe8dc8",
+    "generation_policy": "One independent image generation per direction using that exact canonical reference; no whole-character mirroring."
+  },
+  {
+    "direction": "W",
+    "canonical_reference": "assets/hero-base/W.png",
+    "canonical_sha256": "fd50076b6f3f00a0339f0639aa006021bf6ca7d86a2975e55a2206bb13c289cf",
+    "guide_reference": "guides/W-sheet.png",
+    "guide_sha256": "34f24c6dace9d986cf526a524eff4a9e71f0b122d8a0607c3c72d8d046e29872",
+    "generation_policy": "One independent image generation per direction using that exact canonical reference; no whole-character mirroring."
+  },
+  {
+    "direction": "NW",
+    "canonical_reference": "assets/hero-base/NW.png",
+    "canonical_sha256": "85ff6e579ad94077bd5a65ca9ff442fd5c40f451dc27891fc83101018ec76a73",
+    "guide_reference": "guides/NW-sheet.png",
+    "guide_sha256": "8fabdebb6acd110b4192e2acf184fba48e49350a544ea67414665dee603c6596",
+    "generation_policy": "One independent image generation per direction using that exact canonical reference; no whole-character mirroring."
+  },
+  {
+    "direction": "N",
+    "canonical_reference": "assets/hero-base/N.png",
+    "canonical_sha256": "4f4e9c5a31ef6ff3bac3efd3094c85298139043fb033f169747b98d624e7806c",
+    "guide_reference": "guides/N-sheet.png",
+    "guide_sha256": "eaea3b21972f1ccd9f97c83965411b6b6cd0d812e7f0152bb02d4bc827169f03",
+    "generation_policy": "One independent image generation per direction using that exact canonical reference; no whole-character mirroring."
+  },
+  {
+    "direction": "NE",
+    "canonical_reference": "assets/hero-base/NE.png",
+    "canonical_sha256": "93265fc4bcc9405b8dee370d89e28a4f1101579d083b685b6bc76be2169b2045",
+    "guide_reference": "guides/NE-sheet.png",
+    "guide_sha256": "7a12dacbb532ee5de1658b062405f365e282ae48b660f8947a59df35f07cd04c",
+    "generation_policy": "One independent image generation per direction using that exact canonical reference; no whole-character mirroring."
+  },
+  {
+    "direction": "E",
+    "canonical_reference": "assets/hero-base/E.png",
+    "canonical_sha256": "2b2ad0ddb24d8e0bdec25174444c5a32e58dab96293384300608d2afe96b1e45",
+    "guide_reference": "guides/E-sheet.png",
+    "guide_sha256": "85f4c1b46f1eb16e11bb900ac81834bb4d6e8a688f9fc7f5f400c2cb57218919",
+    "generation_policy": "One independent image generation per direction using that exact canonical reference; no whole-character mirroring."
+  },
+  {
+    "direction": "SE",
+    "canonical_reference": "assets/hero-base/SE.png",
+    "canonical_sha256": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d",
+    "guide_reference": "guides/SE-sheet.png",
+    "guide_sha256": "1a6da71586ece14a3df5b4879d40e24671e57ef5aff311692bcd582869a7d5fd",
+    "generation_policy": "One independent image generation per direction using that exact canonical reference; no whole-character mirroring."
+  }
+]

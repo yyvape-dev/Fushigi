@@ -1,0 +1,283 @@
+OK  pixel art rows are 16x16
+OK  boot: starts in town at spawn
+OK  boot: fresh save has 3 potions in warehouse, bag empty
+OK  town: all tiles seen/visible
+OK  town: stepping on warehouse door opens warehouse
+OK  town: ctx button on door = 倉庫
+OK  warehouse: take all out
+OK  warehouse: store 1
+OK  warehouse: take 1 back
+OK  warehouse: bag full blocks take-out
+OK  warehouse: warehouse full blocks store
+OK  save/load round trip
+OK  corrupted save does not crash
+OK  town: 決定(Attack) on the door opens warehouse
+OK  town: cannot drop items on the ground
+OK  town: attack away from facilities does nothing harmful
+OK  town: gate tile + ctx button = 潜る
+OK  enter dungeon: scene/floor/hp/bag kept
+OK  dungeon: stairs exist & reachable, items reachable
+OK  clear: back in town, bag kept, clears+1, saved
+OK  second run starts
+OK  death: dead flag set
+OK  death: instant tap is ignored
+OK  death: back in town, bag lost, warehouse kept, deaths+1
+OK  death: saved state matches
+bot runs 60 cleared 1 died 45
+OK  bot: no invariant violations / exceptions
+goal bot: cleared 60 / 60, died 0 , avg steps 37
+OK  goal bot can clear floor 1 in most runs (stairs path + combat + potion)
+OK  resize at various sizes
+OK  landscape: auto tile 64px (about 13 tiles across)
+OK  landscape: focus at screen centre, portrait above centre
+OK  landscape: minimap sits top-left
+OK  landscape sizes draw without error
+OK  minimap: none in town
+OK  enter dungeon for map tests
+OK  vision: whole room visible when inside
+OK  vision: other room not visible
+OK  vision: corridor shows <=9 tiles (9)
+OK  minimap draws mode 0 rect null
+OK  minimap draws mode 1 rect set
+OK  minimap draws mode 2 rect set
+OK  save/load keeps mapMode & zoomPref
+OK  zoomPref 1 -> TS 32
+OK  zoomPref 2 -> TS 48
+OK  zoomPref 3 -> TS 64
+OK  hi-res sprite renders without error
+OK  scaledOf returns a cached square canvas
+OK  facing: moving left sets fl
+OK  cfg opens & blocks input
+OK  cfg closes
+OK  save/load keeps charPref
+OK  charPref 0/1/2 draw (incl. hit flash) without error
+OK  cfg shows char row
+OK  zoomPref 4 -> TS 80
+OK  zoomPref 5 -> TS 96
+OK  zoomPref 5 round trip
+OK  hunger: starts at 100 on entering dungeon
+OK  hunger: -1% per 10 turns
+OK  hunger: fast mode -1% per 2 turns
+OK  hunger: warning at 20%
+OK  hunger: warning at 10%
+OK  hunger: at 0% HP drops 1/turn and no natural regen
+OK  hunger: starvation kills
+OK  starvation death returns to town
+OK  onigiri at full: not consumed, no turn
+OK  onigiri: +50%, consumed
+OK  eating resets warning stage
+OK  onigiri appears on floors (433/3000)
+OK  no hunger tick in town
+OK  HUD shows belly in dungeon
+OK  hungerPref round trip
+OK  cfg has hunger row
+OK  shade 0/1/2 draw (with external floor/wall) without error
+OK  shade 0/1/2 draw (built-in art) without error
+OK  shadePref round trip
+OK  cfg has shade row
+OK  tile (cover): wide image fills corners
+OK  character (contain): wide image keeps letterbox
+OK  town draws with wide tile images
+OK  ASSET_KEYS has town
+OK  town art draws without error
+OK  town art replaces tile art (tree tile shows art colour)
+OK  town grid overlay draws
+OK  grid marks solid tiles red
+OK  cfg has grid row
+OK  cfg: no in-game image import UI (art comes only from assets/)
+OK  log: same turn accumulates
+OK  log: next turn clears window (like original: reset on actor switch)
+OK  log: window caps at 4 lines
+OK  log: history keeps everything
+OK  log: history capped
+OK  log: classes
+OK  log: html has classes
+OK  history opens & blocks input
+OK  history open: move ignored
+OK  history closes
+OK  logPos round trip
+OK  cfg has log position row
+OK  refreshUI with log pos 0/1
+OK  3F: enter dungeon on floor 1
+OK  3F: step on stairs
+OK  3F: descends to floor 2 (still in dungeon)
+OK  3F: bag, hp, belly carried over
+OK  3F: floor 2 has stairs & enemies scale
+OK  3F: floor 3
+OK  3F: clearing floor 3 returns to town
+OK  3F: death on floor 3 -> town, bag lost, deaths counted
+OK  5F: dungeon has 5 floors by default
+OK  enemies: floor1 only slime/goblin
+OK  enemies: floor5 has all 5 kinds
+OK  enemies: every kind has stats
+OK  equip: name shows plus
+OK  equip: groups split by plus
+OK  equip: no bonus when unequipped
+OK  equip: sword+2 equipped, atk +5
+OK  equip: shield+1 -> def 2
+OK  equip: toggle off
+OK  equip: save keeps plus + eq slots
+OK  equip: load restores plus and equipped
+OK  scroll: raises equipped weapon plus
+OK  warehouse: moving equipped item unequips it
+OK  combat: bare hand 2-4
+OK  combat: axe adds +5 (7-9)
+OK  combat: shield def 5
+OK  herb: +6 HP
+OK  lifeherb: max HP +3
+OK  staff: has 3-5 charges
+OK  firestaff: 8 dmg and charge used
+OK  blowstaff: knocks back up to 5
+OK  swapstaff: swaps places
+OK  empty staff does nothing but stays
+OK  staff hits enemy up to range 8
+OK  boomscroll: hits within 2 only
+OK  mapscroll: reveals map
+OK  escscroll: back to town with bag kept
+OK  mapscroll in town: not consumed
+OK  staff charges survive save/load
+OK  rig: on when ready and no imported player art
+OK  rig: still on when player art was imported (default)
+OK  rig: off when 1枚絵 selected
+OK  rig: pref saved and loaded
+OK  rig: draws all poses/equipment without error
+OK  rig: swing keeps animation running
+OK  rig: walking swings legs, idle does not
+OK  rig: strike phase lunges and leans
+OK  rig: attack face only during swing
+OK  rig: death makes the body fall backward
+OK  rig: hurt/dead faces draw (and fall back when extra heads are missing)
+OK  rig: falls back to flat sprite when not loaded
+OK  gift: 5 weapons/shields given once on a fresh boot
+OK  gift: not given twice after save/load
+OK  town: attack button does a practice swing (no turn)
+OK  log position default is bottom-right
+OK  vfx: default is 標準
+OK  vfx: a hit spawns a slash and sparks
+OK  vfx: a hit shakes the screen and keeps animating
+OK  vfx: draws across its whole lifetime without error
+OK  vfx: 強 gives more sparks and a bigger shake than 標準
+OK  vfx: なし spawns nothing and does not shake
+OK  vfx: an enemy hit on the player spawns a slash on the player
+OK  vfx: expired effects are removed and the shake settles
+OK  vfx: pref saved and loaded
+OK  items: every item has name/cat/ch/fg/weight/desc
+OK  items: every item is usable, equippable or a staff
+OK  items: weapons have atk, shields have def, seals are known
+OK  items: rings have no plus value, weapons do
+OK  items: 19+ herbs, 2 seeds, 10+ scrolls, 15+ rings, 10+ weapons, 10+ shields
+OK  items: save/load keeps ids of new items
+OK  items: floor 1 never drops deeper items
+OK  items: floor 5 can drop every item
+OK  herb: +6 HP
+OK  outogiri: +15 HP and cures confusion
+OK  iyashi: heals and cures every bad state
+OK  herb at full HP: max HP +1 instead
+OK  kaguwashi: not consumed when nothing to cure
+OK  mute: herbs and scrolls cannot be used
+OK  kaguwashi: cures and is consumed
+OK  bellyup seed: max belly +5
+OK  bellydown seed: clamps belly to the new max
+OK  strherb: attack +1 for the run
+OK  powerherb: attack +3 while it lasts
+OK  poisonherb: 5 damage and weakened (-2 attack)
+OK  ring_antidote: blocks weakness (damage still taken)
+OK  poisonherb can kill
+OK  reviveherb: revives at full HP and turns into a weed
+OK  reviveherb: eating it by hand is refused
+OK  invincherb: invincible and cures bad states
+OK  invincible: blocks confusion and sleep
+OK  confherb: confused
+OK  rings: noconf/nosleep block them
+OK  sleepherb: sleeps through 5 enemy turns, then wakes
+OK  hasteherb: enemies act only every other action
+OK  blindherb: only own tile is visible
+OK  eyeherb: cures blindness, shows enemies on the map
+OK  warpherb: lands on a floor tile
+OK  dragonherb: 12-15 fire damage to the first enemy
+OK  confusion: movement direction is random
+OK  confscroll: confuses every enemy in the room
+OK  sleepscroll: sleeps them
+OK  hastescroll: speeds them up
+OK  vacuumscroll: 12-15 damage to each, and damage wakes them
+OK  annihilatescroll: removes the room's enemies
+OK  helpscroll: full heal, cures, refills a starving belly
+OK  gatherscroll: every enemy ends up near the player
+OK  itemscroll: floor items gather around the player
+OK  housescroll: 6 aware enemies appear around the player
+OK  lightscroll: map revealed and enemies/items sensed
+OK  lightscroll: effect ends on the next floor
+OK  mutescroll: mutes for 30 turns
+OK  scrolls: 天の恵み→weapon, 地の恵み→shield (+1 each)
+OK  rings: two can be worn at once
+OK  rings: a third is refused
+OK  rings: worn rings survive save/load
+OK  rings: tapping a worn ring takes it off
+OK  rings: dropping a worn ring takes it off
+OK  ring_strength: attack +2
+OK  ring_strength x2: attack +4
+OK  ring_bellyup: max belly +25
+OK  ring_bellydown x2: max belly 50
+OK  ring_regen: belly drains faster
+OK  no ring: belly drains at the normal pace
+OK  ring_senseE: senses enemies only
+OK  ring_senseI: senses items only
+OK  ring_seeall: senses both
+OK  ring_boom: explodes — enemy hurt 10, player left at 1 HP
+OK  ring_warp: eventually warps
+OK  ring_leak: drops an unworn item at your feet
+OK  ring_summon: a new enemy appears
+OK  ring_sneak: an enemy 5 tiles away does not notice you
+OK  without ring_sneak, the same enemy notices you
+OK  ring_moroha: a low roll is a critical hit (2 x 2 = 4)
+OK  ring_moroha: a normal roll is not (2+1 = 3)
+OK  minoaxe: 会心 doubles (2+4)*2 = 12
+OK  skyblade: double damage to bats only
+OK  healsword: heals a third of the damage
+OK  steakknife: +3 when hungry
+OK  harisen: knocks the enemy back one tile
+OK  renkentou: attacks twice on a proc
+OK  kamaitachi: hits the front three tiles, not behind
+OK  firesword: fires at range when HP is full
+OK  firesword: no fire when HP is not full
+OK  katana+2: attack bonus 4+2
+OK  mikiri: dodges at a low roll
+OK  battlecounter: reflects half the damage
+OK  zekkocho: half damage at full HP
+OK  konjo: survives a lethal hit at 1 HP on a low roll
+OK  without konjo the same hit kills
+OK  steakplate: +2 defence when hungry
+OK  haramochi: belly lasts longer
+OK  catalogue: 鉄甲の盾 def 3, どうたぬき atk 6
+OK  invincible: enemy hits do 0 damage
+OK  ring_tsukon: enemy crits double the damage on a low roll
+OK  minoshield: crit damage is not doubled
+OK  enemy asleep: does not attack
+OK  enemy confused: rarely attacks
+OK  draw: statuses, enemy marks and rings render without error
+OK  hud: status text lists remaining turns
+OK  enterDungeon: max HP resets to the level-1 value
+OK  enterDungeon: starts with a full (extended) belly
+OK  giftall: fills the warehouse up to its cap, skipping what the bag has
+OK  giftall: refills what was removed
+OK  sheets: every key is an item or a shared icon, and appears once
+OK  sheets: every weapon/shield without hand art yet is on a sheet
+OK  sheets: every key has a visual hint
+OK  sheets: at most 16 per sheet
+OK  sheets: hand-art keys never end in a digit (extName() would strip it)
+OK  prompt: Japanese, names columns/rows, magenta, each item numbered in order
+OK  prompt: the weapon sheet says blade-up, 4x3
+OK  prompt: shield sheet says frontal
+OK  icons: every herb/seed/scroll/ring/staff/weapon/shield has a shared icon
+OK  icons: potion and onigiri keep their own art
+OK  icons: no shared art yet -> falls back to the item itself (placeholder)
+OK  icons: with shared art, every herb draws the SAME art key (identity not leaked)
+OK  icons: all weapons share one floor icon; the hand art key stays per weapon
+OK  icons: bag rows show the picture when art exists, a glyph otherwise
+OK  icons: floor drawing works with shared art
+OK  icons: asset list has the shared icons, hand art for weapons/shields, and no per-herb files
+OK  slice: 16 cells, the two blank ones are null
+OK  slice: each piece is square and filled mostly by its colour, with transparent margin
+OK  slice: the piece is centred (margin on all four sides)
+OK  slice: a mostly-empty sheet yields one piece
+ALL OK

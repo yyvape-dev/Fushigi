@@ -1,0 +1,362 @@
+[
+  {
+    "direction": "S",
+    "canonical_start_end_exact": true,
+    "new_poses": 4,
+    "alpha_boxes": [
+      [
+        68,
+        32,
+        190,
+        228
+      ],
+      [
+        64,
+        21,
+        195,
+        228
+      ],
+      [
+        61,
+        26,
+        192,
+        228
+      ],
+      [
+        63,
+        26,
+        194,
+        228
+      ],
+      [
+        63,
+        23,
+        194,
+        228
+      ],
+      [
+        68,
+        32,
+        190,
+        228
+      ]
+    ],
+    "feet_bottom_spread_px": 0,
+    "body_sha256": "f91ec65097b59a4f7138303e162408e14cf4d0de88b3718d5c962f08e263a5d5"
+  },
+  {
+    "direction": "SW",
+    "canonical_start_end_exact": true,
+    "new_poses": 4,
+    "alpha_boxes": [
+      [
+        80,
+        32,
+        190,
+        231
+      ],
+      [
+        65,
+        22,
+        193,
+        231
+      ],
+      [
+        42,
+        25,
+        177,
+        231
+      ],
+      [
+        67,
+        34,
+        181,
+        231
+      ],
+      [
+        67,
+        24,
+        186,
+        231
+      ],
+      [
+        80,
+        32,
+        190,
+        231
+      ]
+    ],
+    "feet_bottom_spread_px": 0,
+    "body_sha256": "2d2201931a30a26c9cca35aaa1100dadcb2d5c69169237fb66a225a011e15fc6"
+  },
+  {
+    "direction": "W",
+    "canonical_start_end_exact": true,
+    "new_poses": 4,
+    "alpha_boxes": [
+      [
+        89,
+        32,
+        195,
+        232
+      ],
+      [
+        64,
+        24,
+        185,
+        232
+      ],
+      [
+        35,
+        32,
+        171,
+        232
+      ],
+      [
+        56,
+        32,
+        171,
+        232
+      ],
+      [
+        67,
+        28,
+        182,
+        232
+      ],
+      [
+        89,
+        32,
+        195,
+        232
+      ]
+    ],
+    "feet_bottom_spread_px": 0,
+    "body_sha256": "fd50076b6f3f00a0339f0639aa006021bf6ca7d86a2975e55a2206bb13c289cf"
+  },
+  {
+    "direction": "NW",
+    "canonical_start_end_exact": true,
+    "new_poses": 4,
+    "alpha_boxes": [
+      [
+        76,
+        33,
+        183,
+        229
+      ],
+      [
+        65,
+        26,
+        191,
+        229
+      ],
+      [
+        31,
+        35,
+        173,
+        229
+      ],
+      [
+        56,
+        28,
+        174,
+        229
+      ],
+      [
+        68,
+        28,
+        186,
+        229
+      ],
+      [
+        76,
+        33,
+        183,
+        229
+      ]
+    ],
+    "feet_bottom_spread_px": 0,
+    "body_sha256": "85ff6e579ad94077bd5a65ca9ff442fd5c40f451dc27891fc83101018ec76a73"
+  },
+  {
+    "direction": "N",
+    "canonical_start_end_exact": true,
+    "new_poses": 4,
+    "alpha_boxes": [
+      [
+        70,
+        33,
+        190,
+        225
+      ],
+      [
+        62,
+        31,
+        200,
+        225
+      ],
+      [
+        66,
+        44,
+        195,
+        225
+      ],
+      [
+        59,
+        37,
+        182,
+        225
+      ],
+      [
+        67,
+        34,
+        192,
+        225
+      ],
+      [
+        70,
+        33,
+        190,
+        225
+      ]
+    ],
+    "feet_bottom_spread_px": 0,
+    "body_sha256": "4f4e9c5a31ef6ff3bac3efd3094c85298139043fb033f169747b98d624e7806c"
+  },
+  {
+    "direction": "NE",
+    "canonical_start_end_exact": true,
+    "new_poses": 4,
+    "alpha_boxes": [
+      [
+        71,
+        32,
+        182,
+        229
+      ],
+      [
+        69,
+        23,
+        196,
+        229
+      ],
+      [
+        79,
+        37,
+        207,
+        229
+      ],
+      [
+        82,
+        32,
+        197,
+        229
+      ],
+      [
+        69,
+        23,
+        187,
+        229
+      ],
+      [
+        71,
+        32,
+        182,
+        229
+      ]
+    ],
+    "feet_bottom_spread_px": 0,
+    "body_sha256": "93265fc4bcc9405b8dee370d89e28a4f1101579d083b685b6bc76be2169b2045"
+  },
+  {
+    "direction": "E",
+    "canonical_start_end_exact": true,
+    "new_poses": 4,
+    "alpha_boxes": [
+      [
+        66,
+        32,
+        172,
+        232
+      ],
+      [
+        68,
+        28,
+        176,
+        232
+      ],
+      [
+        78,
+        29,
+        199,
+        232
+      ],
+      [
+        76,
+        25,
+        196,
+        232
+      ],
+      [
+        67,
+        25,
+        179,
+        232
+      ],
+      [
+        66,
+        32,
+        172,
+        232
+      ]
+    ],
+    "feet_bottom_spread_px": 0,
+    "body_sha256": "2b2ad0ddb24d8e0bdec25174444c5a32e58dab96293384300608d2afe96b1e45"
+  },
+  {
+    "direction": "SE",
+    "canonical_start_end_exact": true,
+    "new_poses": 4,
+    "alpha_boxes": [
+      [
+        60,
+        32,
+        179,
+        232
+      ],
+      [
+        54,
+        26,
+        182,
+        232
+      ],
+      [
+        65,
+        27,
+        188,
+        232
+      ],
+      [
+        59,
+        27,
+        182,
+        232
+      ],
+      [
+        59,
+        27,
+        185,
+        232
+      ],
+      [
+        60,
+        32,
+        179,
+        232
+      ]
+    ],
+    "feet_bottom_spread_px": 0,
+    "body_sha256": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+  }
+]

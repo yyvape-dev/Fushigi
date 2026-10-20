@@ -1,0 +1,2103 @@
+{
+  "version": 1,
+  "frameSize": [
+    256,
+    256
+  ],
+  "groundAnchor": [
+    128,
+    224
+  ],
+  "heightToGround": 192,
+  "directionOrder": [
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE",
+    "E",
+    "SE"
+  ],
+  "durationMs": 300,
+  "impactMs": 105,
+  "directions": [
+    {
+      "id": "S",
+      "frameMs": [
+        35,
+        70,
+        40,
+        55,
+        60,
+        40
+      ],
+      "durationMs": 300,
+      "atlas": "S.png",
+      "frames": [
+        {
+          "name": "idle-start",
+          "right": {
+            "position": [
+              81,
+              172
+            ],
+            "layer": "front",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": -0.35
+          },
+          "left": {
+            "position": [
+              175,
+              172
+            ],
+            "layer": "front",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        },
+        {
+          "name": "windup",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              76,
+              86
+            ],
+            "layer": "front",
+            "angle": -0.35,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              162,
+              143
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "strike",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              92,
+              160
+            ],
+            "layer": "front",
+            "angle": 3.14,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              160,
+              146
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "follow",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              143,
+              164
+            ],
+            "layer": "front",
+            "angle": 2.5,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              159,
+              144
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "recover",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              101,
+              153
+            ],
+            "layer": "front",
+            "angle": -0.75,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              165,
+              159
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "idle-end",
+          "right": {
+            "position": [
+              81,
+              172
+            ],
+            "layer": "front",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": -0.35
+          },
+          "left": {
+            "position": [
+              175,
+              172
+            ],
+            "layer": "front",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        }
+      ],
+      "registration": [
+        {
+          "phase": 0,
+          "head_match_score": 0.7363186813500436,
+          "common_source_scale": 1.08,
+          "source_head_position": [
+            50,
+            10
+          ],
+          "translate": [
+            1.7037037037037095,
+            14.74074074074074
+          ],
+          "planted_foot_correction": [
+            0,
+            -10
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 1,
+          "head_match_score": 0.6669997723793833,
+          "common_source_scale": 1.08,
+          "source_head_position": [
+            36,
+            17
+          ],
+          "translate": [
+            14.666666666666671,
+            10.25925925925926
+          ],
+          "planted_foot_correction": [
+            -4,
+            -5
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 2,
+          "head_match_score": 0.7238469437872032,
+          "common_source_scale": 1.08,
+          "source_head_position": [
+            50,
+            13
+          ],
+          "translate": [
+            1.7037037037037095,
+            12.962962962962964
+          ],
+          "planted_foot_correction": [
+            -2,
+            -5
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 3,
+          "head_match_score": 0.7759377848119239,
+          "common_source_scale": 1.08,
+          "source_head_position": [
+            36,
+            12
+          ],
+          "translate": [
+            14.666666666666671,
+            12.88888888888889
+          ],
+          "planted_foot_correction": [
+            -2,
+            -5
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        }
+      ],
+      "canonical_sha256": "f91ec65097b59a4f7138303e162408e14cf4d0de88b3718d5c962f08e263a5d5",
+      "socketStatus": "Manually calibrated visible fists; occluded far-hand locations are estimates. Single diagnostic sword grip/angle checked in renderer."
+    },
+    {
+      "id": "SW",
+      "frameMs": [
+        35,
+        70,
+        40,
+        55,
+        60,
+        40
+      ],
+      "durationMs": 300,
+      "atlas": "SW.png",
+      "frames": [
+        {
+          "name": "idle-start",
+          "right": {
+            "position": [
+              88,
+              169
+            ],
+            "layer": "back",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": -0.45
+          },
+          "left": {
+            "position": [
+              163,
+              173
+            ],
+            "layer": "front",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        },
+        {
+          "name": "windup",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              71,
+              84
+            ],
+            "layer": "back",
+            "angle": 0.3,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              135,
+              136
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "strike",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              57,
+              149
+            ],
+            "layer": "front",
+            "angle": -2.21,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              136,
+              145
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "follow",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              132,
+              174
+            ],
+            "layer": "front",
+            "angle": 2.5,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              124,
+              150
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "recover",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              79,
+              122
+            ],
+            "layer": "front",
+            "angle": -0.55,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              149,
+              158
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "idle-end",
+          "right": {
+            "position": [
+              88,
+              169
+            ],
+            "layer": "back",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": -0.45
+          },
+          "left": {
+            "position": [
+              163,
+              173
+            ],
+            "layer": "front",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        }
+      ],
+      "registration": [
+        {
+          "phase": 0,
+          "head_match_score": 0.7951866360970447,
+          "common_source_scale": 1.08,
+          "source_head_position": [
+            61,
+            13
+          ],
+          "translate": [
+            -8.481481481481481,
+            11.962962962962964
+          ],
+          "planted_foot_correction": [
+            0,
+            -7
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 1,
+          "head_match_score": 0.6560528675618613,
+          "common_source_scale": 1.08,
+          "source_head_position": [
+            41,
+            20
+          ],
+          "translate": [
+            10.037037037037038,
+            7.481481481481481
+          ],
+          "planted_foot_correction": [
+            -16,
+            -2
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 2,
+          "head_match_score": 0.6303056741681309,
+          "common_source_scale": 1.08,
+          "source_head_position": [
+            56,
+            21
+          ],
+          "translate": [
+            -3.8518518518518476,
+            5.555555555555557
+          ],
+          "planted_foot_correction": [
+            -12,
+            9
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 3,
+          "head_match_score": 0.7692629388873932,
+          "common_source_scale": 1.08,
+          "source_head_position": [
+            48,
+            7
+          ],
+          "translate": [
+            3.555555555555557,
+            17.51851851851852
+          ],
+          "planted_foot_correction": [
+            -6,
+            -3
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        }
+      ],
+      "canonical_sha256": "2d2201931a30a26c9cca35aaa1100dadcb2d5c69169237fb66a225a011e15fc6",
+      "socketStatus": "Manually calibrated visible fists; occluded far-hand locations are estimates. Single diagnostic sword grip/angle checked in renderer."
+    },
+    {
+      "id": "W",
+      "frameMs": [
+        35,
+        70,
+        40,
+        55,
+        60,
+        40
+      ],
+      "durationMs": 300,
+      "atlas": "W.png",
+      "frames": [
+        {
+          "name": "idle-start",
+          "right": {
+            "position": [
+              108,
+              172
+            ],
+            "layer": "back",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": -0.45
+          },
+          "left": {
+            "position": [
+              126,
+              183
+            ],
+            "layer": "front",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        },
+        {
+          "name": "windup",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              168,
+              64
+            ],
+            "layer": "back",
+            "angle": 0.3,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              86,
+              132
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "strike",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              44,
+              156
+            ],
+            "layer": "back",
+            "angle": -1.8,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              117,
+              151
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "follow",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              70,
+              177
+            ],
+            "layer": "back",
+            "angle": -2.2,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              106,
+              155
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "recover",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              86,
+              146
+            ],
+            "layer": "back",
+            "angle": -0.7,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              107,
+              162
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "idle-end",
+          "right": {
+            "position": [
+              108,
+              172
+            ],
+            "layer": "back",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": -0.45
+          },
+          "left": {
+            "position": [
+              126,
+              183
+            ],
+            "layer": "front",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        }
+      ],
+      "registration": [
+        {
+          "phase": 0,
+          "head_match_score": 0.740184043300726,
+          "common_source_scale": 1.04,
+          "source_head_position": [
+            57,
+            20
+          ],
+          "translate": [
+            -6.807692307692307,
+            4.76923076923077
+          ],
+          "planted_foot_correction": [
+            -20,
+            -5
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 1,
+          "head_match_score": 0.6589132851236408,
+          "common_source_scale": 1.04,
+          "source_head_position": [
+            36,
+            28
+          ],
+          "translate": [
+            13.384615384615387,
+            -0.9230769230769234
+          ],
+          "planted_foot_correction": [
+            -28,
+            1
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 2,
+          "head_match_score": 0.5743392690711833,
+          "common_source_scale": 1.04,
+          "source_head_position": [
+            51,
+            23
+          ],
+          "translate": [
+            -1.03846153846154,
+            2.884615384615387
+          ],
+          "planted_foot_correction": [
+            -26,
+            2
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 3,
+          "head_match_score": 0.6849491241957644,
+          "common_source_scale": 1.04,
+          "source_head_position": [
+            38,
+            19
+          ],
+          "translate": [
+            11.46153846153846,
+            5.73076923076923
+          ],
+          "planted_foot_correction": [
+            -16,
+            -1
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        }
+      ],
+      "canonical_sha256": "fd50076b6f3f00a0339f0639aa006021bf6ca7d86a2975e55a2206bb13c289cf",
+      "socketStatus": "Manually calibrated visible fists; occluded far-hand locations are estimates. Single diagnostic sword grip/angle checked in renderer."
+    },
+    {
+      "id": "NW",
+      "frameMs": [
+        35,
+        70,
+        40,
+        55,
+        60,
+        40
+      ],
+      "durationMs": 300,
+      "atlas": "NW.png",
+      "frames": [
+        {
+          "name": "idle-start",
+          "right": {
+            "position": [
+              160,
+              158
+            ],
+            "layer": "back",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": 0.55
+          },
+          "left": {
+            "position": [
+              85,
+              171
+            ],
+            "layer": "back",
+            "angle": 0,
+            "handOverShield": false,
+            "gripMask": {
+              "rx": 9,
+              "ry": 8
+            }
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        },
+        {
+          "name": "windup",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              169,
+              65
+            ],
+            "layer": "back",
+            "angle": 0.3,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              83,
+              136
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 9,
+              "ry": 8
+            },
+            "handOverShield": false
+          }
+        },
+        {
+          "name": "strike",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              57,
+              146
+            ],
+            "layer": "back",
+            "angle": -0.9,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              88,
+              146
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 9,
+              "ry": 8
+            },
+            "handOverShield": false
+          }
+        },
+        {
+          "name": "follow",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              70,
+              146
+            ],
+            "layer": "back",
+            "angle": -1.3,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              101,
+              140
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 9,
+              "ry": 8
+            },
+            "handOverShield": false
+          }
+        },
+        {
+          "name": "recover",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              172,
+              124
+            ],
+            "layer": "back",
+            "angle": 0.55,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              89,
+              142
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 9,
+              "ry": 8
+            },
+            "handOverShield": false
+          }
+        },
+        {
+          "name": "idle-end",
+          "right": {
+            "position": [
+              160,
+              158
+            ],
+            "layer": "back",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": 0.55
+          },
+          "left": {
+            "position": [
+              85,
+              171
+            ],
+            "layer": "back",
+            "angle": 0,
+            "handOverShield": false,
+            "gripMask": {
+              "rx": 9,
+              "ry": 8
+            }
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        }
+      ],
+      "registration": [
+        {
+          "phase": 0,
+          "head_match_score": 0.7320329661018922,
+          "common_source_scale": 1.02,
+          "source_head_position": [
+            62,
+            18
+          ],
+          "translate": [
+            -12.784313725490193,
+            6.352941176470587
+          ],
+          "planted_foot_correction": [
+            -10,
+            -6
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 1,
+          "head_match_score": 0.5936572482330036,
+          "common_source_scale": 1.02,
+          "source_head_position": [
+            41,
+            27
+          ],
+          "translate": [
+            7.803921568627452,
+            -0.470588235294116
+          ],
+          "planted_foot_correction": [
+            -22,
+            0
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 2,
+          "head_match_score": 0.776464334033584,
+          "common_source_scale": 1.02,
+          "source_head_position": [
+            62,
+            17
+          ],
+          "translate": [
+            -12.784313725490193,
+            8.333333333333332
+          ],
+          "planted_foot_correction": [
+            -12,
+            -5
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 3,
+          "head_match_score": 0.7875364099779812,
+          "common_source_scale": 1.02,
+          "source_head_position": [
+            61,
+            17
+          ],
+          "translate": [
+            -11.803921568627452,
+            7.333333333333332
+          ],
+          "planted_foot_correction": [
+            0,
+            -4
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        }
+      ],
+      "canonical_sha256": "85ff6e579ad94077bd5a65ca9ff442fd5c40f451dc27891fc83101018ec76a73",
+      "socketStatus": "Manually calibrated visible fists; occluded far-hand locations are estimates. Single diagnostic sword grip/angle checked in renderer."
+    },
+    {
+      "id": "N",
+      "frameMs": [
+        35,
+        70,
+        40,
+        55,
+        60,
+        40
+      ],
+      "durationMs": 300,
+      "atlas": "N.png",
+      "frames": [
+        {
+          "name": "idle-start",
+          "right": {
+            "position": [
+              175,
+              168
+            ],
+            "layer": "back",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": 0.45
+          },
+          "left": {
+            "position": [
+              81,
+              168
+            ],
+            "layer": "back",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        },
+        {
+          "name": "windup",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              183,
+              84
+            ],
+            "layer": "back",
+            "angle": 0.35,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              85,
+              151
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "strike",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              183,
+              148
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              86,
+              151
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "follow",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              171,
+              153
+            ],
+            "layer": "back",
+            "angle": -0.8,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              87,
+              151
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "recover",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              175,
+              154
+            ],
+            "layer": "back",
+            "angle": 0.7,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              85,
+              151
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "idle-end",
+          "right": {
+            "position": [
+              175,
+              168
+            ],
+            "layer": "back",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": 0.45
+          },
+          "left": {
+            "position": [
+              81,
+              168
+            ],
+            "layer": "back",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        }
+      ],
+      "registration": [
+        {
+          "phase": 0,
+          "head_match_score": 0.6503515293488722,
+          "common_source_scale": 1.02,
+          "source_head_position": [
+            57,
+            24
+          ],
+          "translate": [
+            -7.882352941176471,
+            0.47058823529411953
+          ],
+          "planted_foot_correction": [
+            -6,
+            -1
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 1,
+          "head_match_score": 0.6419402620404847,
+          "common_source_scale": 1.02,
+          "source_head_position": [
+            38,
+            30
+          ],
+          "translate": [
+            10.745098039215684,
+            -3.4117647058823515
+          ],
+          "planted_foot_correction": [
+            -4,
+            3
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 2,
+          "head_match_score": 0.6920271118389881,
+          "common_source_scale": 1.02,
+          "source_head_position": [
+            54,
+            26
+          ],
+          "translate": [
+            -4.941176470588232,
+            -0.4901960784313708
+          ],
+          "planted_foot_correction": [
+            -12,
+            2
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 3,
+          "head_match_score": 0.7837236154461176,
+          "common_source_scale": 1.02,
+          "source_head_position": [
+            43,
+            25
+          ],
+          "translate": [
+            5.843137254901961,
+            -0.5098039215686256
+          ],
+          "planted_foot_correction": [
+            0,
+            2
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        }
+      ],
+      "canonical_sha256": "4f4e9c5a31ef6ff3bac3efd3094c85298139043fb033f169747b98d624e7806c",
+      "socketStatus": "Manually calibrated visible fists; occluded far-hand locations are estimates. Single diagnostic sword grip/angle checked in renderer."
+    },
+    {
+      "id": "NE",
+      "frameMs": [
+        35,
+        70,
+        40,
+        55,
+        60,
+        40
+      ],
+      "durationMs": 300,
+      "atlas": "NE.png",
+      "frames": [
+        {
+          "name": "idle-start",
+          "right": {
+            "position": [
+              174,
+              171
+            ],
+            "layer": "front",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": 0.55
+          },
+          "left": {
+            "position": [
+              88,
+              160
+            ],
+            "layer": "back",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        },
+        {
+          "name": "windup",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              183,
+              70
+            ],
+            "layer": "front",
+            "angle": 0.35,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              161,
+              132
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "strike",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              197,
+              137
+            ],
+            "layer": "front",
+            "angle": 1.0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              161,
+              135
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "follow",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              188,
+              155
+            ],
+            "layer": "front",
+            "angle": 1.6,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              158,
+              139
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "recover",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              174,
+              144
+            ],
+            "layer": "front",
+            "angle": 0.5,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              158,
+              132
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "idle-end",
+          "right": {
+            "position": [
+              174,
+              171
+            ],
+            "layer": "front",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": 0.55
+          },
+          "left": {
+            "position": [
+              88,
+              160
+            ],
+            "layer": "back",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        }
+      ],
+      "registration": [
+        {
+          "phase": 0,
+          "head_match_score": 0.7551556619770412,
+          "common_source_scale": 0.94,
+          "source_head_position": [
+            58,
+            34
+          ],
+          "translate": [
+            -13.702127659574472,
+            -12.170212765957451
+          ],
+          "planted_foot_correction": [
+            -2,
+            -9
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 1,
+          "head_match_score": 0.6337157544115858,
+          "common_source_scale": 0.94,
+          "source_head_position": [
+            56,
+            44
+          ],
+          "translate": [
+            -11.574468085106389,
+            -20.808510638297875
+          ],
+          "planted_foot_correction": [
+            9,
+            -2
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 2,
+          "head_match_score": 0.5958275748406785,
+          "common_source_scale": 0.94,
+          "source_head_position": [
+            74,
+            41
+          ],
+          "translate": [
+            -30.723404255319153,
+            -18.61702127659575
+          ],
+          "planted_foot_correction": [
+            14,
+            -3
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 3,
+          "head_match_score": 0.8603279789323883,
+          "common_source_scale": 0.94,
+          "source_head_position": [
+            58,
+            34
+          ],
+          "translate": [
+            -13.702127659574472,
+            -12.170212765957451
+          ],
+          "planted_foot_correction": [
+            -2,
+            -9
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        }
+      ],
+      "canonical_sha256": "93265fc4bcc9405b8dee370d89e28a4f1101579d083b685b6bc76be2169b2045",
+      "socketStatus": "Manually calibrated visible fists; occluded far-hand locations are estimates. Single diagnostic sword grip/angle checked in renderer."
+    },
+    {
+      "id": "E",
+      "frameMs": [
+        35,
+        70,
+        40,
+        55,
+        60,
+        40
+      ],
+      "durationMs": 300,
+      "atlas": "E.png",
+      "frames": [
+        {
+          "name": "idle-start",
+          "right": {
+            "position": [
+              132,
+              183
+            ],
+            "layer": "front",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": 0.65
+          },
+          "left": {
+            "position": [
+              150,
+              169
+            ],
+            "layer": "back",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        },
+        {
+          "name": "windup",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              104,
+              89
+            ],
+            "layer": "front",
+            "angle": -0.5,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              160,
+              136
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "strike",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              184,
+              169
+            ],
+            "layer": "front",
+            "angle": 1.8,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              155,
+              135
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "follow",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              180,
+              170
+            ],
+            "layer": "front",
+            "angle": 2.1,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              153,
+              137
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "recover",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              138,
+              151
+            ],
+            "layer": "front",
+            "angle": 1.0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              164,
+              148
+            ],
+            "layer": "back",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          }
+        },
+        {
+          "name": "idle-end",
+          "right": {
+            "position": [
+              132,
+              183
+            ],
+            "layer": "front",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": 0.65
+          },
+          "left": {
+            "position": [
+              150,
+              169
+            ],
+            "layer": "back",
+            "angle": 0
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        }
+      ],
+      "registration": [
+        {
+          "phase": 0,
+          "head_match_score": 0.6655525816669098,
+          "common_source_scale": 1.06,
+          "source_head_position": [
+            51,
+            13
+          ],
+          "translate": [
+            -0.1132075471698073,
+            11.735849056603774
+          ],
+          "planted_foot_correction": [
+            4,
+            -4
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 1,
+          "head_match_score": 0.6826735499154335,
+          "common_source_scale": 1.06,
+          "source_head_position": [
+            51,
+            19
+          ],
+          "translate": [
+            -0.1132075471698073,
+            8.075471698113208
+          ],
+          "planted_foot_correction": [
+            14,
+            0
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 2,
+          "head_match_score": 0.627496078643371,
+          "common_source_scale": 1.06,
+          "source_head_position": [
+            53,
+            14
+          ],
+          "translate": [
+            -2.0,
+            11.79245283018868
+          ],
+          "planted_foot_correction": [
+            12,
+            -2
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 3,
+          "head_match_score": 0.7348985881673386,
+          "common_source_scale": 1.06,
+          "source_head_position": [
+            50,
+            11
+          ],
+          "translate": [
+            0.830188679245282,
+            13.622641509433963
+          ],
+          "planted_foot_correction": [
+            3,
+            -4
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        }
+      ],
+      "canonical_sha256": "2b2ad0ddb24d8e0bdec25174444c5a32e58dab96293384300608d2afe96b1e45",
+      "socketStatus": "Manually calibrated visible fists; occluded far-hand locations are estimates. Single diagnostic sword grip/angle checked in renderer."
+    },
+    {
+      "id": "SE",
+      "frameMs": [
+        35,
+        70,
+        40,
+        55,
+        60,
+        40
+      ],
+      "durationMs": 300,
+      "atlas": "SE.png",
+      "frames": [
+        {
+          "name": "idle-start",
+          "right": {
+            "position": [
+              85,
+              177
+            ],
+            "layer": "front",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": -0.55
+          },
+          "left": {
+            "position": [
+              173,
+              167
+            ],
+            "layer": "front",
+            "angle": 0,
+            "handOverShield": false
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        },
+        {
+          "name": "windup",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              80,
+              94
+            ],
+            "layer": "front",
+            "angle": -0.4,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              164,
+              145
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "handOverShield": false
+          }
+        },
+        {
+          "name": "strike",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              136,
+              167
+            ],
+            "layer": "front",
+            "angle": 2.2,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              164,
+              141
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "handOverShield": false
+          }
+        },
+        {
+          "name": "follow",
+          "weaponLengthFactor": 0.88,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              149,
+              165
+            ],
+            "layer": "front",
+            "angle": 2.65,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              166,
+              143
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "handOverShield": false
+          }
+        },
+        {
+          "name": "recover",
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1,
+          "right": {
+            "position": [
+              107,
+              151
+            ],
+            "layer": "front",
+            "angle": -0.65,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            }
+          },
+          "left": {
+            "position": [
+              182,
+              158
+            ],
+            "layer": "front",
+            "angle": 0,
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "handOverShield": false
+          }
+        },
+        {
+          "name": "idle-end",
+          "right": {
+            "position": [
+              85,
+              177
+            ],
+            "layer": "front",
+            "gripMask": {
+              "rx": 7,
+              "ry": 6
+            },
+            "angle": -0.55
+          },
+          "left": {
+            "position": [
+              173,
+              167
+            ],
+            "layer": "front",
+            "angle": 0,
+            "handOverShield": false
+          },
+          "weaponLengthFactor": 1,
+          "weaponWidthFactor": 1
+        }
+      ],
+      "registration": [
+        {
+          "phase": 0,
+          "head_match_score": 0.7145442637103481,
+          "common_source_scale": 1.04,
+          "source_head_position": [
+            58,
+            12
+          ],
+          "translate": [
+            -7.7692307692307665,
+            12.461538461538462
+          ],
+          "planted_foot_correction": [
+            2,
+            -5
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 1,
+          "head_match_score": 0.7818066202270411,
+          "common_source_scale": 1.04,
+          "source_head_position": [
+            59,
+            14
+          ],
+          "translate": [
+            -8.730769230769226,
+            12.538461538461538
+          ],
+          "planted_foot_correction": [
+            10,
+            -6
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 2,
+          "head_match_score": 0.7667702738451931,
+          "common_source_scale": 1.04,
+          "source_head_position": [
+            60,
+            11
+          ],
+          "translate": [
+            -9.692307692307693,
+            14.423076923076923
+          ],
+          "planted_foot_correction": [
+            4,
+            -5
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        },
+        {
+          "phase": 3,
+          "head_match_score": 0.8003269824826115,
+          "common_source_scale": 1.04,
+          "source_head_position": [
+            59,
+            10
+          ],
+          "translate": [
+            -8.730769230769226,
+            14.384615384615385
+          ],
+          "planted_foot_correction": [
+            3,
+            -5
+          ],
+          "head_registration_method": "normalized correlation against same-direction canonical head; common scale, whole-image translation only"
+        }
+      ],
+      "canonical_sha256": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d",
+      "socketStatus": "Manually calibrated visible fists; occluded far-hand locations are estimates. Single diagnostic sword grip/angle checked in renderer."
+    }
+  ],
+  "equipmentStatus": "Independent diagnostic sword/shield; production item-specific art and full shield/forearm occlusion masks not yet authored."
+}

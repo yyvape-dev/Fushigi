@@ -1,0 +1,114 @@
+[
+  {
+    "direction": "S",
+    "alpha_bbox": [
+      68,
+      32,
+      190,
+      228
+    ],
+    "canonical_anchor": [
+      128,
+      224
+    ],
+    "head_top_error_px": 0
+  },
+  {
+    "direction": "SW",
+    "alpha_bbox": [
+      80,
+      32,
+      190,
+      231
+    ],
+    "canonical_anchor": [
+      128,
+      224
+    ],
+    "head_top_error_px": 0
+  },
+  {
+    "direction": "W",
+    "alpha_bbox": [
+      89,
+      32,
+      195,
+      232
+    ],
+    "canonical_anchor": [
+      128,
+      224
+    ],
+    "head_top_error_px": 0
+  },
+  {
+    "direction": "NW",
+    "alpha_bbox": [
+      76,
+      33,
+      183,
+      229
+    ],
+    "canonical_anchor": [
+      128,
+      224
+    ],
+    "head_top_error_px": 1
+  },
+  {
+    "direction": "N",
+    "alpha_bbox": [
+      70,
+      33,
+      190,
+      225
+    ],
+    "canonical_anchor": [
+      128,
+      224
+    ],
+    "head_top_error_px": 1
+  },
+  {
+    "direction": "NE",
+    "alpha_bbox": [
+      71,
+      32,
+      182,
+      229
+    ],
+    "canonical_anchor": [
+      128,
+      224
+    ],
+    "head_top_error_px": 0
+  },
+  {
+    "direction": "E",
+    "alpha_bbox": [
+      66,
+      32,
+      172,
+      232
+    ],
+    "canonical_anchor": [
+      128,
+      224
+    ],
+    "head_top_error_px": 0
+  },
+  {
+    "direction": "SE",
+    "alpha_bbox": [
+      60,
+      32,
+      179,
+      232
+    ],
+    "canonical_anchor": [
+      128,
+      224
+    ],
+    "head_top_error_px": 0
+  }
+]

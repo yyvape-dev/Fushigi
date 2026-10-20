@@ -1,0 +1,483 @@
+{
+  "version": 1,
+  "status": "Canonical idle direction base v1; no animation authored",
+  "frameSize": [
+    256,
+    256
+  ],
+  "groundAnchor": [
+    128,
+    224
+  ],
+  "headTopY": 32,
+  "heightToGround": 192,
+  "directions": [
+    {
+      "id": "S",
+      "index": 0,
+      "right": {
+        "position": [
+          81,
+          172
+        ],
+        "layer": "front",
+        "gripMask": {
+          "rx": 7,
+          "ry": 6
+        },
+        "angle": -0.35
+      },
+      "left": {
+        "position": [
+          175,
+          172
+        ],
+        "layer": "front",
+        "angle": 0
+      },
+      "shieldWidth": 1.0,
+      "sourceTransform": {
+        "scale": 0.4683545213316924,
+        "translate": [
+          16.054574701453276,
+          25.443036701356306
+        ]
+      },
+      "sourceAlphaBox": [
+        111,
+        14,
+        371,
+        433
+      ],
+      "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.",
+      "guideProjectedSockets": {
+        "right": [
+          94.0,
+          159.63
+        ],
+        "left": [
+          162.0,
+          159.63
+        ]
+      },
+      "shieldView": "front"
+    },
+    {
+      "id": "SW",
+      "index": 1,
+      "right": {
+        "position": [
+          88,
+          169
+        ],
+        "layer": "back",
+        "gripMask": {
+          "rx": 7,
+          "ry": 6
+        },
+        "angle": -0.45
+      },
+      "left": {
+        "position": [
+          163,
+          173
+        ],
+        "layer": "front",
+        "angle": 0
+      },
+      "shieldWidth": 0.707,
+      "sourceTransform": {
+        "scale": 0.4675427444756731,
+        "translate": [
+          31.334115612670175,
+          26.857029810767614
+        ]
+      },
+      "sourceAlphaBox": [
+        104,
+        11,
+        340,
+        438
+      ],
+      "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.",
+      "guideProjectedSockets": {
+        "right": [
+          97.95,
+          148.06
+        ],
+        "left": [
+          146.03,
+          169.02
+        ]
+      },
+      "shieldView": "quarter"
+    },
+    {
+      "id": "W",
+      "index": 2,
+      "right": {
+        "position": [
+          108,
+          172
+        ],
+        "layer": "back",
+        "gripMask": {
+          "rx": 7,
+          "ry": 6
+        },
+        "angle": -0.45
+      },
+      "left": {
+        "position": [
+          126,
+          183
+        ],
+        "layer": "front",
+        "angle": 0
+      },
+      "shieldWidth": 0.2,
+      "sourceTransform": {
+        "scale": 0.46450847087973085,
+        "translate": [
+          37.159991204657956,
+          27.819423762082437
+        ]
+      },
+      "sourceAlphaBox": [
+        111,
+        9,
+        339,
+        439
+      ],
+      "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.",
+      "guideProjectedSockets": {
+        "right": [
+          119.5,
+          141.09
+        ],
+        "left": [
+          119.5,
+          170.74
+        ]
+      },
+      "shieldView": "side"
+    },
+    {
+      "id": "NW",
+      "index": 3,
+      "right": {
+        "position": [
+          160,
+          158
+        ],
+        "layer": "back",
+        "gripMask": {
+          "rx": 7,
+          "ry": 6
+        },
+        "angle": 0.55
+      },
+      "left": {
+        "position": [
+          85,
+          171
+        ],
+        "layer": "back",
+        "angle": 0,
+        "handOverShield": false,
+        "gripMask": {
+          "rx": 9,
+          "ry": 8
+        }
+      },
+      "shieldWidth": 0.707,
+      "sourceTransform": {
+        "scale": 0.2375304220862943,
+        "translate": [
+          -3.3107761696716125,
+          25.586678603670066
+        ]
+      },
+      "sourceAlphaBox": [
+        333,
+        27,
+        786,
+        856
+      ],
+      "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.",
+      "guideProjectedSockets": {
+        "right": [
+          146.03,
+          142.82
+        ],
+        "left": [
+          97.95,
+          163.78
+        ]
+      },
+      "shieldView": "back"
+    },
+    {
+      "id": "N",
+      "index": 4,
+      "right": {
+        "position": [
+          175,
+          168
+        ],
+        "layer": "back",
+        "gripMask": {
+          "rx": 7,
+          "ry": 6
+        },
+        "angle": 0.45
+      },
+      "left": {
+        "position": [
+          81,
+          168
+        ],
+        "layer": "back",
+        "angle": 0
+      },
+      "shieldWidth": 1.0,
+      "sourceTransform": {
+        "scale": 0.4591300531527691,
+        "translate": [
+          21.224641181564238,
+          29.245219681083398
+        ]
+      },
+      "sourceAlphaBox": [
+        107,
+        6,
+        368,
+        425
+      ],
+      "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.",
+      "guideProjectedSockets": {
+        "right": [
+          162.0,
+          152.21
+        ],
+        "left": [
+          94.0,
+          152.21
+        ]
+      },
+      "shieldView": "back"
+    },
+    {
+      "id": "NE",
+      "index": 5,
+      "right": {
+        "position": [
+          174,
+          171
+        ],
+        "layer": "front",
+        "gripMask": {
+          "rx": 7,
+          "ry": 6
+        },
+        "angle": 0.55
+      },
+      "left": {
+        "position": [
+          88,
+          160
+        ],
+        "layer": "back",
+        "angle": 0
+      },
+      "shieldWidth": 0.707,
+      "sourceTransform": {
+        "scale": 0.24161069927550669,
+        "translate": [
+          39.71142363974192,
+          22.577182728255252
+        ]
+      },
+      "sourceAlphaBox": [
+        129,
+        39,
+        591,
+        854
+      ],
+      "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.",
+      "guideProjectedSockets": {
+        "right": [
+          158.05,
+          163.78
+        ],
+        "left": [
+          109.97,
+          142.82
+        ]
+      },
+      "shieldView": "back"
+    },
+    {
+      "id": "E",
+      "index": 6,
+      "right": {
+        "position": [
+          132,
+          183
+        ],
+        "layer": "front",
+        "gripMask": {
+          "rx": 7,
+          "ry": 6
+        },
+        "angle": 0.65
+      },
+      "left": {
+        "position": [
+          150,
+          169
+        ],
+        "layer": "back",
+        "angle": 0
+      },
+      "shieldWidth": 0.2,
+      "sourceTransform": {
+        "scale": 0.46667907121094454,
+        "translate": [
+          26.258215196811975,
+          30.13328371515624
+        ]
+      },
+      "sourceAlphaBox": [
+        85,
+        4,
+        312,
+        432
+      ],
+      "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.",
+      "guideProjectedSockets": {
+        "right": [
+          136.5,
+          170.74
+        ],
+        "left": [
+          136.5,
+          141.09
+        ]
+      },
+      "shieldView": "side"
+    },
+    {
+      "id": "SE",
+      "index": 7,
+      "right": {
+        "position": [
+          85,
+          177
+        ],
+        "layer": "front",
+        "gripMask": {
+          "rx": 7,
+          "ry": 6
+        },
+        "angle": -0.55
+      },
+      "left": {
+        "position": [
+          173,
+          167
+        ],
+        "layer": "front",
+        "angle": 0,
+        "handOverShield": false
+      },
+      "shieldWidth": 0.707,
+      "sourceTransform": {
+        "scale": 0.4697429456261469,
+        "translate": [
+          23.821072416620638,
+          28.71179938061698
+        ]
+      },
+      "sourceAlphaBox": [
+        77,
+        7,
+        330,
+        432
+      ],
+      "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.",
+      "guideProjectedSockets": {
+        "right": [
+          109.97,
+          169.02
+        ],
+        "left": [
+          158.05,
+          148.06
+        ]
+      },
+      "shieldView": "quarter"
+    }
+  ],
+  "animationPolicy": "Do not author animation until canonical directions have been reviewed in game context.",
+  "equipmentAssets": {
+    "weapon": {
+      "path": "equipment/weapon.png",
+      "grip": [
+        48,
+        210
+      ],
+      "size": [
+        96,
+        256
+      ],
+      "renderScale": 0.66
+    },
+    "shield": {
+      "path": "equipment/shield.png",
+      "grip": [
+        80,
+        96
+      ],
+      "size": [
+        160,
+        192
+      ],
+      "renderScale": 0.59
+    },
+    "shield-back": {
+      "path": "equipment/shield-back.png",
+      "grip": [
+        80,
+        96
+      ],
+      "size": [
+        160,
+        192
+      ]
+    },
+    "shield-side": {
+      "path": "equipment/shield-side.png",
+      "grip": [
+        80,
+        96
+      ],
+      "size": [
+        160,
+        192
+      ]
+    },
+    "shield-quarter": {
+      "path": "equipment/shield-quarter.png",
+      "grip": [
+        80,
+        96
+      ],
+      "size": [
+        160,
+        192
+      ]
+    }
+  },
+  "equipmentLimitations": "First approved-design equipment prototype. Shield has separate front, quarter, side, back art. Sword still uses one view. Hand occlusion is approximate."
+}

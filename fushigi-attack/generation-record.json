@@ -1,0 +1,42 @@
+[
+  {
+    "direction": "SW",
+    "status": "ok",
+    "source": "/workspace/generated_images/exec-563dd9fc-2434-48ee-802b-1c0fb078e1d3.png"
+  },
+  {
+    "direction": "S",
+    "status": "ok",
+    "source": "/workspace/generated_images/exec-3432fcf8-5e6e-4327-b207-1cd1fbb5e79c.png"
+  },
+  {
+    "direction": "W",
+    "status": "ok",
+    "source": "/workspace/generated_images/exec-56067f5a-4bda-482b-9871-a22ccc9212eb.png"
+  },
+  {
+    "direction": "NW",
+    "status": "ok",
+    "source": "/workspace/generated_images/exec-bc09cc74-4791-449d-928b-d77a13ece5c5.png"
+  },
+  {
+    "direction": "N",
+    "status": "ok",
+    "source": "/workspace/generated_images/exec-2f3d90ed-4a7f-4b99-b666-179d86ee15aa.png"
+  },
+  {
+    "direction": "NE",
+    "status": "ok",
+    "source": "/workspace/generated_images/exec-9fa637f8-1862-4c34-ba6f-b12da3b1f73b.png"
+  },
+  {
+    "direction": "E",
+    "status": "ok",
+    "source": "/workspace/generated_images/exec-d78d2646-b292-4209-80be-7a5f0c73e3ff.png"
+  },
+  {
+    "direction": "SE",
+    "status": "ok",
+    "source": "/workspace/generated_images/exec-d12c205e-4582-4f3d-9d36-f48947c76796.png"
+  }
+]

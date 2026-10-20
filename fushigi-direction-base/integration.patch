@@ -1,0 +1,66 @@
+--- a/index.html
++++ b/index.html
+@@ -125,6 +125,7 @@
+     <div class="plist" id="cfgList"></div>
+ </div>
+ 
++<script src="hero-base-renderer.js"></script>
+ <script>
+ 'use strict';
+ // =====================================================================
+@@ -1518,7 +1519,7 @@
+     `<div class="set"><span class="lab">キャラの大きさ<br><small>1マスより大きく描く（頭が上にはみ出す）</small></span><button class="sm" data-cfg="char">×${CHAR_K[charPref]}</button></div>`,
+     `<div class="set"><span class="lab">メッセージ窓の位置<br><small>下＝右下に表示（本家は右下に小さく出る）</small></span><button class="sm" data-cfg="logpos">${logPos ? '右下' : '上'}</button></div>`,
+     `<div class="set"><span class="lab">町の判定を表示<br><small>町で、歩けない所(赤)・倉庫(緑)・入口(青)を重ねて表示。一枚絵とのズレ確認用</small></span><button class="sm" data-cfg="grid">${showGrid ? 'ON' : 'OFF'}</button></div>`,
+-    `<div class="set"><span class="lab">主人公の表示<br><small>パーツ＝歩き・攻撃・装備が動く／1枚絵＝assets/player.png をそのまま表示</small></span><button class="sm" data-cfg="rig">${rigPref ? '1枚絵' : 'パーツ'}</button></div>`,
++    `<div class="set"><span class="lab">主人公の表示<br><small>方向別の基準絵（待機のみ）／1枚絵＝assets/player.png</small></span><button class="sm" data-cfg="rig">${rigPref ? '1枚絵' : '基準絵'}</button></div>`,
+     `<div class="set"><span class="lab">陰影（立体感）<br><small>壁の高さ・壁際の影・暗がり。絵が平らに見えるとき「強」</small></span><button class="sm" data-cfg="shade">${['なし', '標準', '強'][shadePref]}</button></div>`,
+     `<div class="set"><span class="lab">戦闘の演出<br><small>斬撃の弧・命中の火花・被弾や撃破での画面の揺れ。酔うときは「なし」</small></span><button class="sm" data-cfg="vfx">${['なし', '標準', '強'][vfxPref]}</button></div>`,
+     `<div class="set"><span class="lab">満腹度の減り<br><small>「速い」は動作確認用（2ターンで1%）</small></span><button class="sm" data-cfg="hunger">${hungerPref ? '速い' : '標準'}</button></div>`,
+@@ -1709,8 +1710,23 @@
+   if (headFirst) nearArm();
+   g.restore(); g.restore();
+ }
++
++// Canonical idle-only directional base; future animation will retain these anchors.
++const HERO_BASE_META = {"version": 1, "status": "Canonical idle direction base v1; no animation authored", "frameSize": [256, 256], "groundAnchor": [128, 224], "headTopY": 32, "heightToGround": 192, "directions": [{"id": "S", "index": 0, "right": {"position": [81, 172], "layer": "front", "gripMask": {"rx": 7, "ry": 6}, "angle": 0}, "left": {"position": [175, 172], "layer": "front", "angle": 0}, "shieldWidth": 1.0, "sourceTransform": {"scale": 0.4683545213316924, "translate": [16.054574701453276, 25.443036701356306]}, "sourceAlphaBox": [111, 14, 371, 433], "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.", "guideProjectedSockets": {"right": [94.0, 159.63], "left": [162.0, 159.63]}}, {"id": "SW", "index": 1, "right": {"position": [88, 169], "layer": "back", "gripMask": {"rx": 7, "ry": 6}, "angle": 0}, "left": {"position": [163, 173], "layer": "front", "angle": 0}, "shieldWidth": 0.707, "sourceTransform": {"scale": 0.4675427444756731, "translate": [31.334115612670175, 26.857029810767614]}, "sourceAlphaBox": [104, 11, 340, 438], "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.", "guideProjectedSockets": {"right": [97.95, 148.06], "left": [146.03, 169.02]}}, {"id": "W", "index": 2, "right": {"position": [108, 172], "layer": "back", "gripMask": {"rx": 7, "ry": 6}, "angle": 0}, "left": {"position": [126, 183], "layer": "front", "angle": 0}, "shieldWidth": 0.2, "sourceTransform": {"scale": 0.46450847087973085, "translate": [37.159991204657956, 27.819423762082437]}, "sourceAlphaBox": [111, 9, 339, 439], "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.", "guideProjectedSockets": {"right": [119.5, 141.09], "left": [119.5, 170.74]}}, {"id": "NW", "index": 3, "right": {"position": [160, 158], "layer": "back", "gripMask": {"rx": 7, "ry": 6}, "angle": 0}, "left": {"position": [85, 171], "layer": "front", "angle": 0}, "shieldWidth": 0.707, "sourceTransform": {"scale": 0.2375304220862943, "translate": [-3.3107761696716125, 25.586678603670066]}, "sourceAlphaBox": [333, 27, 786, 856], "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.", "guideProjectedSockets": {"right": [146.03, 142.82], "left": [97.95, 163.78]}}, {"id": "N", "index": 4, "right": {"position": [175, 168], "layer": "back", "gripMask": {"rx": 7, "ry": 6}, "angle": 0}, "left": {"position": [81, 168], "layer": "back", "angle": 0}, "shieldWidth": 1.0, "sourceTransform": {"scale": 0.4591300531527691, "translate": [21.224641181564238, 29.245219681083398]}, "sourceAlphaBox": [107, 6, 368, 425], "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.", "guideProjectedSockets": {"right": [162.0, 152.21], "left": [94.0, 152.21]}}, {"id": "NE", "index": 5, "right": {"position": [174, 171], "layer": "front", "gripMask": {"rx": 7, "ry": 6}, "angle": 0}, "left": {"position": [88, 160], "layer": "back", "angle": 0}, "shieldWidth": 0.707, "sourceTransform": {"scale": 0.24161069927550669, "translate": [39.71142363974192, 22.577182728255252]}, "sourceAlphaBox": [129, 39, 591, 854], "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.", "guideProjectedSockets": {"right": [158.05, 163.78], "left": [109.97, 142.82]}}, {"id": "E", "index": 6, "right": {"position": [132, 183], "layer": "front", "gripMask": {"rx": 7, "ry": 6}, "angle": 0}, "left": {"position": [150, 169], "layer": "back", "angle": 0}, "shieldWidth": 0.2, "sourceTransform": {"scale": 0.46667907121094454, "translate": [26.258215196811975, 30.13328371515624]}, "sourceAlphaBox": [85, 4, 312, 432], "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.", "guideProjectedSockets": {"right": [136.5, 170.74], "left": [136.5, 141.09]}}, {"id": "SE", "index": 7, "right": {"position": [85, 177], "layer": "front", "gripMask": {"rx": 7, "ry": 6}, "angle": 0}, "left": {"position": [173, 167], "layer": "back", "angle": 0}, "shieldWidth": 0.707, "sourceTransform": {"scale": 0.4697429456261469, "translate": [23.821072416620638, 28.71179938061698]}, "sourceAlphaBox": [77, 7, 330, 432], "socketStatus": "Idle calibrated against generated art; fully occluded far-hand positions remain estimates.", "guideProjectedSockets": {"right": [109.97, 169.02], "left": [158.05, 148.06]}}], "animationPolicy": "Do not author animation until canonical directions have been reviewed in game context.", "equipmentAssets": {"weapon": {"path": "equipment-test/weapon.png", "grip": [48, 210], "size": [96, 256]}, "shield": {"path": "equipment-test/shield.png", "grip": [80, 96], "size": [160, 192]}}, "equipmentLimitations": "Diagnostic single-image sword/shield demonstrate anchors and coarse layering. Final per-direction equipment art and per-frame hand masks are still required."}, HERO_BASE_IMAGES = {}, HERO_BASE_EQUIPMENT = {};
++let heroBaseRenderer = null;
++const heroBasePreview = {weapon:false,shield:false,debug:false};
++function heroBaseReady() {return !!heroBaseRenderer && rigPref===0;}
++function heroBaseDirection(face) {const [dx,dy]=face||[0,1];return HERO_BASE_META.directions[(Math.round(Math.atan2(-dx,dy)/(Math.PI/4))+8)%8].id;}
++function loadHeroBase() {
++  if(typeof Image==='undefined'||typeof HeroBaseRenderer==='undefined')return;
++  const check=()=>{if(HERO_BASE_META.directions.every(d=>HERO_BASE_IMAGES[d.id])){heroBaseRenderer=new HeroBaseRenderer(HERO_BASE_META,HERO_BASE_IMAGES,HERO_BASE_EQUIPMENT);render();}};
++  for(const d of HERO_BASE_META.directions){const im=new Image();im.onload=()=>{HERO_BASE_IMAGES[d.id]=im;check();};im.src='assets/hero-base/'+d.id+'.png';}
++  for(const name of ['weapon','shield']){const im=new Image();im.onload=()=>{HERO_BASE_EQUIPMENT[name]=im;render();};im.src='assets/hero-base/'+HERO_BASE_META.equipmentAssets[name].path;}
++}
++
+ // キャラを1体描く：パーツ表示が使えるときは主人公だけパーツで、それ以外は1枚絵
+ function drawChar(key, x, y, g, k, e, t) {
++  if(key==='player' && heroBaseReady()){heroBaseRenderer.draw(g,heroBaseDirection(e.face),x+TS/2,y+TS*.9,TS*k,{weapon:heroBasePreview.weapon,shield:heroBasePreview.shield,debug:heroBasePreview.debug});return;}
+   if (key === 'player' && rigOn()) { const S = TS * k; drawRig(g, x - (S - TS) / 2 + S / 2, y - (S - TS) + S, S * 0.97, e, t); return; }
+   blit(key, x, y, g, k);
+ }
+@@ -1726,12 +1742,12 @@
+   const [ox, oy] = entityOffset(e, t);
+   const px = Math.round(camX + (e.vx + ox) * TS), py = Math.round(camY + (e.vy + oy) * TS);
+   const d = Math.hypot(e.x - e.vx, e.y - e.vy);
+-  const hop = d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 歩くときの小さな跳ね
++  const hop = !(key==='player' && heroBaseReady()) && d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 歩くときの小さな跳ね
+   ctx.fillStyle = 'rgba(0,0,0,.35)';
+   const ck = CHAR_K[charPref];
+   ctx.beginPath(); ctx.ellipse(px + TS / 2, py + TS * 0.9, TS * 0.32 * Math.min(ck, 1.25), TS * 0.1 * Math.min(ck, 1.25), 0, 0, Math.PI * 2); ctx.fill();
+   ctx.save();
+-  if (e.fl) { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
++  if (e.fl && !(key==='player' && heroBaseReady())) { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
+   drawChar(key, 0, 0, ctx, ck, e, t);
+   if (e.flash > t) {                                             // 被弾の白フラッシュ（絵の形のまま）。tmpは3マス四方：マスの左上を(TS, 2TS)に置く
+     const g = tmp.getContext('2d');
+@@ -2003,6 +2019,7 @@
+ loadExternalAssets();
+ loadRig();
+ boot();
++loadHeroBase();
+ </script>
+ </body>
+ </html>
