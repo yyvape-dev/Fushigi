@@ -23,6 +23,11 @@ with sync_playwright() as p:
         page.goto('http://127.0.0.1:8000/fushigi-monsters-v1/preview.html');page.wait_for_function('MonsterReview.ready || MonsterReview.error');assert page.evaluate('MonsterReview.ready'),page.evaluate('MonsterReview.error')
         for kind in m['monsters']:
             page.select_option('#kind',kind);page.wait_for_function('Array.from(document.querySelectorAll("#contact img")).every(i=>i.complete && i.naturalWidth===256)')
+        for style in ['before','current']:
+            page.select_option('#faceStyle',style)
+            page.wait_for_function('Array.from(document.querySelectorAll("#contact img")).every(i=>i.complete && i.naturalWidth===256)')
+            prefix='before-face-v2/' if style=='before' else 'assets/'
+            assert page.locator('#contact img').first.get_attribute('src').startswith(prefix)
         for theme in ['forest','limestone','ruins','ice','volcano']:page.select_option('#theme',theme)
         page.select_option('#theme','limestone');page.select_option('#kind','goblin')
         for d in m['directions']:page.evaluate('(d)=>MonsterReview.setDirection(d)',d)
@@ -32,7 +37,7 @@ with sync_playwright() as p:
         page.locator('#stage').screenshot(path=str(P/f'stage-{name}.png'))
         page.locator('#rotate').click();page.wait_for_function('document.querySelector("#dirs button[aria-pressed=true]").textContent!=="SE"');page.locator('#rotate').click()
         assert not errors and not failures,(errors,failures)
-        report['browsers'].append({'name':name,'viewport':[w,h],'ready':True,'errors':errors,'failedRequests':failures,'noPageOverflow':True,'floorThemes':5,'directions':8})
+        report['browsers'].append({'name':name,'viewport':[w,h],'ready':True,'errors':errors,'failedRequests':failures,'noPageOverflow':True,'floorThemes':5,'directions':8,'faceVersions':2})
         page.close()
     browser.close()
 (P/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

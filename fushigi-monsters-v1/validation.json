@@ -77,36 +77,36 @@
     "goblin": {
       "S": {
         "visibleBounds": [
-          64,
-          73,
-          192,
+          63,
+          72,
+          194,
           223
         ],
         "mirror": false
       },
       "SW": {
         "visibleBounds": [
-          65,
-          72,
-          191,
+          64,
+          71,
+          193,
           223
         ],
         "mirror": false
       },
       "W": {
         "visibleBounds": [
-          80,
+          77,
           69,
-          177,
+          179,
           223
         ],
         "mirror": false
       },
       "NW": {
         "visibleBounds": [
-          71,
-          75,
-          186,
+          68,
+          72,
+          188,
           223
         ],
         "mirror": false
@@ -114,35 +114,35 @@
       "N": {
         "visibleBounds": [
           63,
-          76,
-          193,
+          80,
+          194,
           223
         ],
         "mirror": false
       },
       "NE": {
         "visibleBounds": [
-          70,
-          76,
-          186,
+          69,
+          80,
+          188,
           223
         ],
         "mirror": false
       },
       "E": {
         "visibleBounds": [
-          80,
-          72,
-          177,
+          78,
+          76,
+          179,
           223
         ],
         "mirror": false
       },
       "SE": {
         "visibleBounds": [
-          73,
-          77,
-          183,
+          69,
+          75,
+          188,
           223
         ],
         "mirror": false
@@ -151,72 +151,72 @@
     "bat": {
       "S": {
         "visibleBounds": [
-          41,
-          88,
-          216,
+          46,
+          89,
+          211,
           195
         ],
         "mirror": false
       },
       "SE": {
         "visibleBounds": [
-          55,
+          60,
           87,
-          201,
+          197,
           195
         ],
         "mirror": false
       },
       "E": {
         "visibleBounds": [
-          86,
+          87,
           83,
-          171,
+          170,
           195
         ],
         "mirror": false
       },
       "NE": {
         "visibleBounds": [
-          55,
+          58,
           83,
-          202,
+          198,
           195
         ],
         "mirror": false
       },
       "N": {
         "visibleBounds": [
-          42,
-          88,
-          214,
+          45,
+          86,
+          211,
           195
         ],
         "mirror": false
       },
       "SW": {
         "visibleBounds": [
-          56,
+          60,
           87,
-          202,
+          197,
           195
         ],
         "mirror": true
       },
       "W": {
         "visibleBounds": [
-          86,
+          87,
           83,
-          171,
+          170,
           195
         ],
         "mirror": true
       },
       "NW": {
         "visibleBounds": [
-          55,
+          59,
           83,
-          202,
+          199,
           195
         ],
         "mirror": true
@@ -235,7 +235,8 @@
       "failedRequests": [],
       "noPageOverflow": true,
       "floorThemes": 5,
-      "directions": 8
+      "directions": 8,
+      "faceVersions": 2
     },
     {
       "name": "portrait",
@@ -248,7 +249,8 @@
       "failedRequests": [],
       "noPageOverflow": true,
       "floorThemes": 5,
-      "directions": 8
+      "directions": 8,
+      "faceVersions": 2
     },
     {
       "name": "landscape",
@@ -261,7 +263,8 @@
       "failedRequests": [],
       "noPageOverflow": true,
       "floorThemes": 5,
-      "directions": 8
+      "directions": 8,
+      "faceVersions": 2
     }
   ]
 }

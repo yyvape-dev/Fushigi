@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-20",
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "userFeedback": "More monster-like and simpler facial features, as in attached yellow round monster. Reduce human-baby-like detail even for cute monsters.",
+  "slime": "Existing simple face retained; no new image generation.",
+  "records": [
+    {
+      "id": "goblin-simple-face-v2",
+      "prompt": "Edit the FIRST sprite sheet to simplify the FACES ONLY, following the facial design language of reference 2 (the user's yellow round monster). The user rejected the original human-baby-like expressive amber anime eyes. IMPORTANT new face style: two simple glossy almost-black oval bead eyes with a very thin pale rim and just ONE small white highlight, NO colored iris or detailed iris rings, NO eyelashes, NO layered expressive human eyelids, NO blush, NO cheeks, NO cute human smile. A simplified stylized MONSTER face readable at small game size, still charming, not horror. Use only a few bold shapes for eyes/mouth/nose. Do not copy the yellow monster's color, ball body, or ears. Preserve the original creature's body design, stance, silhouette, material rendering, scale, orientation, clothing/accessories, consistent camera and layout. Transparent background. Same exact sprite count and grid layout as input. Do not add labels, shadows or background. Goblin: slightly slanted oval black eyes tucked under a simple low green brow ridge, a broad blunt simple nose, a short horizontal mouth slit with TWO obvious small ivory triangular tusks, more mischievous blunt monster than adorable human child. Simplify skin on face: no freckles, fine wrinkles or dimples. Keep green skin, pointed ears, dark moss hair, leather vest, shorts and club exactly in its anatomical RIGHT hand. In FRONT S right-hand club is viewer LEFT; in SE (bottom right) club is also on viewer LEFT held by near right arm. DO NOT change hands. Grid is FOUR COLUMNS TWO ROWS: S,SW,W,NW / N,NE,E,SE. Back-facing sprites must have NO visible facial features. Preserve all 8 directions and consistent same facial design across visible views.",
+      "references": [
+        "source-art/faces-v2/goblin-edit-input.png",
+        "source-art/faces-v2/user-face-reference.jpg"
+      ],
+      "output": "source-art/faces-v2/goblin.png"
+    },
+    {
+      "id": "bat-simple-face-v2",
+      "prompt": "Edit the FIRST sprite sheet to simplify the FACES ONLY, following the facial design language of reference 2 (the user's yellow round monster). The user rejected the original human-baby-like expressive amber anime eyes. IMPORTANT new face style: two simple glossy almost-black oval bead eyes with a very thin pale rim and just ONE small white highlight, NO colored iris or detailed iris rings, NO eyelashes, NO layered expressive human eyelids, NO blush, NO cheeks, NO cute human smile. A simplified stylized MONSTER face readable at small game size, still charming, not horror. Use only a few bold shapes for eyes/mouth/nose. Do not copy the yellow monster's color, ball body, or ears. Preserve the original creature's body design, stance, silhouette, material rendering, scale, orientation, clothing/accessories, consistent camera and layout. Transparent background. Same exact sprite count and grid layout as input. Do not add labels, shadows or background. Bat: replace orange anime eyes with small simple glossy BLACK oval eyes, very thin pale border, a single tiny white specular dot, gentle slightly downward slant at inner corner for enemy personality; short flat little mouth with TWO clear triangular white fangs and tiny simple triangular nose. Not the face of a human child or baby kitten. Preserve purple body, pink ears and spread wings with scalloped lavender membranes. FIVE sprites ONE ROW: S(front), SE(front facing right), E(right profile), NE(back facing right), N(back). Preserve rear views, no face painted on the back of head. Keep generous padding around full wing tips and each sprite separate. Transparent background.",
+      "references": [
+        "source-art/bat.png",
+        "source-art/faces-v2/user-face-reference.jpg"
+      ],
+      "output": "source-art/faces-v2/bat.png"
+    }
+  ]
+}

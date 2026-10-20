@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "status": "idle-base-review; not approved; not integrated",
+  "version": 2,
+  "status": "simplified-monster-face-review; not approved; not integrated",
   "frameSize": 256,
   "origin": [
     128,
@@ -78,122 +78,117 @@
     },
     "goblin": {
       "name": "ゴブリン",
-      "scale": 0.39185750636132316,
+      "scale": 0.3684210526315789,
       "bodyHeight": 154,
       "visualBottom": 224,
-      "source": "source-art/goblin.png",
-      "sourceSha256": "19f67dd8880d011aea3690ddf8cd57c685b4d0153a3da14bb6f8dfb84ca2f3d0",
+      "source": "source-art/faces-v2/goblin.png",
+      "sourceSha256": "a01b98216cfbee57a1a3dd5d612c18b95ed2f8b6f91e450544f117315df3997f",
       "views": {
         "S": {
           "source": "S",
           "mirror": false,
           "path": "assets/goblin/S.png",
-          "sha256": "c80ba74eaf94675cd194af035ef0ffc4205ade598e9f33cf206f16ed7ee64521"
+          "sha256": "b0bc4fc87a0b7187c83883ca1fdf6d066994f30c62d76d5bbc2fb90f79b20a5f"
         },
         "SW": {
           "source": "SW",
           "mirror": false,
           "path": "assets/goblin/SW.png",
-          "sha256": "2413d140002f933c681b252f70f247ccc5b424c5bf780d245ba93b3699b4af98"
+          "sha256": "e1b2fadebfea9af9878a7e9df5d15c1744c693a48b23deb5a02f197df0250f70"
         },
         "W": {
           "source": "W",
           "mirror": false,
           "path": "assets/goblin/W.png",
-          "sha256": "e9c77dab06545a8098f0db90593e763605b394e1a17102fca18e381182ecad60"
+          "sha256": "8613a36312de16ac3e2c9a709e583c42a104569666e36a56041a4f713755423a"
         },
         "NW": {
           "source": "NW",
           "mirror": false,
           "path": "assets/goblin/NW.png",
-          "sha256": "245a63b25e68387d58b4f3b8cae9d5081bf29df22d1f85fe4a6e951dffb24700"
+          "sha256": "bb5c3d650a839513031f67ff43201f0f20e1975c460265b39c0ca2a513ccb032"
         },
         "N": {
           "source": "N",
           "mirror": false,
           "path": "assets/goblin/N.png",
-          "sha256": "1c131d59bdeab775a31258c0b003898c06de8da808d2b23668851b6ffb9c393e"
+          "sha256": "5d3a196b71dc0c531ce9889b32cca00093d6f3f40cb707bfdb08804e1f3e02f6"
         },
         "NE": {
           "source": "NE",
           "mirror": false,
           "path": "assets/goblin/NE.png",
-          "sha256": "4e80c90998441dd9112007d1720d8cce1d321de4a6cd9b6e70854ce2b5ae29d9"
+          "sha256": "edf83922092adaf13b9f344e20396c780deac11432f6fa39f157249a28b7416b"
         },
         "E": {
           "source": "E",
           "mirror": false,
           "path": "assets/goblin/E.png",
-          "sha256": "8289cd3035580e7666316fe3e64d1db069455ad449dd5697dfa44012f63d2518"
+          "sha256": "db21143e70d1134b5a9097106226321debb67e27b6fb2499ae048890b92ac376"
         },
         "SE": {
           "source": "SE",
           "mirror": false,
           "path": "assets/goblin/SE.png",
-          "sha256": "4ff03acf7013c5140840b767b16f13e60eb67011981218e6ea9326e4adaa3325",
-          "override": {
-            "source": "source-art/goblin-SE-fixed.png",
-            "sha256": "95040837ad7f33b1221e34e4804f7de47fe07d4a47e6855457e3856273152ae5",
-            "reason": "Correct club from left to anatomical right hand"
-          }
+          "sha256": "2b0973fa7579129231b647a0f993ca0db6011c48cca3ce8c583325dbdad3167f"
         }
       }
     },
     "bat": {
       "name": "コウモリ",
-      "scale": 0.3822525597269625,
+      "scale": 0.34355828220858897,
       "bodyHeight": 112,
       "visualBottom": 196,
-      "source": "source-art/bat.png",
-      "sourceSha256": "cee26f6c915e209346304a553895d9065d131c28f35c8b331fdb68206c6c6a41",
+      "source": "source-art/faces-v2/bat.png",
+      "sourceSha256": "8dff7d7216a89dc29c3c7aa2a6062cfebf94b8288bd99818b60b9245a050949c",
       "views": {
         "S": {
           "source": "S",
           "mirror": false,
           "path": "assets/bat/S.png",
-          "sha256": "20b795134a0796d578491f49e2b07a2e5b19e07844ad4ae18e84babc3cca8def"
+          "sha256": "ada935bf2523f7e772da46312bd5e619727cb467bb0e3e8c9a04d88bd84cfd34"
         },
         "SE": {
           "source": "SE",
           "mirror": false,
           "path": "assets/bat/SE.png",
-          "sha256": "8d211674ae6f907e536791ed3e2458fde3ecd215c69ce06d36bb1f8697bc9ce5"
+          "sha256": "8b6c9c406815c54b53fb0ca2a692b6094a8963fb835a92bcc3d9e8169fe86207"
         },
         "E": {
           "source": "E",
           "mirror": false,
           "path": "assets/bat/E.png",
-          "sha256": "e33f467288b4e1fa3b33e362ca784d9e83f6d0cb49f50e646de743aa741203e9"
+          "sha256": "128f1c4f3db9315bb74419bcfeaf6d120dbec3d609b0b75363452b4a113f4ae7"
         },
         "NE": {
           "source": "NE",
           "mirror": false,
           "path": "assets/bat/NE.png",
-          "sha256": "ea7b69eb5c20d1a665452d1967c2da6a2f77663089074d5de880b14529ad371c"
+          "sha256": "ae462cedc24d875704e1b96ab5298bb8eb54968e0c24cda48ac8cfdbbd157a69"
         },
         "N": {
           "source": "N",
           "mirror": false,
           "path": "assets/bat/N.png",
-          "sha256": "b87e99710392d8e8a87eb4275269639d7c61d2760147a6f6dc6a85207cc0d2af"
+          "sha256": "91e62921a283042b14442cc60e41942aeef6cf87e1fa79f194ce1791062f3c88"
         },
         "SW": {
           "source": "SE",
           "mirror": true,
           "path": "assets/bat/SW.png",
-          "sha256": "10d2faadee56f6d15bc4cb30f896e53be552628eca938a8cff5c139dd5e367c5"
+          "sha256": "3bc433437142ed70686f458f830dd6e497e1e25593059357990507e7c5639877"
         },
         "W": {
           "source": "E",
           "mirror": true,
           "path": "assets/bat/W.png",
-          "sha256": "7f2090098899b16b42e56a8beff51f267d88a3235f1a38f44613c8cce62cd4a5"
+          "sha256": "def6dd77adb6f77e32bf400f89c940cb03c50f3cd0123ad352404b7278570866"
         },
         "NW": {
           "source": "NE",
           "mirror": true,
           "path": "assets/bat/NW.png",
-          "sha256": "6318ac79e9ab9d5b4cfd5b86fde938b83a697b630493b7b6129cb4513790654d"
+          "sha256": "acebba863c336c3e437c3fa14405cc86159e57fa40ed11514b0b8fc29b78bbb4"
         }
       }
     }
