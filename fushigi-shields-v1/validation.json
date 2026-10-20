@@ -1,7 +1,8 @@
 {
   "shieldDirectionFrameChecks": 480,
   "equipmentCombinationFrameChecks": 6240,
-  "shieldImagesLoaded": 40,
+  "shieldImagesLoaded": 50,
+  "SEIndependentView": true,
   "NWPixelChecks": 60,
   "pageErrors": [],
   "mobileLayout": true,
@@ -494,72 +495,72 @@
       "shield": "bronzeshield",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "bronzeshield",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "bronzeshield",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "bronzeshield",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "bronzeshield",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "bronzeshield",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -1049,72 +1050,72 @@
       "shield": "tekkoshield",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "tekkoshield",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "tekkoshield",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "tekkoshield",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "tekkoshield",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "tekkoshield",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -1604,72 +1605,72 @@
       "shield": "onioookami",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "onioookami",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "onioookami",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "onioookami",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "onioookami",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "onioookami",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -2159,72 +2160,72 @@
       "shield": "battlecounter",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "battlecounter",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "battlecounter",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "battlecounter",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "battlecounter",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "battlecounter",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -2714,72 +2715,72 @@
       "shield": "mikiri",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "mikiri",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "mikiri",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "mikiri",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "mikiri",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "mikiri",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -3269,72 +3270,72 @@
       "shield": "konjo",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "konjo",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "konjo",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "konjo",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "konjo",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "konjo",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -3824,72 +3825,72 @@
       "shield": "zekkocho",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "zekkocho",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "zekkocho",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "zekkocho",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "zekkocho",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "zekkocho",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -4379,72 +4380,72 @@
       "shield": "haramochi",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "haramochi",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "haramochi",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "haramochi",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "haramochi",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "haramochi",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -4934,72 +4935,72 @@
       "shield": "steakplate",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "steakplate",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "steakplate",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "steakplate",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "steakplate",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "steakplate",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
@@ -5489,72 +5490,72 @@
       "shield": "minoshield",
       "direction": "SE",
       "frame": 0,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "minoshield",
       "direction": "SE",
       "frame": 1,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "minoshield",
       "direction": "SE",
       "frame": 2,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "minoshield",
       "direction": "SE",
       "frame": 3,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "minoshield",
       "direction": "SE",
       "frame": 4,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     },
     {
       "shield": "minoshield",
       "direction": "SE",
       "frame": 5,
-      "view": "quarter",
+      "view": "quarter-se",
       "drawOrder": [
         "body",
         "weapon",
         "body",
-        "shield-quarter"
+        "shield-quarter-se"
       ]
     }
   ],

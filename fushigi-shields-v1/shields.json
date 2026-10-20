@@ -1,6 +1,6 @@
 {
-  "version": 1,
-  "status": "Ten four-view shield candidates; user visual review pending",
+  "version": 2,
+  "status": "Ten five-view shield candidates; SE yaw correction pending user review",
   "approvedBaseline": "../fushigi-equipment-v3/",
   "shieldRenderScale": 0.59,
   "weaponRenderScale": 0.66,
@@ -12,7 +12,7 @@
     "N": "back",
     "NE": "back",
     "E": "side",
-    "SE": "quarter"
+    "SE": "quarter-se"
   },
   "shields": [
     {
@@ -114,6 +114,32 @@
           ],
           "scale": 0.6233766233766234,
           "sha256": "800ea9ed84cead9c5c64d4c7ed706451fe7f9f7c63bf57cbf84f83b5cebae77b"
+        },
+        "quarter-se": {
+          "path": "assets/bronzeshield/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            129,
+            39,
+            364,
+            378
+          ],
+          "sourceGrip": [
+            246.5,
+            208.5
+          ],
+          "scale": 0.4247787610619469,
+          "sha256": "93b9667eafbcfb757ecc103c97fa54bd803d5f754faf71fe32c956606a4b99c8",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -217,6 +243,32 @@
           ],
           "scale": 0.6396396396396397,
           "sha256": "bdbd5360b33a8556bd96765a0560935a896de60362f93fe914f4e91df3c240c1"
+        },
+        "quarter-se": {
+          "path": "assets/tekkoshield/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            507,
+            38,
+            770,
+            380
+          ],
+          "sourceGrip": [
+            638.5,
+            209.0
+          ],
+          "scale": 0.40304182509505704,
+          "sha256": "5fb445122202a7fa3a16ddb3864d7136c3f76581c73454b75a1ca95b5f9dc025",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -320,6 +372,32 @@
           ],
           "scale": 0.5735849056603773,
           "sha256": "eb9db4b21dd2588c6277fb4f9356dff297c1c734a595c10109202386ffec8e6c"
+        },
+        "quarter-se": {
+          "path": "assets/onioookami/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            896,
+            22,
+            1111,
+            396
+          ],
+          "sourceGrip": [
+            1003.5,
+            209.0
+          ],
+          "scale": 0.40641711229946526,
+          "sha256": "3889aa05d7602501abae3ce1ce906650ef766867d9de8edc4b340282036440bb",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -423,6 +501,32 @@
           ],
           "scale": 0.5197090170867873,
           "sha256": "91570d976d9bbe3f48fa78d9845cb0f331b45fa984f4b01b2d5beb3b243ec35b"
+        },
+        "quarter-se": {
+          "path": "assets/battlecounter/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            1261,
+            47,
+            1532,
+            396
+          ],
+          "sourceGrip": [
+            1396.5,
+            221.5
+          ],
+          "scale": 0.3839541547277937,
+          "sha256": "c75c5c70b4c9f57d18ca5566df31ab0d3341c0dad7348843e0601ffaf3e7cce3",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -526,6 +630,32 @@
           ],
           "scale": 0.4919093851132686,
           "sha256": "59e5e7ad828655fbf7bbd259176884d3dc131357de29656cf990947678d604ea"
+        },
+        "quarter-se": {
+          "path": "assets/mikiri/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            1678,
+            22,
+            1862,
+            412
+          ],
+          "sourceGrip": [
+            1770.0,
+            217.0
+          ],
+          "scale": 0.3695652173913043,
+          "sha256": "37606d42ada3579f8c60d1dc3124ba0ba65acf73089ad14b736a1975d81e1726",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -629,6 +759,32 @@
           ],
           "scale": 0.62882096069869,
           "sha256": "91a37a820c8d62445d78146688de6b8b434c1669ce4b947b464e02dff92e11a5"
+        },
+        "quarter-se": {
+          "path": "assets/konjo/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            124,
+            417,
+            377,
+            746
+          ],
+          "sourceGrip": [
+            250.5,
+            581.5
+          ],
+          "scale": 0.425531914893617,
+          "sha256": "8afe2ed330abbb7cfbe10e9b67636c637b05440b8ead0bc110333da5ced5cdc9",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -732,6 +888,32 @@
           ],
           "scale": 0.5883766402035384,
           "sha256": "12e2e9c284eafbb68b7f71226d887c0fef576143d9c4eacb048c5e76e2e2bed6"
+        },
+        "quarter-se": {
+          "path": "assets/zekkocho/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            507,
+            413,
+            764,
+            740
+          ],
+          "sourceGrip": [
+            635.5,
+            576.5
+          ],
+          "scale": 0.40978593272171254,
+          "sha256": "f920d2d51bc772507f4a076ca5fd75495618e23353b177d13886d9b8e4e6318e",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -835,6 +1017,32 @@
           ],
           "scale": 0.5336963921034718,
           "sha256": "cfae68d0ee023877622b3d1297ce6e1a48a2a92b9fb06a07194092b962562069"
+        },
+        "quarter-se": {
+          "path": "assets/haramochi/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            866,
+            432,
+            1139,
+            736
+          ],
+          "sourceGrip": [
+            1002.5,
+            584.0
+          ],
+          "scale": 0.3980263157894737,
+          "sha256": "1725adea239e17381f6b9ff19c8122aa29eb7defc01a316156460b8eeff9efab",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -938,6 +1146,32 @@
           ],
           "scale": 0.4645161290322581,
           "sha256": "4424bce91b77c9e82bd3894449b346d8eacd62d7c22eec1557c0b3c4a73fc664"
+        },
+        "quarter-se": {
+          "path": "assets/steakplate/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            1213,
+            437,
+            1555,
+            725
+          ],
+          "sourceGrip": [
+            1384.0,
+            581.0
+          ],
+          "scale": 0.3157894736842105,
+          "sha256": "0178a2f1d8f95ad377d11d4cfc75bb467015669a3b31eabbb0f84d27957394f8",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"
@@ -1041,6 +1275,32 @@
           ],
           "scale": 0.5200553250345781,
           "sha256": "05a95c62d4b3dcdb0a76796921f3eb52e42a75e820ca110a839f55bf8bd364c2"
+        },
+        "quarter-se": {
+          "path": "assets/minoshield/quarter-se.png",
+          "size": [
+            160,
+            192
+          ],
+          "grip": [
+            80,
+            96
+          ],
+          "source": "source-art/shields-se.png",
+          "sourceSha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+          "sourceBox": [
+            1649,
+            424,
+            1904,
+            740
+          ],
+          "sourceGrip": [
+            1776.5,
+            582.0
+          ],
+          "scale": 0.39556962025316456,
+          "sha256": "6416b8c0cf4405a282076feb4ec17a3010ad446139092a1150488e313424c956",
+          "facing": "screen-right; visible left thickness; independent painted artwork"
         }
       },
       "reviewStatus": "candidate"

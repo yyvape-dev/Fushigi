@@ -31,16 +31,18 @@ def run():
      for(const weapon of ['approved',...r.weaponCatalog.weapons.map(w=>w.key)]){
       r.selectEquipment(shield.key,weapon);let count=0;
       for(const d of r.baseMeta.directions)for(const [i,ms]of r.MIDS.entries()){
-       const seq=[],native=g.drawImage.bind(g);g.drawImage=function(im,...args){seq.push(im===r.equipment['shield-back']?'shield-back':im===r.equipment['shield-quarter']?'shield-quarter':im===r.equipment['shield-side']?'shield-side':im===r.equipment.shield?'shield-front':im===r.equipment.weapon?'weapon':'body');native(im,...args)};
+       const seq=[],native=g.drawImage.bind(g);g.drawImage=function(im,...args){seq.push(im===r.equipment['shield-back']?'shield-back':im===r.equipment['shield-quarter-se']?'shield-quarter-se':im===r.equipment['shield-quarter']?'shield-quarter':im===r.equipment['shield-side']?'shield-side':im===r.equipment.shield?'shield-front':im===r.equipment.weapon?'weapon':'body');native(im,...args)};
        g.clearRect(0,0,512,512);r.renderer.draw(g,d.id,256,310,192,ms,{weapon:true,shield:true});g.drawImage=native;
        if(d.id==='NW'&&(seq.indexOf('shield-back')<0||seq.at(-1)!=='body'))throw Error('NW depth '+shield.key+weapon+i);
-       if(d.id==='SE'&&seq.at(-1)!=='shield-quarter')throw Error('SE depth '+shield.key+weapon+i);
-       if(!seq.includes('shield-'+d.shieldView))throw Error('Wrong view '+d.id);
+       if(d.id==='SE'&&seq.at(-1)!=='shield-quarter-se')throw Error('SE depth '+shield.key+weapon+i);
+       const actualView=r.renderer.baseMeta.directions.find(row=>row.id===d.id).shieldView;
+       if(actualView!==r.catalog.viewMapping[d.id]||!seq.includes('shield-'+actualView))throw Error('Wrong view '+d.id);
+       if(d.id==='SW'&&actualView!=='quarter')throw Error('SW view changed');
        count++;
        if(weapon==='approved'){
         const p=g.getImageData(0,0,512,512).data;let visible=0;for(let z=3;z<p.length;z+=4)if(p[z])visible++;
         if(!visible)throw Error('Empty frame');for(let j=0;j<512;j++)if(p[j*4+3]||p[(511*512+j)*4+3]||p[j*512*4+3]||p[(j*512+511)*4+3])throw Error('Clipped frame');
-        checks.push({shield:shield.key,direction:d.id,frame:i,view:d.shieldView,drawOrder:seq});
+        checks.push({shield:shield.key,direction:d.id,frame:i,view:actualView,drawOrder:seq});
        }
       }
       combinations.push({shield:shield.key,weapon,frames:count});
@@ -53,6 +55,14 @@ def run():
    for direction in ['NW','SE']:
     data=page.evaluate('''direction => {const r=window.review,c=document.createElement('canvas');c.width=1536;c.height=10*256;const g=c.getContext('2d');g.fillStyle='#e8e3d9';g.fillRect(0,0,c.width,c.height);for(const [row,s]of r.catalog.shields.entries()){r.selectEquipment(s.key,'approved');for(const [i,ms]of r.MIDS.entries()){r.renderer.draw(g,direction,i*256+128,row*256+222,144,ms,{weapon:true,shield:true});g.fillStyle='#273536';g.font='14px system-ui';g.fillText(s.key+' / '+direction+' / '+i,i*256+8,row*256+20)}}return c.toDataURL().split(',')[1]}''',direction)
     (R/f'{direction}-all-frames.png').write_bytes(base64.b64decode(data))
+   before=Image.open(R/'SE-before-correction.png').convert('RGB');after=Image.open(R/'SE-all-frames.png').convert('RGB')
+   comparison=Image.new('RGB',(1024,2560),'#e8e3d9')
+   from PIL import ImageDraw
+   cg=ImageDraw.Draw(comparison)
+   for row in range(10):
+    for col,(source,frame,title) in enumerate([(before,0,'BEFORE idle'),(after,0,'AFTER idle'),(before,3,'BEFORE follow'),(after,3,'AFTER follow')]):
+     comparison.paste(source.crop((frame*256,row*256,(frame+1)*256,(row+1)*256)),(col*256,row*256));cg.rectangle((col*256,row*256,col*256+255,row*256+26),fill='#e8e3d9');cg.text((col*256+8,row*256+7),manifest['shields'][row]['key']+' / '+title,fill='#273536')
+   comparison.save(R/'SE-yaw-before-after.png')
    page.evaluate('''window.contactAt = ms => {const r=window.review,c=document.createElement('canvas');c.width=1280;c.height=10*170;const g=c.getContext('2d');g.fillStyle='#e8e3d9';g.fillRect(0,0,c.width,c.height);for(const [row,s]of r.catalog.shields.entries()){r.selectEquipment(s.key,'approved');for(const [i,d]of r.baseMeta.directions.entries()){r.renderer.draw(g,d.id,i*160+80,row*170+135,96,ms,{weapon:true,shield:true});g.fillStyle='#273536';g.font='12px system-ui';g.fillText(s.key+' / '+d.id,i*160+6,row*170+16)}}return c.toDataURL().split(',')[1]}''')
    data=page.evaluate('contactAt(170)');(R/'game-size.png').write_bytes(base64.b64decode(data))
    frames=[]
@@ -66,8 +76,8 @@ def run():
    page.select_option('#shieldSelect','approved');assert page.evaluate('review.equipment.shield===review.approvedEquipment.shield')
    assert len(results['checks'])==480 and sum(x['frames'] for x in results['combinations'])==6240 and len(results['pixels'])==60
    assert not errors,errors
-   (R/'validation.json').write_text(json.dumps(dict(shieldDirectionFrameChecks=480,equipmentCombinationFrameChecks=6240,shieldImagesLoaded=40,NWPixelChecks=60,pageErrors=errors,mobileLayout=True,approvedBaselineUnchanged=True,**results),indent=2)+'\n')
+   (R/'validation.json').write_text(json.dumps(dict(shieldDirectionFrameChecks=480,equipmentCombinationFrameChecks=6240,shieldImagesLoaded=50,SEIndependentView=True,NWPixelChecks=60,pageErrors=errors,mobileLayout=True,approvedBaselineUnchanged=True,**results),indent=2)+'\n')
    browser.close()
  finally:server.shutdown()
- print('PASS: 40 sprites, 480 shield frames, 6240 equipment combination frames, 60 NW pixel checks, view mapping, NW/SE draw order, mobile UI; v3 unchanged')
+ print('PASS: 50 sprites, independent SE view, 480 shield frames, 6240 equipment combination frames, 60 NW pixel checks, view mapping, NW/SE draw order, mobile UI; v3 unchanged')
 if __name__=='__main__':run()

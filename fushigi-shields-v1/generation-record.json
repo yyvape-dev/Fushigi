@@ -24,8 +24,29 @@
       "promptSummary": "Four columns x five rows, 20 isolated sprites. Columns front, quarter-front, edge-side, back with horizontal leather grip. Rows round gold guts shield with kanji 根, cheerful yellow sun shield, onigiri-shaped ivory metal shield with seaweed plate, oval iron steak plate shield with grilled steak relief, bronze bull shield with short ivory horns. Same approved painterly forged-metal fantasy style. Transparent background; no captions, characters, hands, shadows.",
       "localGenerationOriginal": "/workspace/generated_images/exec-ec751f3e-4e67-491d-a2d4-98c075e2fcab.png",
       "sha256": "d67dff98d5acc28595aa9bb814c412611bb5b2f267bf234d73703533988345be"
+    },
+    {
+      "output": "source-art/shields-se.png",
+      "promptSummary": "User correction: SE shields have reversed yaw. Independently repaint all ten shields in a five-column two-row sheet, facing screen-right with LEFT edge thickness visible and boss displaced right. Square top edge slopes up to right. Preserve unmirrored 根 and swirl handedness, upper-left illumination. Reference both original design sheets and canonical SE hero. Transparent background; no hands or characters.",
+      "sha256": "dfc24b5aeacc5f07094f62cdd791fffd043c3fdb193383ae576b96fd62f3c019",
+      "localGenerationOriginal": "/workspace/generated_images/exec-bbac683f-d7d4-4fe9-bff3-8705b44a71ad.png",
+      "references": [
+        {
+          "path": "fushigi-shields-v1/source-art/shields-a.png",
+          "sha256": "2d3685033407c672779a327f332a1ad524f00aec09866cff99e2a0756d4c9215"
+        },
+        {
+          "path": "fushigi-shields-v1/source-art/shields-b.png",
+          "sha256": "d67dff98d5acc28595aa9bb814c412611bb5b2f267bf234d73703533988345be"
+        },
+        {
+          "path": "fushigi-equipment-v3/assets/hero-base/SE.png",
+          "sha256": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+        }
+      ]
     }
   ],
   "processing": "build.py extracts 20 alpha-connected components per batch, sorts rows by vertical centre then columns by x. All four views of each shield have one common apparent height, respecting v3 front/back 144px width and quarter 112px; raised side-relief envelope up to 64px. Grip (80,96), renderScale .59. Back leather-grip centres manually calibrated and stored. No front-view squashing or mirroring.",
-  "userApproval": "Weapons received GO; shield candidates not yet approved."
+  "userApproval": "Weapons received GO; shield candidates not yet approved.",
+  "SECorrection": "SE uses independently painted quarter-se; SW keeps quarter. Original forty sprites and v3 are unchanged. New SE sprites fit the previous quarter-view envelope. Front motifs are not mirrored."
 }
