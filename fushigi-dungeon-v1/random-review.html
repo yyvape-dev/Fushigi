@@ -1,6 +1,6 @@
 <!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>生成ダンジョン確認</title>
 <style>body{margin:0;background:#11151a;color:#eee;font:14px sans-serif}header{min-height:42px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:6px}button,select,a{font:inherit;background:#27313b;color:#ffe4ac;border:1px solid #64717a;border-radius:6px;padding:5px}iframe{display:block;border:0;width:100%;height:calc(100dvh - 102px)}p{margin:4px 8px;font-size:12px;color:#bac8ce}</style>
-<header><button id="next">別の階を生成</button><button id="shopFloor">店のある階</button><select id="location" aria-label="ロケーション"></select><select id="weapon"></select><select id="shield"></select><button id="attack">攻撃</button><select id="motion" aria-label="確認する動作"><option value="walk">歩行</option><option value="food">食事</option><option value="herb">草</option><option value="scroll">巻物</option><option value="staff">杖</option></select><button id="demo">動作確認</button><a href="../fushigi-actions-v1/preview.html">8方向比較</a><button id="map">全体地図</button><a href="../index.html" target="_blank">本編</a></header>
+<header><button id="next">別の階を生成</button><button id="shopFloor">店のある階</button><select id="location" aria-label="ロケーション"></select><select id="weapon"></select><select id="shield"></select><button id="attack">攻撃</button><select id="motion" aria-label="確認する動作"><option value="walk">歩行</option><option value="food">食事</option><option value="herb">草</option><option value="scroll">巻物</option><option value="staff">杖</option></select><button id="demo">動作確認</button><a href="../fushigi-actions-v1/preview.html">8方向比較</a><button id="grid">マス境界</button><button id="map">全体地図</button><a href="../index.html" target="_blank">本編</a></header>
 <p id="status">本編を読み込み中</p><p>確認専用：セーブ・読み込みは無効。キャラと装備は承認済み素材。本編と同じ生成・描画・配置処理を使います。</p><iframe id="game" title="生成マップの実ゲーム表示"></iframe>
 <script>
 const frame=document.getElementById('game'),$=id=>document.getElementById(id);
@@ -15,6 +15,7 @@ async function setup(){
 }
 frame.onload=async()=>{
  if(!frame.srcdoc)return;
+ run(`window.reviewGrid=false;const reviewDraw=draw;draw=function(){reviewDraw();if(!window.reviewGrid||scene!=='dungeon')return;const cx=Math.round(innerWidth/2-(player.vx+.5)*TS),cy=Math.round(focusY()-(player.vy+.5)*tilePitchY());ctx.save();ctx.lineWidth=1;for(let y=0;y<MH;y++)for(let x=0;x<MW;x++){if(!seen[y]?.[x])continue;ctx.strokeStyle=map[y][x]===WALL?'#ffb87b90':'#b7e9ff80';ctx.strokeRect(cx+x*TS,cy+y*tilePitchY(),TS,tilePitchY());}ctx.restore();};`);
  const started=Date.now();while(!run('typeof ApprovedHero!=="undefined" && ApprovedHero.ready')){if(Date.now()-started>30000){$('status').textContent='画像読込を確認してください';return;}await new Promise(r=>setTimeout(r,100));}
  for(const entry of run('DungeonGenerator.themes'))$('location').add(new Option(entry.name,entry.id));
  $('location').onchange=()=>{run('floorPlan.theme=DungeonGenerator.themes.find(t=>t.id==='+JSON.stringify($('location').value)+');render();');update();};
@@ -25,6 +26,8 @@ frame.onload=async()=>{
  $('weapon').value='katana';$('shield').value='bronzeshield';
  run("enterDungeon(); floorNo=3; newFloor(); eqWeapon=mkItem('katana');eqShield=mkItem('bronzeshield'); inv=[eqWeapon,eqShield]; render();");update();
 };
+let gridOn=false;
+$('grid').onclick=()=>{gridOn=!gridOn;run('window.reviewGrid='+gridOn+';render()');};
 function update(){const d=run('({seed:floorPlan.seed,style:floorPlan.style,theme:floorPlan.theme.name,rooms:rooms.length,shop:!!floorShop})');$('location').value=run('floorPlan.theme.id');$('status').textContent=`seed ${d.seed} ／ ${d.style} ／ ${d.theme} ／ ${d.rooms}部屋 ／ 店${d.shop?'あり':'なし'}`;}
 $('next').onclick=()=>{run('newFloor();render()');update();};
 $('shopFloor').onclick=()=>{run('for(let i=0;i<100;i++){newFloor();if(floorShop)break;} if(floorShop){const r=rooms[floorShop.room];player.x=player.vx=r.cx;player.y=player.vy=r.cy;updateVis();} render();');update();};
