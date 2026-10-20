@@ -132,7 +132,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/approved-hero.js?v=actions-v1"></script>
 <script src="assets/hero-actions.js?v=actions-v1"></script>
 <script src="assets/dungeon-generator.js?v=locations-v1"></script>
-<script src="assets/cave-terrain.js?v=locations-v1"></script>
+<script src="assets/cave-terrain.js?v=wall-relief-v1"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -2154,7 +2154,7 @@ function grad(x0, y0, x1, y1, c0, c1, px, py, w, h) {
 }
 function shadeTile(key, x, y, px, py, m) {
   const a = v => Math.min(0.9, v * m).toFixed(3);
-  if (typeof CaveTerrain !== 'undefined' && CaveTerrain.ready && (key === 'wallF' || key === 'wallT')) return;
+  if (scene === 'dungeon' && typeof CaveTerrain !== 'undefined' && CaveTerrain.ready) return; // 岩の輪郭は画像側で陰影。論理マスの四角い影を重ねない。
   if (key === 'wallF') {
     const h = Math.round(TS * 0.3);
     grad(0, py, 0, py + h, `rgba(255,255,255,${a(0.26)})`, 'rgba(255,255,255,0)', px, py, TS, h);                       // 上端の明るいふち（壁の天面が光る）
