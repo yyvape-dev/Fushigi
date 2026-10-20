@@ -1,5 +1,7 @@
 # ダンジョン：1部屋＋通路 v1
 
+**最新：** [ランダム生成＋承認済みキャラ・装備の確認](https://yyvape-dev.github.io/Fushigi/fushigi-dungeon-v1/random-review.html)。本編統合と生成モジュールの仕様は [DUNGEON_GENERATION.md](../docs/DUNGEON_GENERATION.md)。以下は初回の固定部屋制作記録。
+
 確認: https://yyvape-dev.github.io/Fushigi/fushigi-dungeon-v1/preview.html
 
 本編のCanvas描画・入力・衝突・視界・カメラを複製した独立プレビュー。7×5マスの部屋から幅1マスのL字通路へ歩ける。マス線、元絵との比較、開始位置への復帰に対応。本編とセーブを共有せず、書き込みも無効化した。

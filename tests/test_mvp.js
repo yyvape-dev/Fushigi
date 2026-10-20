@@ -2,7 +2,7 @@
   ACC.p = ACC.e = 1;                                              // 旧テストは命中100%前提（命中のテストは別に行う）
   const fail = [];
   const ok = (name, cond) => { console.log((cond ? 'OK  ' : 'NG  ') + name); if (!cond) fail.push(name); };
-  const out = n => '/tmp/claude-0/-home-claude/0eb386c6-7351-54b0-8403-f6a23a641574/scratchpad/cv/' + n;
+  const out = n => '/tmp/' + n;
   const cnt = t => inv.filter(i => i.type === t).length, wcnt = t => wh.filter(i => i.type === t).length;
 
   // --- ドット絵データの形
