@@ -1,0 +1,58 @@
+[
+  {
+    "id": "town",
+    "title": "Harvest5",
+    "artist": "PeriTune / むつき醒",
+    "page": "https://peritune.com/blog/2018/10/26/harvest5/",
+    "download": "https://peritune.com/loop/PerituneMaterial_Harvest5_loop.zip",
+    "archiveMember": "PerituneMaterial_Harvest5_loop.mp3",
+    "file": "audio/town.mp3",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "modifications": "None; official loop MP3 bytes unchanged",
+    "sha256": "c8684b8fa3831c1ae9830e1993eaf3da05314d68c9dff55d0aa6cc419a6655c3",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "green",
+    "title": "Breeze",
+    "artist": "PeriTune / むつき醒",
+    "page": "https://peritune.com/blog/2017/03/02/breeze/",
+    "download": "https://peritune.com/loop/PerituneMaterial_Breeze_loop.zip",
+    "archiveMember": "PerituneMaterial_Breeze_loop.mp3",
+    "file": "audio/green.mp3",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "modifications": "None; official loop MP3 bytes unchanged",
+    "sha256": "ce88cc339b495604569f7191020cf4abbfa649d07ef0187bfaa59ee993282bcf",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "depth",
+    "title": "Labyrinth",
+    "artist": "PeriTune / むつき醒",
+    "page": "https://peritune.com/blog/2015/11/01/labyrinth/",
+    "download": "https://peritune.com/music/PerituneMaterial_Labyrinth_loop.mp3",
+    "archiveMember": null,
+    "file": "audio/depth.mp3",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "modifications": "None; official loop MP3 bytes unchanged",
+    "sha256": "fa7aaac562f081d7dedc53562b9b9c457699fd77e6be253041dfb21f4972265c",
+    "checked": "2026-10-21"
+  },
+  {
+    "id": "spooky",
+    "title": "Spook",
+    "artist": "PeriTune / むつき醒",
+    "page": "https://peritune.com/blog/2015/09/30/spook/",
+    "download": "https://peritune.com/loop/PerituneMaterial_Spook_loop.zip",
+    "archiveMember": "PerituneMaterial_Spook_loop.mp3",
+    "file": "audio/spooky.mp3",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "modifications": "None; official loop MP3 bytes unchanged",
+    "sha256": "d7182dbba4028a2c75e0c437ebfecd81228ca37594bd4c4b68d6d95a4804cf60",
+    "checked": "2026-10-21"
+  }
+]

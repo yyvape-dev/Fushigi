@@ -1,0 +1,20 @@
+[
+  {
+    "id": "enhance",
+    "file": "audio/enhance.wav",
+    "creator": "Fushigi project",
+    "kind": "Original procedural sound sketch",
+    "description": "金属の鋭い立ち上がり＋上昇する倍音ときらめき。合成音の試作。",
+    "source": "render_se.py",
+    "sha256": "7de35b0b509bbf4013ba8073f088f1f8751b3346e1276e8fb23ca3211a5a5b76"
+  },
+  {
+    "id": "levelup",
+    "file": "audio/levelup.wav",
+    "creator": "Fushigi project",
+    "kind": "Original procedural sound sketch",
+    "description": "笛の上昇句＋太鼓の掛け合い。既存ゲームの旋律を使わない合成音の試作。",
+    "source": "render_se.py",
+    "sha256": "052d20657f339f1bf8ad9299d527b0f3118c9f9c5f6204fda8721161364521f6"
+  }
+]

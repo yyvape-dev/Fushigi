@@ -1,0 +1,137 @@
+[
+  {
+    "size": [
+      844,
+      390
+    ],
+    "decoded": [
+      {
+        "file": "audio/town.mp3",
+        "duration": 80.65573696145125,
+        "peak": 1
+      },
+      {
+        "file": "audio/green.mp3",
+        "duration": 85.45453514739229,
+        "peak": 1
+      },
+      {
+        "file": "audio/depth.mp3",
+        "duration": 94.28571428571429,
+        "peak": 0.9781737327575684
+      },
+      {
+        "file": "audio/spooky.mp3",
+        "duration": 66.75,
+        "peak": 1
+      },
+      {
+        "file": "audio/enhance.wav",
+        "duration": 1.45,
+        "peak": 0.7799920439720154
+      },
+      {
+        "file": "audio/levelup.wav",
+        "duration": 2.4,
+        "peak": 0.77996826171875
+      }
+    ],
+    "exclusiveBgm": true,
+    "seDucking": true,
+    "mute": true,
+    "loopToggle": true,
+    "stop": true,
+    "savedVolume": true,
+    "noAutoplay": true
+  },
+  {
+    "size": [
+      390,
+      844
+    ],
+    "decoded": [
+      {
+        "file": "audio/town.mp3",
+        "duration": 80.65573696145125,
+        "peak": 1
+      },
+      {
+        "file": "audio/green.mp3",
+        "duration": 85.45453514739229,
+        "peak": 1
+      },
+      {
+        "file": "audio/depth.mp3",
+        "duration": 94.28571428571429,
+        "peak": 0.9781737327575684
+      },
+      {
+        "file": "audio/spooky.mp3",
+        "duration": 66.75,
+        "peak": 1
+      },
+      {
+        "file": "audio/enhance.wav",
+        "duration": 1.45,
+        "peak": 0.7799920439720154
+      },
+      {
+        "file": "audio/levelup.wav",
+        "duration": 2.4,
+        "peak": 0.77996826171875
+      }
+    ],
+    "exclusiveBgm": true,
+    "seDucking": true,
+    "mute": true,
+    "loopToggle": true,
+    "stop": true,
+    "savedVolume": true,
+    "noAutoplay": true
+  },
+  {
+    "size": [
+      320,
+      568
+    ],
+    "decoded": [
+      {
+        "file": "audio/town.mp3",
+        "duration": 80.65573696145125,
+        "peak": 1
+      },
+      {
+        "file": "audio/green.mp3",
+        "duration": 85.45453514739229,
+        "peak": 1
+      },
+      {
+        "file": "audio/depth.mp3",
+        "duration": 94.28571428571429,
+        "peak": 0.9781737327575684
+      },
+      {
+        "file": "audio/spooky.mp3",
+        "duration": 66.75,
+        "peak": 1
+      },
+      {
+        "file": "audio/enhance.wav",
+        "duration": 1.45,
+        "peak": 0.7799920439720154
+      },
+      {
+        "file": "audio/levelup.wav",
+        "duration": 2.4,
+        "peak": 0.77996826171875
+      }
+    ],
+    "exclusiveBgm": true,
+    "seDucking": true,
+    "mute": true,
+    "loopToggle": true,
+    "stop": true,
+    "savedVolume": true,
+    "noAutoplay": true
+  }
+]

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Fushigi — 音の試聴室</title>
+<link rel="stylesheet" href="style.css">
+<main>
+<header><a href="../">FUSHIGI</a><span>音楽と効果音 · 候補版</span><h1>音の小さな試聴室</h1><p>絵本の城下町から、ちょっと奇妙な地下の冒険へ。</p></header>
+<section class="mixer" aria-label="音量と再生設定">
+<label>BGM <input id="bgmVolume" type="range" min="0" max="100" value="45"><output id="bgmValue">45%</output></label>
+<label>効果音 <input id="seVolume" type="range" min="0" max="100" value="65"><output id="seValue">65%</output></label>
+<div><label><input type="checkbox" id="loop" checked> BGMをループ</label><label><input type="checkbox" id="mute"> ミュート</label><button id="stop">すべて停止</button></div>
+<p id="status" role="status" aria-live="polite">聴きたい曲の再生ボタンを押してください。</p>
+</section>
+<h2>町とダンジョン <small>BGM候補 · PeriTune</small></h2>
+<div class="tracks">
+<article data-id="town" class="town"><span class="number">01 · TOWN</span><h3>城下町のお祭り</h3><p class="name">Harvest5</p><p>笛とフィドル、弦の伴奏。油絵の絵本のような城下町に、少しの賑わいと旅の期待感。</p><audio aria-label="町の候補 Harvest5" controls preload="none" loop src="audio/town.mp3"></audio><footer><a href="https://peritune.com/blog/2018/10/26/harvest5/" target="_blank" rel="noopener">曲・作者のページ ↗</a><button class="seam">ループのつなぎ目を聴く</button></footer></article>
+<article data-id="green" class="green"><span class="number">02 · DUNGEON / GREEN</span><h3>町外れの草木</h3><p class="name">Breeze</p><p>ティンホイッスルと弦の軽やかな探索曲。明るい草木の道・浅い階層への候補。</p><audio aria-label="草木の探索候補 Breeze" controls preload="none" loop src="audio/green.mp3"></audio><footer><a href="https://peritune.com/blog/2017/03/02/breeze/" target="_blank" rel="noopener">曲・作者のページ ↗</a><button class="seam">ループのつなぎ目を聴く</button></footer></article>
+<article data-id="depth" class="depth"><span class="number">03 · DUNGEON / DEPTH</span><h3>へんてこな迷宮</h3><p class="name">Labyrinth</p><p>軽快さを残したオーケストラ。地下を進む重みと「何かありそう」な気配への候補。</p><audio aria-label="迷宮の候補 Labyrinth" controls preload="none" loop src="audio/depth.mp3"></audio><footer><a href="https://peritune.com/blog/2015/11/01/labyrinth/" target="_blank" rel="noopener">曲・作者のページ ↗</a><button class="seam">ループのつなぎ目を聴く</button></footer></article>
+<article data-id="spooky" class="spooky"><span class="number">04 · DUNGEON / SPOOKY</span><h3>おばけの気配</h3><p class="name">Spook</p><p>不気味だけれど、どこか愛嬌のあるホラー。暗い場所でも重すぎない方向への候補。</p><audio aria-label="怪しい探索の候補 Spook" controls preload="none" loop src="audio/spooky.mp3"></audio><footer><a href="https://peritune.com/blog/2015/09/30/spook/" target="_blank" rel="noopener">曲・作者のページ ↗</a><button class="seam">ループのつなぎ目を聴く</button></footer></article>
+</div>
+<h2>小さなご褒美の音 <small>オリジナル合成音 · 試作</small></h2>
+<div class="effects">
+<article><span class="number">EQUIPMENT</span><h3>装備強化</h3><p>鋭い金属音から、きらめきが尾を引く「シャキーン」。</p><button class="effect" data-se="enhance">装備強化を聴く</button><audio id="enhance" preload="none" src="audio/enhance.wav"></audio></article>
+<article><span class="number">LEVEL UP</span><h3>レベルアップ</h3><p>笛の上昇句と太鼓の掛け合い。短い祭囃子の方向を探る試作。</p><button class="effect" data-se="levelup">レベルアップを聴く</button><audio id="levelup" preload="none" src="audio/levelup.wav"></audio></article>
+</div>
+<p class="note">BGMを流しながら効果音を重ねて比較できます。効果音の間はBGMが少し下がります。画面を離れると停止します。</p>
+<aside><h2>素材とクレジット</h2><p>BGM：PeriTune / むつき醒 — Harvest5、Breeze、Labyrinth、Spook。公式ループ版を加工せず使用。<a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a> ／ <a href="https://peritune.com/about/" target="_blank" rel="noopener">配布元の利用条件</a></p><p>効果音：Fushigi用のオリジナル合成音による方向確認用の試作。既存ゲームの音源・旋律は使用していません。</p><p>このページは音選びのための候補版です。本編の音はまだ変更していません。</p></aside>
+<footer class="bottom"><a href="../">本編へ戻る</a><span>FUSHIGI · SOUND STUDY 01</span></footer>
+</main><script src="player.js"></script></html>
