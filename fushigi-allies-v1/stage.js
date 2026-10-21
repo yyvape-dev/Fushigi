@@ -10,5 +10,5 @@
  document.getElementById('allyScale').onchange=e=>{AllySystem.state.renderScale=Number(e.target.value);render();};
  document.getElementById('allySize').onclick=()=>setup('size');
  document.getElementById('allyMeet').onclick=()=>setup('meet');document.getElementById('allyWall').onclick=()=>setup('wall');document.getElementById('allyHaste').onclick=()=>setup('haste');document.getElementById('allyLevel').onclick=()=>{if(!AllySystem.state.actor?.following)setup('haste');AllySystem.gainExp(expNeed(AllySystem.state.actor.lv));render();};
- const wait=setInterval(()=>{if(window.ExperienceReview&&ApprovedHero.ready&&CaveTerrain.ready&&DungeonExperience.ready&&MonsterSprites.ready&&AllySystem.state.ready){clearInterval(wait);setup(new URLSearchParams(location.search).has('size')?'size':'meet');}},100);
+ const wait=setInterval(()=>{if(window.ExperienceReview&&ApprovedHero.ready&&CaveTerrain.ready&&DungeonExperience.ready&&MonsterSprites.ready&&AllySystem.state.ready){clearInterval(wait);setup(new URLSearchParams(location.search).has('size')?'size':'meet');if(new URLSearchParams(location.search).has('dialog'))AllySystem.talk();}},100);
 })();
