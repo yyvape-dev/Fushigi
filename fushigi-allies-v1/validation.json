@@ -1,0 +1,26 @@
+{
+  "poses": 24,
+  "individuallyPaintedDirections": 8,
+  "game": [
+    {
+      "viewport": "landscape",
+      "gameplayChecks": 36,
+      "modalFocus": true,
+      "recruit": true,
+      "wallAttack": true,
+      "doubleAction": true,
+      "statusMenu": true,
+      "errors": []
+    },
+    {
+      "viewport": "portrait",
+      "gameplayChecks": 36,
+      "modalFocus": true,
+      "recruit": true,
+      "wallAttack": true,
+      "doubleAction": true,
+      "statusMenu": true,
+      "errors": []
+    }
+  ]
+}
