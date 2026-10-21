@@ -5,7 +5,7 @@
  const state={ready:false,error:null,images:{},layers:{}};
  const ids=['forest','limestone','ruins','ice','volcano'];
  state.load=async function(redraw=()=>{}){try{
-  await Promise.all(['shop','coin',...['pit','mine','gas','hungry','warp','summon'].map(k=>'trap-'+k),...ids.flatMap(k=>['stairs-'+k,'ceiling-'+k])].map(k=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{state.images[k]=im;resolve();};im.onerror=()=>reject(Error(k));im.src=R+k+((/^(stairs|ceiling)-/.test(k))?'.webp':'.png');})));
+  await Promise.all(['shop','coin',...['pit','mine','gas','hungry','warp','summon'].map(k=>'trap-'+k),...ids.flatMap(k=>['stairs-'+k,'ceiling-'+k])].map(k=>new Promise((resolve,reject)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{state.images[k]=im;resolve();};im.onerror=()=>reject(Error(k));im.src=R+k+((/^(stairs|ceiling)-/.test(k))?'.webp':'.png');})));
   state.ready=true;redraw();
  }catch(e){state.error=e.message;console.error('ダンジョン素材読込失敗',e);redraw();}};
  state.stairs=function(g,x,y,size,pitch,id){const im=state.images['stairs-'+id];if(!im)return false;g.imageSmoothingEnabled=true;g.drawImage(im,x,y,size,pitch);return true;};
