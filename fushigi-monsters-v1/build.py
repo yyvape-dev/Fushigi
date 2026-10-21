@@ -6,8 +6,8 @@ P=Path(__file__).resolve().parent
 D=['S','SW','W','NW','N','NE','E','SE']
 CONFIG={
  'slime':dict(name='スライム',cols=5,rows=1,dirs=['S','SE','E','NE','N'],height=92,anchor=224),
- 'goblin':dict(name='ゴブリン',cols=4,rows=2,dirs=D,height=154,anchor=224,source='faces-v2/goblin.png'),
- 'bat':dict(name='コウモリ',cols=5,rows=1,dirs=['S','SE','E','NE','N'],height=112,anchor=196,cuts=[0,501,940,1235,1677,2172],source='faces-v2/bat.png'),
+ 'goblin':dict(name='ゴブリン',cols=4,rows=2,dirs=D,height=154,anchor=224,source='faces-v3/goblin.png'),
+ 'bat':dict(name='コウモリ',cols=5,rows=1,dirs=['S','SE','E','NE','N'],height=112,anchor=196,cuts=[0,505,949,1242,1680,2172],source='faces-v3/bat.png'),
 }
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 def clean(im):
@@ -28,7 +28,7 @@ def clean(im):
     from PIL import ImageChops
     a=ImageChops.multiply(a,mask.filter(MaxFilter(5)));im.putalpha(a)
     return im
-meta={'version':2,'status':'simplified-monster-face-review; not approved; not integrated','frameSize':256,'origin':[128,224],'heroHeight':192,'directions':D,'monsters':{}}
+meta={'version':3,'status':'hostile-beast-humanoid-face-review; not approved; not integrated','frameSize':256,'origin':[128,224],'heroHeight':192,'directions':D,'monsters':{}}
 for kind,cfg in CONFIG.items():
     src=P/'source-art'/cfg.get('source',f'{kind}.png');sheet=Image.open(src).convert('RGBA');cells={}
     for i,d in enumerate(cfg['dirs']):

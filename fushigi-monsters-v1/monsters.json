@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "status": "simplified-monster-face-review; not approved; not integrated",
+  "version": 3,
+  "status": "hostile-beast-humanoid-face-review; not approved; not integrated",
   "frameSize": 256,
   "origin": [
     128,
@@ -78,117 +78,117 @@
     },
     "goblin": {
       "name": "ゴブリン",
-      "scale": 0.3684210526315789,
+      "scale": 0.35648148148148145,
       "bodyHeight": 154,
       "visualBottom": 224,
-      "source": "source-art/faces-v2/goblin.png",
-      "sourceSha256": "a01b98216cfbee57a1a3dd5d612c18b95ed2f8b6f91e450544f117315df3997f",
+      "source": "source-art/faces-v3/goblin.png",
+      "sourceSha256": "abae95fd033a7f8f890c7eb075d647fe057b16e4a96b97466889dcd68d08025a",
       "views": {
         "S": {
           "source": "S",
           "mirror": false,
           "path": "assets/goblin/S.png",
-          "sha256": "b0bc4fc87a0b7187c83883ca1fdf6d066994f30c62d76d5bbc2fb90f79b20a5f"
+          "sha256": "98d8dd94b4eb2ad3994d63902b83bcf4a7ebd728981ea0da4a9329bcd9ba62d4"
         },
         "SW": {
           "source": "SW",
           "mirror": false,
           "path": "assets/goblin/SW.png",
-          "sha256": "e1b2fadebfea9af9878a7e9df5d15c1744c693a48b23deb5a02f197df0250f70"
+          "sha256": "9dc915ba03a86d5898b21f74e0f35a271abe415c8dd236eaaab1c6bf911134bc"
         },
         "W": {
           "source": "W",
           "mirror": false,
           "path": "assets/goblin/W.png",
-          "sha256": "8613a36312de16ac3e2c9a709e583c42a104569666e36a56041a4f713755423a"
+          "sha256": "78bae1a35e6649dfa1ac27e96f6ff6f232a7686a7b0c981133022f8b6100e015"
         },
         "NW": {
           "source": "NW",
           "mirror": false,
           "path": "assets/goblin/NW.png",
-          "sha256": "bb5c3d650a839513031f67ff43201f0f20e1975c460265b39c0ca2a513ccb032"
+          "sha256": "9a97150fc81b412d8800aad9f5281c184d04cf988512337cb7241eb380425686"
         },
         "N": {
           "source": "N",
           "mirror": false,
           "path": "assets/goblin/N.png",
-          "sha256": "5d3a196b71dc0c531ce9889b32cca00093d6f3f40cb707bfdb08804e1f3e02f6"
+          "sha256": "c306b3c13650aa20447484c2ee112f7b4b1fd0b7f1ec5f0e96702e03c508fa19"
         },
         "NE": {
           "source": "NE",
           "mirror": false,
           "path": "assets/goblin/NE.png",
-          "sha256": "edf83922092adaf13b9f344e20396c780deac11432f6fa39f157249a28b7416b"
+          "sha256": "6345c26fde8218813e3294078aa70c17a02a8766a876ec76326376eaf898f0cc"
         },
         "E": {
           "source": "E",
           "mirror": false,
           "path": "assets/goblin/E.png",
-          "sha256": "db21143e70d1134b5a9097106226321debb67e27b6fb2499ae048890b92ac376"
+          "sha256": "6651609534f35720a9fbee01b8c9200c7b6a6336b44b8a44155a80c7e5fb678d"
         },
         "SE": {
           "source": "SE",
           "mirror": false,
           "path": "assets/goblin/SE.png",
-          "sha256": "2b0973fa7579129231b647a0f993ca0db6011c48cca3ce8c583325dbdad3167f"
+          "sha256": "35fcb1f6c61fbf038836c19b4944231fc27ca28d91e5714a6d869a8f24e583e0"
         }
       }
     },
     "bat": {
       "name": "コウモリ",
-      "scale": 0.34355828220858897,
+      "scale": 0.32653061224489793,
       "bodyHeight": 112,
       "visualBottom": 196,
-      "source": "source-art/faces-v2/bat.png",
-      "sourceSha256": "8dff7d7216a89dc29c3c7aa2a6062cfebf94b8288bd99818b60b9245a050949c",
+      "source": "source-art/faces-v3/bat.png",
+      "sourceSha256": "1f3978c9e36d3be2ad6309ec3f11f709d08492c9f18229e44cfd3479a8f17286",
       "views": {
         "S": {
           "source": "S",
           "mirror": false,
           "path": "assets/bat/S.png",
-          "sha256": "ada935bf2523f7e772da46312bd5e619727cb467bb0e3e8c9a04d88bd84cfd34"
+          "sha256": "b59a5362ed5ba3f7e8aba1b010f7966edc812bc71910d07c8eb71c9ec514fcce"
         },
         "SE": {
           "source": "SE",
           "mirror": false,
           "path": "assets/bat/SE.png",
-          "sha256": "8b6c9c406815c54b53fb0ca2a692b6094a8963fb835a92bcc3d9e8169fe86207"
+          "sha256": "460ed102575363725d2eeb22a80c1b0723956fea22d57edb1cdc4cf58d568a5b"
         },
         "E": {
           "source": "E",
           "mirror": false,
           "path": "assets/bat/E.png",
-          "sha256": "128f1c4f3db9315bb74419bcfeaf6d120dbec3d609b0b75363452b4a113f4ae7"
+          "sha256": "fb89ee619e0a2d438582ef0e8708d434d3f16a2b5303925db9861ba1624d3a86"
         },
         "NE": {
           "source": "NE",
           "mirror": false,
           "path": "assets/bat/NE.png",
-          "sha256": "ae462cedc24d875704e1b96ab5298bb8eb54968e0c24cda48ac8cfdbbd157a69"
+          "sha256": "c26cb2372a23e3ddda675996f08b41d09e1de43eba590d215b2e3e0a7069d54e"
         },
         "N": {
           "source": "N",
           "mirror": false,
           "path": "assets/bat/N.png",
-          "sha256": "91e62921a283042b14442cc60e41942aeef6cf87e1fa79f194ce1791062f3c88"
+          "sha256": "9279363d38986933c327b3eba4434477b11805148b70796c19e2d089d10bf84f"
         },
         "SW": {
           "source": "SE",
           "mirror": true,
           "path": "assets/bat/SW.png",
-          "sha256": "3bc433437142ed70686f458f830dd6e497e1e25593059357990507e7c5639877"
+          "sha256": "054b9af21e8e22a824b05e389791b671c42894bc9ff6e58476acd337c358e68d"
         },
         "W": {
           "source": "E",
           "mirror": true,
           "path": "assets/bat/W.png",
-          "sha256": "def6dd77adb6f77e32bf400f89c940cb03c50f3cd0123ad352404b7278570866"
+          "sha256": "66b34cde484bf70bd85092630b72ae5c7f3b3436e52d8d4ab0f8dcb0c26374d1"
         },
         "NW": {
           "source": "NE",
           "mirror": true,
           "path": "assets/bat/NW.png",
-          "sha256": "acebba863c336c3e437c3fa14405cc86159e57fa40ed11514b0b8fc29b78bbb4"
+          "sha256": "3972a9d5243d8c8e453a51407a7e560eeb2b477f26feade5170cd4ec4ed0598f"
         }
       }
     }
