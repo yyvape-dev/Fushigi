@@ -1,0 +1,631 @@
+{
+  "frameSize": 256,
+  "origin": [
+    128,
+    224
+  ],
+  "directions": [
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE",
+    "E",
+    "SE"
+  ],
+  "monsters": {
+    "blob": {
+      "name": "ブヨブヨ",
+      "scale": 0.4014336917562724,
+      "motionSourceScale": 1.2494331065759636,
+      "anchor": 224,
+      "height": 112,
+      "source": "source-art/blob.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/blob/S.png",
+          "sha256": "4abb236d0ec7581db240470560ab59615cbc00c0de3c9ab5bb3c14eaf793f2be",
+          "motion": "assets/blob/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/blob/SW.png",
+          "sha256": "12948c2b65e741664e7972ca79bf6219fa9702e6c17eda678a6aeb68422e6928",
+          "motion": "assets/blob/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/blob/W.png",
+          "sha256": "a816197a493b41f00e635f177b5676cafece99384c6d1218ec669bf68f6bc700",
+          "motion": "assets/blob/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/blob/NW.png",
+          "sha256": "624f1a2f55e160235224876f79920ff9674b73889adc06071a46656c7411f171",
+          "motion": "assets/blob/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/blob/N.png",
+          "sha256": "8883004c82834386f41e7f7059c8c388fe4bb3c2eab3085d0900948da1dc1860",
+          "motion": "assets/blob/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/blob/NE.png",
+          "sha256": "0007a60c9b0ca69cb45857df6920e5b82660aae0cfd7b629e98658538d574225",
+          "motion": "assets/blob/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/blob/E.png",
+          "sha256": "4f9f0be2a6ea82e91f48d7dd2a7c1549634152f803db75d876fdb6f53ed04590",
+          "motion": "assets/blob/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/blob/SE.png",
+          "sha256": "a95e2b00ece79b35335f51268c5a41a6cb8ec0e72576005dfdbd4192cf6a4fe7",
+          "motion": "assets/blob/SE-motion.png"
+        }
+      }
+    },
+    "skeleton": {
+      "name": "スケルトン",
+      "scale": 0.4732394366197183,
+      "motionSourceScale": 1.2767527675276753,
+      "anchor": 224,
+      "height": 168,
+      "source": "source-art/skeleton.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/skeleton/S.png",
+          "sha256": "8e0ca8251b06ee945b2c65f2d38eaf08069ffcc4cbd9983fecd6f57fb89c4c09",
+          "motion": "assets/skeleton/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/skeleton/SW.png",
+          "sha256": "90d77d444649e2d704d8b73f08c8875bcb245564371242ba0934af297018ae86",
+          "motion": "assets/skeleton/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/skeleton/W.png",
+          "sha256": "934b07417121abd25d56e99366761244951f81e4d3d25c7e79bd4d86dd36e03e",
+          "motion": "assets/skeleton/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/skeleton/NW.png",
+          "sha256": "4adee40d96a5d2db4ea932953741f7ec8f41e07a145b290262940a6c12508ac2",
+          "motion": "assets/skeleton/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/skeleton/N.png",
+          "sha256": "c5be6cbb9802e214be701d3e4972f86adae04a71c505d12cf3d343ecfd5ec3ff",
+          "motion": "assets/skeleton/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/skeleton/NE.png",
+          "sha256": "b833181bae4fa2b06807535f043f0e6fd099293036abcea14bd73320d9c1cf04",
+          "motion": "assets/skeleton/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/skeleton/E.png",
+          "sha256": "6a8ced93bb1815a785645bee84cdd0723b50bfaf4dae6820a01a31c8d221cafa",
+          "motion": "assets/skeleton/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/skeleton/SE.png",
+          "sha256": "6b5142244bf4ffc0317706107a0d823746e929f2bda1ab2891f9827760ed9cd2",
+          "motion": "assets/skeleton/SE-motion.png"
+        }
+      }
+    },
+    "archer": {
+      "name": "ゆみこぞう",
+      "scale": 0.4953560371517028,
+      "motionSourceScale": 1.28714859437751,
+      "anchor": 224,
+      "height": 160,
+      "source": "source-art/archer.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/archer/S.png",
+          "sha256": "08ab9cf0919ae1c6e19e4f79f7856c18979dd1603d81b8cfbfafcc754fef2634",
+          "motion": "assets/archer/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/archer/SW.png",
+          "sha256": "5a2d1cd43f113c362bc21c4e029ceae7bd18fbc2e6004f0d31c4f03440fe0420",
+          "motion": "assets/archer/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/archer/W.png",
+          "sha256": "4108e8b09345c24324bca4dc64b88a1282368767ca78d16fd4b11d0fa54db16d",
+          "motion": "assets/archer/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/archer/NW.png",
+          "sha256": "98090c1c0d99b6c5d50936dd6cf5daa8084bc95aa9a9b1fb030ce7e2a54a095f",
+          "motion": "assets/archer/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/archer/N.png",
+          "sha256": "eb106898e849dd015e702b4a0e1f5457324d92dec43e8ea88d3737f216ae2aff",
+          "motion": "assets/archer/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/archer/NE.png",
+          "sha256": "e421119fb035c37c0edd0632ef143071b984911dab9996f6f8cd84a29f75379d",
+          "motion": "assets/archer/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/archer/E.png",
+          "sha256": "d1e40ea37db0177cfb2f73180c86e39102b0adb95530a6436c107ebf1b568a98",
+          "motion": "assets/archer/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/archer/SE.png",
+          "sha256": "67304cf0b2187b933be1233891db70b71f7f18eefa0a7427ac36e19c305b8e73",
+          "motion": "assets/archer/SE-motion.png"
+        }
+      }
+    },
+    "thief": {
+      "name": "どろぼうタヌキ",
+      "scale": 0.4297994269340974,
+      "motionSourceScale": 1.2706766917293233,
+      "anchor": 224,
+      "height": 150,
+      "source": "source-art/thief.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/thief/S.png",
+          "sha256": "71b3e16bc75bf909be90b58a22e4b32d5e6856e8a28b6e1acbd4fc47acf8bca1",
+          "motion": "assets/thief/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/thief/SW.png",
+          "sha256": "a23d254371db995c8b2ceb26ee631bb34b55cbc4d58a6bf8febe40101d1caadd",
+          "motion": "assets/thief/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/thief/W.png",
+          "sha256": "e62279d0c6232be6931ad7a8874dcc24eb0a16a7578e8a0708d8c39458cc8e10",
+          "motion": "assets/thief/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/thief/NW.png",
+          "sha256": "4b9ac5d1b928fc16fd8c8d05c19f577dae744302949c8edbb551cb6ae1161758",
+          "motion": "assets/thief/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/thief/N.png",
+          "sha256": "61d3b3887badf0f7faeff962254b1f834b22aa038ab51b391482cf3052b887b1",
+          "motion": "assets/thief/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/thief/NE.png",
+          "sha256": "981a64248b3b3b39a9e7b2ddf26052c5850ca1917ef4804af03eb0928980332b",
+          "motion": "assets/thief/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/thief/E.png",
+          "sha256": "630c495a8e2d1f8e68d41f54ff8caf0273f369f19705e77aaaa3115beb0f7253",
+          "motion": "assets/thief/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/thief/SE.png",
+          "sha256": "44343e5fb952ae22b7d883f27bfa2ceac1ad676ec60b835513ae54f5c45558e6",
+          "motion": "assets/thief/SE-motion.png"
+        }
+      }
+    },
+    "sleepy": {
+      "name": "ねむりダケ",
+      "scale": 0.42,
+      "motionSourceScale": 1.4023809523809523,
+      "anchor": 224,
+      "height": 126,
+      "source": "source-art/sleepy.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/sleepy/S.png",
+          "sha256": "2eb8e98f93aec6956b99497b6bfae52448be490bcf1479802d5227b36be99db7",
+          "motion": "assets/sleepy/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/sleepy/SW.png",
+          "sha256": "d359043fb990c85997e47d47f7d2bf4f5689c53596d68e32ee8fcc3065d4b1c2",
+          "motion": "assets/sleepy/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/sleepy/W.png",
+          "sha256": "9d9d8f7e34b38d0287053021291df9ec26a62b99e0fce3b8720a1ab172a19666",
+          "motion": "assets/sleepy/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/sleepy/NW.png",
+          "sha256": "1783a919667625a833388c894cbcf3aedf308748950fdd27a67965797492bd2a",
+          "motion": "assets/sleepy/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/sleepy/N.png",
+          "sha256": "c1a17d31f7af56fb808c2cf495ba52dfbbb4535d780224d560ca1edd05cdd861",
+          "motion": "assets/sleepy/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/sleepy/NE.png",
+          "sha256": "273c9e6a1359f2ad6662847aada1e2cbe6ef7d8734215819960ca4a22827a4f9",
+          "motion": "assets/sleepy/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/sleepy/E.png",
+          "sha256": "78ef6d616b823d56c52107c7629fabd03cdaebdbdfcddc3c557d992df8123562",
+          "motion": "assets/sleepy/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/sleepy/SE.png",
+          "sha256": "45e2ec0ec78129615ea2f9de4bb679c5b4b6a536fca350ea0fc75d43c798b918",
+          "motion": "assets/sleepy/SE-motion.png"
+        }
+      }
+    },
+    "bomb": {
+      "name": "ばくだん虫",
+      "scale": 0.36900369003690037,
+      "motionSourceScale": 1.1274725274725275,
+      "anchor": 224,
+      "height": 100,
+      "source": "source-art/bomb.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/bomb/S.png",
+          "sha256": "bdc60c1eeb243a2ee7b4c2d5efe5ce149a817e26ab9d7afc1014a73b965df956",
+          "motion": "assets/bomb/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/bomb/SW.png",
+          "sha256": "e0de84c7c58bfc2dd879528152d78efd3fe09c787efcbd31de5585f245d1d13a",
+          "motion": "assets/bomb/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/bomb/W.png",
+          "sha256": "7bb2d4eee24d3d20d9730d90850d46feddb1c3953c8ec1e5103a759d7b95f013",
+          "motion": "assets/bomb/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/bomb/NW.png",
+          "sha256": "c5c921c986942d148cc05799ff1a6a9465b17f8fe73d50c30e207a9e2b01f2f4",
+          "motion": "assets/bomb/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/bomb/N.png",
+          "sha256": "e0446669de24131e36da255002153fb56dc88957f966b72089dc2fec3b8ed6ea",
+          "motion": "assets/bomb/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/bomb/NE.png",
+          "sha256": "3487935df505e5afcf913cf598f069f4e7ba7ef0040c3896932683cc8d14e275",
+          "motion": "assets/bomb/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/bomb/E.png",
+          "sha256": "9869d7bace234235f6eea9c42ebc75acd548343524cc6daf059755bd7529ce50",
+          "motion": "assets/bomb/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/bomb/SE.png",
+          "sha256": "09bbbaf70607048a3c04404c129725137e8cc27c00bcf60de80d487b90434b94",
+          "motion": "assets/bomb/SE-motion.png"
+        }
+      }
+    },
+    "ogre": {
+      "name": "オーガ",
+      "scale": 0.5295774647887324,
+      "motionSourceScale": 1.3283018867924528,
+      "anchor": 224,
+      "height": 188,
+      "source": "source-art/ogre.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/ogre/S.png",
+          "sha256": "624e8c1b1f7d169a8a832a3d36a05646219d7dcbf54d57e377638b3057f28d6a",
+          "motion": "assets/ogre/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/ogre/SW.png",
+          "sha256": "dea2ea58972ec00043da5d84a1dbf97b8ef7cc2e632ba5eb8d8e8cce8f818b37",
+          "motion": "assets/ogre/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/ogre/W.png",
+          "sha256": "14df01784883b821856e5c47ba0cf964f3057e38259b52f42b4bb8188e5d4875",
+          "motion": "assets/ogre/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/ogre/NW.png",
+          "sha256": "3a682e801a3c90de1cecbe65990e6da51b9e43c3606b1cfe13f39a80c69fc823",
+          "motion": "assets/ogre/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/ogre/N.png",
+          "sha256": "34e36da79e4df0c1cb93982b999d68945a374abf18bd823f7540c2e7c804a663",
+          "motion": "assets/ogre/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/ogre/NE.png",
+          "sha256": "11f9e52db6b834d8b799bf61b2b32334028aa6fa22ad3b0719f814a4a678adab",
+          "motion": "assets/ogre/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/ogre/E.png",
+          "sha256": "7a522f75a67a5f191e2b6f9d368d36eae421b30f1c2ba86b5e8a0bef0f58642d",
+          "motion": "assets/ogre/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/ogre/SE.png",
+          "sha256": "44807766545f27cc2c8d6f83b4d809bfe7d34dda78219130bdc15d5bf34a799a",
+          "motion": "assets/ogre/SE-motion.png"
+        }
+      }
+    },
+    "dazzle": {
+      "name": "めまいガエル",
+      "scale": 0.4,
+      "motionSourceScale": 1.3225806451612903,
+      "anchor": 224,
+      "height": 104,
+      "source": "source-art/dazzle.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/dazzle/S.png",
+          "sha256": "2cfa0f4fcab2c3fe558c8bda1d8419a0267f2db2f99c1c0652c96fd4e188cf55",
+          "motion": "assets/dazzle/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/dazzle/SW.png",
+          "sha256": "bc0795ff7fcb75d5e488e8a3de738f994be1b7c46fdaf8405efebd54d29ff301",
+          "motion": "assets/dazzle/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/dazzle/W.png",
+          "sha256": "43c0a17b0845e007f36b8b66a0572f1697aa95dc6b3e5493833867594781c89c",
+          "motion": "assets/dazzle/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/dazzle/NW.png",
+          "sha256": "e4c0280b91ce5159d5397cf269b7f6b23d4af02617160c748ef129095b040a3d",
+          "motion": "assets/dazzle/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/dazzle/N.png",
+          "sha256": "2a3c469fb0e38d9357bed87bf006b9d5ac5a59971d1d83c631f175b913df5502",
+          "motion": "assets/dazzle/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/dazzle/NE.png",
+          "sha256": "9de421b51df6ba3d518c7ef9e1d146d84a4360c2b7b55d0b30752d7af4429938",
+          "motion": "assets/dazzle/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/dazzle/E.png",
+          "sha256": "8a13ff57104a9d16210816bab9e8e55547dff47bdb928995ba19e6bebc9d2505",
+          "motion": "assets/dazzle/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/dazzle/SE.png",
+          "sha256": "03fb3419512bc2ce22c3a4bfdc9081872e040e8b5f0ccbe707fef7c154a68095",
+          "motion": "assets/dazzle/SE-motion.png"
+        }
+      }
+    },
+    "venom": {
+      "name": "どくバチ",
+      "scale": 0.3911671924290221,
+      "motionSourceScale": 1.1707779886148009,
+      "anchor": 196,
+      "height": 124,
+      "source": "source-art/venom.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/venom/S.png",
+          "sha256": "ebc4434875fc163fd2e13b2658a0bb836a21a35af7a4cd7de3b10c4ff0f7e673",
+          "motion": "assets/venom/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/venom/SW.png",
+          "sha256": "5660383aef6160df599c8ea439720ea6c1c7cf9e703b0a40c57d1d290e29304e",
+          "motion": "assets/venom/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/venom/W.png",
+          "sha256": "5676416733a555477feb7ebac90ea90d1f431cc388a37e33849589c52ea3dbb2",
+          "motion": "assets/venom/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/venom/NW.png",
+          "sha256": "27c843c5baa44ef971c324df114f2161fc4e5e131753f9fb0be3c799289db6b4",
+          "motion": "assets/venom/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/venom/N.png",
+          "sha256": "dd84a5686196af20403b614ac0bc12d894158949d6bb4f8f4017c2e876357578",
+          "motion": "assets/venom/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/venom/NE.png",
+          "sha256": "df1351191ba9c35899c8313bc4a2f829da00c752b3af7fc4086c1947570599d5",
+          "motion": "assets/venom/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/venom/E.png",
+          "sha256": "d9a781c90c73ec068ab8f3e17adc6812c4cc2d5e176b834620f4cbb82c3077be",
+          "motion": "assets/venom/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/venom/SE.png",
+          "sha256": "bfdb6fa9590ce4f34f44178f473ffa8a590e819f2cefe065f9cb3573b4dd5184",
+          "motion": "assets/venom/SE-motion.png"
+        }
+      }
+    },
+    "ghost": {
+      "name": "ゴースト",
+      "scale": 0.46439628482972134,
+      "motionSourceScale": 1.3209876543209877,
+      "anchor": 208,
+      "height": 150,
+      "source": "source-art/ghost.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/ghost/S.png",
+          "sha256": "2119988114c03c9bc71901c1f32b66a4f4934ccb30dfa797cc8fe6774945d565",
+          "motion": "assets/ghost/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/ghost/SW.png",
+          "sha256": "435d86e876e67e422ff97fc398560f51cdc69b46b7db8ad1398b4be5c4567a97",
+          "motion": "assets/ghost/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/ghost/W.png",
+          "sha256": "8d2a39b2ac7c756cbba563410492bd924ede97ce30750355789444a6c113385a",
+          "motion": "assets/ghost/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/ghost/NW.png",
+          "sha256": "b2879e5487d1b21b24685436457b00de24fe89ca7726f5c947d808b76c0321c5",
+          "motion": "assets/ghost/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/ghost/N.png",
+          "sha256": "d9c3cb548204644b8cb86b75cb9b36512b2f0712bd51630624d5137e10aeb9d6",
+          "motion": "assets/ghost/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/ghost/NE.png",
+          "sha256": "644d9cba6c3fb04e67ccbc14b4f12c6d60164cfb731bd04d93afd89a2c6c05e5",
+          "motion": "assets/ghost/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/ghost/E.png",
+          "sha256": "3352d3365ba9a17d41926405d4bc8e1ec6fa10e10c596d887917eadb8ef0fd13",
+          "motion": "assets/ghost/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/ghost/SE.png",
+          "sha256": "af006725f4d72a8018cd102f6f0896913c1c82ed23a978273b7f3be9c6984bd1",
+          "motion": "assets/ghost/SE-motion.png"
+        }
+      }
+    },
+    "minotaur": {
+      "name": "ミノタウロス",
+      "scale": 0.47174447174447176,
+      "motionSourceScale": 1.3428571428571427,
+      "anchor": 224,
+      "height": 192,
+      "source": "source-art/minotaur.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/minotaur/S.png",
+          "sha256": "dd77c4090ff88ce41e582f062ff8bd792d02b64aef48b7c18c96fdd6135cc732",
+          "motion": "assets/minotaur/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/minotaur/SW.png",
+          "sha256": "91bcb5d158ae212faec53599feeda0f042a8931abb4391696d7b6fd6edcb1c12",
+          "motion": "assets/minotaur/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/minotaur/W.png",
+          "sha256": "0f403bd9c10fd9d7959c490b9fbe33f74dcd642246e4aa08a7fcda5fe42a0b22",
+          "motion": "assets/minotaur/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/minotaur/NW.png",
+          "sha256": "d37d817fca1321ed6d37b6d6d8a3fa9111607e504715153daceb08b6204d3ebf",
+          "motion": "assets/minotaur/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/minotaur/N.png",
+          "sha256": "6212faab9c72da6bdb356e2cc7271d96f637af89328bd6914c7754befeab837d",
+          "motion": "assets/minotaur/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/minotaur/NE.png",
+          "sha256": "2a82f5a2e7ca8f9dca8980d4d0510aab4ec86f089aa755998e093f147862c076",
+          "motion": "assets/minotaur/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/minotaur/E.png",
+          "sha256": "04528ae2cee103fee480eca4d8bd4625d85cfd49271cad6b5afbaad44bbed8b6",
+          "motion": "assets/minotaur/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/minotaur/SE.png",
+          "sha256": "9fa92ef2ee5f55cd4a63aecb505791ddfe1e96679e61fdc4b8df9e893e288729",
+          "motion": "assets/minotaur/SE-motion.png"
+        }
+      }
+    },
+    "dragon": {
+      "name": "ドラゴン",
+      "scale": 0.5,
+      "motionSourceScale": 1.2181069958847737,
+      "anchor": 224,
+      "height": 176,
+      "source": "source-art/dragon.png",
+      "motion": true,
+      "views": {
+        "S": {
+          "idle": "assets/dragon/S.png",
+          "sha256": "9303c7c0a256d56c5ec4df287d83a7780effbf838de0495c212a1428b1939ed8",
+          "motion": "assets/dragon/S-motion.png"
+        },
+        "SW": {
+          "idle": "assets/dragon/SW.png",
+          "sha256": "2f5bcc2fd42fdfa3c0b87ef10454eba90a962c6a643be38cff5043ae284bb246",
+          "motion": "assets/dragon/SW-motion.png"
+        },
+        "W": {
+          "idle": "assets/dragon/W.png",
+          "sha256": "9fd595cfbb4a0f3098a1314a5750273f7130fb1b856f2f3839878d810b837fc1",
+          "motion": "assets/dragon/W-motion.png"
+        },
+        "NW": {
+          "idle": "assets/dragon/NW.png",
+          "sha256": "4c258eee3149eac9e31ece960274873ec6fdfa03f0132e44c84c7b58741bb0bb",
+          "motion": "assets/dragon/NW-motion.png"
+        },
+        "N": {
+          "idle": "assets/dragon/N.png",
+          "sha256": "6470af3a549123041de486f9c7473b0792e7e27cb94640ba6c41921e734028a2",
+          "motion": "assets/dragon/N-motion.png"
+        },
+        "NE": {
+          "idle": "assets/dragon/NE.png",
+          "sha256": "49081510824377ca8b3add0062d6c288207011c5ec5ed0f284676ee01a34530c",
+          "motion": "assets/dragon/NE-motion.png"
+        },
+        "E": {
+          "idle": "assets/dragon/E.png",
+          "sha256": "25878189c917fee8d88941ddfe21bfbe662f0a69e4678e86d555103f2dce0f3b",
+          "motion": "assets/dragon/E-motion.png"
+        },
+        "SE": {
+          "idle": "assets/dragon/SE.png",
+          "sha256": "96e205b0bfc2c6a23d7df8ad4e2723ff5e6c32b1cd8fc5d81e7b18cba54fb1d3",
+          "motion": "assets/dragon/SE-motion.png"
+        }
+      }
+    }
+  }
+}

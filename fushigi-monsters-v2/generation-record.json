@@ -1,0 +1,393 @@
+{
+  "date": "2026-10-21",
+  "camera": "orthographic 26-degree downward, upper-left light",
+  "records": [
+    {
+      "kind": "blob",
+      "source": "source-art/blob.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A lumpy opaque magenta jelly monster with two stacked asymmetrical rounded lobes, short dripping pseudopods, tiny blank black oval eyes and one short flat mouth. Clearly different from the approved smooth blue slime. Simple uncanny face, no human expression, no equipment.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/blob-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "c14de09f463c65a7cd97e64a8fa09867e3ec926302c7beb0e77790e86a008888",
+      "referenceHashes": {
+        "guides/blob-sheet.png": "a15cefe59624215e05e974adfcc642cfe13b137da5bdf06547cf86fdebeae4e9",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "skeleton",
+      "source": "source-art/skeleton.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A short chibi skeleton monster, large ivory skull with deep slanted black eye sockets and simple small tooth line, thin complete ribcage and bony limbs, tiny tattered muted blue waist cloth. Empty claw hands, no weapon, no shield. Malicious skeletal face, not smiling human, clear readable bone silhouette.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/skeleton-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "732d6a14171e84edd7e4d238025fafea1db5b999ca5e2db2e2ff9e6f8be41aa5",
+      "referenceHashes": {
+        "guides/skeleton-sheet.png": "aa33fa0fc96d29f325cb18e65b2d52ece76a7ec611d8d07a199b55789a4c6b07",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "archer",
+      "source": "source-art/archer.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A squat wicked woodland imp archer, olive-mustard skin, bald head beneath a simple short dark olive hood, angular long ears, narrow glaring simple white eyes and dark pupils, short fanged mouth. Wears moss-brown leather vest. Holds one small wooden bow in ANATOMICAL LEFT HAND and a short arrow in RIGHT hand, quiver on back. Clearly a bow enemy, never a club goblin. No hair. Keep bow handedness in every view.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. Maintain ANATOMICAL LEFT hand bow (screen RIGHT in front view) and right-hand arrow, do not mirror asymmetric gear.",
+      "references": [
+        "guides/archer-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "a7fa9643b01db8bddae799ace5005c28fb57d64c543b667f484b66b5a5afe427",
+      "referenceHashes": {
+        "guides/archer-sheet.png": "9555e97f266b660b4c8ff7a4ae652bcbd90c98aa6fcc7fc2da9d26f0afd4f622",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "thief",
+      "source": "source-art/thief.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A compact upright raccoon-dog tanuki thief monster with brown fur, cream belly, black mask around narrow malicious eyes, round ears, short muzzle, small sly fanged mouth, bushy striped tail. Both paws clutch one little dark green stolen-goods pouch against belly. Original Japanese tanuki animal enemy with wicked simple face, no human hair, no huge human eyes.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/thief-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "020b7a838edbec5501f7a841e218a349575e4b213d8627f5b2a2409a01c0bee4",
+      "referenceHashes": {
+        "guides/thief-sheet.png": "837b4b340cde0e777ccb8196df319e46d68593296c89b514090d66b5e8f36327",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "sleepy",
+      "source": "source-art/sleepy.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A squat walking sleep mushroom monster: oversized dusty periwinkle blue cap with a few large pale spots, cream stubby stalk body, tiny root feet, two very simple narrow dark sleepy eyes and tiny flat mouth on stalk. Slightly uncanny and comical, NOT a human child. No arms, no equipment. Cap and gills visible appropriately on back views.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/sleepy-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "2684f22ba68fc069da719e734a7c9c9cc2e5521177ca181db638aa03804eccda",
+      "referenceHashes": {
+        "guides/sleepy-sheet.png": "0215a61b2400ac336a987b00e56b436244f13e00ac9b99be85897d39075119dd",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "bomb",
+      "source": "source-art/bomb.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A stocky round orange-brown explosive beetle monster, shiny segmented armored round abdomen with dark seam, six short articulated black legs, two angry simple slanted pale eyes, tiny mandibles, two stubby antennae. A tiny ember-orange marking on carapace hints at explosive behavior, NO real bomb prop or text. Ground beetle, NO wings. Beast enemy malicious face with a comical squat silhouette.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/bomb-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "83f9b5cf6fa8540563524029ec4e49ff0e2170db943d74ff55ba7bdeb0b7b18a",
+      "referenceHashes": {
+        "guides/bomb-sheet.png": "e8fa00cf953068bede0cbdefbb04d03ba57896924360811972394715dc927f80",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "ogre",
+      "source": "source-art/ogre.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A broad heavy stocky orange-russet ogre monster, bald head, two tiny ivory forehead horns, heavy low brow, narrow hostile simple eyes, short mouth with two tusks. Thick bare muscular arms with empty clenched fists, short thick legs, simple brown ragged loincloth. Original chibi monster, large shoulders, squat strong body, not human child, no weapon or hair.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/ogre-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "faddb95525efef2605340c6c1aca68002743bc6ff00eb39a80eaae6d06923106",
+      "referenceHashes": {
+        "guides/ogre-sheet.png": "f1200bd81661e590af70526d3085e7a24ab3ccc88202b59da8da3dea1b20eb3d",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "dazzle",
+      "source": "source-art/dazzle.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A squat pink-mauve magical frog monster, big rounded frog head, cream throat pouch, four webbed feet, squat crouched body with no clothes. Two small narrow sinister eyes on top of head with simple pale sclera and dark slit pupils, short flat sly mouth, a few round dark skin spots. Clearly a frog beast, slightly comic but enemy-like, no human hair or human smile.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/dazzle-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "a22c763b53929de6c5ae95f66f189463174e81ed38197a13d0116e8fb5694629",
+      "referenceHashes": {
+        "guides/dazzle-sheet.png": "9153fc3dec0975dbdb4bdd3d60b4abb3ff63cdaddad86a6230f1a7a1bf4ead33",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "venom",
+      "source": "source-art/venom.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A hovering poisonous wasp monster, golden yellow and dark charcoal striped body, compact angular insect head, narrow angry white eyes with dark pupils, pointed dark stinger at tail, six tiny jointed legs, two pairs of translucent pale bluish wings, stubby antennae. Original chibi beast enemy with a clear threatening stinger and simplified hostile face, no clothing. Keep entire wings within cell.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/venom-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "8c83eca07dde5296c9089ab70715b275631e6f594cc6b05a7457f149fbf1fa7a",
+      "referenceHashes": {
+        "guides/venom-sheet.png": "3992197f29fc1b8b199fd100a8351f4ba3e27f12d97d4423d6c0bc6d41881a2a",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "ghost",
+      "source": "source-art/ghost.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A floating pale icy-blue ghost monster with soft rounded sheet-like body and tapering curling tail, two short drooping wisp arms, simple sinister black slanted eye holes and a tiny dark oval mouth. Soft painted spectral glow confined within silhouette, lightly translucent edges, no human anatomy or clothing, original playful spooky enemy. View from back shows smooth ghost back without face.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/ghost-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "0b27563ece41b9e7e9292977113875f007631c44ac386ec94cadb5ef5eaca2ac",
+      "referenceHashes": {
+        "guides/ghost-sheet.png": "53358e39969b22f345477c3c81dd196d6038f382f2849016111332d26f9c9c5a",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "minotaur",
+      "source": "source-art/minotaur.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A stocky powerful minotaur bull monster: tawny brown fur, large bull head with two symmetrical curved ivory horns, broad dark muzzle, narrowed malicious simple eyes, hoof feet, thick muscular torso, simple dark brown leather belt and loincloth. Both empty fists raised at waist, NO weapon or shield. Clearly a horned bull-headed biped, not an ogre. Chibi proportions with large head and heavy chest.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/minotaur-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "83ef0d08423c56010b0762e0c607342f636629bfced63e0436489a8b602d1c87",
+      "referenceHashes": {
+        "guides/minotaur-sheet.png": "ec8545a0a6f86f4bbff6a996cfa787ae74c8e5757d734f54e4ebaeb9f7580c3a",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "dragon",
+      "source": "source-art/dragon.png",
+      "prompt": "Create a production game sprite sheet for Fushigi, matching attached golden-haired hero and green goblin's miniature painterly 3D storybook rendering, soft upper-left light, crisp small-game readable silhouette, subtly textured materials, NOT pixel art, NOT photorealism. New enemy: A small squat quadruped dragon monster with ember orange scales, cream belly, broad reptilian snout, two short swept horns, narrow malicious pale eyes with dark slit pupils, small fangs, four chunky clawed feet, two compact bat-like wings folded partly open, thick curling tail with a small arrowhead tip. Original full dragon creature, not humanoid. Cute-bodied but threatening face. Entire tail and wings must remain inside frame, no fire effect at idle.\nEXACTLY EIGHT separate full-body idle views in a strict 4-column by 2-row grid. FIRST reference is the exact volume/camera direction guide: top row SOUTH(front), SOUTHWEST(face screen-left), WEST(left profile), NORTHWEST(back-left); bottom row NORTH(back), NORTHEAST(back-right), EAST(right profile), SOUTHEAST(face screen-right). Render same ONE creature rotated at every view, same scale, anatomy, palette and proportions; NO face drawn on back of head. Orthographic 26-degree downward camera, grounded feet, same idle stance, do not copy mannequin details. Design detail overrides mannequin rough body. Each entire creature centered INSIDE its own equal cell with generous transparent padding on all sides. No touching other cells, no cropping, all limbs and equipment entirely inside cell. Upper/lower rows evenly separated with empty transparent gutter. No labels, text, border, floors, background or ground shadows. Transparent background. Enemy-like simple narrowed eyes and short mouth for beasts/humanoids; uncanny tiny simple eyes for blobs/plant. ",
+      "references": [
+        "guides/dragon-sheet.png",
+        "../fushigi-monsters-v1/assets/goblin/SE.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "sha256": "96b2b1395062a0e29cabd6521755cc4511fe974ebdb9e331211c807da252d374",
+      "referenceHashes": {
+        "guides/dragon-sheet.png": "f6509f5859acca89c532f916b1374d83c1bf38a5c5405fd4bbab2f33d6b7e297",
+        "../fushigi-monsters-v1/assets/goblin/SE.png": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "kind": "blob",
+      "action": "walk-and-attack",
+      "source": "source-art/blob-motion.png",
+      "prompt": "Create a painted animation-keypose sprite sheet for the SAME EXACT blob enemy shown in FIRST reference (canonical eight idle views). Keep the character's face, color, clothing, anatomy, scale, material and proportions unchanged in corresponding directions. A lumpy opaque magenta jelly monster with two stacked asymmetrical rounded lobes, short dripping pseudopods, tiny blank black oval eyes and one short flat mouth. Clearly different from the approved smooth blue slime. Simple uncanny face, no human expression, no equipment.\nSECOND reference is a rough 3D direction/pose guide. Use its directions and layout, not mannequin styling. EXACTLY SIXTEEN full body sprites in a strict FOUR-column FOUR-row grid:\nrow1 WALK S(front), WALK SW(front-left), WALK W(left profile), WALK NW(back-left);\nrow2 WALK N(back), WALK NE(back-right), WALK E(right profile), WALK SE(front-right);\nrow3 ATTACK S, ATTACK SW, ATTACK W, ATTACK NW;\nrow4 ATTACK N, ATTACK NE, ATTACK E, ATTACK SE.\nwalking: one soft lobe rolls forward with a small squash; attack: whole upper lobe lunges forward like a short jelly headbutt.\nEvery attack points toward that view's facing direction, never uniformly to the right. Back views must show back of head and body without invented rear faces. One walk keypose and one strike keypose per direction; actual game interleaves original idle with these. Foot base position consistent, no global jumping, same overall idle body size. Orthographic 26-degree down view, upper-left light, same premium painterly miniature game style. Each figure centered with LARGE TRANSPARENT GUTTERS, all limbs/gear fully within its own cell. No text, labels, grid, environment, floor, cast shadow. Transparent background.",
+      "references": [
+        "source-art/blob.png",
+        "guides/blob-motion-sheet.png"
+      ],
+      "sha256": "4c6ce47403e1922ff54226ce4cf737f2ea2e2e2e4247ee1289d06dd4cff23956",
+      "referenceHashes": {
+        "source-art/blob.png": "c14de09f463c65a7cd97e64a8fa09867e3ec926302c7beb0e77790e86a008888",
+        "guides/blob-motion-sheet.png": "fd421d70f9c8448d54ab9fe3600336e2300842a518e19268be37b0e169787826"
+      }
+    },
+    {
+      "kind": "skeleton",
+      "action": "walk-and-attack",
+      "source": "source-art/skeleton-motion.png",
+      "prompt": "Create a painted animation-keypose sprite sheet for the SAME EXACT skeleton enemy shown in FIRST reference (canonical eight idle views). Keep the character's face, color, clothing, anatomy, scale, material and proportions unchanged in corresponding directions. A short chibi skeleton monster, large ivory skull with deep slanted black eye sockets and simple small tooth line, thin complete ribcage and bony limbs, tiny tattered muted blue waist cloth. Empty claw hands, no weapon, no shield. Malicious skeletal face, not smiling human, clear readable bone silhouette.\nSECOND reference is a rough 3D direction/pose guide. Use its directions and layout, not mannequin styling. EXACTLY SIXTEEN full body sprites in a strict FOUR-column FOUR-row grid:\nrow1 WALK S(front), WALK SW(front-left), WALK W(left profile), WALK NW(back-left);\nrow2 WALK N(back), WALK NE(back-right), WALK E(right profile), WALK SE(front-right);\nrow3 ATTACK S, ATTACK SW, ATTACK W, ATTACK NW;\nrow4 ATTACK N, ATTACK NE, ATTACK E, ATTACK SE.\nwalking: one leg steps forward and opposite arm swings subtly; attack: both claw hands reach forward toward facing direction, torso leaning forward.\nEvery attack points toward that view's facing direction, never uniformly to the right. Back views must show back of head and body without invented rear faces. One walk keypose and one strike keypose per direction; actual game interleaves original idle with these. Foot base position consistent, no global jumping, same overall idle body size. Orthographic 26-degree down view, upper-left light, same premium painterly miniature game style. Each figure centered with LARGE TRANSPARENT GUTTERS, all limbs/gear fully within its own cell. No text, labels, grid, environment, floor, cast shadow. Transparent background.",
+      "references": [
+        "source-art/skeleton.png",
+        "guides/skeleton-motion-sheet.png"
+      ],
+      "sha256": "cb6162f4573c9a4c6fa78dd6f8cbab34e3b713963c188a19c69602f96be0132c",
+      "referenceHashes": {
+        "source-art/skeleton.png": "732d6a14171e84edd7e4d238025fafea1db5b999ca5e2db2e2ff9e6f8be41aa5",
+        "guides/skeleton-motion-sheet.png": "8caefccc9fe3aede6a354f81df29527aef39d8050b010eb41ee1ce8e41626ffe"
+      }
+    },
+    {
+      "kind": "archer",
+      "action": "walk-and-attack",
+      "source": "source-art/archer-motion.png",
+      "prompt": "Create a painted animation-keypose sprite sheet for the SAME EXACT archer enemy shown in FIRST reference (canonical eight idle views). Keep the character's face, color, clothing, anatomy, scale, material and proportions unchanged in corresponding directions. A squat wicked woodland imp archer, olive-mustard skin, bald head beneath a simple short dark olive hood, angular long ears, narrow glaring simple white eyes and dark pupils, short fanged mouth. Wears moss-brown leather vest. Holds one small wooden bow in ANATOMICAL LEFT HAND and a short arrow in RIGHT hand, quiver on back. Clearly a bow enemy, never a club goblin. No hair. Keep bow handedness in every view.\nSECOND reference is a rough 3D direction/pose guide. Use its directions and layout, not mannequin styling. EXACTLY SIXTEEN full body sprites in a strict FOUR-column FOUR-row grid:\nrow1 WALK S(front), WALK SW(front-left), WALK W(left profile), WALK NW(back-left);\nrow2 WALK N(back), WALK NE(back-right), WALK E(right profile), WALK SE(front-right);\nrow3 ATTACK S, ATTACK SW, ATTACK W, ATTACK NW;\nrow4 ATTACK N, ATTACK NE, ATTACK E, ATTACK SE.\nwalking: a short forward step while holding left-hand bow and right-hand arrow; attack: left hand holds bow extended toward facing direction, RIGHT hand draws string and arrow toward cheek ready to fire, clear archer shooting pose. Preserve handedness.\nEvery attack points toward that view's facing direction, never uniformly to the right. Back views must show back of head and body without invented rear faces. One walk keypose and one strike keypose per direction; actual game interleaves original idle with these. Foot base position consistent, no global jumping, same overall idle body size. Orthographic 26-degree down view, upper-left light, same premium painterly miniature game style. Each figure centered with LARGE TRANSPARENT GUTTERS, all limbs/gear fully within its own cell. No text, labels, grid, environment, floor, cast shadow. Transparent background.",
+      "references": [
+        "source-art/archer.png",
+        "guides/archer-motion-sheet.png"
+      ],
+      "sha256": "ca888dd57b76cf7e228aa55584787873ac133171092c18d8711ca2a77ae2d47a",
+      "referenceHashes": {
+        "source-art/archer.png": "a7fa9643b01db8bddae799ace5005c28fb57d64c543b667f484b66b5a5afe427",
+        "guides/archer-motion-sheet.png": "bf8928202bce907b19871d4aa4b689083334a6e875b41559709e42f620569f58"
+      }
+    },
+    {
+      "kind": "thief",
+      "action": "walk-and-attack",
+      "source": "source-art/thief-motion.png",
+      "prompt": "Paint a game animation sprite sheet for the EXACT SAME thief character from first reference, matching every corresponding canonical idle view. A compact upright raccoon-dog tanuki thief monster with brown fur, cream belly, black mask around narrow malicious eyes, round ears, short muzzle, small sly fanged mouth, bushy striped tail. Both paws clutch one little dark green stolen-goods pouch against belly. Original Japanese tanuki animal enemy with wicked simple face, no human hair, no huge human eyes.\nSecond reference is rough direction/pose volume guide. EXACTLY 16 separate full-body sprites in a strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right). Row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nWalking: short forward step with pouch held at belly, tail balancing. Attack: one paw reaches forward to snatch, other paw holds pouch. Attack always toward facing direction. Keep identical body size/proportions/face/clothing/material/palette with corresponding idle view. No rear faces. 26-degree down orthographic camera, painterly miniature 3D game style, upper-left light. All creatures completely inside equal cells with generous TRANSPARENT GUTTERS, no overlap, no crop. Same grounded foot base. No labels, text, floor, shadow or backdrop. Transparent background. This is one walk and one attack painted keypose for each facing direction; game uses canonical idle between poses.",
+      "references": [
+        "source-art/thief.png",
+        "guides/thief-motion-sheet.png"
+      ],
+      "sha256": "1e88380ffcd86926e844d0f92b3e2ec6fa2cb76065561a55563a1e6653b32166",
+      "referenceHashes": {
+        "source-art/thief.png": "020b7a838edbec5501f7a841e218a349575e4b213d8627f5b2a2409a01c0bee4",
+        "guides/thief-motion-sheet.png": "20d5f6df83e7236ca0f2cec24786cd820cf2cebc038b0592c9dea6eac9bb68d5"
+      }
+    },
+    {
+      "kind": "sleepy",
+      "action": "walk-and-attack",
+      "source": "source-art/sleepy-motion.png",
+      "prompt": "Paint a game animation sprite sheet for the EXACT SAME sleepy character from first reference, matching every corresponding canonical idle view. A squat walking sleep mushroom monster: oversized dusty periwinkle blue cap with a few large pale spots, cream stubby stalk body, tiny root feet, two very simple narrow dark sleepy eyes and tiny flat mouth on stalk. Slightly uncanny and comical, NOT a human child. No arms, no equipment. Cap and gills visible appropriately on back views.\nSecond reference is rough direction/pose volume guide. EXACTLY 16 separate full-body sprites in a strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right). Row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nWalking: small root foot steps while cap stays stable. Attack: cap and stalk lean forward with a few tiny sleepy spores near cap. Attack always toward facing direction. Keep identical body size/proportions/face/clothing/material/palette with corresponding idle view. No rear faces. 26-degree down orthographic camera, painterly miniature 3D game style, upper-left light. All creatures completely inside equal cells with generous TRANSPARENT GUTTERS, no overlap, no crop. Same grounded foot base. No labels, text, floor, shadow or backdrop. Transparent background. This is one walk and one attack painted keypose for each facing direction; game uses canonical idle between poses.",
+      "references": [
+        "source-art/sleepy.png",
+        "guides/sleepy-motion-sheet.png"
+      ],
+      "sha256": "4d011f41bf5a0b756349fce97efd01cadd7fc23f225868c78e1c00d398dcdc2e",
+      "referenceHashes": {
+        "source-art/sleepy.png": "2684f22ba68fc069da719e734a7c9c9cc2e5521177ca181db638aa03804eccda",
+        "guides/sleepy-motion-sheet.png": "a7ec3fb03c12a29671e1a55db9683948df9313368bfb373576b4bb5e3b1c86b1"
+      }
+    },
+    {
+      "kind": "bomb",
+      "action": "walk-and-attack",
+      "source": "source-art/bomb-motion.png",
+      "prompt": "Paint a game animation sprite sheet for the EXACT SAME bomb character from first reference, matching every corresponding canonical idle view. A stocky round orange-brown explosive beetle monster, shiny segmented armored round abdomen with dark seam, six short articulated black legs, two angry simple slanted pale eyes, tiny mandibles, two stubby antennae. A tiny ember-orange marking on carapace hints at explosive behavior, NO real bomb prop or text. Ground beetle, NO wings. Beast enemy malicious face with a comical squat silhouette.\nSecond reference is rough direction/pose volume guide. EXACTLY 16 separate full-body sprites in a strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right). Row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nWalking: six short legs take a step. Attack: crouches with mandibles opened forward, ember carapace glows, no explosion. Attack always toward facing direction. Keep identical body size/proportions/face/clothing/material/palette with corresponding idle view. No rear faces. 26-degree down orthographic camera, painterly miniature 3D game style, upper-left light. All creatures completely inside equal cells with generous TRANSPARENT GUTTERS, no overlap, no crop. Same grounded foot base. No labels, text, floor, shadow or backdrop. Transparent background. This is one walk and one attack painted keypose for each facing direction; game uses canonical idle between poses.",
+      "references": [
+        "source-art/bomb.png",
+        "guides/bomb-motion-sheet.png"
+      ],
+      "sha256": "7d8e43e50814bbfc72169147fb88c822214a79951b21f0804c8b5f8d1cc56fbd",
+      "referenceHashes": {
+        "source-art/bomb.png": "83f9b5cf6fa8540563524029ec4e49ff0e2170db943d74ff55ba7bdeb0b7b18a",
+        "guides/bomb-motion-sheet.png": "c5a44f251b8cc9f6dde0c7381d785951c87823e8fdbb524f6c030be698f89f0b"
+      }
+    },
+    {
+      "kind": "archer",
+      "action": "attack-S-N-correction",
+      "source": "source-art/archer-attack-S-N-fixed.png",
+      "prompt": "Create a TWO-cell vertical game sprite sheet, transparent background. Same exact hostile olive hooded imp archer from references, same scale and clothing. TOP CELL: SOUTH FRONT attack shooting pose, camera sees BOTH ears and BOTH eyes symmetrically front-on. LEFT anatomical hand extends forward TOWARD CAMERA holding a VERTICAL UPRIGHT wooden bow, right hand pulls string near right cheek. The arrow aims straight TOWARD VIEWER, strongly foreshortened, arrowhead projects toward BOTTOM CENTER of image, shaft aligned near VERTICAL image centerline, NEVER aiming sideways. Bottom cell: NORTH BACK attack pose, camera sees only back of hood/quiver, arms and bow aim straight AWAY FROM CAMERA toward TOP CENTER, arrow shaft near VERTICAL image centerline with foreshortening, never sideways. Body remains facing exact SOUTH in top cell, exact NORTH in bottom; do NOT rotate creature into three-quarter view to make archery easier. Same 26-degree downward orthographic game camera as idle refs. These are sprite game directions, not action illustration. Wood bow remains in ANATOMICAL LEFT hand, arrow drawn with right hand. Clear painted miniature style and original character, no redesign. Large transparent gutter between two equally sized cells. Full body and equipment inside each cell with plenty of padding. No text, ground, shadows or background.",
+      "references": [
+        "guides/archer-idle-S.png",
+        "guides/archer-idle-N.png"
+      ],
+      "sha256": "c3bfd8409d725e084b5d2176680782c71d8515e85ca9d18c6600510b0bbbce94",
+      "referenceHashes": {
+        "guides/archer-idle-S.png": "89312fed0f122e4911c2a807b807bfb96ce041e85b8687b76a38f8c74833f4a9",
+        "guides/archer-idle-N.png": "29904ec815374912330acdaa113dd3c27584cb9dbf5abe72fd825f999541f3bf"
+      }
+    },
+    {
+      "kind": "ogre",
+      "action": "walk-and-attack",
+      "source": "source-art/ogre-motion.png",
+      "prompt": "Paint a game animation sprite sheet for the EXACT SAME ogre character from first reference, matching each corresponding canonical idle view. A broad heavy stocky orange-russet ogre monster, bald head, two tiny ivory forehead horns, heavy low brow, narrow hostile simple eyes, short mouth with two tusks. Thick bare muscular arms with empty clenched fists, short thick legs, simple brown ragged loincloth. Original chibi monster, large shoulders, squat strong body, not human child, no weapon or hair.\nSecond reference is rough pose/direction guide only. EXACTLY 16 full-body sprites, strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right). Row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nWalking: one thick leg steps forward with opposite fist swinging. Attack: one clenched fist punches forward in facing direction, other fist guards, torso leans forward. Attack toward that view's facing direction, no rear faces. Keep face, palette, anatomy, clothing, body proportions/size EXACTLY same as idle. Painterly miniature 3D rendering, 26-degree down orthographic, soft upper-left light. Each sprite entirely within equal cell, generous transparent gutters. No touching adjacent cells, no cropping, all wings/fists/legs inside own cell. No labels, text, floor, shadow or background. Transparent background. One walk/flying keypose and one strike keypose per view; original idle is interleaved by game.",
+      "references": [
+        "source-art/ogre.png",
+        "guides/ogre-motion-sheet.png"
+      ],
+      "sha256": "537cd57adaaa13c8806449ed4c876db8cea12656871b8c3a766dd49e5216181a",
+      "referenceHashes": {
+        "source-art/ogre.png": "faddb95525efef2605340c6c1aca68002743bc6ff00eb39a80eaae6d06923106",
+        "guides/ogre-motion-sheet.png": "dd9a821f464639c50ad781cd33e775f5b36d4afa86860204fb0a46624f4d281b"
+      }
+    },
+    {
+      "kind": "dazzle",
+      "action": "walk-and-attack",
+      "source": "source-art/dazzle-motion.png",
+      "prompt": "Paint a game animation sprite sheet for the EXACT SAME dazzle character from first reference, matching each corresponding canonical idle view. A squat pink-mauve magical frog monster, big rounded frog head, cream throat pouch, four webbed feet, squat crouched body with no clothes. Two small narrow sinister eyes on top of head with simple pale sclera and dark slit pupils, short flat sly mouth, a few round dark skin spots. Clearly a frog beast, slightly comic but enemy-like, no human hair or human smile.\nSecond reference is rough pose/direction guide only. EXACTLY 16 full-body sprites, strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right). Row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nWalking: small crouching frog hop with feet extending slightly, no global jumping. Attack: throat pouch inflates while head thrusts toward facing direction, menacing narrow eyes. Attack toward that view's facing direction, no rear faces. Keep face, palette, anatomy, clothing, body proportions/size EXACTLY same as idle. Painterly miniature 3D rendering, 26-degree down orthographic, soft upper-left light. Each sprite entirely within equal cell, generous transparent gutters. No touching adjacent cells, no cropping, all wings/fists/legs inside own cell. No labels, text, floor, shadow or background. Transparent background. One walk/flying keypose and one strike keypose per view; original idle is interleaved by game.",
+      "references": [
+        "source-art/dazzle.png",
+        "guides/dazzle-motion-sheet.png"
+      ],
+      "sha256": "0f68ed2fa998a9021434b4caf4b3129df035a49cf0c650d80c920edc4cb7f90d",
+      "referenceHashes": {
+        "source-art/dazzle.png": "a22c763b53929de6c5ae95f66f189463174e81ed38197a13d0116e8fb5694629",
+        "guides/dazzle-motion-sheet.png": "bc620d41d5de3876eb36fd2c4cc6af176e5d01450f718e29734c53808e75490c"
+      }
+    },
+    {
+      "kind": "venom",
+      "action": "walk-and-attack",
+      "source": "source-art/venom-motion.png",
+      "prompt": "Paint a game animation sprite sheet for the EXACT SAME venom character from first reference, matching each corresponding canonical idle view. A hovering poisonous wasp monster, golden yellow and dark charcoal striped body, compact angular insect head, narrow angry white eyes with dark pupils, pointed dark stinger at tail, six tiny jointed legs, two pairs of translucent pale bluish wings, stubby antennae. Original chibi beast enemy with a clear threatening stinger and simplified hostile face, no clothing. Keep entire wings within cell.\nSecond reference is rough pose/direction guide only. EXACTLY 16 full-body sprites, strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right). Row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nFlying: wings lift into a different beat angle, body stays same hovering height. Attack: abdomen curls and stinger thrusts toward facing direction, wings tucked closer. Attack toward that view's facing direction, no rear faces. Keep face, palette, anatomy, clothing, body proportions/size EXACTLY same as idle. Painterly miniature 3D rendering, 26-degree down orthographic, soft upper-left light. Each sprite entirely within equal cell, generous transparent gutters. No touching adjacent cells, no cropping, all wings/fists/legs inside own cell. No labels, text, floor, shadow or background. Transparent background. One walk/flying keypose and one strike keypose per view; original idle is interleaved by game.",
+      "references": [
+        "source-art/venom.png",
+        "guides/venom-motion-sheet.png"
+      ],
+      "sha256": "f0b5a08e99b1a6020871d5c30b239777d07da05eeba16b50fa91e50d8abe524e",
+      "referenceHashes": {
+        "source-art/venom.png": "8c83eca07dde5296c9089ab70715b275631e6f594cc6b05a7457f149fbf1fa7a",
+        "guides/venom-motion-sheet.png": "c2080343c55db685d89d14787f87cecc35a43b9addb6ecbd73d976e6b472982d"
+      }
+    },
+    {
+      "kind": "ghost",
+      "action": "walk-and-attack",
+      "source": "source-art/ghost-motion.png",
+      "prompt": "Paint a game animation sprite sheet for EXACT SAME ghost character from first reference, matching corresponding canonical idle views. A floating pale icy-blue ghost monster with soft rounded sheet-like body and tapering curling tail, two short drooping wisp arms, simple sinister black slanted eye holes and a tiny dark oval mouth. Soft painted spectral glow confined within silhouette, lightly translucent edges, no human anatomy or clothing, original playful spooky enemy. View from back shows smooth ghost back without face.\nSecond reference is rough pose/direction guide only. EXACTLY 16 full-body sprites, strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right); row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nFloating movement: spectral tail curves to a different side, same head size and hover height. Attack: both wisp arms extend toward facing direction, body leans and mouth opens slightly, no huge effects. Attack toward that view's facing direction, no rear faces. Same face, palette, anatomy, material, body proportions and size as idle. Orthographic 26-degree down view, painterly miniature 3D game style, upper-left light. Each full creature must fit its equal cell, all horns/wings/tail inside, generous transparent gutters, no overlap or cropping. No text, labels, floor, cast shadow or background. Transparent background. One painted movement keypose and one painted strike keypose per direction, game interleaves canonical idle.",
+      "references": [
+        "source-art/ghost.png",
+        "guides/ghost-motion-sheet.png"
+      ],
+      "sha256": "ea928741fd234d5ed03337c0d288552e3b72943d8878bdb62deff4fa23296e6c",
+      "referenceHashes": {
+        "source-art/ghost.png": "0b27563ece41b9e7e9292977113875f007631c44ac386ec94cadb5ef5eaca2ac",
+        "guides/ghost-motion-sheet.png": "a198e1cff11db8bb2eb57fc86812bcba14bc77cd0231cec5ded74ebbade426aa"
+      }
+    },
+    {
+      "kind": "minotaur",
+      "action": "walk-and-attack",
+      "source": "source-art/minotaur-motion.png",
+      "prompt": "Paint a game animation sprite sheet for EXACT SAME minotaur character from first reference, matching corresponding canonical idle views. A stocky powerful minotaur bull monster: tawny brown fur, large bull head with two symmetrical curved ivory horns, broad dark muzzle, narrowed malicious simple eyes, hoof feet, thick muscular torso, simple dark brown leather belt and loincloth. Both empty fists raised at waist, NO weapon or shield. Clearly a horned bull-headed biped, not an ogre. Chibi proportions with large head and heavy chest.\nSecond reference is rough pose/direction guide only. EXACTLY 16 full-body sprites, strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right); row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nWalking: one hoof steps forward, opposite fist swings, horn shape identical. Attack: horns and bull head thrust forward toward facing direction with one fist reaching, a powerful low headbutt. Attack toward that view's facing direction, no rear faces. Same face, palette, anatomy, material, body proportions and size as idle. Orthographic 26-degree down view, painterly miniature 3D game style, upper-left light. Each full creature must fit its equal cell, all horns/wings/tail inside, generous transparent gutters, no overlap or cropping. No text, labels, floor, cast shadow or background. Transparent background. One painted movement keypose and one painted strike keypose per direction, game interleaves canonical idle.",
+      "references": [
+        "source-art/minotaur.png",
+        "guides/minotaur-motion-sheet.png"
+      ],
+      "sha256": "f08aea0c1ce4f0d76765f6513b6ee1046663090fcb6b635d522a66b641b48116",
+      "referenceHashes": {
+        "source-art/minotaur.png": "83ef0d08423c56010b0762e0c607342f636629bfced63e0436489a8b602d1c87",
+        "guides/minotaur-motion-sheet.png": "4858e7b09508b680a901f1663a96f53861867d139d4551b5b1468c2430721e22"
+      }
+    },
+    {
+      "kind": "dragon",
+      "action": "walk-and-attack",
+      "source": "source-art/dragon-motion.png",
+      "prompt": "Paint a game animation sprite sheet for EXACT SAME dragon character from first reference, matching corresponding canonical idle views. A small squat quadruped dragon monster with ember orange scales, cream belly, broad reptilian snout, two short swept horns, narrow malicious pale eyes with dark slit pupils, small fangs, four chunky clawed feet, two compact bat-like wings folded partly open, thick curling tail with a small arrowhead tip. Original full dragon creature, not humanoid. Cute-bodied but threatening face. Entire tail and wings must remain inside frame, no fire effect at idle.\nSecond reference is rough pose/direction guide only. EXACTLY 16 full-body sprites, strict 4-column 4-row grid: row1 WALK S(front), SW(front-left), W(left profile), NW(back-left); row2 WALK N(back), NE(back-right), E(right profile), SE(front-right); row3 ATTACK S, SW, W, NW; row4 ATTACK N, NE, E, SE.\nWalking: one front foot and opposite back foot step, tail shifts subtly. Attack: head and neck thrust toward facing direction and jaws open to breathe, tiny warm light inside mouth, NO big fire plume, preserve compact wings and horns. Attack toward that view's facing direction, no rear faces. Same face, palette, anatomy, material, body proportions and size as idle. Orthographic 26-degree down view, painterly miniature 3D game style, upper-left light. Each full creature must fit its equal cell, all horns/wings/tail inside, generous transparent gutters, no overlap or cropping. No text, labels, floor, cast shadow or background. Transparent background. One painted movement keypose and one painted strike keypose per direction, game interleaves canonical idle.",
+      "references": [
+        "source-art/dragon.png",
+        "guides/dragon-motion-sheet.png"
+      ],
+      "sha256": "87f4de369eafa9f1fc5f96fc007a3d103fb0cb5ff829d7a83c1167f363f69697",
+      "referenceHashes": {
+        "source-art/dragon.png": "96b2b1395062a0e29cabd6521755cc4511fe974ebdb9e331211c807da252d374",
+        "guides/dragon-motion-sheet.png": "df4f3e10f47eaec6aa2d7d3c9422279c60639a78f2a2dfccf99d87fbf62e078e"
+      }
+    }
+  ]
+}

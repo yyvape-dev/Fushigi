@@ -149,6 +149,8 @@ canvas{display:block;touch-action:none}
 <script src="assets/dungeon-generator.js?v=locations-v1"></script>
 <script src="assets/cave-terrain.js?v=wall-relief-v1"></script>
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
+<script src="assets/monster-roster.js?v=families-v2"></script>
+<script src="assets/monster-families.js?v=families-v2"></script>
 <script src="assets/dungeon-experience.js?v=experience-v1"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
 <script>
@@ -550,6 +552,7 @@ const ENEMIES = {
   minotaur: { name: 'ミノタウロス', from: 8, w: 2, hp: f => 25 + f * 2, atk: f => [6, 9 + Math.floor(f / 2)], def: 3, exp: 40, art: 'ogre', hue: 20, col: '#d08040' },
   dragon: { name: 'ドラゴン', from: 9, w: 1, hp: f => 40 + f * 2, atk: f => [5, 8 + Math.floor(f / 2)], breath: f => [4, 7 + Math.floor(f / 3)], def: 4, exp: 70, ai: 'breath', art: 'ogre', hue: 140, col: '#ff5030' },
 };
+if(typeof MonsterRoster!=='undefined')MonsterRoster.install(ENEMIES);
 const eT = e => ENEMIES[e.kind] || ENEMIES.goblin;
 // 杖・巻物の共通処理：向いている方向の最初の敵（射程8）／ダメージを与える
 let zapDir = [0, 1];
@@ -843,7 +846,7 @@ function loadSprite(key, src) {
   im.onerror = () => {};
   im.src = src;
 }
-const ASSET_KEYS = ['player', ...Object.keys(ENEMIES), 'floor', 'wall', 'stairs', 'ground', 'tree', 'roof', 'hwall', 'door', 'gate', 'pillar', 'town', ...new Set(Object.values(ICON_BY_CAT)), ...Object.keys(ITEMS).filter(k => !ITEMS[k].icon || ITEMS[k].equip === 'weapon' || ITEMS[k].equip === 'shield')];   // town = 町全体の一枚絵（あれば町のタイル絵より優先）
+const ASSET_KEYS = ['player', ...Object.keys(ENEMIES).filter(k=>!ENEMIES[k].tier||ENEMIES[k].tier===1), 'floor', 'wall', 'stairs', 'ground', 'tree', 'roof', 'hwall', 'door', 'gate', 'pillar', 'town', ...new Set(Object.values(ICON_BY_CAT)), ...Object.keys(ITEMS).filter(k => !ITEMS[k].icon || ITEMS[k].equip === 'weapon' || ITEMS[k].equip === 'shield')];   // town = 町全体の一枚絵（あれば町のタイル絵より優先）
 function loadExternalAssets() {
   if (typeof Image === 'undefined' || typeof location === 'undefined' || location.protocol === 'file:') return;
   for (const k of ASSET_KEYS) loadSprite(k, `assets/${k}.png`);
@@ -1385,7 +1388,7 @@ function strikeOne(e, again) {
   }
   let dmg = calcDamage(e), crit = false;
   if (Math.random() < 0.2 * ringN('moroha') + (wSeal() === 'crit' ? 0.25 : 0)) { dmg *= 2; crit = true; }
-  if (wSeal() === 'bat' && e.kind === 'bat') dmg *= 2;
+  if (wSeal() === 'bat' && (eT(e).flying || e.kind === 'bat')) dmg *= 2;
   e.hp -= dmg; e.aware = true; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
   fxText(e.x, e.y, '-' + dmg, crit ? '#ffe28a' : '#ffffff');
   vfxHit(e.x, e.y, e.x - player.x, e.y - player.y, '#ffe9a0', e.hp <= 0 || crit);
@@ -1576,7 +1579,7 @@ function enemyTurn() {
         if (best) { e.x += best[0]; e.y += best[1]; if (best[0]) e.fl = best[0] < 0; }
         continue;
       }
-      const range = ai === 'archer' ? 6 : ai === 'breath' ? 4 : 0;   // 遠距離攻撃：直線上で、間に何も無いとき
+      const range = T.range || (ai === 'archer' ? 6 : ai === 'breath' ? 4 : 0);   // 遠距離攻撃：直線上で、間に何も無いとき
       if (!confused && range && e.aware && dist > 1 && dist <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e)) {
         const r = enemyStrike(e, T, ai === 'breath' ? T.breath(floorNo) : T.atk(floorNo), ai === 'breath' ? '炎' : '矢');
         if (r.dead) return;
@@ -1585,7 +1588,7 @@ function enemyTurn() {
       const adj = dist === 1 && (ai === 'ghost' || geomOK(e.x, e.y, player.x - e.x, player.y - e.y));
       if (!confused && adj) {                                     // 隣接なら攻撃（1ターンに1回）
         if (ai === 'bomb') {                                      // 自爆：自分も消える
-          const dmg = Math.max(1, 5 + Math.floor(floorNo * 0.8) - Math.floor(defBonus() / 2));
+          const dmg = Math.max(1, Math.ceil((5 + Math.floor(floorNo * 0.8)) * (T.bombScale || 1)) - Math.floor(defBonus() / 2));
           enemies.splice(enemies.indexOf(e), 1); vfxShake(6, 300); fxText(e.x, e.y, '爆発', '#ff9a4a');
           say(`${T.name}が爆発した！ ${dmg}ダメージ。`);
           if (hurtPlayer(dmg, `力尽きた…（${floorNo}階）`)) return;
@@ -1600,8 +1603,8 @@ function enemyTurn() {
         const r = enemyStrike(e, T, T.atk(floorNo), '攻撃');
         if (r.dead) return;
         if (r.hit && r.dmg > 0) {
-          if (ai === 'sleepy' && addStatus('sleep', 5)) say('眠ってしまった…');
-          else if (ai === 'dazzle' && addStatus('confuse', 8)) say('目が回って混乱した！');
+          if (ai === 'sleepy' && addStatus('sleep', T.statusTurns || 5)) say('眠ってしまった…');
+          else if (ai === 'dazzle' && addStatus('confuse', T.statusTurns || 8)) say('目が回って混乱した！');
           else if (ai === 'venom') {
             if (ringN('antidote')) say('腕輪の力で毒を防いだ！');
             else if (atkUp > -4) { atkUp--; fxText(player.x, player.y, 'ちから-1', '#c0e040'); say('毒でちからが下がった！'); }
