@@ -8,7 +8,7 @@ function runSafe(dx,dy){
  if(scene!=='dungeon'||uiBlocked()||dead||player.st.confuse>0||player.st.sleep>0||player.st.blind>0)return false;
  if(enemies.some(e=>vis[e.y]?.[e.x]))return false;
  const x=player.x+dx,y=player.y+dy;
- if(!geomOK(player.x,player.y,dx,dy)||enemyAt(x,y))return false;
+ if(!geomOK(player.x,player.y,dx,dy)||enemyAt(x,y)||(typeof AllySystem!=='undefined'&&AllySystem.at(x,y)))return false;
  if(map[y][x]===STAIRS||traps.some(t=>t.seen&&Math.max(Math.abs(t.x-x),Math.abs(t.y-y))<=1))return false;
  return true;
 }
@@ -43,6 +43,7 @@ function showMenuInfo(kind){
  if(kind==='ground')panel.innerHTML='<h2>足元</h2><p>'+ (it?itemName(it.item):onStairs?'下り階段がある。':'ここには何もない。')+'</p>'+((it||onStairs)?'<button class="sm" id="menuGroundAction">'+(onStairs?'階段を使う':'拾う')+'</button>':'');
  if(kind==='status')panel.innerHTML='<h2>状態</h2><p>Lv '+player.lv+'　HP '+player.hp+' / '+player.maxhp+'</p><p>満腹度 '+belly+' / '+maxBelly()+'　所持金 '+gold+'ギタン</p><p>武器：'+(eqWeapon?itemName(eqWeapon):'なし')+'</p><p>盾：'+(eqShield?itemName(eqShield):'なし')+'</p><p>'+Object.entries(player.st).filter(([k,v])=>v>0).map(([k,v])=>(STATUS_LABEL[k]||k)+' '+v).join('　')+'</p>';
  if(kind==='help')panel.innerHTML='<h2>操作</h2><p>方向ボタン：8方向移動<br>向き：その場で向きを変える<br>斜め：斜め方向だけ移動<br>走る：押している間ダッシュ</p><p>キーボード：矢印／WASD／テンキー<br>Ctrl＋方向：向きだけ変更<br>Alt＋方向：斜め固定<br>Shift＋方向：ダッシュ<br>F：近い敵へ向く<br>Esc：メニュー／戻る<br>I：持ち物　M：地図<br>Z／Enter：攻撃・決定</p><p>メニュー選択や方向変更ではターンは進みません。ダッシュは敵・分岐・階段・発見済みの罠の手前で停止。道具の上では拾わず停止します。</p>';
+ if(kind==='status'&&typeof AllySystem!=='undefined')panel.innerHTML+=AllySystem.infoHTML();
  const action=$('menuGroundAction');if(action)action.onclick=()=>{closeGameMenu();menuTrail=false;doCtx();};
 }
 const STATUS_LABEL={confuse:'混乱',sleep:'睡眠',blind:'目つぶし',mute:'くちなし',weak:'ちから低下',fast:'倍速',power:'パワーアップ',invincible:'無敵',sight:'よく見え'};

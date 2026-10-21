@@ -148,6 +148,8 @@ canvas{display:block;touch-action:none}
 <script src="assets/dungeon-generator.js?v=locations-v1"></script>
 <script src="assets/cave-terrain.js?v=wall-relief-v1"></script>
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
+<link rel="stylesheet" href="assets/allies.css?v=yuzunamiki-v1">
+<script src="assets/allies.js?v=yuzunamiki-v1"></script>
 <script src="assets/monster-roster.js?v=families-v2"></script>
 <script src="assets/monster-families.js?v=families-v2"></script>
 <script src="assets/dungeon-experience.js?v=experience-v1"></script>
@@ -609,14 +611,14 @@ function killEnemy(e, noExp) {
   const i = enemies.indexOf(e); if (i >= 0) enemies.splice(i, 1);
   if (e.loot) { dropAt(e.x, e.y, e.loot); say(`盗まれた${itemName(e.loot)}を取り返した！`); e.loot = null; }
   if (!noExp && Math.random() < 0.25) dropAt(e.x, e.y, mkItem('gold', rnd(5, 15) + floorNo * 3));
-  if (!noExp) gainExp(Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)))));
+  if (!noExp) { const xp=Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)))); gainExp(xp); AllySystem.gainExp(xp); }
 }
 // ダメージを受けて生き残った後：ブヨブヨは分裂する（3回まで。子は経験値が半分ずつ）
 function afterDamage(e) {
   if ((eT(e).ai !== 'split') || e.hp < 2 || (e.gen || 0) >= 3 || enemies.length >= 30) return;
   for (const [dx, dy] of DIRS8) {
     const nx = e.x + dx, ny = e.y + dy;
-    if (!geomOK(e.x, e.y, dx, dy) || enemyAt(nx, ny) || (nx === player.x && ny === player.y)) continue;
+    if (!geomOK(e.x, e.y, dx, dy) || enemyAt(nx, ny) || AllySystem.at(nx,ny) || (nx === player.x && ny === player.y)) continue;
     const c = { kind: e.kind, x: nx, y: ny, vx: e.x, vy: e.y, hp: Math.floor(e.hp / 2), maxhp: e.maxhp, aware: true, lost: 0, flash: 0, bump: null, fl: e.fl, st: {}, gen: (e.gen || 0) + 1 };
     e.hp -= c.hp; e.gen = c.gen; enemies.push(c); say(`${eT(e).name}が分裂した！`); return;
   }
@@ -676,7 +678,7 @@ function freeNear(n) {
   for (let r = 1; r <= 9 && out.length < n; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
     if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || out.length >= n) continue;
     const x = player.x + dx, y = player.y + dy;
-    if (inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !itemAt(x, y)) out.push([x, y]);
+    if (inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x,y) && !itemAt(x, y)) out.push([x, y]);
   }
   return out;
 }
@@ -687,7 +689,7 @@ function spawnEnemy(x, y, aware) {
 }
 function warpPlayer() {                                         // この階のどこかの部屋へ
   const c = [];
-  for (const R of rooms) for (let y = R.y; y < R.y + R.h; y++) for (let x = R.x; x < R.x + R.w; x++) if (map[y][x] === FLOOR && !enemyAt(x, y) && !(x === player.x && y === player.y)) c.push([x, y]);
+  for (const R of rooms) for (let y = R.y; y < R.y + R.h; y++) for (let x = R.x; x < R.x + R.w; x++) if (map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x,y) && !(x === player.x && y === player.y)) c.push([x, y]);
   if (!c.length) return;
   const [x, y] = c[rnd(0, c.length - 1)]; player.x = player.vx = x; player.y = player.vy = y; fxText(x, y, '転移', '#9ad8ff');
 }
@@ -707,7 +709,7 @@ function ringTick() {
   }
   if (n('summon') && Math.random() < 0.03 * n('summon')) {
     const R = rooms[rnd(0, rooms.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
-    if (map[y][x] === FLOOR && !enemyAt(x, y) && !vis[y][x] && !(x === player.x && y === player.y)) { spawnEnemy(x, y, true); say('どこかで魔物の気配がする…'); }
+    if (map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x,y) && !vis[y][x] && !(x === player.x && y === player.y)) { spawnEnemy(x, y, true); say('どこかで魔物の気配がする…'); }
   }
 }
 
@@ -956,7 +958,7 @@ const decItem = t => { const [ty, pl] = String(t).split(':'); return ITEMS[ty] ?
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
-const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen;
+const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen || AllySystem.state.open;
 function rollType() {
   const ks = Object.keys(ITEMS).filter(k => (ITEMS[k].from || 1) <= floorNo);
   let r = Math.random() * ks.reduce((a, k) => a + ITEMS[k].w, 0);
@@ -1077,6 +1079,7 @@ function newFloor() {
   placeHouse(far);
   placeTraps(far);
   seen = Array.from({ length: MH }, () => new Array(MW).fill(false));
+  AllySystem.newFloor();
   snapVis();
   updateVis();
 }
@@ -1145,7 +1148,7 @@ function triggerTrap(tr) {                                        // 罠を踏�
 function snapVis() { for (const e of [player, ...enemies]) { e.vx = e.x; e.vy = e.y; e.bump = null; } }
 function toTown(fromDungeon) {
   closeStairs();
-  scene = 'town'; buildTown();
+  scene = 'town'; AllySystem.reset(); buildTown();
   enemies = []; floorItems = []; traps = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
   player.lv = 1; player.exp = 0; atkUp = 0; player.maxhp = BASE_HP; player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus(); floorLight = false;
   player.x = fromDungeon ? 17 : 11; player.y = fromDungeon ? 4 : 9;
@@ -1158,6 +1161,7 @@ function toTown(fromDungeon) {
 function enterDungeon() {
   if (uiBlocked() || guardDead()) return;
   if (!unlocked(dungeonId)) dungeonId = 'first';
+  AllySystem.reset();
   scene = 'dungeon'; floorNo = 1; turn = 0; logs = []; fx.length = 0; vfx.length = 0; shakeAmp = 0;
   player.maxhp = BASE_HP; player.hp = player.maxhp; player.lv = 1; player.exp = 0; player.face = [0, 1]; player.st = newStatus();   // レベル・体力は毎回リセット（本家と同じ）
   atkUp = 0; bellyBonus = 0; floorLight = false; belly = maxBelly(); bellyWarn = 99;
@@ -1351,7 +1355,7 @@ function hungerTick() {
 // 1ターン分の処理。倍速のときは2回に1回、敵も空腹も進まない
 function turnCore() {
   const free = scene === 'dungeon' && player.st.haste > 0 && (hasteFlip = !hasteFlip);
-  if (scene === 'dungeon' && !free) enemyTurn();
+  if (scene === 'dungeon' && !free) { AllySystem.tick(); if (!dead) enemyTurn(); }
   if (!free) turn++;
   if (!dead && scene === 'dungeon' && !free) { hungerTick(); ringTick(); }
   if (!dead && !free && turn % Math.max(2, Math.round(10 / (1 + ringN('regen')))) === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;
@@ -1400,7 +1404,7 @@ function strikeOne(e, again) {
   }
   if (e.hp > 0 && wSeal() === 'knock' && Math.random() < 0.3) {
     const dx = Math.sign(e.x - player.x), dy = Math.sign(e.y - player.y);
-    if (geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy)) { e.x += dx; e.y += dy; say('突き飛ばした！'); }
+    if (geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy) && !AllySystem.at(e.x+dx,e.y+dy)) { e.x += dx; e.y += dy; say('突き飛ばした！'); }
   }
   if (e.hp > 0 && !again && wSeal() === 'double' && Math.random() < 0.25) { say('連続攻撃！'); strikeOne(e, true); }
 }
@@ -1421,6 +1425,8 @@ function playerMove(dx, dy, {skipPickup=false}={}) {
   if (dx) player.fl = dx < 0;                                   // 絵は右向きが基本。左へ動くときは反転
   if (!geomOK(player.x, player.y, dx, dy)) { render(); return; }  // 壁：ターン消費なし
   const nx = player.x + dx, ny = player.y + dy;
+  const ally=AllySystem.at(nx,ny);
+  if(ally){if(!ally.following){AllySystem.talk();return;}ally.x=player.x;ally.y=player.y;ally.face=[-dx,-dy];ally.walkStart=now();ally.walkEnd=now()+220;}
   const e = enemyAt(nx, ny);
   if (e) hitEnemy(e);
   else {
@@ -1468,6 +1474,7 @@ function ctxInfo() {
   if (scene === 'dungeon') {
     if (map[player.y][player.x]===STAIRS) return {label:'階段',fn:openStairs};
     if (itemAt(player.x, player.y)) return { label: '拾う', fn: playerPickUp };
+    if(AllySystem.nearby())return {label:'話す',fn:AllySystem.talk};
     return atDungeonShop() ? { label: '店', fn: openWh } : null;
   }
   const t = map[player.y][player.x];
@@ -1509,6 +1516,7 @@ function playerAttack() {
       if (e) { t = e; player.face = [dx, dy]; }
     }
   }
+  if(!t&&AllySystem.nearby()&&!AllySystem.nearby().following){AllySystem.talk();return;}
   if (!t && wSeal() === 'fire' && player.hp >= player.maxhp) {  // 炎飛ばし：HPが満タンなら、離れた敵に炎
     const z = lineTarget();
     if (z) { player.swing = now(); player.attackFace = player.face.slice(); kick(); zapHit(z.e, 8, '炎'); endTurn(); return; }
@@ -1564,6 +1572,7 @@ function enemyTurn() {
     if (S.boost > 0) S.boost--;
     for (let step = 0; step < (T.spd === 'fast' || S.boost > 0 ? 2 : 1); step++) {
       if (!enemies.includes(e)) break;
+      if(!confused && AllySystem.enemyAction(e,T)){if(dead)return;continue;}
       const dist = Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y));
       if (dist <= (ringN('sneak') ? 3 : SIGHT) && los(e.x, e.y, player.x, player.y)) { e.aware = true; e.lost = 0; }
       else if (step === 0 && e.aware && ++e.lost > 10) e.aware = false;
@@ -1573,7 +1582,7 @@ function enemyTurn() {
         for (const [dx, dy] of DIRS8) {
           if (!geomOK(e.x, e.y, dx, dy)) continue;
           const nx = e.x + dx, ny = e.y + dy;
-          if (d[ny][nx] > bd && !enemyAt(nx, ny) && !(nx === player.x && ny === player.y)) { bd = d[ny][nx]; best = [dx, dy]; }
+          if (d[ny][nx] > bd && !enemyAt(nx, ny) && !AllySystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { bd = d[ny][nx]; best = [dx, dy]; }
         }
         if (best) { e.x += best[0]; e.y += best[1]; if (best[0]) e.fl = best[0] < 0; }
         continue;
@@ -1615,7 +1624,7 @@ function enemyTurn() {
       if (T.spd === 'slow' && turn % 2 === 1) break;               // 動きが遅い敵：2ターンに1歩
       if (ai === 'ghost' && !confused && e.aware) {               // 壁抜け：壁を無視してまっすぐ近づく
         const mx = Math.sign(player.x - e.x), my = Math.sign(player.y - e.y), nx = e.x + mx, ny = e.y + my;
-        if (inb(nx, ny) && !enemyAt(nx, ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
+        if (inb(nx, ny) && !enemyAt(nx, ny) && !AllySystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
         continue;
       }
       let mx = 0, my = 0;
@@ -1626,7 +1635,7 @@ function enemyTurn() {
           if (!dx && !dy) continue;
           if (!geomOK(e.x, e.y, dx, dy)) continue;
           const nx = e.x + dx, ny = e.y + dy;
-          if (d[ny][nx] < 0 || enemyAt(nx, ny) || (nx === player.x && ny === player.y)) continue;
+          if (d[ny][nx] < 0 || enemyAt(nx, ny) || AllySystem.at(nx,ny) || (nx === player.x && ny === player.y)) continue;
           if (d[ny][nx] < best) { best = d[ny][nx]; cand = [[dx, dy]]; }
           else if (d[ny][nx] === best && cand.length) cand.push([dx, dy]);
         }
@@ -1636,7 +1645,7 @@ function enemyTurn() {
       }
       if ((mx || my) && geomOK(e.x, e.y, mx, my)) {
         const nx = e.x + mx, ny = e.y + my;
-        if (!enemyAt(nx, ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
+        if (!enemyAt(nx, ny) && !AllySystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
       }
     }
   }
@@ -2015,6 +2024,7 @@ const cache = new Map();
 function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) { cache.set(k, v); $(id).style[prop] = v; } }
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
+  AllySystem.ui();
   if(typeof GameAudio!=='undefined')GameAudio.sync(scene,floorPlan?.theme.id,dead);
   setH('where', scene === 'town' ? `町　踏破${clears}　${DUNGEONS[dungeonId].name}` : `${DUNGEONS[dungeonId].name} ${floorNo}F ${floorPlan?.theme.name || ''}<br><small>ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}</small>`);
   setH('bagc', `持${inv.length}/${MAXBAG}<img class="hud-coin" src="assets/dungeon/experience-v1/coin.png" alt="ギタン"> ${gold.toLocaleString()}G`);
@@ -2316,7 +2326,8 @@ function draw() {
     ctx.fillStyle = TRAPS[tr.kind].col; ctx.font = 'bold ' + Math.round(TS * 0.34) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('!', cx, cy + 1);
   }
   for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
-  for (const e of [...enemies].sort((a, b) => a.vy - b.vy)) if (vis[e.y][e.x]) {
+  for (const e of [...enemies,...(AllySystem.state.actor?[AllySystem.state.actor]:[])].sort((a,b)=>a.vy-b.vy)) if (vis[e.y][e.x]) {
+    if(e.isAlly){AllySystem.draw(ctx,e,t,camX,camY);continue;}
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
     ctx.fillStyle = '#000'; ctx.fillRect(px, py + tilePitchY() - 3, TS, 3);
     ctx.fillStyle = '#e55'; ctx.fillRect(px, py + tilePitchY() - 3, TS * e.hp / e.maxhp, 3);
@@ -2364,6 +2375,7 @@ function draw() {
 }
 // アニメーション：動いている間だけ rAF を回す
 function stepVis(dt) {
+  AllySystem.animate(dt);
   for (const e of [player, ...enemies]) {
     const dx = e.x - e.vx, dy = e.y - e.vy, d = Math.hypot(dx, dy);
     if (e !== player && typeof MonsterSprites !== 'undefined' && MonsterSprites.has(e.kind) && d>.001 && d<=2.5) {
@@ -2380,6 +2392,7 @@ function stepVis(dt) {
   }
 }
 function animating(t) {
+  if(AllySystem.animating(t))return true;
   if (t - fadeT < 350 || (hurtT && t - hurtT < 260) || fx.length || vfx.length || (shakeAmp && t - shakeT0 < shakeLife)) return true;
   if (player.swing && t - player.swing < SWING_MS) return true;
   if (player.action && t-player.action.t0 < player.action.duration) return true;
@@ -2491,9 +2504,10 @@ resize();
 loadExternalAssets();
 loadRig();
 boot();
-if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); DungeonExperience.load(render); }
+if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); AllySystem.load(render); DungeonExperience.load(render); }
 </script>
-<script src="assets/controls-ui.js?v=controls-v1"></script>
+<script src="assets/controls-ui.js?v=yuzunamiki-v1"></script>
 <script src="assets/ergonomic-ui.js?v=hands-v1"></script>
+<script>AllySystem.init();</script>
 </body>
 </html>

@@ -1,0 +1,63 @@
+{
+  "name": "ユズナミキ",
+  "origin": [
+    128,
+    224
+  ],
+  "scale": 0.4036036036036036,
+  "motionSourceScale": 1.6759259259259258,
+  "fixedSWSourceScale": 0.3898450946643718,
+  "mirroring": false,
+  "views": {
+    "S": {
+      "idle": "assets/S.png",
+      "motion": "assets/S-motion.png"
+    },
+    "SW": {
+      "idle": "assets/SW.png",
+      "motion": "assets/SW-motion.png"
+    },
+    "W": {
+      "idle": "assets/W.png",
+      "motion": "assets/W-motion.png"
+    },
+    "NW": {
+      "idle": "assets/NW.png",
+      "motion": "assets/NW-motion.png"
+    },
+    "N": {
+      "idle": "assets/N.png",
+      "motion": "assets/N-motion.png"
+    },
+    "NE": {
+      "idle": "assets/NE.png",
+      "motion": "assets/NE-motion.png"
+    },
+    "E": {
+      "idle": "assets/E.png",
+      "motion": "assets/E-motion.png"
+    },
+    "SE": {
+      "idle": "assets/SE.png",
+      "motion": "assets/SE-motion.png"
+    }
+  },
+  "sha256": {
+    "assets/W-motion.png": "c76be3c30dbfb9c73d44f9bfa60e0c0f9b00b9b84bdcb516a6df717eee716c97",
+    "assets/N.png": "a5b563d6ec37c3695c2c69eb91cea0bd865f342883d09cb0c5b6a5fee908997f",
+    "assets/SE-motion.png": "6b095b92755ac257a120b47a9a2d492929b2229c4e8baf029ddd515cdf37ad8b",
+    "assets/E-motion.png": "55b3c959e4daee95f49cd734e45b430cba9cb51bc5dc8471b1b0a20ee0274b75",
+    "assets/S.png": "c0ba09b63003da370f3df5b2768153dbec203db3da72a7cec328e97139922d47",
+    "assets/NE-motion.png": "160eb334f3c7f77d42c98de18f60077da182b43647e932fe8beff31a140b8512",
+    "assets/NW.png": "862c99b181320e017519b4f351f75e992d6c41addc6fab17143416adb044e841",
+    "assets/E.png": "e3933a605dbe9f1d505798d7d55bb29fb6ac1901547b863867c2e0e4a1149aae",
+    "assets/W.png": "88f807a21aca4e4418724a720886952117313be3a8d24ebddabda38c986be522",
+    "assets/NE.png": "ce4c26d53d4049203365e8ba44610e3b46654c6a5ff50fbb2e1a5a25982da6d5",
+    "assets/SE.png": "fab6363c914555c6aa5023d692ded11935729288762caf5300db5da51f252462",
+    "assets/N-motion.png": "d63986c41cd47afb2aeeae8e181a1f100b293ddc594c7b2de3f1200231f25252",
+    "assets/NW-motion.png": "3919ba37ff8f1e69751552f06bc105dc957eda98e235ab675c5965bba15091ef",
+    "assets/S-motion.png": "0d2a27d7bddd1cf279714113fb8b65a28a6926602a0081b4396dde7120089ac9",
+    "assets/SW.png": "4887db8fb3465c52aad5e7c5915c80098f47238195313c8a6becb97ea6abb829",
+    "assets/SW-motion.png": "b168ac71ceb520f23f2910cddb1310a053eda374dbbeb97dc6edbc05981166d1"
+  }
+}

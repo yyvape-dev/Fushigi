@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-21",
+  "transparentBackground": true,
+  "records": [
+    {
+      "source": "source-art/yuzunamiki-rejected-ninja.png",
+      "status": "rejected clothing",
+      "references": [
+        "user attachment in this conversation"
+      ],
+      "promptSummary": "Create one canonical southeast full-body adult fox ninja ally based on the attached fox woman: pale blonde bob, fox ears and tail, amber eyes, blossom at left temple, right-hand kunai. Initial practical dark plum ninja jacket, leggings and boots proposal. This output was rejected after user specified the reference kimono should remain. Preserve it as history only.",
+      "sha256": "bef1fd6c1338ad63fe11e8578785850e13594e65b1f0021d97d6535479cdb318",
+      "referenceHashes": {}
+    },
+    {
+      "source": "source-art/yuzunamiki-canonical.png",
+      "references": [
+        "source-art/yuzunamiki-rejected-ninja.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "prompt": "Revise FIRST character into her final game-ready canonical full-body SOUTHEAST idle, using SECOND golden-haired hero as exact miniature painterly 3D game rendering/proportion/camera guide. Keep first character's blonde wavy bob, fox ears, single golden fox tail, amber sly confident eyes, pale pink blossom at anatomical LEFT temple, anatomical RIGHT hand silver kunai. Crucial clothing correction from user: she wears a KIMONO, NOT a tight ninja suit. White-to-pale-gray crossed wrap KIMONO with a few large simple charcoal botanical/cloud motifs, broad soft kimono sleeves, gold obi with dark red accent and simple cord, open deep violet haori on back. Simplify all ornament into broad readable shapes. Compact kimono hem approximately knee-length with slight overlapping split for running, bare lower legs with plain dark ankle tabi boots. NO trousers or leggings, no chest armor, no armored wrist/leg plates, no waist pouches, no big knots. Adult woman, tasteful kimono lapel. Keep foxfire small and near tail only. Her MAIN garment must visually read PALE KIMONO with PURPLE HAORI and GOLD OBI. Match reference hero's low 2.7-head-tall proportions and dimensional miniature lighting: large head, small compact body, stubby limbs, soft 3D rounded surfaces, painterly textures, no black anime lineart, no flat illustration. Upper-left soft light, orthographic 26 degrees down, face looks screen-right front three-quarter. Entire head ears tail feet and kunai visible, neutral stable idle feet at same ground level, generous transparent margin on every side, no floor/shadow/text. A single full-body character.",
+      "sha256": "75f7b4efe7e1122fbaa291999fb75100e28dcfd213a32bee6b890bf8ae8db306",
+      "referenceHashes": {
+        "source-art/yuzunamiki-rejected-ninja.png": "bef1fd6c1338ad63fe11e8578785850e13594e65b1f0021d97d6535479cdb318",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "source": "source-art/yuzunamiki-idle.png",
+      "references": [
+        "guides/idle-sheet.png",
+        "source-art/yuzunamiki-canonical.png",
+        "../fushigi-direction-base/assets/hero-base/SE.png"
+      ],
+      "prompt": "Production Fushigi ally sprite sheet. FIRST reference = exact simplified 3D volume and 8 direction camera grid. SECOND reference = locked Yuzunamiki KIMONO character design. THIRD = approved game hero rendering style. Make exactly 8 separate complete full-body idle views in strict 4 columns 2 rows, directions TOP S(front), SW(front screen-left), W(left profile), NW(back-left); BOTTOM N(back), NE(back-right), E(right profile), SE(front screen-right). Match ONE identical adult fox woman with blonde wavy bob, brown fox ears, single large golden tail behind hips, pale blossom at anatomical LEFT temple. PALE WHITE/GRAY KIMONO with a few broad charcoal floral motifs, gold obi with dark red narrow accent, PURPLE HAORI broad sleeves. Short overlapping knee kimono hem, bare lower legs, plain dark tabi ankle boots. Silver kunai in anatomical RIGHT hand, LEFT empty. She holds weapon as in canonical even from back. No armor, ninja pants, leggings, bags, pipe, bowl. Friendly sly small face. About 2.7 heads tall, same proportions as hero, dimensional miniature painterly 3D surfaces, upper-left soft light, orthographic camera 26 degrees downward. Rotate actual anatomy: NO face on rear of head, blossom only visible from its real side; do NOT mirror asymmetric weapon hand. Stable idle pose and same scale all cells. Each body ears tail kunai feet fully INSIDE its own cell, generous blank transparent gutters between rows and columns and outer margin. No text, frames, backgrounds, floor, shadows. Tiny violet foxfire near tail is okay but keep most pixels character.",
+      "sha256": "6db4863bc87fa43efce53194c52734ae5c260c882d25b45aed7898be2326f3b8",
+      "referenceHashes": {
+        "guides/idle-sheet.png": "6fcf9f9d64d9a1e6bcbd098335356a257cc4b669dc718f139dbed920e043f5da",
+        "source-art/yuzunamiki-canonical.png": "75f7b4efe7e1122fbaa291999fb75100e28dcfd213a32bee6b890bf8ae8db306",
+        "../fushigi-direction-base/assets/hero-base/SE.png": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d"
+      }
+    },
+    {
+      "source": "source-art/yuzunamiki-SW-fixed.png",
+      "references": [
+        "guides/0-SW.png",
+        "source-art/yuzunamiki-canonical.png",
+        "../fushigi-direction-base/assets/hero-base/SW.png"
+      ],
+      "prompt": "One complete full-body SOUTHWEST idle view of Yuzunamiki, EXACT direction of FIRST mannequin guide and THIRD hero view. Nose, torso and toes MUST point diagonally toward SCREEN LEFT and down, NOT screen-right. SECOND reference is character design only, rotate it to southwest. Adult fox woman, blonde short wavy bob, brown fox ears, single fluffy golden tail BEHIND hips toward screen-right, pale blossom at anatomical LEFT temple, pale white gray kimono with simple charcoal flower motifs, gold obi with thin red accent, purple haori and wide sleeves, short knee overlapping kimono hem, bare lower legs, dark plain tabi ankle boots, small silver kunai held low in anatomical RIGHT hand, left hand relaxed empty. Right arm is on farther side in this view, no handedness mirror. 2.7-head-tall compact game miniature like hero, dimensional painterly 3D style and soft upper-left lighting, orthographic 26 degree downward camera. Idle feet stable, entire ears head feet tail weapon visible. Only ONE character, center in generous transparent padding all sides. Absolutely TRANSPARENT background, no scenery, no shadow, no floor, no text.",
+      "sha256": "9bfd72ebf0a17f61844af9446ada771d6d7f6ffbdff1003ca16e970a586fd5ea",
+      "referenceHashes": {
+        "guides/0-SW.png": "0ba494d224bd992584d77452f3680807d1303cbe67be61e910e338afa3bff3b2",
+        "source-art/yuzunamiki-canonical.png": "75f7b4efe7e1122fbaa291999fb75100e28dcfd213a32bee6b890bf8ae8db306",
+        "../fushigi-direction-base/assets/hero-base/SW.png": "2d2201931a30a26c9cca35aaa1100dadcb2d5c69169237fb66a225a011e15fc6"
+      }
+    },
+    {
+      "source": "source-art/yuzunamiki-motion.png",
+      "references": [
+        "guides/motion-sheet.png",
+        "source-art/locked-idle-reference.png",
+        "source-art/yuzunamiki-canonical.png"
+      ],
+      "prompt": "Create production WALK and KUNAI ATTACK sprite poses for the SAME Yuzunamiki KIMONO fox-woman ally. FIRST reference is exact 4-column x4-row pose/camera guide. SECOND reference is the LOCKED EIGHT DIRECTION idle sheet ordered S,SW,W,NW,N,NE,E,SE left-to-right; every pose MUST refer to its matching direction here. THIRD reference is canonical design. SIXTEEN separate full-body characters, EXACT 4 columns 4 rows. ROW1 walk S(front),SW(nose screen-LEFT),W(left profile),NW(back-left). ROW2 walk N(back),NE(back-right),E(right profile),SE(nose screen-RIGHT). ROW3 kunai attack same S,SW,W,NW. ROW4 kunai attack N,NE,E,SE. Walk: one foot clearly takes a step, arms and broad sleeves swing, body steady. Attack: anatomical RIGHT hand throws/thrusts the silver kunai DIRECTLY along the direction she faces; S points toward bottom center/camera, N away toward top center, W left, E right; diagonal directions diagonally. Kunai still visible in hand at release, LEFT hand balances. Preserve handedness, no flips. ALL cells SAME one character scale, 2.7-head tall, same upper-left lighting, orthographic26deg camera. Blonde short wavy bob, brown fox ears, ONE golden fox tail, pale blossom at anatomical LEFT temple. White-gray KIMONO, sparse charcoal motifs, gold/red obi, PURPLE HAORI with broad sleeves; short knee overlapping hem, bare lower legs, plain dark ankle tabi. NO leggings, no ninja suit, no armor. Face small, sly friendly. Painterly dimensional miniature 3D game rendering matching idle. No giant foxfire trails, no ground shadows. Every head ears tail kunai and feet fully inside its own cell with GENEROUS transparent gutters on every side, never crop, no characters touching. TRANSPARENT empty background, NO text labels/borders/floors/scenery.",
+      "note": "The locked reference was named locked-idle-directions.png during generation; preserved here before final common-scale registration.",
+      "sha256": "1a5893fbcac880cd5e2fb1a69478696bc798910399f5cafa700e1d138dfae275",
+      "referenceHashes": {
+        "guides/motion-sheet.png": "e70beeaf7cbcd04bbef89a74f86098ffe03223b64579899be10cc3979e538b41",
+        "source-art/locked-idle-reference.png": "a07030bc3417146426c5078571498dfc1329c638a413d48b8e74270d16d618ea",
+        "source-art/yuzunamiki-canonical.png": "75f7b4efe7e1122fbaa291999fb75100e28dcfd213a32bee6b890bf8ae8db306"
+      }
+    }
+  ]
+}
