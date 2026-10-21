@@ -11,3 +11,7 @@
 ## 矢印位置の修正・最新版
 
 旧素材への追加矢印はユーザー指摘により廃止。`compass-geometry.svg` を正確な8方向ガイドとしてPNG化し、質感のみ画像生成で制作。最新版は `assets/ui-art/lacquer-compass-v3.png`（回転なし・追加矢印なし）。プロンプトは `compass-v3-prompt.txt`。攻撃は `attack-medallion.png` の生成一枚絵へ変更。押下中の実画面は `../compass-844-pressed.png` など。旧記述の22.5度回転・別レイヤー矢印は廃止。ガイドのPNG化はInkscapeのSVG書出し。生成PNGそのものは加工なし。
+
+## 宝石液体HUD
+
+`assets/ui-art/gem-liquid-atlas.png` は上半分エメラルド・下半分琥珀の画像生成原画（加工なし）。CSSで上下を選び、ゲーム値で幅を変更。プロンプトは `gem-liquid-prompt.txt`。検証 `../check_gem_bars.py`、画面 `../gem-bars-844-50.png` など。

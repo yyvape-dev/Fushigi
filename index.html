@@ -82,6 +82,7 @@ canvas{display:block;touch-action:none}
 <link rel="stylesheet" href="assets/ergonomic-ui.css?v=hands-v1">
 <link rel="stylesheet" href="assets/control-skin.css?v=brass-v1">
 <link rel="stylesheet" href="assets/compass-ui.css?v=lacquer-v3">
+<link rel="stylesheet" href="assets/gem-bars.css?v=gem-v1">
 </head>
 <body>
 <div id="hud"><span id="where"></span><span id="bagc"></span><div id="bars"><div class="bar"><i id="hpf"></i><b id="hp"></b></div><div class="bar bl" id="blbar"><i id="blf"></i><b id="belly"></b></div></div></div>
@@ -2012,11 +2013,11 @@ function refreshUI() {
   setH('belly', `満腹度 ${belly}/${maxBelly()}`);
   setS('blbar', 'display', scene === 'dungeon' ? 'block' : 'none');
   setS('blf', 'width', Math.max(0, Math.min(100, belly / maxBelly() * 100)).toFixed(1) + '%');
-  setS('blf', 'background', belly <= 10 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
+  setS('blf', 'filter', belly <= 10 ? 'hue-rotate(-38deg) saturate(1.35)' : '');
   setH('hp', scene === 'dungeon' ? `Lv${player.lv}　HP ${player.hp}/${player.maxhp}` : `HP ${player.hp}/${player.maxhp}`);
   const hpr = Math.max(0, Math.min(1, player.hp / player.maxhp));
   setS('hpf', 'width', (hpr * 100).toFixed(1) + '%');
-  setS('hpf', 'background', hpr <= 0.25 ? 'linear-gradient(#ff8a8a,#c02020)' : '');
+  setS('hpf', 'filter', hpr <= 0.25 ? 'hue-rotate(-110deg) saturate(1.35)' : '');
   setH('log', logHtml(logs));
   { const el = $('log'); if (el.classList) { el.classList.toggle('off', !logs.length || histOpen || now() - logT > LOG_MS); el.classList.toggle('pos-b', logPos === 1); } }
   setH('quick', quick ? `${dispName(quick)}<br><small>×${invCount(quick)}</small>` : '−');

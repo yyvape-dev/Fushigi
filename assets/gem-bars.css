@@ -1,0 +1,10 @@
+/* Original generated emerald/amber liquid atlas; width remains the true game value. */
+#bars .bar{height:20px;border:1px solid #c8ab72;border-radius:12px;background:linear-gradient(#100f0c,#29251c);box-shadow:0 2px 5px #0008,inset 0 0 0 1px #060906,inset 0 2px 4px #000b;isolation:isolate}
+#bars .bar i{border-radius:10px;background-image:url('ui-art/gem-liquid-atlas.png');background-size:100% 200%;background-position:center top;background-repeat:no-repeat;box-shadow:inset 0 1px 2px #daffe280,inset 0 -2px 3px #021e13a6,inset -1px 0 2px #ecffce66;transition:width .2s,filter .2s;overflow:hidden}
+#bars .bar.bl i{background-image:url('ui-art/gem-liquid-atlas.png');background-size:100% 200%;background-position:center bottom;box-shadow:inset 0 1px 2px #fff0cb80,inset 0 -2px 3px #36150099,inset -1px 0 2px #fff6d466}
+#bars .bar::after{content:"";position:absolute;inset:1px;z-index:1;border-radius:10px;background:linear-gradient(#ffffff36,transparent 38%,#00000018 75%,#ffffff0a);box-shadow:inset 0 0 0 1px #fff2;pointer-events:none}
+#bars .bar i::after{content:"";position:absolute;inset:0;background:linear-gradient(105deg,transparent 25%,#fff4 48%,transparent 65%);opacity:.12;animation:gem-breathe 5s ease-in-out infinite alternate;pointer-events:none}
+#bars .bar.bl i::after{animation-delay:-2.5s}
+#bars .bar b{z-index:2;line-height:18px;color:#fff9e7;font-weight:700;font-size:12px;text-shadow:0 1px 2px #000,1px 0 2px #000,-1px 0 2px #000}
+@keyframes gem-breathe{to{opacity:.4;transform:translateX(12%)}}
+@media(prefers-reduced-motion:reduce){#bars .bar i::after{animation:none}#bars .bar i{transition:none}}
