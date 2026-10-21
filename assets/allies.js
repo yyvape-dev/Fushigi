@@ -3,7 +3,7 @@
  const D=['S','SW','W','NW','N','NE','E','SE'];
  const src=typeof document!=='undefined'&&document.currentScript?.src;
  const base=src?new URL('../fushigi-allies-v1/',src).href:'fushigi-allies-v1/';
- const state={actor:null,used:false,open:false,renderScale:1.25,ready:false,error:null,images:{}};
+ const state={actor:null,used:false,open:false,renderScale:1.20,registration:{},ready:false,error:null,images:{}};
  const distance=(a,b)=>Math.max(Math.abs(a.x-b.x),Math.abs(a.y-b.y));
  const at=(x,y)=>state.actor?.x===x&&state.actor?.y===y?state.actor:null;
  const stats=a=>({attack:Math.max(1,Math.round(playerAtk()+2+(a.lv-1)*.8)-(a.poison||0)),defense:Math.max(0,defBonus()-1+Math.floor((a.lv-1)/3)),maxhp:26+4*(a.lv-1)});
@@ -64,14 +64,14 @@
   const choices=DIRS8.map(([dx,dy])=>({x:e.x+dx,y:e.y+dy,dx,dy})).filter(c=>inb(c.x,c.y)&&(T.ai==='ghost'||geomOK(e.x,e.y,c.dx,c.dy))&&!enemyAt(c.x,c.y)&&!at(c.x,c.y)&&!(player.x===c.x&&player.y===c.y)&&distance(c,a)<dist).sort((x,y)=>distance(x,a)-distance(y,a));
   if(choices.length){e.x=choices[0].x;e.y=choices[0].y;}return true;
  }
- async function load(redraw){try{const paths=D.flatMap(d=>[d+'.png',d+'-motion.png']);await Promise.all(paths.map(path=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{state.images[path]=im;resolve();};im.onerror=()=>reject(Error(path));im.src=base+'assets/'+path;})));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('助っ人画像',e);redraw();}}
- function draw(g,a,t,camX,camY){const px=camX+a.vx*TS,py=camY+a.vy*tilePitchY(),s=TS*CHAR_K[charPref]*state.renderScale/192,x=px+TS/2,y=py+tilePitchY();
-  g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.ellipse(x,y-5,TS*.28,TS*.09,0,0,Math.PI*2);g.fill();
-  const attacking=a.attackStart!=null&&t-a.attackStart<300,walking=t<a.walkEnd,face=attacking?a.attackFace:a.face,d=MonsterSprites.direction(face||[0,1]);let image=state.images[d+'.png'],sx=0;
-  if(attacking&&t-a.attackStart>=35&&t-a.attackStart<240){image=state.images[d+'-motion.png'];sx=256;}else if(walking&&Math.floor((t-a.walkStart)/80)%2===0){image=state.images[d+'-motion.png'];}
+ async function load(redraw){try{const response=await fetch(base+'ally.json?v=ground-v3');if(!response.ok)throw Error('ally.json '+response.status);const metadata=await response.json();state.registration=metadata.views;const paths=D.flatMap(d=>[d+'.png',d+'-motion.png']);await Promise.all(paths.map(path=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{state.images[path]=im;resolve();};im.onerror=()=>reject(Error(path));im.src=base+'assets/'+path;})));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('助っ人画像',e);redraw();}}
+ function draw(g,a,t,camX,camY){const px=camX+a.vx*TS,py=camY+a.vy*tilePitchY(),s=TS*CHAR_K[charPref]*state.renderScale/192,x=px+TS/2,y=py+tilePitchY()*.9;
+  g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.ellipse(x,y,TS*.28,TS*.09,0,0,Math.PI*2);g.fill();
+  const attacking=a.attackStart!=null&&t-a.attackStart<300,walking=t<a.walkEnd,face=attacking?a.attackFace:a.face,d=MonsterSprites.direction(face||[0,1]);let image=state.images[d+'.png'],sx=0,pose='idle';
+  if(attacking&&t-a.attackStart>=35&&t-a.attackStart<240){image=state.images[d+'-motion.png'];sx=256;pose='attack';}else if(walking&&Math.floor((t-a.walkStart)/80)%2===0){image=state.images[d+'-motion.png'];pose='walk';}
   if(a.boost>0||t-(a.castStart||-9999)<600){g.save();const r=TS*.6,glow=g.createRadialGradient(x,y-TS*.45,3,x,y-TS*.45,r);glow.addColorStop(0,'#b55bff55');glow.addColorStop(1,'#b55bff00');g.fillStyle=glow;g.fillRect(x-r,y-TS*.45-r,r*2,r*2);g.restore();}
-  if(image)g.drawImage(image,sx,0,256,256,x-128*s,y-224*s,256*s,256*s);
-  g.fillStyle='#16111f';g.fillRect(px,y-3,TS,3);g.fillStyle=a.following?'#a3d4ff':'#debfff';g.fillRect(px,y-3,TS*a.hp/a.maxhp,3);
+  if(image){const anchor=state.registration[d]?.anchors?.[pose]||[128,224];g.drawImage(image,sx,0,256,256,x-anchor[0]*s,y-anchor[1]*s,256*s,256*s);}
+  g.fillStyle='#16111f';g.fillRect(px,py+tilePitchY()-3,TS,3);g.fillStyle=a.following?'#a3d4ff':'#debfff';g.fillRect(px,py+tilePitchY()-3,TS*a.hp/a.maxhp,3);
   g.font=Math.max(9,Math.round(TS*.18))+'px sans-serif';g.textAlign='center';g.fillStyle='#f5d7ff';g.fillText(a.following?'ユズナミキ Lv'+a.lv:'ユズナミキ［話す］',x,y-192*s-4);
   return [px,py];
  }

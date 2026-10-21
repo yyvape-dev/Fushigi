@@ -1,0 +1,24 @@
+[
+  {
+    "viewport": "landscape",
+    "scales": [
+      1.17,
+      1.2,
+      1.25
+    ],
+    "directions": 8,
+    "registeredPoses": 24,
+    "errors": []
+  },
+  {
+    "viewport": "portrait",
+    "scales": [
+      1.17,
+      1.2,
+      1.25
+    ],
+    "directions": 8,
+    "registeredPoses": 24,
+    "errors": []
+  }
+]

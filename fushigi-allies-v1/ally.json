@@ -11,35 +11,307 @@
   "views": {
     "S": {
       "idle": "assets/S.png",
-      "motion": "assets/S-motion.png"
+      "motion": "assets/S-motion.png",
+      "anchors": {
+        "idle": [
+          136.5,
+          215
+        ],
+        "walk": [
+          124.0,
+          215
+        ],
+        "attack": [
+          123.5,
+          215
+        ]
+      },
+      "bootBands": {
+        "idle": [
+          106,
+          199,
+          167,
+          223
+        ],
+        "walk": [
+          112,
+          199,
+          136,
+          223
+        ],
+        "attack": [
+          112,
+          199,
+          135,
+          223
+        ]
+      }
     },
     "SW": {
       "idle": "assets/SW.png",
-      "motion": "assets/SW-motion.png"
+      "motion": "assets/SW-motion.png",
+      "anchors": {
+        "idle": [
+          114.0,
+          216
+        ],
+        "walk": [
+          113.0,
+          214
+        ],
+        "attack": [
+          136.0,
+          214
+        ]
+      },
+      "bootBands": {
+        "idle": [
+          87,
+          200,
+          141,
+          224
+        ],
+        "walk": [
+          88,
+          198,
+          138,
+          222
+        ],
+        "attack": [
+          78,
+          198,
+          194,
+          222
+        ]
+      }
     },
     "W": {
       "idle": "assets/W.png",
-      "motion": "assets/W-motion.png"
+      "motion": "assets/W-motion.png",
+      "anchors": {
+        "idle": [
+          116.5,
+          215
+        ],
+        "walk": [
+          108.0,
+          214
+        ],
+        "attack": [
+          138.5,
+          214
+        ]
+      },
+      "bootBands": {
+        "idle": [
+          104,
+          199,
+          129,
+          223
+        ],
+        "walk": [
+          71,
+          198,
+          145,
+          222
+        ],
+        "attack": [
+          71,
+          198,
+          206,
+          222
+        ]
+      }
     },
     "NW": {
       "idle": "assets/NW.png",
-      "motion": "assets/NW-motion.png"
+      "motion": "assets/NW-motion.png",
+      "anchors": {
+        "idle": [
+          123.0,
+          215
+        ],
+        "walk": [
+          135.5,
+          214
+        ],
+        "attack": [
+          135.0,
+          214
+        ]
+      },
+      "bootBands": {
+        "idle": [
+          97,
+          199,
+          149,
+          223
+        ],
+        "walk": [
+          92,
+          198,
+          179,
+          222
+        ],
+        "attack": [
+          82,
+          198,
+          188,
+          222
+        ]
+      }
     },
     "N": {
       "idle": "assets/N.png",
-      "motion": "assets/N-motion.png"
+      "motion": "assets/N-motion.png",
+      "anchors": {
+        "idle": [
+          122.5,
+          215
+        ],
+        "walk": [
+          130.0,
+          214
+        ],
+        "attack": [
+          125.5,
+          214
+        ]
+      },
+      "bootBands": {
+        "idle": [
+          88,
+          199,
+          157,
+          223
+        ],
+        "walk": [
+          116,
+          198,
+          144,
+          222
+        ],
+        "attack": [
+          73,
+          198,
+          178,
+          222
+        ]
+      }
     },
     "NE": {
       "idle": "assets/NE.png",
-      "motion": "assets/NE-motion.png"
+      "motion": "assets/NE-motion.png",
+      "anchors": {
+        "idle": [
+          128.5,
+          215
+        ],
+        "walk": [
+          129.0,
+          215
+        ],
+        "attack": [
+          126.5,
+          215
+        ]
+      },
+      "bootBands": {
+        "idle": [
+          102,
+          199,
+          155,
+          223
+        ],
+        "walk": [
+          112,
+          199,
+          146,
+          223
+        ],
+        "attack": [
+          62,
+          199,
+          191,
+          223
+        ]
+      }
     },
     "E": {
       "idle": "assets/E.png",
-      "motion": "assets/E-motion.png"
+      "motion": "assets/E-motion.png",
+      "anchors": {
+        "idle": [
+          138.5,
+          215
+        ],
+        "walk": [
+          140.5,
+          214
+        ],
+        "attack": [
+          107.0,
+          214
+        ]
+      },
+      "bootBands": {
+        "idle": [
+          125,
+          199,
+          152,
+          223
+        ],
+        "walk": [
+          100,
+          198,
+          181,
+          222
+        ],
+        "attack": [
+          43,
+          198,
+          171,
+          222
+        ]
+      }
     },
     "SE": {
       "idle": "assets/SE.png",
-      "motion": "assets/SE-motion.png"
+      "motion": "assets/SE-motion.png",
+      "anchors": {
+        "idle": [
+          143.5,
+          215
+        ],
+        "walk": [
+          150.5,
+          215
+        ],
+        "attack": [
+          128.0,
+          215
+        ]
+      },
+      "bootBands": {
+        "idle": [
+          117,
+          199,
+          170,
+          223
+        ],
+        "walk": [
+          119,
+          199,
+          182,
+          223
+        ],
+        "attack": [
+          73,
+          199,
+          183,
+          223
+        ]
+      }
     }
   },
   "sha256": {
