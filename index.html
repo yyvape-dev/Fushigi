@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Fushigi Core</title>
 <link rel="stylesheet" href="assets/dungeon-experience.css?v=experience-v1">
+<link rel="stylesheet" href="assets/controls-ui.css?v=controls-v1">
 <style>
 html,body{margin:0;height:100%;background:#0d0d12;color:#ddd;font-family:monospace;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 canvas{display:block;touch-action:none}
@@ -85,11 +86,13 @@ canvas{display:block;touch-action:none}
 <canvas id="c"></canvas>
 
 <div id="lft">
+  <button class="btn" id="menubtn">メニュー</button>
   <button class="btn" id="logbtn">履歴</button>
   <button class="btn" id="pick"></button>
   <button class="btn" id="quick">−</button>
   <button class="btn" id="bagbtn">持物<br><small>0</small></button>
 </div>
+<div id="moveModes"><button data-mode="turn" aria-pressed="false">向き</button><button data-mode="diagonal" aria-pressed="false">斜め</button><button data-mode="dash" aria-pressed="false">走る</button><span id="controlHint">移動</span></div>
 <div id="act"><button class="btn" id="atk">Attack</button></div>
 <div id="pad">
   <button class="btn dp" data-d="-1,-1">↖</button>
@@ -103,6 +106,7 @@ canvas{display:block;touch-action:none}
   <button class="btn dp" data-d="1,1">↘</button>
 </div>
 
+<div id="gameMenu" role="dialog" aria-modal="true" aria-label="メニュー" hidden><header>メニュー<button class="sm" id="menuClose">戻る</button></header><div id="menuList"></div><aside id="menuInfo" hidden></aside><footer>↑ ↓ 選ぶ　Enter 決定　Esc 戻る</footer></div>
 <div id="bag" class="panel" hidden>
   <div class="phead"><span class="ptitle" id="bagTitle"></span><button class="sm" id="autoBtn"></button><button class="sm" id="cfgBtn">設定</button><button class="sm" id="bagClose">閉じる</button></div>
   <div class="tabs" id="bagTabs"></div>
@@ -905,7 +909,7 @@ let uid = 0;
 let bagOpen = false, bagTab = '全部', bagSel = null;
 let bagActionMode = false, bagActionIndex = 0, stairsOpen = false, stairsChoice = 0;
 let whOpen = false, whSide = 'bag', whSel = null, whMsg = '';
-let cfgOpen = false, DPR = 1;
+let cfgOpen = false, menuOpen=false, DPR = 1;
 let bellyBonus = 0, atkUp = 0, floorLight = false, hasteFlip = false;   // この冒険の間だけ有効：最大満腹度の増減／ちからの草／この階があかるい／倍速の交互フラグ
 const BASE_HP = 20;
 let belly = MAXBELLY, bellyWarn = 99, hungerPref = 0;   // 満腹度（%）／直近の警告段階／減る速さ 0=標準 1=速い(確認用)
@@ -943,7 +947,7 @@ const decItem = t => { const [ty, pl] = String(t).split(':'); return ITEMS[ty] ?
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
-const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen || stairsOpen;
+const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen;
 function rollType() {
   const ks = Object.keys(ITEMS).filter(k => (ITEMS[k].from || 1) <= floorNo);
   let r = Math.random() * ks.reduce((a, k) => a + ITEMS[k].w, 0);
@@ -1400,7 +1404,7 @@ function takeFloor(f) {
 }
 
 // 移動（敵のマスへ動けば体当たり攻撃）。(0,0)は待機
-function playerMove(dx, dy) {
+function playerMove(dx, dy, {skipPickup=false}={}) {
   if (uiBlocked() || guardDead()) return;
   if (!dx && !dy) { endTurn(); return; }
   if (player.st.confuse > 0) { const r = DIRS8[rnd(0, 7)]; dx = r[0]; dy = r[1]; }          // 混乱：向きがでたらめ
@@ -1428,8 +1432,8 @@ function playerMove(dx, dy) {
       if (tr && triggerTrap(tr)) return;
       checkHouse();
       const f = itemAt(player.x, player.y);
-      if (f && f.item.type === 'gold') { gold += f.item.plus; floorItems.splice(floorItems.indexOf(f), 1); fxText(player.x, player.y, '+' + f.item.plus + 'G', '#ffd54a'); say(`${f.item.plus}ギタンを拾った。（所持金 ${gold}G）`); }
-      else if (f) { if (autoPick) takeFloor(f); else say(`足元に${itemName(f.item)}がある。`); }
+      if (f && !skipPickup && f.item.type === 'gold') { gold += f.item.plus; floorItems.splice(floorItems.indexOf(f), 1); fxText(player.x, player.y, '+' + f.item.plus + 'G', '#ffd54a'); say(`${f.item.plus}ギタンを拾った。（所持金 ${gold}G）`); }
+      else if (f) { if (autoPick && !skipPickup) takeFloor(f); else say(`足元に${itemName(f.item)}がある。`); }
     }
   }
   endTurn();
@@ -2017,7 +2021,7 @@ function refreshUI() {
   const c = ctxInfo();
   setH('pick', c ? c.label : '');
   $('pick').style.display = c ? 'block' : 'none';
-  setH('atk', scene === 'town' ? '決定' : 'Attack');
+  setH('atk', scene === 'town' ? '決定' : '攻撃');
 }
 function tileKey(x, y) {
   const t = map[y][x], v = (((x * 73856093) ^ (y * 19349663)) >>> 0) & 3;
@@ -2385,7 +2389,7 @@ function render() { draw(); kick(); }
 //  入力：画面ボタン（十字キー・Attack/決定・状況ボタン・クイック）
 // =====================================================================
 let holdT = 0, holdI = 0;
-function holdStop() { clearTimeout(holdT); clearInterval(holdI); holdT = holdI = 0; }
+function holdStop() { if(typeof stopRun==='function')stopRun(); clearTimeout(holdT); clearInterval(holdI); holdT = holdI = 0; }
 function capture(b, ev) { try { b.setPointerCapture(ev.pointerId); } catch (_) {} }
 document.querySelectorAll('.dp').forEach(b => {
   const [dx, dy] = b.dataset.d.split(',').map(Number);
@@ -2393,11 +2397,12 @@ document.querySelectorAll('.dp').forEach(b => {
   b.addEventListener('pointerdown', ev => {
     ev.preventDefault(); capture(b, ev); b.classList.add('on');
     holdStop();
+    dashBlocked=false;
     const wasDead = dead;
-    playerMove(dx, dy);
-    if (wasDead || !repeat) return;
+    controlsMove(dx, dy);
+    if (wasDead || !repeat || controlMode==='dash') return;
     holdT = setTimeout(() => {
-      holdI = setInterval(() => { if (dead || uiBlocked()) { holdStop(); return; } playerMove(dx, dy); }, 120);
+      holdI = setInterval(() => { if (dead || uiBlocked() || controlMode==='dash') { holdStop(); return; } controlsMove(dx, dy); }, 120);
     }, 280);
   });
   const up = () => { b.classList.remove('on'); holdStop(); };
@@ -2407,7 +2412,7 @@ document.querySelectorAll('.dp').forEach(b => {
 });
 function bindAction(id, fn) {
   const b = $(id);
-  b.addEventListener('pointerdown', ev => { ev.preventDefault(); capture(b, ev); b.classList.add('on'); fn(); });
+  b.addEventListener('pointerdown', ev => { ev.preventDefault(); capture(b, ev); holdStop(); b.classList.add('on'); fn(); });
   const up = () => b.classList.remove('on');
   b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up); b.addEventListener('lostpointercapture', up);
 }
@@ -2429,6 +2434,7 @@ const KEYS = {
 };
 addEventListener('keydown', ev => {
   const k = ev.key;
+  if(typeof controlsKey==='function'&&controlsKey(ev))return;
   if(stairsOpen){ev.preventDefault();if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(k)){stairsChoice=1-stairsChoice;updateStairsChoice();}else if(['Enter','z','x'].includes(k))chooseStairs(stairsChoice===0);else if(k==='Escape')chooseStairs(false);return;}
   if (k === 'Escape' && histOpen) { closeHist(); return; }
   if (histOpen) { if (k === 'v') closeHist(); return; }
@@ -2465,7 +2471,7 @@ cv.addEventListener('pointerup', ev => {
     return;
   }
   const i = (Math.round(Math.atan2(dy, dx) / (Math.PI / 4)) + 8) % 8;
-  playerMove(DIRS[i][0], DIRS[i][1]);
+  if(controlMode==='dash'){controlsMove(DIRS[i][0],DIRS[i][1],'walk');}else controlsMove(DIRS[i][0],DIRS[i][1]);
 });
 addEventListener('resize', resize);
 
@@ -2475,5 +2481,6 @@ loadRig();
 boot();
 if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); DungeonExperience.load(render); }
 </script>
+<script src="assets/controls-ui.js?v=controls-v1"></script>
 </body>
 </html>

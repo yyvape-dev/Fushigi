@@ -1,0 +1,23 @@
+[
+  {
+    "viewport": "landscape",
+    "controlsAndDashSafety": true,
+    "keyboardTouch": true,
+    "menuBackFlow": true,
+    "errors": []
+  },
+  {
+    "viewport": "portrait",
+    "controlsAndDashSafety": true,
+    "keyboardTouch": true,
+    "menuBackFlow": true,
+    "errors": []
+  },
+  {
+    "viewport": "desktop",
+    "controlsAndDashSafety": true,
+    "keyboardTouch": true,
+    "menuBackFlow": true,
+    "errors": []
+  }
+]
