@@ -25,7 +25,9 @@
   const w=state.weaponCatalog.find(w=>w.key===weapon);
   // Preserve original item identity for legacy gear outside the approved catalogs.
   if(w){meta.equipmentAssets.weapon={...w};equipment.weapon=state.weapons[weapon];}
-  else if(state.legacy[weapon]){const im=state.legacy[weapon];meta.equipmentAssets.weapon={grip:[im.width*.5,im.height*.8],renderScale:.66};equipment.weapon=im;}
+  // Legacy art is 512px high; catalog art is 256px. Normalize its logical size
+  // while keeping the grip in source pixels, for idle, attack and action poses.
+  else if(state.legacy[weapon]){const im=state.legacy[weapon];meta.equipmentAssets.weapon={grip:[im.width*.5,im.height*.8],renderScale:.66*256/im.height};equipment.weapon=im;}
   const sh=state.shieldCatalog.find(s=>s.key===shield);
   if(sh){
    meta.equipmentAssets.shield={...meta.equipmentAssets.shield,grip:sh.views.front.grip,renderScale:sh.renderScale};
