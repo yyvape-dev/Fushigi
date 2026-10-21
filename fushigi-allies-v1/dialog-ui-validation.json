@@ -1,0 +1,72 @@
+[
+  {
+    "layout": "portrait-right",
+    "dialogBottom": true,
+    "portrait": true,
+    "focusAndRecruit": true,
+    "zeroTurnConversation": true,
+    "partyAvoidsControls": true,
+    "threeSlots": true,
+    "errors": []
+  },
+  {
+    "layout": "portrait-left",
+    "dialogBottom": true,
+    "portrait": true,
+    "focusAndRecruit": true,
+    "zeroTurnConversation": true,
+    "partyAvoidsControls": true,
+    "threeSlots": true,
+    "errors": []
+  },
+  {
+    "layout": "portrait-both",
+    "dialogBottom": true,
+    "portrait": true,
+    "focusAndRecruit": true,
+    "zeroTurnConversation": true,
+    "partyAvoidsControls": true,
+    "threeSlots": true,
+    "errors": []
+  },
+  {
+    "layout": "small-right",
+    "dialogBottom": true,
+    "portrait": true,
+    "focusAndRecruit": true,
+    "zeroTurnConversation": true,
+    "partyAvoidsControls": true,
+    "threeSlots": true,
+    "errors": []
+  },
+  {
+    "layout": "small-both",
+    "dialogBottom": true,
+    "portrait": true,
+    "focusAndRecruit": true,
+    "zeroTurnConversation": true,
+    "partyAvoidsControls": true,
+    "threeSlots": true,
+    "errors": []
+  },
+  {
+    "layout": "landscape-both",
+    "dialogBottom": true,
+    "portrait": true,
+    "focusAndRecruit": true,
+    "zeroTurnConversation": true,
+    "partyAvoidsControls": true,
+    "threeSlots": true,
+    "errors": []
+  },
+  {
+    "layout": "landscape-right",
+    "dialogBottom": true,
+    "portrait": true,
+    "focusAndRecruit": true,
+    "zeroTurnConversation": true,
+    "partyAvoidsControls": true,
+    "threeSlots": true,
+    "errors": []
+  }
+]

@@ -8,7 +8,7 @@
  const at=(x,y)=>state.actor?.x===x&&state.actor?.y===y?state.actor:null;
  const stats=a=>({attack:Math.max(1,Math.round(playerAtk()+2+(a.lv-1)*.8)-(a.poison||0)),defense:Math.max(0,defBonus()-1+Math.floor((a.lv-1)/3)),maxhp:26+4*(a.lv-1)});
  const live=()=>scene==='dungeon'&&state.actor?.following&&state.actor.hp>0;
- function hide(){state.open=false;const el=document.getElementById('allyPrompt');if(el)el.hidden=true;}
+ function hide(){state.open=false;document.body?.classList?.remove('ally-dialog-open');const el=document.getElementById('allyPrompt');if(el)el.hidden=true;if(state.returnFocus?.isConnected)state.returnFocus.focus({preventScroll:true});state.returnFocus=null;}
  function reset(){state.actor=null;state.used=false;hide();}
  function make(x,y){const lv=Math.max(1,player.lv);return {kind:'yuzunamiki',isAlly:true,x,y,vx:x,vy:y,lv,exp:0,hp:26+4*(lv-1),maxhp:26+4*(lv-1),following:false,face:[0,1],st:{},boost:0,cooldown:0};}
  function free(x,y){return inb(x,y)&&map[y][x]===FLOOR&&!enemyAt(x,y)&&!itemAt(x,y)&&!trapAt(x,y)&&!(player.x===x&&player.y===y);}
@@ -27,7 +27,13 @@
  function nearby(){const a=state.actor;return scene==='dungeon'&&a&&distance(a,player)<=1&&geomOK(player.x,player.y,a.x-player.x,a.y-player.y)?a:null;}
  function recruit(){const a=nearby();if(!a||a.following)return false;a.following=true;state.used=true;say('ユズナミキ「道連れも悪くないね。クナイは壁の向こうまで届くよ」');hide();render();return true;}
  function infoHTML(){const a=state.actor;if(!a||!a.following)return '<p>同行している助っ人はいない。</p>';const s=stats(a);return '<h3>ユズナミキ　Lv'+a.lv+'</h3><p>HP '+a.hp+'/'+a.maxhp+'　EXP '+a.exp+'/'+expNeed(a.lv)+'</p><p>攻撃 '+s.attack+'　守備 '+s.defense+'<br>装備固定：クナイ・着物<br>クナイ：8方向の直線2マス・障害物越し<br>狐火の襲：本人のみ4ターン2回行動'+(a.boost?'（残り'+a.boost+'）':'')+'</p>';}
- function talk(){const a=nearby();if(!a||uiBlocked())return;holdStop();state.open=true;const el=document.getElementById('allyPrompt');if(!el)return;el.hidden=false;document.getElementById('allyContent').innerHTML=a.following?infoHTML():'<h2>ユズナミキ</h2><p>「一緒に行こうか？ このクナイ、壁の向こうにも届くんだ」</p><p>狐耳の忍び。クナイと着物の装備は固定。あなたの攻撃・守備と自身のレベルで強くなる。</p>';document.getElementById('allyJoin').hidden=a.following;document.getElementById('allyStay').textContent=a.following?'戻る':'そのまま';(a.following?document.getElementById('allyStay'):document.getElementById('allyJoin')).focus?.();render();}
+ function talk(){
+  const a=nearby();if(!a||uiBlocked())return;holdStop();state.returnFocus=document.activeElement;state.open=true;
+  document.body?.classList?.add('ally-dialog-open');const el=document.getElementById('allyPrompt');if(!el)return;el.hidden=false;
+  document.getElementById('allyContent').innerHTML=a.following?'<p>ついていくよ。<br>壁の向こうも、私に任せて。</p>':'<p>ユズナミキだよ。<br>クナイは壁の向こうにも届くよ。<br>よかったら、一緒に行こうか？</p>';
+  document.getElementById('allyJoin').hidden=a.following;document.getElementById('allyStay').textContent=a.following?'戻る':'そのまま';
+  (a.following?document.getElementById('allyStay'):document.getElementById('allyJoin')).focus?.();render();
+ }
  function gainExp(n){if(!live())return;const a=state.actor;a.exp+=n;while(a.lv<MAX_LV&&a.exp>=expNeed(a.lv)){a.exp-=expNeed(a.lv);a.lv++;a.maxhp=stats(a).maxhp;a.hp=Math.min(a.maxhp,a.hp+4);fxText(a.x,a.y,'Lv'+a.lv,'#c9a7ff');say('ユズナミキはレベル'+a.lv+'になった！');}}
  function strike(a,e){a.face=[Math.sign(e.x-a.x),Math.sign(e.y-a.y)];a.attackFace=a.face.slice();a.attackStart=now();a.walkEnd=0;
   if(!(e.st?.sleep>0)&&Math.random()>=ACC.p){fxText(e.x,e.y,'MISS','#d7c3ff');say('ユズナミキのクナイは外れた。');return;}
@@ -77,7 +83,19 @@
  }
  function animate(dt){const a=state.actor;if(!a)return;const dx=a.x-a.vx,dy=a.y-a.vy,d=Math.hypot(dx,dy),s=dt/100;if(d>2.5||d<=s){a.vx=a.x;a.vy=a.y;}else{a.vx+=dx/d*s;a.vy+=dy/d*s;}}
  function animating(t){const a=state.actor;return !!a&&(Math.hypot(a.x-a.vx,a.y-a.vy)>.001||t<a.walkEnd||a.attackStart!=null&&t-a.attackStart<300||a.castStart!=null&&t-a.castStart<600);}
- function ui(){if(!document.body)return;let badge=document.getElementById('allyBadge');if(!badge){badge=document.createElement('button');badge.id='allyBadge';badge.onclick=()=>{openGameMenu();showMenuInfo('status');};document.body.append(badge);}const a=state.actor;badge.hidden=!live();if(live())badge.textContent='ユズナミキ Lv'+a.lv+'　HP '+a.hp+'/'+a.maxhp+(a.boost?'　狐火 ×2':'');}
- function init(){if(!document.body)return;const el=document.createElement('section');el.id='allyPrompt';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-label','ユズナミキとの会話');el.innerHTML='<div class="ally-dialog"><div id="allyContent"></div><div class="ally-choices"><button id="allyJoin">一緒に行く</button><button id="allyStay">そのまま</button></div></div>';document.body.append(el);document.getElementById('allyJoin').onclick=()=>recruit();document.getElementById('allyStay').onclick=()=>{hide();render();};document.addEventListener('keydown',e=>{if(!state.open)return;if(e.key==='Tab'){e.preventDefault();const join=document.getElementById('allyJoin'),stay=document.getElementById('allyStay');(document.activeElement===join?stay:join.hidden?stay:join).focus();return;}e.preventDefault();e.stopImmediatePropagation();if(e.key==='Escape'){hide();render();}else if(['Enter','z','x'].includes(e.key)){document.activeElement?.click();}else if(e.key.startsWith('Arrow')){const join=document.getElementById('allyJoin'),stay=document.getElementById('allyStay');(document.activeElement===join?stay:join.hidden?stay:join).focus();}},true);}
- root.AllySystem={state,at,stats,reset,newFloor,nearby,recruit,talk,gainExp,tick,enemyAction,load,draw,animate,animating,ui,init,infoHTML,hide,make};
+ function portrait(){return '<span class="ally-face" aria-hidden="true"><img src="'+base+'assets/S.png" alt=""></span>';}
+ function updateParty(members){
+  if(!document.body)return;let host=document.getElementById('partyHUD');
+  if(!host){host=document.createElement('div');host.id='partyHUD';host.setAttribute('role','group');host.setAttribute('aria-label','仲間');document.body.append(host);}
+  host.hidden=!members.length;const keys=new Set();
+  members.forEach((a,i)=>{const key=String(a.id||a.kind||i);keys.add(key);let badge=[...host.children].find(el=>el.dataset.member===key);
+   if(!badge){badge=document.createElement('button');badge.className='party-slot';badge.dataset.member=key;badge.id=i===0?'allyBadge':'';badge.innerHTML=portrait()+'<span class="party-info"><span class="party-name"></span><span class="party-numbers"></span><span class="party-track"><span class="party-fill"></span></span><span class="party-status"></span></span>';badge.onclick=()=>{if(uiBlocked()||dead)return;openGameMenu();showMenuInfo('status');};host.append(badge);}
+   const name=a.name||'ユズナミキ',ratio=Math.max(0,Math.min(1,a.hp/a.maxhp));badge.setAttribute('aria-label',name+' レベル'+a.lv+' HP '+a.hp+' / '+a.maxhp+' 状態を開く');badge.querySelector('.party-name').textContent=name;badge.querySelector('.party-numbers').textContent='Lv'+a.lv+'　'+a.hp+'/'+a.maxhp;badge.querySelector('.party-fill').style.width=(ratio*100)+'%';badge.classList.toggle('low',ratio<=.25);badge.querySelector('.party-status').textContent=a.boost?'狐火 ×2':'';
+  });
+  for(const child of [...host.children])if(!keys.has(child.dataset.member))child.remove();
+ }
+ function ui(){updateParty(live()?[state.actor]:[]);}
+
+ function init(){if(!document.body)return;const el=document.createElement('section');el.id='allyPrompt';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-labelledby','allyName');el.innerHTML='<div class="ally-dialog"><div class="ally-portrait">'+portrait()+'</div><div class="ally-speech"><h2 id="allyName">ユズナミキ</h2><div id="allyContent" aria-live="polite"></div></div><div class="ally-choices"><button id="allyJoin">一緒に行く</button><button id="allyStay">そのまま</button></div></div>';document.body.append(el);document.getElementById('allyJoin').onclick=()=>recruit();document.getElementById('allyStay').onclick=()=>{hide();render();};document.addEventListener('keydown',e=>{if(!state.open)return;if(e.key==='Tab'){e.preventDefault();const join=document.getElementById('allyJoin'),stay=document.getElementById('allyStay');(document.activeElement===join?stay:join.hidden?stay:join).focus();return;}e.preventDefault();e.stopImmediatePropagation();if(e.key==='Escape'){hide();render();}else if(['Enter','z','x',' '].includes(e.key)){document.activeElement?.click();}else if(e.key.startsWith('Arrow')){const join=document.getElementById('allyJoin'),stay=document.getElementById('allyStay');(document.activeElement===join?stay:join.hidden?stay:join).focus();}},true);}
+ root.AllySystem={state,at,stats,reset,newFloor,nearby,recruit,talk,gainExp,tick,enemyAction,load,draw,animate,animating,ui,updateParty,init,infoHTML,hide,make};
 })(typeof window==='undefined'?globalThis:window);
