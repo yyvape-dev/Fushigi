@@ -1,0 +1,20 @@
+{
+  "frames": {
+    "views": 1440,
+    "cache": 192
+  },
+  "game": [
+    {
+      "viewport": "landscape",
+      "roster": true,
+      "realGameDraw": true,
+      "aiAndMotionDispatch": true
+    },
+    {
+      "viewport": "portrait",
+      "roster": true,
+      "realGameDraw": true,
+      "aiAndMotionDispatch": true
+    }
+  ]
+}

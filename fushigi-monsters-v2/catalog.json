@@ -1,0 +1,1502 @@
+{
+  "slime": {
+    "kind": "slime",
+    "name": "スライム",
+    "family": "slime",
+    "tier": 1,
+    "color": "#5aa8ff",
+    "from": 1,
+    "to": 5,
+    "ai": "melee",
+    "speed": "slow",
+    "hp": 4,
+    "attack": [
+      1,
+      1
+    ],
+    "hp12": 15,
+    "attack12": [
+      1,
+      4
+    ],
+    "defense": 0,
+    "exp": 3,
+    "range": 0,
+    "flying": false
+  },
+  "goblin": {
+    "kind": "goblin",
+    "name": "ゴブリン",
+    "family": "goblin",
+    "tier": 1,
+    "color": "#4bb25a",
+    "from": 1,
+    "to": 5,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 5,
+    "attack": [
+      1,
+      2
+    ],
+    "hp12": 16,
+    "attack12": [
+      1,
+      6
+    ],
+    "defense": 0,
+    "exp": 4,
+    "range": 0,
+    "flying": false
+  },
+  "bat": {
+    "kind": "bat",
+    "name": "コウモリ",
+    "family": "bat",
+    "tier": 1,
+    "color": "#9a6ad8",
+    "from": 2,
+    "to": 6,
+    "ai": "melee",
+    "speed": "fast",
+    "hp": 4,
+    "attack": [
+      1,
+      2
+    ],
+    "hp12": 9,
+    "attack12": [
+      1,
+      2
+    ],
+    "defense": 0,
+    "exp": 4,
+    "range": 0,
+    "flying": true
+  },
+  "blob": {
+    "kind": "blob",
+    "name": "ブヨブヨ",
+    "family": "blob",
+    "tier": 1,
+    "color": "#d070e0",
+    "from": 2,
+    "to": 6,
+    "ai": "split",
+    "speed": "normal",
+    "hp": 8,
+    "attack": [
+      1,
+      1
+    ],
+    "hp12": 18,
+    "attack12": [
+      1,
+      4
+    ],
+    "defense": 0,
+    "exp": 6,
+    "range": 0,
+    "flying": false
+  },
+  "skeleton": {
+    "kind": "skeleton",
+    "name": "スケルトン",
+    "family": "skeleton",
+    "tier": 1,
+    "color": "#d6d0b5",
+    "from": 3,
+    "to": 7,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 10,
+    "attack": [
+      2,
+      4
+    ],
+    "hp12": 19,
+    "attack12": [
+      2,
+      9
+    ],
+    "defense": 1,
+    "exp": 7,
+    "range": 0,
+    "flying": false
+  },
+  "archer": {
+    "kind": "archer",
+    "name": "ゆみこぞう",
+    "family": "archer",
+    "tier": 1,
+    "color": "#b2a34e",
+    "from": 3,
+    "to": 7,
+    "ai": "archer",
+    "speed": "normal",
+    "hp": 6,
+    "attack": [
+      2,
+      4
+    ],
+    "hp12": 13,
+    "attack12": [
+      2,
+      7
+    ],
+    "defense": 0,
+    "exp": 8,
+    "range": 6,
+    "flying": false
+  },
+  "thief": {
+    "kind": "thief",
+    "name": "どろぼうタヌキ",
+    "family": "thief",
+    "tier": 1,
+    "color": "#aa8665",
+    "from": 3,
+    "to": 7,
+    "ai": "thief",
+    "speed": "normal",
+    "hp": 8,
+    "attack": [
+      1,
+      2
+    ],
+    "hp12": 17,
+    "attack12": [
+      1,
+      2
+    ],
+    "defense": 0,
+    "exp": 9,
+    "range": 0,
+    "flying": false
+  },
+  "sleepy": {
+    "kind": "sleepy",
+    "name": "ねむりダケ",
+    "family": "sleepy",
+    "tier": 1,
+    "color": "#8ca8d9",
+    "from": 4,
+    "to": 8,
+    "ai": "sleepy",
+    "speed": "still",
+    "hp": 10,
+    "attack": [
+      1,
+      2
+    ],
+    "hp12": 18,
+    "attack12": [
+      1,
+      2
+    ],
+    "defense": 0,
+    "exp": 8,
+    "range": 0,
+    "flying": false
+  },
+  "bomb": {
+    "kind": "bomb",
+    "name": "ばくだん虫",
+    "family": "bomb",
+    "tier": 1,
+    "color": "#d08442",
+    "from": 4,
+    "to": 8,
+    "ai": "bomb",
+    "speed": "normal",
+    "hp": 5,
+    "attack": [
+      1,
+      1
+    ],
+    "hp12": 9,
+    "attack12": [
+      1,
+      1
+    ],
+    "defense": 0,
+    "exp": 6,
+    "range": 0,
+    "flying": false
+  },
+  "ogre": {
+    "kind": "ogre",
+    "name": "オーガ",
+    "family": "ogre",
+    "tier": 1,
+    "color": "#c0623a",
+    "from": 4,
+    "to": 8,
+    "ai": "melee",
+    "speed": "slow",
+    "hp": 20,
+    "attack": [
+      3,
+      6
+    ],
+    "hp12": 36,
+    "attack12": [
+      3,
+      9
+    ],
+    "defense": 2,
+    "exp": 14,
+    "range": 0,
+    "flying": false
+  },
+  "dazzle": {
+    "kind": "dazzle",
+    "name": "めまいガエル",
+    "family": "dazzle",
+    "tier": 1,
+    "color": "#cc7bb2",
+    "from": 5,
+    "to": 9,
+    "ai": "dazzle",
+    "speed": "normal",
+    "hp": 12,
+    "attack": [
+      1,
+      3
+    ],
+    "hp12": 19,
+    "attack12": [
+      1,
+      3
+    ],
+    "defense": 0,
+    "exp": 10,
+    "range": 0,
+    "flying": false
+  },
+  "venom": {
+    "kind": "venom",
+    "name": "どくバチ",
+    "family": "venom",
+    "tier": 1,
+    "color": "#c6b64d",
+    "from": 5,
+    "to": 9,
+    "ai": "venom",
+    "speed": "fast",
+    "hp": 11,
+    "attack": [
+      2,
+      4
+    ],
+    "hp12": 18,
+    "attack12": [
+      2,
+      7
+    ],
+    "defense": 0,
+    "exp": 10,
+    "range": 0,
+    "flying": true
+  },
+  "ghost": {
+    "kind": "ghost",
+    "name": "ゴースト",
+    "family": "ghost",
+    "tier": 1,
+    "color": "#a0c8d9",
+    "from": 6,
+    "to": 9,
+    "ai": "ghost",
+    "speed": "normal",
+    "hp": 14,
+    "attack": [
+      2,
+      5
+    ],
+    "hp12": 20,
+    "attack12": [
+      2,
+      7
+    ],
+    "defense": 0,
+    "exp": 14,
+    "range": 0,
+    "flying": false
+  },
+  "minotaur": {
+    "kind": "minotaur",
+    "name": "ミノタウロス",
+    "family": "minotaur",
+    "tier": 1,
+    "color": "#a68151",
+    "from": 8,
+    "to": 10,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 41,
+    "attack": [
+      6,
+      13
+    ],
+    "hp12": 49,
+    "attack12": [
+      6,
+      15
+    ],
+    "defense": 3,
+    "exp": 40,
+    "range": 0,
+    "flying": false
+  },
+  "dragon": {
+    "kind": "dragon",
+    "name": "ドラゴン",
+    "family": "dragon",
+    "tier": 1,
+    "color": "#d56b42",
+    "from": 9,
+    "to": 11,
+    "ai": "breath",
+    "speed": "normal",
+    "hp": 58,
+    "attack": [
+      5,
+      12
+    ],
+    "hp12": 64,
+    "attack12": [
+      5,
+      14
+    ],
+    "defense": 4,
+    "exp": 70,
+    "range": 4,
+    "flying": false
+  },
+  "slime_2": {
+    "kind": "slime_2",
+    "name": "ライムスライム",
+    "family": "slime",
+    "tier": 2,
+    "color": "#83d553",
+    "from": 4,
+    "to": 8,
+    "ai": "melee",
+    "speed": "slow",
+    "hp": 10,
+    "attack": [
+      3,
+      4
+    ],
+    "hp12": 21,
+    "attack12": [
+      3,
+      6
+    ],
+    "defense": 1,
+    "exp": 5,
+    "range": 0,
+    "flying": false
+  },
+  "slime_3": {
+    "kind": "slime_3",
+    "name": "ルビースライム",
+    "family": "slime",
+    "tier": 3,
+    "color": "#ee6b62",
+    "from": 7,
+    "to": 11,
+    "ai": "melee",
+    "speed": "slow",
+    "hp": 18,
+    "attack": [
+      4,
+      5
+    ],
+    "hp12": 27,
+    "attack12": [
+      4,
+      8
+    ],
+    "defense": 2,
+    "exp": 8,
+    "range": 0,
+    "flying": false
+  },
+  "slime_4": {
+    "kind": "slime_4",
+    "name": "アメジストスライム",
+    "family": "slime",
+    "tier": 4,
+    "color": "#b675ed",
+    "from": 10,
+    "to": 99,
+    "ai": "melee",
+    "speed": "slow",
+    "hp": 29,
+    "attack": [
+      5,
+      8
+    ],
+    "hp12": 33,
+    "attack12": [
+      5,
+      10
+    ],
+    "defense": 3,
+    "exp": 11,
+    "range": 0,
+    "flying": false
+  },
+  "goblin_2": {
+    "kind": "goblin_2",
+    "name": "あかゴブリン",
+    "family": "goblin",
+    "tier": 2,
+    "color": "#dc7659",
+    "from": 4,
+    "to": 8,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 11,
+    "attack": [
+      3,
+      5
+    ],
+    "hp12": 22,
+    "attack12": [
+      3,
+      9
+    ],
+    "defense": 1,
+    "exp": 7,
+    "range": 0,
+    "flying": false
+  },
+  "goblin_3": {
+    "kind": "goblin_3",
+    "name": "あおゴブリン",
+    "family": "goblin",
+    "tier": 3,
+    "color": "#639cde",
+    "from": 7,
+    "to": 11,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 20,
+    "attack": [
+      4,
+      8
+    ],
+    "hp12": 28,
+    "attack12": [
+      4,
+      11
+    ],
+    "defense": 2,
+    "exp": 10,
+    "range": 0,
+    "flying": false
+  },
+  "goblin_4": {
+    "kind": "goblin_4",
+    "name": "ゴブリンロード",
+    "family": "goblin",
+    "tier": 4,
+    "color": "#a66ad0",
+    "from": 10,
+    "to": 99,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 31,
+    "attack": [
+      5,
+      12
+    ],
+    "hp12": 36,
+    "attack12": [
+      5,
+      13
+    ],
+    "defense": 3,
+    "exp": 14,
+    "range": 0,
+    "flying": false
+  },
+  "bat_2": {
+    "kind": "bat_2",
+    "name": "あかコウモリ",
+    "family": "bat",
+    "tier": 2,
+    "color": "#d86565",
+    "from": 5,
+    "to": 9,
+    "ai": "melee",
+    "speed": "fast",
+    "hp": 7,
+    "attack": [
+      3,
+      4
+    ],
+    "hp12": 13,
+    "attack12": [
+      3,
+      4
+    ],
+    "defense": 1,
+    "exp": 7,
+    "range": 0,
+    "flying": true
+  },
+  "bat_3": {
+    "kind": "bat_3",
+    "name": "こんじきコウモリ",
+    "family": "bat",
+    "tier": 3,
+    "color": "#d3ae53",
+    "from": 8,
+    "to": 12,
+    "ai": "melee",
+    "speed": "fast",
+    "hp": 13,
+    "attack": [
+      4,
+      5
+    ],
+    "hp12": 16,
+    "attack12": [
+      4,
+      5
+    ],
+    "defense": 2,
+    "exp": 10,
+    "range": 0,
+    "flying": true
+  },
+  "bat_4": {
+    "kind": "bat_4",
+    "name": "やみコウモリ",
+    "family": "bat",
+    "tier": 4,
+    "color": "#657cb0",
+    "from": 11,
+    "to": 99,
+    "ai": "melee",
+    "speed": "fast",
+    "hp": 18,
+    "attack": [
+      5,
+      7
+    ],
+    "hp12": 20,
+    "attack12": [
+      5,
+      7
+    ],
+    "defense": 3,
+    "exp": 14,
+    "range": 0,
+    "flying": true
+  },
+  "blob_2": {
+    "kind": "blob_2",
+    "name": "あおブヨブヨ",
+    "family": "blob",
+    "tier": 2,
+    "color": "#57bdd1",
+    "from": 5,
+    "to": 9,
+    "ai": "split",
+    "speed": "normal",
+    "hp": 15,
+    "attack": [
+      3,
+      4
+    ],
+    "hp12": 25,
+    "attack12": [
+      3,
+      6
+    ],
+    "defense": 1,
+    "exp": 10,
+    "range": 0,
+    "flying": false
+  },
+  "blob_3": {
+    "kind": "blob_3",
+    "name": "だいだいブヨブヨ",
+    "family": "blob",
+    "tier": 3,
+    "color": "#e9a24e",
+    "from": 8,
+    "to": 12,
+    "ai": "split",
+    "speed": "normal",
+    "hp": 25,
+    "attack": [
+      4,
+      7
+    ],
+    "hp12": 32,
+    "attack12": [
+      4,
+      8
+    ],
+    "defense": 2,
+    "exp": 15,
+    "range": 0,
+    "flying": false
+  },
+  "blob_4": {
+    "kind": "blob_4",
+    "name": "くろブヨブヨ",
+    "family": "blob",
+    "tier": 4,
+    "color": "#6f79aa",
+    "from": 11,
+    "to": 99,
+    "ai": "split",
+    "speed": "normal",
+    "hp": 38,
+    "attack": [
+      5,
+      8
+    ],
+    "hp12": 40,
+    "attack12": [
+      5,
+      10
+    ],
+    "defense": 3,
+    "exp": 21,
+    "range": 0,
+    "flying": false
+  },
+  "skeleton_2": {
+    "kind": "skeleton_2",
+    "name": "こはくスケルトン",
+    "family": "skeleton",
+    "tier": 2,
+    "color": "#c79650",
+    "from": 6,
+    "to": 10,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 18,
+    "attack": [
+      4,
+      9
+    ],
+    "hp12": 26,
+    "attack12": [
+      4,
+      12
+    ],
+    "defense": 2,
+    "exp": 12,
+    "range": 0,
+    "flying": false
+  },
+  "skeleton_3": {
+    "kind": "skeleton_3",
+    "name": "ひすいスケルトン",
+    "family": "skeleton",
+    "tier": 3,
+    "color": "#6ca998",
+    "from": 9,
+    "to": 13,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 28,
+    "attack": [
+      5,
+      12
+    ],
+    "hp12": 34,
+    "attack12": [
+      5,
+      15
+    ],
+    "defense": 3,
+    "exp": 17,
+    "range": 0,
+    "flying": false
+  },
+  "skeleton_4": {
+    "kind": "skeleton_4",
+    "name": "スケルトンロード",
+    "family": "skeleton",
+    "tier": 4,
+    "color": "#7888b1",
+    "from": 12,
+    "to": 99,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 42,
+    "attack": [
+      7,
+      18
+    ],
+    "hp12": 42,
+    "attack12": [
+      7,
+      18
+    ],
+    "defense": 4,
+    "exp": 25,
+    "range": 0,
+    "flying": false
+  },
+  "archer_2": {
+    "kind": "archer_2",
+    "name": "あかゆみこぞう",
+    "family": "archer",
+    "tier": 2,
+    "color": "#bc6451",
+    "from": 6,
+    "to": 10,
+    "ai": "archer",
+    "speed": "normal",
+    "hp": 11,
+    "attack": [
+      4,
+      7
+    ],
+    "hp12": 18,
+    "attack12": [
+      4,
+      10
+    ],
+    "defense": 1,
+    "exp": 13,
+    "range": 6,
+    "flying": false
+  },
+  "archer_3": {
+    "kind": "archer_3",
+    "name": "あおゆみこぞう",
+    "family": "archer",
+    "tier": 3,
+    "color": "#6398bf",
+    "from": 9,
+    "to": 13,
+    "ai": "archer",
+    "speed": "normal",
+    "hp": 20,
+    "attack": [
+      5,
+      11
+    ],
+    "hp12": 23,
+    "attack12": [
+      5,
+      12
+    ],
+    "defense": 2,
+    "exp": 20,
+    "range": 7,
+    "flying": false
+  },
+  "archer_4": {
+    "kind": "archer_4",
+    "name": "ゆみの達人",
+    "family": "archer",
+    "tier": 4,
+    "color": "#9067b0",
+    "from": 12,
+    "to": 99,
+    "ai": "archer",
+    "speed": "normal",
+    "hp": 29,
+    "attack": [
+      7,
+      15
+    ],
+    "hp12": 29,
+    "attack12": [
+      7,
+      15
+    ],
+    "defense": 3,
+    "exp": 28,
+    "range": 7,
+    "flying": false
+  },
+  "thief_2": {
+    "kind": "thief_2",
+    "name": "あかぬすみタヌキ",
+    "family": "thief",
+    "tier": 2,
+    "color": "#c27254",
+    "from": 6,
+    "to": 10,
+    "ai": "thief",
+    "speed": "normal",
+    "hp": 15,
+    "attack": [
+      3,
+      4
+    ],
+    "hp12": 23,
+    "attack12": [
+      3,
+      4
+    ],
+    "defense": 1,
+    "exp": 15,
+    "range": 0,
+    "flying": false
+  },
+  "thief_3": {
+    "kind": "thief_3",
+    "name": "あおぬすみタヌキ",
+    "family": "thief",
+    "tier": 3,
+    "color": "#668fa8",
+    "from": 9,
+    "to": 13,
+    "ai": "thief",
+    "speed": "normal",
+    "hp": 25,
+    "attack": [
+      4,
+      5
+    ],
+    "hp12": 30,
+    "attack12": [
+      4,
+      5
+    ],
+    "defense": 2,
+    "exp": 22,
+    "range": 0,
+    "flying": false
+  },
+  "thief_4": {
+    "kind": "thief_4",
+    "name": "おおどろぼうタヌキ",
+    "family": "thief",
+    "tier": 4,
+    "color": "#8b70b0",
+    "from": 12,
+    "to": 99,
+    "ai": "thief",
+    "speed": "normal",
+    "hp": 38,
+    "attack": [
+      5,
+      7
+    ],
+    "hp12": 38,
+    "attack12": [
+      5,
+      7
+    ],
+    "defense": 3,
+    "exp": 32,
+    "range": 0,
+    "flying": false
+  },
+  "sleepy_2": {
+    "kind": "sleepy_2",
+    "name": "あかねむりダケ",
+    "family": "sleepy",
+    "tier": 2,
+    "color": "#cf6b68",
+    "from": 7,
+    "to": 11,
+    "ai": "sleepy",
+    "speed": "still",
+    "hp": 18,
+    "attack": [
+      3,
+      4
+    ],
+    "hp12": 25,
+    "attack12": [
+      3,
+      4
+    ],
+    "defense": 1,
+    "exp": 13,
+    "range": 0,
+    "flying": false
+  },
+  "sleepy_3": {
+    "kind": "sleepy_3",
+    "name": "あおねむりダケ",
+    "family": "sleepy",
+    "tier": 3,
+    "color": "#6ca58d",
+    "from": 10,
+    "to": 13,
+    "ai": "sleepy",
+    "speed": "still",
+    "hp": 28,
+    "attack": [
+      4,
+      5
+    ],
+    "hp12": 32,
+    "attack12": [
+      4,
+      5
+    ],
+    "defense": 2,
+    "exp": 20,
+    "range": 0,
+    "flying": false
+  },
+  "sleepy_4": {
+    "kind": "sleepy_4",
+    "name": "まどろみ大王ダケ",
+    "family": "sleepy",
+    "tier": 4,
+    "color": "#aa78c9",
+    "from": 12,
+    "to": 99,
+    "ai": "sleepy",
+    "speed": "still",
+    "hp": 40,
+    "attack": [
+      5,
+      7
+    ],
+    "hp12": 40,
+    "attack12": [
+      5,
+      7
+    ],
+    "defense": 3,
+    "exp": 28,
+    "range": 0,
+    "flying": false
+  },
+  "bomb_2": {
+    "kind": "bomb_2",
+    "name": "あかばくだん虫",
+    "family": "bomb",
+    "tier": 2,
+    "color": "#c95b56",
+    "from": 7,
+    "to": 11,
+    "ai": "bomb",
+    "speed": "normal",
+    "hp": 9,
+    "attack": [
+      3,
+      3
+    ],
+    "hp12": 13,
+    "attack12": [
+      3,
+      3
+    ],
+    "defense": 1,
+    "exp": 10,
+    "range": 0,
+    "flying": false
+  },
+  "bomb_3": {
+    "kind": "bomb_3",
+    "name": "あおばくだん虫",
+    "family": "bomb",
+    "tier": 3,
+    "color": "#638fbf",
+    "from": 10,
+    "to": 13,
+    "ai": "bomb",
+    "speed": "normal",
+    "hp": 14,
+    "attack": [
+      4,
+      4
+    ],
+    "hp12": 16,
+    "attack12": [
+      4,
+      4
+    ],
+    "defense": 2,
+    "exp": 15,
+    "range": 0,
+    "flying": false
+  },
+  "bomb_4": {
+    "kind": "bomb_4",
+    "name": "くろがねばくだん虫",
+    "family": "bomb",
+    "tier": 4,
+    "color": "#7975a5",
+    "from": 12,
+    "to": 99,
+    "ai": "bomb",
+    "speed": "normal",
+    "hp": 20,
+    "attack": [
+      5,
+      5
+    ],
+    "hp12": 20,
+    "attack12": [
+      5,
+      5
+    ],
+    "defense": 3,
+    "exp": 21,
+    "range": 0,
+    "flying": false
+  },
+  "ogre_2": {
+    "kind": "ogre_2",
+    "name": "あおオーガ",
+    "family": "ogre",
+    "tier": 2,
+    "color": "#628fc0",
+    "from": 7,
+    "to": 11,
+    "ai": "melee",
+    "speed": "slow",
+    "hp": 36,
+    "attack": [
+      5,
+      10
+    ],
+    "hp12": 49,
+    "attack12": [
+      5,
+      12
+    ],
+    "defense": 3,
+    "exp": 23,
+    "range": 0,
+    "flying": false
+  },
+  "ogre_3": {
+    "kind": "ogre_3",
+    "name": "みどりオーガ",
+    "family": "ogre",
+    "tier": 3,
+    "color": "#75a26c",
+    "from": 10,
+    "to": 13,
+    "ai": "melee",
+    "speed": "slow",
+    "hp": 56,
+    "attack": [
+      7,
+      14
+    ],
+    "hp12": 63,
+    "attack12": [
+      7,
+      15
+    ],
+    "defense": 4,
+    "exp": 34,
+    "range": 0,
+    "flying": false
+  },
+  "ogre_4": {
+    "kind": "ogre_4",
+    "name": "オーガタイラント",
+    "family": "ogre",
+    "tier": 4,
+    "color": "#9572b8",
+    "from": 12,
+    "to": 99,
+    "ai": "melee",
+    "speed": "slow",
+    "hp": 80,
+    "attack": [
+      8,
+      18
+    ],
+    "hp12": 80,
+    "attack12": [
+      8,
+      18
+    ],
+    "defense": 5,
+    "exp": 49,
+    "range": 0,
+    "flying": false
+  },
+  "dazzle_2": {
+    "kind": "dazzle_2",
+    "name": "あおめまいガエル",
+    "family": "dazzle",
+    "tier": 2,
+    "color": "#649dbd",
+    "from": 8,
+    "to": 11,
+    "ai": "dazzle",
+    "speed": "normal",
+    "hp": 21,
+    "attack": [
+      3,
+      5
+    ],
+    "hp12": 26,
+    "attack12": [
+      3,
+      5
+    ],
+    "defense": 1,
+    "exp": 16,
+    "range": 0,
+    "flying": false
+  },
+  "dazzle_3": {
+    "kind": "dazzle_3",
+    "name": "きいろめまいガエル",
+    "family": "dazzle",
+    "tier": 3,
+    "color": "#ccaa51",
+    "from": 10,
+    "to": 13,
+    "ai": "dazzle",
+    "speed": "normal",
+    "hp": 30,
+    "attack": [
+      4,
+      7
+    ],
+    "hp12": 34,
+    "attack12": [
+      4,
+      7
+    ],
+    "defense": 2,
+    "exp": 24,
+    "range": 0,
+    "flying": false
+  },
+  "dazzle_4": {
+    "kind": "dazzle_4",
+    "name": "まぼろしガエル",
+    "family": "dazzle",
+    "tier": 4,
+    "color": "#8a76c3",
+    "from": 12,
+    "to": 99,
+    "ai": "dazzle",
+    "speed": "normal",
+    "hp": 42,
+    "attack": [
+      5,
+      8
+    ],
+    "hp12": 42,
+    "attack12": [
+      5,
+      8
+    ],
+    "defense": 3,
+    "exp": 35,
+    "range": 0,
+    "flying": false
+  },
+  "venom_2": {
+    "kind": "venom_2",
+    "name": "あかどくバチ",
+    "family": "venom",
+    "tier": 2,
+    "color": "#c65e58",
+    "from": 8,
+    "to": 11,
+    "ai": "venom",
+    "speed": "fast",
+    "hp": 19,
+    "attack": [
+      4,
+      7
+    ],
+    "hp12": 25,
+    "attack12": [
+      4,
+      10
+    ],
+    "defense": 1,
+    "exp": 16,
+    "range": 0,
+    "flying": true
+  },
+  "venom_3": {
+    "kind": "venom_3",
+    "name": "あおどくバチ",
+    "family": "venom",
+    "tier": 3,
+    "color": "#679fb9",
+    "from": 10,
+    "to": 13,
+    "ai": "venom",
+    "speed": "fast",
+    "hp": 28,
+    "attack": [
+      5,
+      11
+    ],
+    "hp12": 32,
+    "attack12": [
+      5,
+      12
+    ],
+    "defense": 2,
+    "exp": 24,
+    "range": 0,
+    "flying": true
+  },
+  "venom_4": {
+    "kind": "venom_4",
+    "name": "どくバチクイーン",
+    "family": "venom",
+    "tier": 4,
+    "color": "#9675bd",
+    "from": 12,
+    "to": 99,
+    "ai": "venom",
+    "speed": "fast",
+    "hp": 40,
+    "attack": [
+      7,
+      15
+    ],
+    "hp12": 40,
+    "attack12": [
+      7,
+      15
+    ],
+    "defense": 3,
+    "exp": 35,
+    "range": 0,
+    "flying": true
+  },
+  "ghost_2": {
+    "kind": "ghost_2",
+    "name": "ひすいゴースト",
+    "family": "ghost",
+    "tier": 2,
+    "color": "#78b28c",
+    "from": 8,
+    "to": 11,
+    "ai": "ghost",
+    "speed": "normal",
+    "hp": 22,
+    "attack": [
+      4,
+      7
+    ],
+    "hp12": 27,
+    "attack12": [
+      4,
+      10
+    ],
+    "defense": 1,
+    "exp": 23,
+    "range": 0,
+    "flying": false
+  },
+  "ghost_3": {
+    "kind": "ghost_3",
+    "name": "あかゴースト",
+    "family": "ghost",
+    "tier": 3,
+    "color": "#cf858e",
+    "from": 10,
+    "to": 13,
+    "ai": "ghost",
+    "speed": "normal",
+    "hp": 32,
+    "attack": [
+      5,
+      11
+    ],
+    "hp12": 35,
+    "attack12": [
+      5,
+      12
+    ],
+    "defense": 2,
+    "exp": 34,
+    "range": 0,
+    "flying": false
+  },
+  "ghost_4": {
+    "kind": "ghost_4",
+    "name": "ナイトメアゴースト",
+    "family": "ghost",
+    "tier": 4,
+    "color": "#9481c1",
+    "from": 12,
+    "to": 99,
+    "ai": "ghost",
+    "speed": "normal",
+    "hp": 44,
+    "attack": [
+      7,
+      15
+    ],
+    "hp12": 44,
+    "attack12": [
+      7,
+      15
+    ],
+    "defense": 3,
+    "exp": 49,
+    "range": 0,
+    "flying": false
+  },
+  "minotaur_2": {
+    "kind": "minotaur_2",
+    "name": "あおミノタウロス",
+    "family": "minotaur",
+    "tier": 2,
+    "color": "#618da5",
+    "from": 9,
+    "to": 12,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 59,
+    "attack": [
+      9,
+      17
+    ],
+    "hp12": 67,
+    "attack12": [
+      9,
+      19
+    ],
+    "defense": 4,
+    "exp": 64,
+    "range": 0,
+    "flying": false
+  },
+  "minotaur_3": {
+    "kind": "minotaur_3",
+    "name": "あかミノタウロス",
+    "family": "minotaur",
+    "tier": 3,
+    "color": "#b86053",
+    "from": 11,
+    "to": 13,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 83,
+    "attack": [
+      11,
+      22
+    ],
+    "hp12": 86,
+    "attack12": [
+      11,
+      23
+    ],
+    "defense": 5,
+    "exp": 96,
+    "range": 0,
+    "flying": false
+  },
+  "minotaur_4": {
+    "kind": "minotaur_4",
+    "name": "ミノタウロスキング",
+    "family": "minotaur",
+    "tier": 4,
+    "color": "#8870ac",
+    "from": 12,
+    "to": 99,
+    "ai": "melee",
+    "speed": "normal",
+    "hp": 108,
+    "attack": [
+      13,
+      28
+    ],
+    "hp12": 108,
+    "attack12": [
+      13,
+      28
+    ],
+    "defense": 6,
+    "exp": 140,
+    "range": 0,
+    "flying": false
+  },
+  "dragon_2": {
+    "kind": "dragon_2",
+    "name": "あおドラゴン",
+    "family": "dragon",
+    "tier": 2,
+    "color": "#6aa5c7",
+    "from": 10,
+    "to": 12,
+    "ai": "breath",
+    "speed": "normal",
+    "hp": 81,
+    "attack": [
+      7,
+      17
+    ],
+    "hp12": 87,
+    "attack12": [
+      7,
+      18
+    ],
+    "defense": 5,
+    "exp": 112,
+    "range": 4,
+    "flying": false
+  },
+  "dragon_3": {
+    "kind": "dragon_3",
+    "name": "みどりドラゴン",
+    "family": "dragon",
+    "tier": 3,
+    "color": "#83a56e",
+    "from": 11,
+    "to": 13,
+    "ai": "breath",
+    "speed": "normal",
+    "hp": 109,
+    "attack": [
+      9,
+      21
+    ],
+    "hp12": 112,
+    "attack12": [
+      9,
+      22
+    ],
+    "defense": 6,
+    "exp": 168,
+    "range": 5,
+    "flying": false
+  },
+  "dragon_4": {
+    "kind": "dragon_4",
+    "name": "アビスドラゴン",
+    "family": "dragon",
+    "tier": 4,
+    "color": "#9471b4",
+    "from": 12,
+    "to": 99,
+    "ai": "breath",
+    "speed": "normal",
+    "hp": 141,
+    "attack": [
+      12,
+      27
+    ],
+    "hp12": 141,
+    "attack12": [
+      12,
+      27
+    ],
+    "defense": 7,
+    "exp": 245,
+    "range": 5,
+    "flying": false
+  }
+}

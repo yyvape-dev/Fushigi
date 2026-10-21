@@ -336,7 +336,7 @@
   ok('5F: dungeon has 5 floors by default', (DUNGEONS.first.floors = 5) === 5);
   { const seen1 = new Set(), seen5 = new Set(); for (let i = 0; i < 400; i++) { seen1.add(rollEnemy(1)); seen5.add(rollEnemy(5)); }
     ok('enemies: floor1 only slime/goblin', [...seen1].sort().join() === 'goblin,slime');
-    ok('enemies: floor5 has every kind that can appear there (12)', seen5.size === 12 && Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= 5 && 5 <= (ENEMIES[k].to || 99)).every(k => seen5.has(k)));
+    ok('enemies: floor5 includes every eligible base and upper rank', seen5.size === Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= 5 && 5 <= (ENEMIES[k].to || 99)).length && Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= 5 && 5 <= (ENEMIES[k].to || 99)).every(k => seen5.has(k)));
     ok('enemies: every kind has stats', Object.keys(ENEMIES).every(k => ENEMIES[k].hp(5) > 0 && ENEMIES[k].atk(5)[1] >= ENEMIES[k].atk(5)[0] && DEFAULT[k])); }
   { toTown(false); wh = []; inv = [mkItem('sword', 2), mkItem('sword', 0), mkItem('woodshield', 1), mkItem('scroll'), mkItem('potion')];
     ok('equip: name shows plus', itemName(inv[0]) === '鉄の剣+2' && itemName(mkItem('sword', -1)) === '鉄の剣-1');
@@ -626,9 +626,9 @@
     setup(); { const e = mk('goblin', 1, 0, 1); inv = [mkItem('annihilatescroll')]; useType('annihilatescroll'); ok('annihilate scroll: no exp', player.exp === 0); void e; }
     setup(); { player.lv = 5; player.exp = 3; player.maxhp = 36; toTown(false); ok('toTown: level/exp/max HP reset', player.lv === 1 && player.exp === 0 && player.maxhp === BASE_HP); }
     // 敵の表
-    ok('enemies: 15 kinds, each has exp/def/hp/atk', Object.keys(ENEMIES).length === 15 && Object.values(ENEMIES).every(T => T.exp > 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
+    ok('enemies: 60 kinds, each has exp/def/hp/atk', Object.keys(ENEMIES).length === 60 && Object.values(ENEMIES).every(T => T.exp > 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
     ok('enemies: borrowed-art kinds name an existing art key', Object.values(ENEMIES).filter(T => T.art).every(T => ENEMIES[T.art]));
-    ok('enemies: slime stops at 7F (to:6)', (() => { for (let i = 0; i < 300; i++) if (rollEnemy(7) === 'slime') return false; return true; })());
+    ok('enemies: base slime is replaced by upper ranks before 7F', (() => { for (let i = 0; i < 300; i++) if (rollEnemy(7) === 'slime') return false; return true; })());
     ok('enemies: deep kinds only appear deep', (() => { for (let i = 0; i < 300; i++) if (['minotaur', 'dragon'].includes(rollEnemy(5))) return false; const s = new Set(); for (let i = 0; i < 600; i++) s.add(rollEnemy(10)); return s.has('minotaur') && s.has('dragon'); })());
     // 個性
     setup(); clearAround(); { const e = mk('archer', 4, 0); const hp0 = player.hp; enemyTurn(); ok('archer: shoots from 4 tiles in a straight line', player.hp < hp0 && e.x === player.x + 4); }
