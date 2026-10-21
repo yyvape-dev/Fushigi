@@ -149,6 +149,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/cave-terrain.js?v=wall-relief-v1"></script>
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
 <script src="assets/dungeon-experience.js?v=experience-v1"></script>
+<script src="assets/game-audio.js?v=audio-v1"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -293,7 +294,7 @@ const ITEMS = {
       const t = eqWeapon;
       if (!t) { say('武器を装備していないので効果がなかった。'); return false; }
       const up = Math.random() < 0.1 ? 3 : 1; t.plus += up; fxText(player.x, player.y, '+' + up, '#ffe28a');
-      say(`${itemName(t)}が光った！ 強化値+${up}`); return true;
+      say(`${itemName(t)}が光った！ 強化値+${up}`); if(typeof GameAudio!=='undefined')GameAudio.effect('enhance'); return true;
     },
   },
   shieldscroll: {
@@ -302,7 +303,7 @@ const ITEMS = {
       const t = eqShield;
       if (!t) { say('盾を装備していないので効果がなかった。'); return false; }
       const up = Math.random() < 0.1 ? 3 : 1; t.plus += up; fxText(player.x, player.y, '+' + up, '#ffe28a');
-      say(`${itemName(t)}が光った！ 強化値+${up}`); return true;
+      say(`${itemName(t)}が光った！ 強化値+${up}`); if(typeof GameAudio!=='undefined')GameAudio.effect('enhance'); return true;
     },
   },
   confscroll: {
@@ -590,6 +591,7 @@ function gainExp(n) {
     player.exp -= expNeed(player.lv); player.lv++;
     player.maxhp += 4; player.hp = Math.min(player.maxhp, player.hp + 4);
     fxText(player.x, player.y, 'Lv' + player.lv, '#ffe28a'); vfxShake(3, 180); say(`レベルが${player.lv}に上がった！ 最大HP+4`);
+    if(typeof GameAudio!=='undefined')GameAudio.effect('levelup');
   }
 }
 function dropAt(x, y, it) {                                     // 盗まれた物などを、近くの空き床に置く
@@ -1957,10 +1959,12 @@ function renderCfg() {
     `<div class="set"><span class="lab">お試しアイテム<br><small>倉庫に、まだ無い種類のアイテムを1個ずつ入れる（確認用。倉庫がいっぱいになるまで。何度でも押せる）</small></span><button class="sm" data-cfg="giftall">配る</button></div>`
   ];
   cfgListEl.innerHTML = rows.join('');
+  if(typeof GameAudio!=='undefined')cfgListEl.insertAdjacentHTML('beforeend',GameAudio.rows());
 }
 cfgListEl.addEventListener('click', ev => {
   const b = ev.target.closest('[data-cfg]'); if (!b) return;
   const a = b.dataset.cfg;
+  if(typeof GameAudio!=='undefined'&&a.startsWith('audio-')){if(a==='audio-mute')GameAudio.configure({muted:!GameAudio.settings.muted});else GameAudio.cycle(a==='audio-bgm'?'bgm':'se');renderCfg();return;}
   if (a === 'auto') autoPick = !autoPick;
   else if (a === 'dungeon') { const ids = Object.keys(DUNGEONS).filter(unlocked); dungeonId = ids[(ids.indexOf(dungeonId) + 1) % ids.length]; }
   else if (a === 'zoom') { zoomPref = (zoomPref + 1) % 6; resize(); }
@@ -2008,6 +2012,7 @@ const cache = new Map();
 function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) { cache.set(k, v); $(id).style[prop] = v; } }
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
+  if(typeof GameAudio!=='undefined')GameAudio.sync(scene,floorPlan?.theme.id,dead);
   setH('where', scene === 'town' ? `町　踏破${clears}　${DUNGEONS[dungeonId].name}` : `${DUNGEONS[dungeonId].name} ${floorNo}F ${floorPlan?.theme.name || ''}<br><small>ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}</small>`);
   setH('bagc', `持${inv.length}/${MAXBAG}<img class="hud-coin" src="assets/dungeon/experience-v1/coin.png" alt="ギタン"> ${gold.toLocaleString()}G`);
   setH('belly', `満腹度 ${belly}/${maxBelly()}`);
