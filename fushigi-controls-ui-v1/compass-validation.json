@@ -1,0 +1,92 @@
+[
+  {
+    "size": [
+      844,
+      390
+    ],
+    "hand": "both",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  },
+  {
+    "size": [
+      844,
+      390
+    ],
+    "hand": "right",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  },
+  {
+    "size": [
+      844,
+      390
+    ],
+    "hand": "left",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  },
+  {
+    "size": [
+      390,
+      844
+    ],
+    "hand": "both",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  },
+  {
+    "size": [
+      390,
+      844
+    ],
+    "hand": "right",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  },
+  {
+    "size": [
+      390,
+      844
+    ],
+    "hand": "left",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  },
+  {
+    "size": [
+      320,
+      568
+    ],
+    "hand": "both",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  },
+  {
+    "size": [
+      320,
+      568
+    ],
+    "hand": "right",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  },
+  {
+    "size": [
+      320,
+      568
+    ],
+    "hand": "left",
+    "eightRealTouchTargets": true,
+    "centerSeparate": true,
+    "zeroTurnFacing": true
+  }
+]
