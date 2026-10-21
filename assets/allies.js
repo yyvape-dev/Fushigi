@@ -25,12 +25,12 @@
   if(cells.length){const [x,y]=cells[rnd(0,cells.length-1)];state.actor=make(x,y);}
  }
  function nearby(){const a=state.actor;return scene==='dungeon'&&a&&distance(a,player)<=1&&geomOK(player.x,player.y,a.x-player.x,a.y-player.y)?a:null;}
- function recruit(){const a=nearby();if(!a||a.following)return false;a.following=true;state.used=true;say('ユズナミキ「道連れも悪くないね。クナイは壁の向こうまで届くよ」');hide();render();return true;}
+ function recruit(){const a=nearby();if(!a||a.following)return false;a.following=true;state.used=true;say('ユズナミキ「ほな、いこか。」');hide();render();return true;}
  function infoHTML(){const a=state.actor;if(!a||!a.following)return '<p>同行している助っ人はいない。</p>';const s=stats(a);return '<h3>ユズナミキ　Lv'+a.lv+'</h3><p>HP '+a.hp+'/'+a.maxhp+'　EXP '+a.exp+'/'+expNeed(a.lv)+'</p><p>攻撃 '+s.attack+'　守備 '+s.defense+'<br>装備固定：クナイ・着物<br>クナイ：8方向の直線2マス・障害物越し<br>狐火の襲：本人のみ4ターン2回行動'+(a.boost?'（残り'+a.boost+'）':'')+'</p>';}
  function talk(){
   const a=nearby();if(!a||uiBlocked())return;holdStop();state.returnFocus=document.activeElement;state.open=true;
   document.body?.classList?.add('ally-dialog-open');const el=document.getElementById('allyPrompt');if(!el)return;el.hidden=false;
-  document.getElementById('allyContent').innerHTML=a.following?'<p>ついていくよ。<br>壁の向こうも、私に任せて。</p>':'<p>ユズナミキだよ。<br>クナイは壁の向こうにも届くよ。<br>よかったら、一緒に行こうか？</p>';
+  document.getElementById('allyContent').innerHTML=a.following?'<p>どこに連れてってくれはるの？</p>':'<p>んふっ…。目が合ったなぁ。<br>ウチをご指名してくれはるの？</p>';
   document.getElementById('allyJoin').hidden=a.following;document.getElementById('allyStay').textContent=a.following?'戻る':'そのまま';
   (a.following?document.getElementById('allyStay'):document.getElementById('allyJoin')).focus?.();render();
  }
