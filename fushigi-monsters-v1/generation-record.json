@@ -1,0 +1,44 @@
+{
+  "date": "2026-10-20",
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "records": [
+    {
+      "id": "slime",
+      "prompt": "Create production-quality game monster idle directional sprite artwork for Fushigi. Reference 1 is the approved hero: match its charming polished detailed 3D collectible-figure rendering, rich material shading, soft lighting, crisp readable silhouette; DO NOT copy human appearance or armor. Reference 2 is a simple 3D direction guide: strictly follow its viewing directions, orthographic camera elevation 26 degrees, consistent creature identity and physical size between views. Transparent background, no floor, no ground shadows, no text, no labels, no borders. Each character fully visible with generous empty margins. This is IDLE turntable, identical pose rotated, not motion. Output a regularly spaced sprite sheet with precisely equal-size cells. ONE ROW of FIVE equal square cells, left to right: S front toward viewer, SE front facing screen right, E profile facing screen right, NE back facing screen right, N back away from viewer. A small adorable blue jelly slime, broad low domed blob, rounded asymmetry-free silhouette without pointed crown, translucent azure body, two tiny dark oval eyes on front surface, small friendly smile, soft inner blue volume and subtle highlights, rounded base touching ground, no limbs, no accessories. Rear views have NO eyes or mouth. All cells same scale, base line. Use one centered creature per cell. Wide 5:1 sheet.",
+      "references": [
+        "../fushigi-direction-base/assets/hero-base/SE.png",
+        "guides/slime-sheet.png"
+      ],
+      "output": "source-art/slime.png"
+    },
+    {
+      "id": "goblin",
+      "prompt": "Create production-quality game monster idle directional sprite artwork for Fushigi. Reference 1 is the approved hero: match its charming polished detailed 3D collectible-figure rendering, rich material shading, soft lighting, crisp readable silhouette; DO NOT copy human appearance or armor. Reference 2 is a simple 3D direction guide: strictly follow its viewing directions, orthographic camera elevation 26 degrees, consistent creature identity and physical size between views. Transparent background, no floor, no ground shadows, no text, no labels, no borders. Each character fully visible with generous empty margins. This is IDLE turntable, identical pose rotated, not motion. Output a regularly spaced sprite sheet with precisely equal-size cells. FOUR COLUMNS by TWO ROWS equal square cells. Row 1: S front, SW front facing screen LEFT, W left profile, NW back facing screen LEFT. Row 2: N rear, NE back facing screen RIGHT, E right profile, SE front facing screen RIGHT. Small green goblin with large pointed ears, broad cute head, small ivory tusks, lively amber eyes, short dark moss hair tuft, simple symmetric brown leather vest and belt, ragged brown shorts, bare green feet. Holds one short plain wooden club upright in its anatomical RIGHT hand (viewer LEFT in front S, viewer RIGHT in back N), empty left hand. Match guide club visibility and hand. Not menacing horror; playful dungeon creature. Stable planted feet, slightly bent arms. No armor copied from hero, no helmet. Consistent clothing and club in all 8 views.",
+      "references": [
+        "../fushigi-direction-base/assets/hero-base/SE.png",
+        "guides/goblin-sheet.png"
+      ],
+      "output": "source-art/goblin.png"
+    },
+    {
+      "id": "bat",
+      "prompt": "Create production-quality game monster idle directional sprite artwork for Fushigi. Reference 1 is the approved hero: match its charming polished detailed 3D collectible-figure rendering, rich material shading, soft lighting, crisp readable silhouette; DO NOT copy human appearance or armor. Reference 2 is a simple 3D direction guide: strictly follow its viewing directions, orthographic camera elevation 26 degrees, consistent creature identity and physical size between views. Transparent background, no floor, no ground shadows, no text, no labels, no borders. Each character fully visible with generous empty margins. This is IDLE turntable, identical pose rotated, not motion. Output a regularly spaced sprite sheet with precisely equal-size cells. ONE ROW of FIVE equal square cells, left to right: S front toward viewer, SE front facing screen right, E profile facing screen right, NE back facing screen right, N back away from viewer. Small adorable purple cave bat, plush rounded body, large symmetrical pointed ears with pink interiors, small amber eyes and tiny fangs on front, dark plum smooth wing arms and muted lavender-pink wing membranes with 3 clear scallops. Wings spread in relaxed neutral flying pose (not flapping), short feet tucked, no clothing or accessories. Show real profile in E, wings overlap naturally and are foreshortened. Rear views show back of head and backs of wings, NO face. All cells same physical scale and hovering height. Wide 5:1 sheet.",
+      "references": [
+        "../fushigi-direction-base/assets/hero-base/SE.png",
+        "guides/bat-sheet.png"
+      ],
+      "output": "source-art/bat.png"
+    },
+    {
+      "id": "goblin-SE-fix",
+      "prompt": "Correct ONLY the hand holding the club in this game sprite. Reference 1 is the current WRONG SE sprite; reference 2 is the exact SE 3D guide to follow; reference 3 is approved goblin front design and proportions. Output ONE complete goblin, transparent background, square canvas with margins. Same adorable green goblin, same moss hair, amber eyes, leather vest, shorts, bare green feet, same club. SE = 3/4 front facing screen RIGHT, camera elevated 26 degrees. CRITICAL: anatomical RIGHT hand is the NEAR arm on the VIEWER LEFT side of its body. That near hand on viewer LEFT must GRIP the wooden club vertically, club running upward beside the viewer-left cheek/ear (see reference 2). The far LEFT hand on viewer RIGHT is EMPTY relaxed by hip. In reference 1 these are wrong: swap which hand holds club WITHOUT MIRRORING THE CHARACTER OR DIRECTION. Show near arm elbow bent and fist wrapped around club handle, club is on viewer LEFT. Keep stance/body turned screen right, do not change facing. Same detailed polished 3D figure artwork and lighting. Full body, planted feet, no floor or shadow, no labels.",
+      "references": [
+        "source-art/goblin-SE-before.png",
+        "guides/goblin-SE.png",
+        "source-art/goblin.png"
+      ],
+      "output": "source-art/goblin-SE-fixed.png"
+    }
+  ]
+}

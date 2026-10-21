@@ -1,0 +1,196 @@
+{
+  "version": 4,
+  "status": "adopted-hostile-faces-bald-goblin; not approved; not integrated",
+  "frameSize": 256,
+  "origin": [
+    128,
+    224
+  ],
+  "heroHeight": 192,
+  "directions": [
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE",
+    "E",
+    "SE"
+  ],
+  "monsters": {
+    "slime": {
+      "name": "スライム",
+      "scale": 0.416289592760181,
+      "bodyHeight": 92,
+      "visualBottom": 224,
+      "source": "source-art/slime.png",
+      "sourceSha256": "d767808ff05794323bd4f3b82d5f3be14037505c8742de1be7c2f08ace8e97e2",
+      "views": {
+        "S": {
+          "source": "S",
+          "mirror": false,
+          "path": "assets/slime/S.png",
+          "sha256": "cef5f9cdead0cdcea756f92ef9eabc92adb9b00d2412831a20aabda7c637465a"
+        },
+        "SE": {
+          "source": "SE",
+          "mirror": false,
+          "path": "assets/slime/SE.png",
+          "sha256": "9e8e8b79cc75fb4c5df429c74de96ad909fae5f6bf93c49b7b65bc9ca61ba8c8"
+        },
+        "E": {
+          "source": "E",
+          "mirror": false,
+          "path": "assets/slime/E.png",
+          "sha256": "cb3e72cd60e6f31c2f122da67e6d9151f9402c72cbc23047390399265eaea971"
+        },
+        "NE": {
+          "source": "NE",
+          "mirror": false,
+          "path": "assets/slime/NE.png",
+          "sha256": "893320fbafd8c86679ed7b3b7aea518e1c339b970abea88034ed677e686e5f25"
+        },
+        "N": {
+          "source": "N",
+          "mirror": false,
+          "path": "assets/slime/N.png",
+          "sha256": "e957026d5ae15d33da5d5f9e83275eba13ba1bd0da1cff5dd45f5bcd7dd59aeb"
+        },
+        "SW": {
+          "source": "SE",
+          "mirror": true,
+          "path": "assets/slime/SW.png",
+          "sha256": "1839ba609f671c79ec18e414012a6f9b8834714512ba50aab14ee5fc45b17d72"
+        },
+        "W": {
+          "source": "E",
+          "mirror": true,
+          "path": "assets/slime/W.png",
+          "sha256": "971a5ebbf69aae9e538d59dc5c2af7f7eab8318a40eb909f4f1ba21bc3a04821"
+        },
+        "NW": {
+          "source": "NE",
+          "mirror": true,
+          "path": "assets/slime/NW.png",
+          "sha256": "ebb6e6ce8a2b617b6f9ee077fd698dd6829bcf61cd1689b32ed9cdb3b1cd9cec"
+        }
+      }
+    },
+    "goblin": {
+      "name": "ゴブリン",
+      "scale": 0.3783783783783784,
+      "bodyHeight": 154,
+      "visualBottom": 224,
+      "source": "source-art/bald-v4/goblin.png",
+      "sourceSha256": "1506ef7997a79049d7c2b6ee72ea3f20a6a5f5ce451d4dc0fe25626416fc5f4e",
+      "views": {
+        "S": {
+          "source": "S",
+          "mirror": false,
+          "path": "assets/goblin/S.png",
+          "sha256": "4a69efca28b608dfbf166a523d3ed8eae10a028286414b17b0b7d9a77e5c1bfe"
+        },
+        "SW": {
+          "source": "SW",
+          "mirror": false,
+          "path": "assets/goblin/SW.png",
+          "sha256": "49a9d75f9fd848ed4ecc5a50c37dda9fbf5ebe4f29b85dbe7da34047de46c7bf"
+        },
+        "W": {
+          "source": "W",
+          "mirror": false,
+          "path": "assets/goblin/W.png",
+          "sha256": "06235e5f9a40b422ec3936a36095f8d546abaaf4dfe45db192a97423c8747987"
+        },
+        "NW": {
+          "source": "NW",
+          "mirror": false,
+          "path": "assets/goblin/NW.png",
+          "sha256": "524753b1e479add4f37f26dfd25ad160b6021f986b5ce430d161b9bf94aa2031"
+        },
+        "N": {
+          "source": "N",
+          "mirror": false,
+          "path": "assets/goblin/N.png",
+          "sha256": "00cfdbf68d384c2fda5c45549cb67c91f4d407823293b45f9be45b823322f3f6"
+        },
+        "NE": {
+          "source": "NE",
+          "mirror": false,
+          "path": "assets/goblin/NE.png",
+          "sha256": "c7f97ff7aa830eeeb762cb7e2a69537ec3cfedffb3712e7cb3f3a698379e0a6e"
+        },
+        "E": {
+          "source": "E",
+          "mirror": false,
+          "path": "assets/goblin/E.png",
+          "sha256": "5b4b344279c52cb6846faa0c6e56399862a0c8d0ba635990966ad8aab49c8012"
+        },
+        "SE": {
+          "source": "SE",
+          "mirror": false,
+          "path": "assets/goblin/SE.png",
+          "sha256": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3"
+        }
+      }
+    },
+    "bat": {
+      "name": "コウモリ",
+      "scale": 0.32653061224489793,
+      "bodyHeight": 112,
+      "visualBottom": 196,
+      "source": "source-art/faces-v3/bat.png",
+      "sourceSha256": "1f3978c9e36d3be2ad6309ec3f11f709d08492c9f18229e44cfd3479a8f17286",
+      "views": {
+        "S": {
+          "source": "S",
+          "mirror": false,
+          "path": "assets/bat/S.png",
+          "sha256": "b59a5362ed5ba3f7e8aba1b010f7966edc812bc71910d07c8eb71c9ec514fcce"
+        },
+        "SE": {
+          "source": "SE",
+          "mirror": false,
+          "path": "assets/bat/SE.png",
+          "sha256": "460ed102575363725d2eeb22a80c1b0723956fea22d57edb1cdc4cf58d568a5b"
+        },
+        "E": {
+          "source": "E",
+          "mirror": false,
+          "path": "assets/bat/E.png",
+          "sha256": "fb89ee619e0a2d438582ef0e8708d434d3f16a2b5303925db9861ba1624d3a86"
+        },
+        "NE": {
+          "source": "NE",
+          "mirror": false,
+          "path": "assets/bat/NE.png",
+          "sha256": "c26cb2372a23e3ddda675996f08b41d09e1de43eba590d215b2e3e0a7069d54e"
+        },
+        "N": {
+          "source": "N",
+          "mirror": false,
+          "path": "assets/bat/N.png",
+          "sha256": "9279363d38986933c327b3eba4434477b11805148b70796c19e2d089d10bf84f"
+        },
+        "SW": {
+          "source": "SE",
+          "mirror": true,
+          "path": "assets/bat/SW.png",
+          "sha256": "054b9af21e8e22a824b05e389791b671c42894bc9ff6e58476acd337c358e68d"
+        },
+        "W": {
+          "source": "E",
+          "mirror": true,
+          "path": "assets/bat/W.png",
+          "sha256": "66b34cde484bf70bd85092630b72ae5c7f3b3436e52d8d4ab0f8dcb0c26374d1"
+        },
+        "NW": {
+          "source": "NE",
+          "mirror": true,
+          "path": "assets/bat/NW.png",
+          "sha256": "3972a9d5243d8c8e453a51407a7e560eeb2b477f26feade5170cd4ec4ed0598f"
+        }
+      }
+    }
+  }
+}

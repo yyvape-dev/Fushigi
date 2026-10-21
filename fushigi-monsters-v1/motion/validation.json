@@ -1,0 +1,31 @@
+{
+  "atlases": 24,
+  "poses": 96,
+  "mirroredPoses": 24,
+  "browser": [
+    {
+      "viewport": [
+        844,
+        390
+      ],
+      "kinds": 3,
+      "walkFacing": true,
+      "attackFacingLocked": true,
+      "noLegacyFlip": true,
+      "errors": []
+    },
+    {
+      "viewport": [
+        390,
+        844
+      ],
+      "kinds": 3,
+      "walkFacing": true,
+      "attackFacingLocked": true,
+      "noLegacyFlip": true,
+      "errors": []
+    }
+  ],
+  "exactIdleEndpoints": 72,
+  "changedActionSamples": 48
+}

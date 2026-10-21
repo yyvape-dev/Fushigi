@@ -1,0 +1,28 @@
+{
+  "dateJST": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "num_last_images_to_include": 3,
+  "transparent_background": true,
+  "records": [
+    {
+      "id": "goblin-hostile-face-v3",
+      "prompt": "Use the recent reference images: the user's enemy monster example shows the important distinction between simple innocent plant/blob monsters and MALICIOUS beast/humanoid monsters. The two following sheets show current green goblin and purple bat. Edit ONLY the requested species sheet. The prior round black bead eyes are too innocent. Create a clearly MALICIOUS enemy face while retaining simple graphic shapes. Eyes must be SHARP slanted angular white wedges, narrow BLACK pupils, thick heavy brow ridges angled DOWN toward nose (angry V brow). NO round shiny doll eyes, NO detailed colored iris, NO eyelashes, NO cute baby smile. Simple bold readable shapes in 3D figure style. A dark crooked aggressive mouth with obvious two pointed ivory fangs; restrained sneer not friendly smile. Keep existing body, color, clothing, proportions, pose, direction, orthographic camera, and sheet layout. Transparent background, no labels, no ground shadows. Output ONLY the GREEN GOBLIN, FOUR columns TWO rows: S SW W NW / N NE E SE. It should look cunning, mean and ready to attack, a small villain: prominent low furrowed brow, narrow glaring white eyes with black pupils, blunt green nose, crooked dark smirk with upward tusks, not human baby. Keep leather vest/shorts, hair, pointed ears, wooden club in anatomical RIGHT hand. Front S and front-right SE club is on viewer LEFT. SE club held by near right arm, far left hand empty. All 8 sprites full body and same scale.",
+      "references": [
+        "user-attachment: monster expression pattern reference, received 2026-10-21 JST",
+        "source-art/faces-v2/goblin.png",
+        "source-art/faces-v2/bat.png"
+      ],
+      "output": "source-art/faces-v3/goblin.png"
+    },
+    {
+      "id": "bat-hostile-face-v3",
+      "prompt": "Use the recent reference images: the user's enemy monster example shows the important distinction between simple innocent plant/blob monsters and MALICIOUS beast/humanoid monsters. The two following sheets show current green goblin and purple bat. Edit ONLY the requested species sheet. The prior round black bead eyes are too innocent. Create a clearly MALICIOUS enemy face while retaining simple graphic shapes. Eyes must be SHARP slanted angular white wedges, narrow BLACK pupils, thick heavy brow ridges angled DOWN toward nose (angry V brow). NO round shiny doll eyes, NO detailed colored iris, NO eyelashes, NO cute baby smile. Simple bold readable shapes in 3D figure style. A dark crooked aggressive mouth with obvious two pointed ivory fangs; restrained sneer not friendly smile. Keep existing body, color, clothing, proportions, pose, direction, orthographic camera, and sheet layout. Transparent background, no labels, no ground shadows. Output ONLY the PURPLE BAT, FIVE sprites ONE row: S SE E NE N. Predatory hostile flying beast: low V-shaped brow pressing on angular narrow white eyes, small black pupils, ears sharply alert, small dark open snarling mouth with two downward white triangular fangs. A compact evil cave bat rather than a cute pet. Keep purple fur, pink ears, lavender wing membranes, spread scalloped wings, body size and hovering pose. In rear NE and N show back of head without eyes or mouth. All wing tips fully inside each cell with enough padding.",
+      "references": [
+        "user-attachment: monster expression pattern reference, received 2026-10-21 JST",
+        "source-art/faces-v2/goblin.png",
+        "source-art/faces-v2/bat.png"
+      ],
+      "output": "source-art/faces-v3/bat.png"
+    }
+  ]
+}
