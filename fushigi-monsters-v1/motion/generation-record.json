@@ -1,0 +1,187 @@
+{
+  "dateJST": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "transparent_background": true,
+  "records": [
+    {
+      "kind": "slime",
+      "direction": "S",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing S = front toward camera. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A blue transparent jelly slime with simple dark oval eyes and tiny smile. NO added limbs, no teeth, no crown. Walk A = wide low squash on ground, Walk B = narrower tall buoyant hop; attack windup = deeply compressed lower blob; attack strike = elastic body stretches FORWARD toward facing direction, leaning and lunging. Keep volume constant, not a different body size. The same neutral face can tighten slightly on attack but don't redesign.",
+      "references": [
+        "../assets/slime/S.png",
+        "guides/slime-S-sheet.png"
+      ],
+      "source": "source-art/slime-S.png"
+    },
+    {
+      "kind": "slime",
+      "direction": "SE",
+      "prompt": "Create a game animation keyframe sheet. Reference 1 is the ADOPTED directional idle creature; preserve exactly this identity, materials, body proportions, expression style and facing SE (front-diagonal facing screen RIGHT). Reference 2 is a FOUR-POSE 3D motion guide, NOT the art style. Match its pose sequence. Output FOUR equal square CELLS in TWO COLUMNS and TWO ROWS: top-left WALK A, top-right WALK B, bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Each FULL creature individually centered within its cell with large clear margins, consistent camera orthographic elevation 26deg and scale. Same physical body size across poses, don't zoom to fill each cell. Original idle pose will be reused for start/end, so these are actual changed poses not duplicate idle. No floor, shadow, text, arrows, grids or VFX. TRANSPARENT background. A blue transparent jelly slime with simple dark oval eyes and tiny smile. NO added limbs, no teeth, no crown. Walk A = wide low squash on ground, Walk B = narrower tall buoyant hop; attack windup = deeply compressed lower blob; attack strike = elastic body stretches FORWARD toward facing direction, leaning and lunging. Keep volume constant, not a different body size. The same neutral face can tighten slightly on attack but don't redesign.",
+      "references": [
+        "../assets/slime/SE.png",
+        "guides/slime-SE-sheet.png"
+      ],
+      "source": "source-art/slime-SE.png"
+    },
+    {
+      "kind": "slime",
+      "direction": "E",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing E = profile facing screen RIGHT. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A blue transparent jelly slime with simple dark oval eyes and tiny smile. NO added limbs, no teeth, no crown. Walk A = wide low squash on ground, Walk B = narrower tall buoyant hop; attack windup = deeply compressed lower blob; attack strike = elastic body stretches FORWARD toward facing direction, leaning and lunging. Keep volume constant, not a different body size. The same neutral face can tighten slightly on attack but don't redesign.",
+      "references": [
+        "../assets/slime/E.png",
+        "guides/slime-E-sheet.png"
+      ],
+      "source": "source-art/slime-E.png"
+    },
+    {
+      "kind": "slime",
+      "direction": "NE",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing NE = rear-diagonal facing screen RIGHT, back of head, no face. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A blue transparent jelly slime with simple dark oval eyes and tiny smile. NO added limbs, no teeth, no crown. Walk A = wide low squash on ground, Walk B = narrower tall buoyant hop; attack windup = deeply compressed lower blob; attack strike = elastic body stretches FORWARD toward facing direction, leaning and lunging. Keep volume constant, not a different body size. The same neutral face can tighten slightly on attack but don't redesign. CRITICAL back view: keep NO visible eyes or facial features. Attack goes AWAY from camera in this direction.",
+      "references": [
+        "../assets/slime/NE.png",
+        "guides/slime-NE-sheet.png"
+      ],
+      "source": "source-art/slime-NE.png"
+    },
+    {
+      "kind": "slime",
+      "direction": "N",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing N = rear, back toward viewer, no face. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A blue transparent jelly slime with simple dark oval eyes and tiny smile. NO added limbs, no teeth, no crown. Walk A = wide low squash on ground, Walk B = narrower tall buoyant hop; attack windup = deeply compressed lower blob; attack strike = elastic body stretches FORWARD toward facing direction, leaning and lunging. Keep volume constant, not a different body size. The same neutral face can tighten slightly on attack but don't redesign. CRITICAL back view: keep NO visible eyes or facial features. Attack goes AWAY from camera in this direction.",
+      "references": [
+        "../assets/slime/N.png",
+        "guides/slime-N-sheet.png"
+      ],
+      "source": "source-art/slime-N.png"
+    },
+    {
+      "kind": "goblin",
+      "direction": "S",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing S = front toward camera. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A COMPLETELY BALD green goblin: smooth bare scalp, NO HAIR in any frame, sharp low brows and glaring white eyes/black pupils, tusks, brown vest and shorts, wooden club in anatomical RIGHT hand. Walk A/B = opposite foot strides, bent knees and elbows, same short club held upright right hand. Attack windup = RIGHT arm raises club overhead, elbow bent. Attack strike = near right arm swings club DOWN and FORWARD toward its facing direction; feet planted, torso twists, no swapping hands. NO left-hand club. Far left hand is empty. Keep malicious expression.",
+      "references": [
+        "../assets/goblin/S.png",
+        "guides/goblin-S-sheet.png"
+      ],
+      "source": "source-art/goblin-S.png"
+    },
+    {
+      "kind": "goblin",
+      "direction": "SW",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing SW = front-diagonal toward screen LEFT. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A COMPLETELY BALD green goblin: smooth bare scalp, NO HAIR in any frame, sharp low brows and glaring white eyes/black pupils, tusks, brown vest and shorts, wooden club in anatomical RIGHT hand. Walk A/B = opposite foot strides, bent knees and elbows, same short club held upright right hand. Attack windup = RIGHT arm raises club overhead, elbow bent. Attack strike = near right arm swings club DOWN and FORWARD toward its facing direction; feet planted, torso twists, no swapping hands. NO left-hand club. Far left hand is empty. Keep malicious expression.",
+      "references": [
+        "../assets/goblin/SW.png",
+        "guides/goblin-SW-sheet.png"
+      ],
+      "source": "source-art/goblin-SW.png"
+    },
+    {
+      "kind": "goblin",
+      "direction": "W",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing W = profile facing screen LEFT. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A COMPLETELY BALD green goblin: smooth bare scalp, NO HAIR in any frame, sharp low brows and glaring white eyes/black pupils, tusks, brown vest and shorts, wooden club in anatomical RIGHT hand. Walk A/B = opposite foot strides, bent knees and elbows, same short club held upright right hand. Attack windup = RIGHT arm raises club overhead, elbow bent. Attack strike = near right arm swings club DOWN and FORWARD toward its facing direction; feet planted, torso twists, no swapping hands. NO left-hand club. Far left hand is empty. Keep malicious expression.",
+      "references": [
+        "../assets/goblin/W.png",
+        "guides/goblin-W-sheet.png"
+      ],
+      "source": "source-art/goblin-W.png"
+    },
+    {
+      "kind": "goblin",
+      "direction": "NW",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing NW = rear-diagonal facing screen LEFT, back of head, no face. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A COMPLETELY BALD green goblin: smooth bare scalp, NO HAIR in any frame, sharp low brows and glaring white eyes/black pupils, tusks, brown vest and shorts, wooden club in anatomical RIGHT hand. Walk A/B = opposite foot strides, bent knees and elbows, same short club held upright right hand. Attack windup = RIGHT arm raises club overhead, elbow bent. Attack strike = near right arm swings club DOWN and FORWARD toward its facing direction; feet planted, torso twists, no swapping hands. NO left-hand club. Far left hand is empty. Keep malicious expression. CRITICAL back view: keep NO visible eyes or facial features. Attack goes AWAY from camera in this direction.",
+      "references": [
+        "../assets/goblin/NW.png",
+        "guides/goblin-NW-sheet.png"
+      ],
+      "source": "source-art/goblin-NW.png"
+    },
+    {
+      "kind": "goblin",
+      "direction": "N",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing N = rear, back toward viewer, no face. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A COMPLETELY BALD green goblin: smooth bare scalp, NO HAIR in any frame, sharp low brows and glaring white eyes/black pupils, tusks, brown vest and shorts, wooden club in anatomical RIGHT hand. Walk A/B = opposite foot strides, bent knees and elbows, same short club held upright right hand. Attack windup = RIGHT arm raises club overhead, elbow bent. Attack strike = near right arm swings club DOWN and FORWARD toward its facing direction; feet planted, torso twists, no swapping hands. NO left-hand club. Far left hand is empty. Keep malicious expression. CRITICAL back view: keep NO visible eyes or facial features. Attack goes AWAY from camera in this direction.",
+      "references": [
+        "../assets/goblin/N.png",
+        "guides/goblin-N-sheet.png"
+      ],
+      "source": "source-art/goblin-N.png"
+    },
+    {
+      "kind": "goblin",
+      "direction": "NE",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing NE = rear-diagonal facing screen RIGHT, back of head, no face. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A COMPLETELY BALD green goblin: smooth bare scalp, NO HAIR in any frame, sharp low brows and glaring white eyes/black pupils, tusks, brown vest and shorts, wooden club in anatomical RIGHT hand. Walk A/B = opposite foot strides, bent knees and elbows, same short club held upright right hand. Attack windup = RIGHT arm raises club overhead, elbow bent. Attack strike = near right arm swings club DOWN and FORWARD toward its facing direction; feet planted, torso twists, no swapping hands. NO left-hand club. Far left hand is empty. Keep malicious expression. CRITICAL back view: keep NO visible eyes or facial features. Attack goes AWAY from camera in this direction.",
+      "references": [
+        "../assets/goblin/NE.png",
+        "guides/goblin-NE-sheet.png"
+      ],
+      "source": "source-art/goblin-NE.png"
+    },
+    {
+      "kind": "goblin",
+      "direction": "E",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing E = profile facing screen RIGHT. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. A COMPLETELY BALD green goblin: smooth bare scalp, NO HAIR in any frame, sharp low brows and glaring white eyes/black pupils, tusks, brown vest and shorts, wooden club in anatomical RIGHT hand. Walk A/B = opposite foot strides, bent knees and elbows, same short club held upright right hand. Attack windup = RIGHT arm raises club overhead, elbow bent. Attack strike = near right arm swings club DOWN and FORWARD toward its facing direction; feet planted, torso twists, no swapping hands. NO left-hand club. Far left hand is empty. Keep malicious expression.",
+      "references": [
+        "../assets/goblin/E.png",
+        "guides/goblin-E-sheet.png"
+      ],
+      "source": "source-art/goblin-E.png"
+    },
+    {
+      "kind": "goblin",
+      "direction": "SE",
+      "prompt": "Create a game animation keyframe sheet. Reference 1 is the ADOPTED directional idle creature; preserve exactly this identity, materials, body proportions, expression style and facing SE (front-diagonal facing screen RIGHT). Reference 2 is a FOUR-POSE 3D motion guide, NOT the art style. Match its pose sequence. Output FOUR equal square CELLS in TWO COLUMNS and TWO ROWS: top-left WALK A, top-right WALK B, bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Each FULL creature individually centered within its cell with large clear margins, consistent camera orthographic elevation 26deg and scale. Same physical body size across poses, don't zoom to fill each cell. Original idle pose will be reused for start/end, so these are actual changed poses not duplicate idle. No floor, shadow, text, arrows, grids or VFX. TRANSPARENT background. A COMPLETELY BALD green goblin: smooth bare scalp, NO HAIR in any frame, sharp low brows and glaring white eyes/black pupils, tusks, brown vest and shorts, wooden club in anatomical RIGHT hand. Walk A/B = opposite foot strides, bent knees and elbows, same short club held upright right hand. Attack windup = RIGHT arm raises club overhead, elbow bent. Attack strike = near right arm swings club DOWN and FORWARD toward its facing direction; feet planted, torso twists, no swapping hands. NO left-hand club. Far left hand is empty. Keep malicious expression.",
+      "references": [
+        "../assets/goblin/SE.png",
+        "guides/goblin-SE-sheet.png"
+      ],
+      "source": "source-art/goblin-SE.png"
+    },
+    {
+      "kind": "bat",
+      "direction": "S",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing S = front toward camera. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. An angry purple bat with white slanted eyes and little black pupils, thick purple V brows, a small dark open snarling mouth with two white fangs, pink ear interiors and lavender membranes. Walk A/B means FLY: wings raised / wings lowered with anatomically connected shoulder and folding membrane, do not detach wings. Attack windup = wings raised close to body; attack strike = wings swept down/back and neck/body lunges forward with fangs exposed. No extra limbs, no happy pet face.",
+      "references": [
+        "../assets/bat/S.png",
+        "guides/bat-S-sheet.png"
+      ],
+      "source": "source-art/bat-S.png"
+    },
+    {
+      "kind": "bat",
+      "direction": "SE",
+      "prompt": "Create a game animation keyframe sheet. Reference 1 is the ADOPTED directional idle creature; preserve exactly this identity, materials, body proportions, expression style and facing SE (front-diagonal facing screen RIGHT). Reference 2 is a FOUR-POSE 3D motion guide, NOT the art style. Match its pose sequence. Output FOUR equal square CELLS in TWO COLUMNS and TWO ROWS: top-left WALK A, top-right WALK B, bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Each FULL creature individually centered within its cell with large clear margins, consistent camera orthographic elevation 26deg and scale. Same physical body size across poses, don't zoom to fill each cell. Original idle pose will be reused for start/end, so these are actual changed poses not duplicate idle. No floor, shadow, text, arrows, grids or VFX. TRANSPARENT background. An angry purple bat with white slanted eyes and little black pupils, thick purple V brows, a small dark open snarling mouth with two white fangs, pink ear interiors and lavender membranes. Walk A/B means FLY: wings raised / wings lowered with anatomically connected shoulder and folding membrane, do not detach wings. Attack windup = wings raised close to body; attack strike = wings swept down/back and neck/body lunges forward with fangs exposed. No extra limbs, no happy pet face.",
+      "references": [
+        "../assets/bat/SE.png",
+        "guides/bat-SE-sheet.png"
+      ],
+      "source": "source-art/bat-SE.png"
+    },
+    {
+      "kind": "bat",
+      "direction": "E",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing E = profile facing screen RIGHT. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. An angry purple bat with white slanted eyes and little black pupils, thick purple V brows, a small dark open snarling mouth with two white fangs, pink ear interiors and lavender membranes. Walk A/B means FLY: wings raised / wings lowered with anatomically connected shoulder and folding membrane, do not detach wings. Attack windup = wings raised close to body; attack strike = wings swept down/back and neck/body lunges forward with fangs exposed. No extra limbs, no happy pet face.",
+      "references": [
+        "../assets/bat/E.png",
+        "guides/bat-E-sheet.png"
+      ],
+      "source": "source-art/bat-E.png"
+    },
+    {
+      "kind": "bat",
+      "direction": "NE",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing NE = rear-diagonal facing screen RIGHT, back of head, no face. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. An angry purple bat with white slanted eyes and little black pupils, thick purple V brows, a small dark open snarling mouth with two white fangs, pink ear interiors and lavender membranes. Walk A/B means FLY: wings raised / wings lowered with anatomically connected shoulder and folding membrane, do not detach wings. Attack windup = wings raised close to body; attack strike = wings swept down/back and neck/body lunges forward with fangs exposed. No extra limbs, no happy pet face. CRITICAL back view: keep NO visible eyes or facial features. Attack goes AWAY from camera in this direction.",
+      "references": [
+        "../assets/bat/NE.png",
+        "guides/bat-NE-sheet.png"
+      ],
+      "source": "source-art/bat-NE.png"
+    },
+    {
+      "kind": "bat",
+      "direction": "N",
+      "prompt": "Create FOUR animation key poses of the SAME creature in reference 1, using reference 2 as 3D pose guide. Preserve adopted creature identity, expression, materials, proportions and EXACT directional facing N = rear, back toward viewer, no face. Do NOT turn to another direction during the motion. Output EXACTLY FOUR equal square cells TWO columns TWO rows: top-left WALK A (left foot forward/right foot back or wings high/squashed jelly), top-right WALK B (RIGHT foot forward/left back, swap the planted leg; or wings lowered/tall jelly), bottom-left ATTACK WINDUP, bottom-right ATTACK STRIKE. Orthographic camera elevation 26deg. Same physical scale, roomy empty margins around FULL bodies, NEVER zoom per pose. Start and end idle are taken from reference1 separately. No text, labels, floor, shadows, grid, weapons except existing club, nor VFX. Transparent background. An angry purple bat with white slanted eyes and little black pupils, thick purple V brows, a small dark open snarling mouth with two white fangs, pink ear interiors and lavender membranes. Walk A/B means FLY: wings raised / wings lowered with anatomically connected shoulder and folding membrane, do not detach wings. Attack windup = wings raised close to body; attack strike = wings swept down/back and neck/body lunges forward with fangs exposed. No extra limbs, no happy pet face. CRITICAL back view: keep NO visible eyes or facial features. Attack goes AWAY from camera in this direction.",
+      "references": [
+        "../assets/bat/N.png",
+        "guides/bat-N-sheet.png"
+      ],
+      "source": "source-art/bat-N.png"
+    }
+  ]
+}

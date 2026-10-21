@@ -1,6 +1,6 @@
 {
-  "version": 3,
-  "status": "hostile-beast-humanoid-face-review; not approved; not integrated",
+  "version": 4,
+  "status": "adopted-hostile-faces-bald-goblin; not approved; not integrated",
   "frameSize": 256,
   "origin": [
     128,
@@ -78,59 +78,59 @@
     },
     "goblin": {
       "name": "ゴブリン",
-      "scale": 0.35648148148148145,
+      "scale": 0.3783783783783784,
       "bodyHeight": 154,
       "visualBottom": 224,
-      "source": "source-art/faces-v3/goblin.png",
-      "sourceSha256": "abae95fd033a7f8f890c7eb075d647fe057b16e4a96b97466889dcd68d08025a",
+      "source": "source-art/bald-v4/goblin.png",
+      "sourceSha256": "1506ef7997a79049d7c2b6ee72ea3f20a6a5f5ce451d4dc0fe25626416fc5f4e",
       "views": {
         "S": {
           "source": "S",
           "mirror": false,
           "path": "assets/goblin/S.png",
-          "sha256": "98d8dd94b4eb2ad3994d63902b83bcf4a7ebd728981ea0da4a9329bcd9ba62d4"
+          "sha256": "4a69efca28b608dfbf166a523d3ed8eae10a028286414b17b0b7d9a77e5c1bfe"
         },
         "SW": {
           "source": "SW",
           "mirror": false,
           "path": "assets/goblin/SW.png",
-          "sha256": "9dc915ba03a86d5898b21f74e0f35a271abe415c8dd236eaaab1c6bf911134bc"
+          "sha256": "49a9d75f9fd848ed4ecc5a50c37dda9fbf5ebe4f29b85dbe7da34047de46c7bf"
         },
         "W": {
           "source": "W",
           "mirror": false,
           "path": "assets/goblin/W.png",
-          "sha256": "78bae1a35e6649dfa1ac27e96f6ff6f232a7686a7b0c981133022f8b6100e015"
+          "sha256": "06235e5f9a40b422ec3936a36095f8d546abaaf4dfe45db192a97423c8747987"
         },
         "NW": {
           "source": "NW",
           "mirror": false,
           "path": "assets/goblin/NW.png",
-          "sha256": "9a97150fc81b412d8800aad9f5281c184d04cf988512337cb7241eb380425686"
+          "sha256": "524753b1e479add4f37f26dfd25ad160b6021f986b5ce430d161b9bf94aa2031"
         },
         "N": {
           "source": "N",
           "mirror": false,
           "path": "assets/goblin/N.png",
-          "sha256": "c306b3c13650aa20447484c2ee112f7b4b1fd0b7f1ec5f0e96702e03c508fa19"
+          "sha256": "00cfdbf68d384c2fda5c45549cb67c91f4d407823293b45f9be45b823322f3f6"
         },
         "NE": {
           "source": "NE",
           "mirror": false,
           "path": "assets/goblin/NE.png",
-          "sha256": "6345c26fde8218813e3294078aa70c17a02a8766a876ec76326376eaf898f0cc"
+          "sha256": "c7f97ff7aa830eeeb762cb7e2a69537ec3cfedffb3712e7cb3f3a698379e0a6e"
         },
         "E": {
           "source": "E",
           "mirror": false,
           "path": "assets/goblin/E.png",
-          "sha256": "6651609534f35720a9fbee01b8c9200c7b6a6336b44b8a44155a80c7e5fb678d"
+          "sha256": "5b4b344279c52cb6846faa0c6e56399862a0c8d0ba635990966ad8aab49c8012"
         },
         "SE": {
           "source": "SE",
           "mirror": false,
           "path": "assets/goblin/SE.png",
-          "sha256": "35fcb1f6c61fbf038836c19b4944231fc27ca28d91e5714a6d869a8f24e583e0"
+          "sha256": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3"
         }
       }
     },

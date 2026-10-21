@@ -133,6 +133,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/hero-actions.js?v=actions-v1"></script>
 <script src="assets/dungeon-generator.js?v=locations-v1"></script>
 <script src="assets/cave-terrain.js?v=wall-relief-v1"></script>
+<script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -1492,6 +1493,8 @@ function clearShot(e) {                                          // 敵→プレ
 // 敵1体の攻撃（近接も遠距離も共通）。結果 {dead, hit, dmg}
 function enemyStrike(e, T, range, verb) {
   const [lo, hi] = range;
+  e.monsterFace = [Math.sign(player.x-e.x), Math.sign(player.y-e.y)];
+  e.monsterAttackFace = e.monsterFace.slice(); e.monsterAttackStart = now();
   bumpToward(e, player.x, player.y);
   if (e.x !== player.x) e.fl = player.x < e.x;
   if (Math.random() >= ACC.e) { say(`${T.name}の${verb}！ はずれた。`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
@@ -2092,6 +2095,13 @@ function drawChar(key, x, y, g, k, e, t) {
     return;
   }
   if (key === 'player' && rigOn()) { const S = TS * k; drawRig(g, x - (S - TS) / 2 + S / 2, y - (S - TS) + S, S * 0.97, e, t); return; }
+  if (e && typeof MonsterSprites !== 'undefined' && MonsterSprites.has(e.kind)) {
+    const attacking = e.monsterAttackStart != null && t-e.monsterAttackStart < 300;
+    const face = attacking ? e.monsterAttackFace : e.monsterFace;
+    const action = attacking ? 'attack' : e.monsterWalkEnd > t ? 'walk' : 'idle';
+    const elapsed = t-(attacking ? e.monsterAttackStart : e.monsterWalkStart || t)+(action==='walk' ? (e.monsterWalkStep||0)%2*160 : 0);
+    if (MonsterSprites.draw(g,e.kind,MonsterSprites.direction(face),x+TS/2,y+TS-tilePitchY()*.1,TS*k,action,elapsed)) return;
+  }
   blit(key, x, y, g, k);
 }
 
@@ -2108,12 +2118,13 @@ function drawEntity(key, e, t, camX, camY) {
   const [ox, oy] = entityOffset(e, t);
   const px = Math.round(camX + (e.vx + ox) * TS), py = Math.round(camY + (e.vy + oy) * tilePitchY());
   const d = Math.hypot(e.x - e.vx, e.y - e.vy);
-  const hop = key !== 'player' && d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 歩くときの小さな跳ね
+  const newMonster = typeof MonsterSprites !== 'undefined' && MonsterSprites.ready && MonsterSprites.has(e.kind);
+  const hop = key !== 'player' && !newMonster && d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 新敵は描いた歩行コマを使用
   ctx.fillStyle = 'rgba(0,0,0,.35)';
   const ck = CHAR_K[charPref];
   ctx.beginPath(); ctx.ellipse(px + TS / 2, py + tilePitchY() * 0.9, TS * 0.32 * Math.min(ck, 1.25), TS * 0.1 * Math.min(ck, 1.25), 0, 0, Math.PI * 2); ctx.fill();
   ctx.save();
-  if (e.fl && key !== 'player') { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
+  if (e.fl && key !== 'player' && !newMonster) { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
   if (hue && 'filter' in ctx) ctx.filter = `hue-rotate(${hue}deg)`;
   drawChar(key, 0, key === 'player' ? 0 : tilePitchY() - TS, ctx, ck, e, t);
   if (hue && 'filter' in ctx) ctx.filter = 'none';
@@ -2288,6 +2299,14 @@ function draw() {
 function stepVis(dt) {
   for (const e of [player, ...enemies]) {
     const dx = e.x - e.vx, dy = e.y - e.vy, d = Math.hypot(dx, dy);
+    if (e !== player && typeof MonsterSprites !== 'undefined' && MonsterSprites.has(e.kind) && d>.001 && d<=2.5) {
+      if (e.monsterTargetX !== e.x || e.monsterTargetY !== e.y) {
+        e.monsterTargetX=e.x; e.monsterTargetY=e.y;
+        e.monsterFace=[Math.sign(dx),Math.sign(dy)];
+        e.monsterWalkStep=(e.monsterWalkStep||0)+1;
+        e.monsterWalkStart=now(); e.monsterWalkEnd=now()+160;
+      }
+    }
     if (d > 2.5) { e.vx = e.x; e.vy = e.y; continue; }
     const s = dt / 100;                                                            // 1マス/100ms
     if (d <= s) { e.vx = e.x; e.vy = e.y; } else { e.vx += dx / d * s; e.vy += dy / d * s; }
@@ -2298,6 +2317,7 @@ function animating(t) {
   if (player.swing && t - player.swing < SWING_MS) return true;
   if (player.action && t-player.action.t0 < player.action.duration) return true;
   if (player.walkEnd && t < player.walkEnd) return true;
+  if (enemies.some(e => e.monsterWalkEnd > t || e.monsterAttackStart != null && t-e.monsterAttackStart < 300)) return true;
   if (dead && t - deadAt < 350) return true;
   return [player, ...enemies].some(e => Math.abs(e.x - e.vx) > 0.001 || Math.abs(e.y - e.vy) > 0.001 || e.bump || e.flash > t);
 }
@@ -2401,7 +2421,7 @@ resize();
 loadExternalAssets();
 loadRig();
 boot();
-if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); }
+if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); }
 </script>
 </body>
 </html>

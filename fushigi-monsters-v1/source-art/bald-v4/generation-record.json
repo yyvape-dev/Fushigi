@@ -1,0 +1,8 @@
+{
+  "dateJST": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "prompt": "Edit this 8-direction goblin sprite sheet: REMOVE ALL HAIR from the goblin in EVERY direction. Completely BALD smooth green scalp, rounded cranium; no tuft, stubble, eyebrows made of hair, cap, helmet or replacement decoration. Keep the existing thick green sculpted brow ridges and hostile glaring eyes, tusks, green pointed ears, body shape, leather clothing, right-hand wooden club, pose, lighting and directions. ONLY the scalp/hair region changes; preserve everything else carefully. FOUR columns TWO rows, directions S SW W NW / N NE E SE. The front-facing S club stays viewer LEFT, the SE club stays viewer LEFT in the near RIGHT hand. Transparent background, full bodies with margins, consistent same scale, no text, no shadow.",
+  "reference": "../faces-v3/goblin.png",
+  "output": "goblin.png",
+  "userDecision": "Adopt other designs; goblin without hair; proceed."
+}

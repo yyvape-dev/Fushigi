@@ -77,18 +77,18 @@
     "goblin": {
       "S": {
         "visibleBounds": [
-          63,
-          73,
-          193,
+          60,
+          71,
+          196,
           223
         ],
         "mirror": false
       },
       "SW": {
         "visibleBounds": [
-          65,
-          71,
-          192,
+          60,
+          69,
+          196,
           223
         ],
         "mirror": false
@@ -96,7 +96,7 @@
       "W": {
         "visibleBounds": [
           76,
-          69,
+          71,
           180,
           223
         ],
@@ -104,27 +104,27 @@
       },
       "NW": {
         "visibleBounds": [
-          68,
-          70,
-          188,
+          65,
+          73,
+          192,
           223
         ],
         "mirror": false
       },
       "N": {
         "visibleBounds": [
-          63,
-          78,
-          193,
+          60,
+          77,
+          197,
           223
         ],
         "mirror": false
       },
       "NE": {
         "visibleBounds": [
-          67,
-          80,
-          189,
+          64,
+          79,
+          193,
           223
         ],
         "mirror": false
@@ -132,17 +132,17 @@
       "E": {
         "visibleBounds": [
           76,
-          75,
-          180,
+          74,
+          181,
           223
         ],
         "mirror": false
       },
       "SE": {
         "visibleBounds": [
-          68,
-          75,
-          189,
+          65,
+          73,
+          192,
           223
         ],
         "mirror": false

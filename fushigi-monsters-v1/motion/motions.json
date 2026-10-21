@@ -1,0 +1,1682 @@
+{
+  "version": 1,
+  "frameSize": 256,
+  "origin": [
+    128,
+    224
+  ],
+  "poses": [
+    "walk-a",
+    "walk-b",
+    "windup",
+    "strike"
+  ],
+  "walk": {
+    "duration": 320,
+    "frames": [
+      0,
+      -1,
+      1,
+      -1
+    ]
+  },
+  "attack": {
+    "duration": 300,
+    "frames": [
+      -1,
+      2,
+      3,
+      -1
+    ],
+    "durations": [
+      35,
+      100,
+      95,
+      70
+    ]
+  },
+  "monsters": {
+    "slime": {
+      "directions": {
+        "S": {
+          "atlas": "assets/slime/S.png",
+          "mirror": false,
+          "source": "source-art/slime-S.png",
+          "sourceSha256": "0603eeba551da3909add641826a5b55f38f6a36a8648a5d8264a4e2c36175e01",
+          "baseSha256": "cef5f9cdead0cdcea756f92ef9eabc92adb9b00d2412831a20aabda7c637465a",
+          "guideSha256": "efde0c7a6c8280b2600ad391fc67300ccc498356adf079c6d440737b85bc8b66",
+          "sha256": "8a13579470f7b78a25c143b13b9839e17e3e02aefed4cc005043fe4d7011690f",
+          "scale": 0.27848101265822783,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                84,
+                359,
+                618,
+                609
+              ],
+              "offset": [
+                53,
+                153
+              ],
+              "visibleBounds": [
+                53,
+                153,
+                203,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                104,
+                220,
+                518,
+                583
+              ],
+              "offset": [
+                70,
+                110
+              ],
+              "visibleBounds": [
+                70,
+                110,
+                186,
+                212
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                90,
+                256,
+                606,
+                467
+              ],
+              "offset": [
+                56,
+                164
+              ],
+              "visibleBounds": [
+                56,
+                164,
+                201,
+                224
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                49,
+                171,
+                572,
+                475
+              ],
+              "offset": [
+                55,
+                138
+              ],
+              "visibleBounds": [
+                55,
+                138,
+                202,
+                224
+              ]
+            }
+          ]
+        },
+        "SE": {
+          "atlas": "assets/slime/SE.png",
+          "mirror": false,
+          "source": "source-art/slime-SE.png",
+          "sourceSha256": "3e4589420900db8c8deca65a58516f53adcf934c1307e48f095b4e89b7490137",
+          "baseSha256": "9e8e8b79cc75fb4c5df429c74de96ad909fae5f6bf93c49b7b65bc9ca61ba8c8",
+          "guideSha256": "a813b6f19801352ef0ba16a35df4006fc8797a0caabab25a1ae24dfb2eae1c9e",
+          "sha256": "6e44417abe5fc412f7a277ba5e4a869d6f4c8929ee9e341dc9897f99a999f1a7",
+          "scale": 0.34152652005174644,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                124,
+                338,
+                547,
+                543
+              ],
+              "offset": [
+                55,
+                153
+              ],
+              "visibleBounds": [
+                56,
+                154,
+                201,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                139,
+                242,
+                489,
+                525
+              ],
+              "offset": [
+                68,
+                114
+              ],
+              "visibleBounds": [
+                68,
+                114,
+                188,
+                211
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                134,
+                322,
+                549,
+                499
+              ],
+              "offset": [
+                57,
+                162
+              ],
+              "visibleBounds": [
+                57,
+                163,
+                199,
+                224
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                83,
+                240,
+                576,
+                488
+              ],
+              "offset": [
+                43,
+                138
+              ],
+              "visibleBounds": [
+                43,
+                138,
+                213,
+                224
+              ]
+            }
+          ]
+        },
+        "E": {
+          "atlas": "assets/slime/E.png",
+          "mirror": false,
+          "source": "source-art/slime-E.png",
+          "sourceSha256": "dadd7501cf0558b6bf2a1644ffbb10567bf08623d5aa15de1ea014d79b55f959",
+          "baseSha256": "cb3e72cd60e6f31c2f122da67e6d9151f9402c72cbc23047390399265eaea971",
+          "guideSha256": "05ff1e69fb1ad07b812fdc99d22df14159f0d42bfca483dcf0a13c7aa5aa4fdb",
+          "sha256": "ad7c25cd21f40ea74ea78eeea1b367813442576e0323a33b9d4c59d9e3f219ee",
+          "scale": 0.3263707571801567,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                120,
+                347,
+                557,
+                548
+              ],
+              "offset": [
+                56,
+                157
+              ],
+              "visibleBounds": [
+                56,
+                157,
+                199,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                138,
+                239,
+                467,
+                530
+              ],
+              "offset": [
+                74,
+                116
+              ],
+              "visibleBounds": [
+                74,
+                116,
+                183,
+                211
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                134,
+                327,
+                541,
+                514
+              ],
+              "offset": [
+                61,
+                162
+              ],
+              "visibleBounds": [
+                61,
+                162,
+                195,
+                223
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                80,
+                251,
+                582,
+                490
+              ],
+              "offset": [
+                46,
+                145
+              ],
+              "visibleBounds": [
+                47,
+                146,
+                210,
+                224
+              ]
+            }
+          ]
+        },
+        "NE": {
+          "atlas": "assets/slime/NE.png",
+          "mirror": false,
+          "source": "source-art/slime-NE.png",
+          "sourceSha256": "b540963f49e01df1a5d8a8c6cafa535202f9ab627d029c5957cff46bd64b3576",
+          "baseSha256": "893320fbafd8c86679ed7b3b7aea518e1c339b970abea88034ed677e686e5f25",
+          "guideSha256": "194db59a7aee9ead0466c8dc0358dc350e3f4c331cfaeaa04e07e2f2ab72e0cb",
+          "sha256": "4f95ff42e91d18d914574548dd414f7b43023d337c08a6d5628f2a2c524e6970",
+          "scale": 0.32955974842767294,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                108,
+                350,
+                561,
+                567
+              ],
+              "offset": [
+                53,
+                151
+              ],
+              "visibleBounds": [
+                53,
+                151,
+                204,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                144,
+                227,
+                486,
+                548
+              ],
+              "offset": [
+                71,
+                105
+              ],
+              "visibleBounds": [
+                71,
+                105,
+                184,
+                212
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                127,
+                337,
+                535,
+                522
+              ],
+              "offset": [
+                60,
+                162
+              ],
+              "visibleBounds": [
+                60,
+                162,
+                196,
+                224
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                72,
+                182,
+                553,
+                525
+              ],
+              "offset": [
+                48,
+                110
+              ],
+              "visibleBounds": [
+                48,
+                110,
+                208,
+                223
+              ]
+            }
+          ]
+        },
+        "N": {
+          "atlas": "assets/slime/N.png",
+          "mirror": false,
+          "source": "source-art/slime-N.png",
+          "sourceSha256": "0e53a50b9d1dfbac202b43d80ed47cbbe272dc39caa65c00282fe8f67914fb08",
+          "baseSha256": "e957026d5ae15d33da5d5f9e83275eba13ba1bd0da1cff5dd45f5bcd7dd59aeb",
+          "guideSha256": "3527d4fd8762b7b81de742e57cfed00edb35be23883374f0986732795cb2e193",
+          "sha256": "66647b4cdc241f356aba0ac39e25be716b501dd74456fd2bfb96e83b3732b0f7",
+          "scale": 0.3295880149812734,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                113,
+                325,
+                564,
+                564
+              ],
+              "offset": [
+                53,
+                144
+              ],
+              "visibleBounds": [
+                53,
+                145,
+                203,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                136,
+                228,
+                486,
+                545
+              ],
+              "offset": [
+                70,
+                106
+              ],
+              "visibleBounds": [
+                70,
+                106,
+                186,
+                212
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                101,
+                307,
+                565,
+                493
+              ],
+              "offset": [
+                51,
+                161
+              ],
+              "visibleBounds": [
+                51,
+                161,
+                204,
+                224
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                78,
+                150,
+                569,
+                502
+              ],
+              "offset": [
+                47,
+                107
+              ],
+              "visibleBounds": [
+                48,
+                108,
+                210,
+                223
+              ]
+            }
+          ]
+        },
+        "SW": {
+          "atlas": "assets/slime/SW.png",
+          "mirror": true,
+          "mirrorSource": "SE",
+          "sha256": "db8ea54c57101a8b31dc77d9574b25ad5915b876ff4da643f5a8791bb357b02c"
+        },
+        "W": {
+          "atlas": "assets/slime/W.png",
+          "mirror": true,
+          "mirrorSource": "E",
+          "sha256": "9d28e30c0b88de7a15de898a4941d8a22d1ed4ceb3474f798f42bb502c41fc29"
+        },
+        "NW": {
+          "atlas": "assets/slime/NW.png",
+          "mirror": true,
+          "mirrorSource": "NE",
+          "sha256": "74d2e0a10ef003058a41c4f1a167a20107abc5edd8891df54c6b6670ac81c17b"
+        }
+      }
+    },
+    "goblin": {
+      "directions": {
+        "S": {
+          "atlas": "assets/goblin/S.png",
+          "mirror": false,
+          "source": "source-art/goblin-S.png",
+          "sourceSha256": "f790cbe63ad545df53209518a042a464733309b7d51ebdcd5f006c9a9ca1c515",
+          "baseSha256": "4a69efca28b608dfbf166a523d3ed8eae10a028286414b17b0b7d9a77e5c1bfe",
+          "guideSha256": "188738ad61c8681b91a1a95e4151f495e3ee3bb849496e805c64df42c4b3e737",
+          "sha256": "2f8d5b5ac5de7d4c40f761dcb01a85f8a0122bb1d8fb34e2ede83625102fb7f5",
+          "scale": 0.30430430430430433,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                147,
+                55,
+                566,
+                550
+              ],
+              "offset": [
+                64,
+                72
+              ],
+              "visibleBounds": [
+                64,
+                72,
+                193,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                93,
+                55,
+                508,
+                559
+              ],
+              "offset": [
+                64,
+                69
+              ],
+              "visibleBounds": [
+                64,
+                69,
+                192,
+                224
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                144,
+                17,
+                570,
+                609
+              ],
+              "offset": [
+                63,
+                43
+              ],
+              "visibleBounds": [
+                63,
+                44,
+                194,
+                224
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                110,
+                76,
+                517,
+                546
+              ],
+              "offset": [
+                66,
+                80
+              ],
+              "visibleBounds": [
+                66,
+                80,
+                191,
+                224
+              ]
+            }
+          ]
+        },
+        "SW": {
+          "atlas": "assets/goblin/SW.png",
+          "mirror": false,
+          "source": "source-art/goblin-SW.png",
+          "sourceSha256": "a3b1ee83a2e6027b9cf3845724c0f6de90dc8c338995d611db57a6d51c011a15",
+          "baseSha256": "49a9d75f9fd848ed4ecc5a50c37dda9fbf5ebe4f29b85dbe7da34047de46c7bf",
+          "guideSha256": "8f3f0f1a61c68e512feab9db3f2ec6d9f61c361a9c2a5c6203f8f303032968d8",
+          "sha256": "fc1b1b8d5de7fa12a76680a9fbef10807a890bd0daeaf386212bb008708904d8",
+          "scale": 0.3366120218579235,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                149,
+                83,
+                537,
+                547
+              ],
+              "offset": [
+                62,
+                66
+              ],
+              "visibleBounds": [
+                63,
+                66,
+                194,
+                223
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                144,
+                84,
+                529,
+                535
+              ],
+              "offset": [
+                63,
+                71
+              ],
+              "visibleBounds": [
+                64,
+                72,
+                194,
+                224
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                164,
+                12,
+                536,
+                553
+              ],
+              "offset": [
+                65,
+                41
+              ],
+              "visibleBounds": [
+                66,
+                41,
+                191,
+                224
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                50,
+                142,
+                550,
+                559
+              ],
+              "offset": [
+                43,
+                82
+              ],
+              "visibleBounds": [
+                43,
+                82,
+                213,
+                223
+              ]
+            }
+          ]
+        },
+        "W": {
+          "atlas": "assets/goblin/W.png",
+          "mirror": false,
+          "source": "source-art/goblin-W.png",
+          "sourceSha256": "64c98a0baebb9bb73753cf710a05a8e096204ffb027b4fe80cda529ae4ead37c",
+          "baseSha256": "06235e5f9a40b422ec3936a36095f8d546abaaf4dfe45db192a97423c8747987",
+          "guideSha256": "874802f363f94b3a2bd9c0e6a4f272307c620057441fbc2e18cbccc48bd5ee19",
+          "sha256": "7f688312b80c343a37bc507f14edd08f73dee780a2504374ecae305004473cdb",
+          "scale": 0.3675937122128174,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                153,
+                128,
+                454,
+                540
+              ],
+              "offset": [
+                72,
+                71
+              ],
+              "visibleBounds": [
+                72,
+                71,
+                184,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                140,
+                127,
+                449,
+                542
+              ],
+              "offset": [
+                71,
+                70
+              ],
+              "visibleBounds": [
+                72,
+                70,
+                185,
+                224
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                225,
+                35,
+                511,
+                529
+              ],
+              "offset": [
+                75,
+                41
+              ],
+              "visibleBounds": [
+                75,
+                42,
+                181,
+                223
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                42,
+                155,
+                514,
+                529
+              ],
+              "offset": [
+                41,
+                85
+              ],
+              "visibleBounds": [
+                41,
+                85,
+                216,
+                223
+              ]
+            }
+          ]
+        },
+        "NW": {
+          "atlas": "assets/goblin/NW.png",
+          "mirror": false,
+          "source": "source-art/goblin-NW.png",
+          "sourceSha256": "cd5c51103618aa562c515d25a5f8b3dea4d4edcfa6503ff900792ea7c958e6a5",
+          "baseSha256": "524753b1e479add4f37f26dfd25ad160b6021f986b5ce430d161b9bf94aa2031",
+          "guideSha256": "1be1a1a97afaac126e05bdc6081c6155bce5f5a6b3102c8a0745008912a3d993",
+          "sha256": "949b79c2ed57f6b88e0ba831ae26b2504ee377ce7700eb66075e7def5bfed6ed",
+          "scale": 0.35502958579881655,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                143,
+                120,
+                484,
+                541
+              ],
+              "offset": [
+                67,
+                73
+              ],
+              "visibleBounds": [
+                67,
+                73,
+                189,
+                223
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                143,
+                120,
+                497,
+                544
+              ],
+              "offset": [
+                65,
+                72
+              ],
+              "visibleBounds": [
+                66,
+                73,
+                192,
+                223
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                160,
+                27,
+                515,
+                527
+              ],
+              "offset": [
+                65,
+                45
+              ],
+              "visibleBounds": [
+                66,
+                45,
+                192,
+                223
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                4,
+                4,
+                375,
+                388
+              ],
+              "offset": [
+                62,
+                86
+              ],
+              "visibleBounds": [
+                62,
+                86,
+                195,
+                224
+              ]
+            }
+          ],
+          "strikeCorrection": {
+            "source": "source-art/goblin-NW-strike-right-hand.png",
+            "sourceSha256": "55de22f0f41262e16b392c7bd13cefdd52d9bbd878663bb274121eb6837affd5",
+            "normalizedHeight": 384.475
+          }
+        },
+        "N": {
+          "atlas": "assets/goblin/N.png",
+          "mirror": false,
+          "source": "source-art/goblin-N.png",
+          "sourceSha256": "d7eb8c1b3d36d9f78b8e09d6cca18cde80cb7bc99f1a7590e3078f555e1b013b",
+          "baseSha256": "00cfdbf68d384c2fda5c45549cb67c91f4d407823293b45f9be45b823322f3f6",
+          "guideSha256": "2815837d3434c84af0cb16b22ecba7a77fe721d65255b42faa1c487bf1d01da0",
+          "sha256": "359a02b2eb923ac57d1d161f587de27d0f1755f2d76db9e7e19a3875e9786519",
+          "scale": 0.33796296296296297,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                143,
+                84,
+                524,
+                519
+              ],
+              "offset": [
+                63,
+                76
+              ],
+              "visibleBounds": [
+                64,
+                76,
+                192,
+                223
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                115,
+                87,
+                491,
+                516
+              ],
+              "offset": [
+                64,
+                78
+              ],
+              "visibleBounds": [
+                64,
+                78,
+                191,
+                224
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                127,
+                16,
+                504,
+                538
+              ],
+              "offset": [
+                64,
+                46
+              ],
+              "visibleBounds": [
+                65,
+                46,
+                192,
+                224
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                4,
+                4,
+                365,
+                397
+              ],
+              "offset": [
+                67,
+                90
+              ],
+              "visibleBounds": [
+                67,
+                91,
+                190,
+                224
+              ]
+            }
+          ],
+          "strikeCorrection": {
+            "source": "source-art/goblin-N-strike-fixed.png",
+            "sourceSha256": "0d5948f3aa1755c4773ef8bbbd2d5cdbd8b977b3d749b1247efa0e66983d692a",
+            "normalizedHeight": 393.12
+          }
+        },
+        "NE": {
+          "atlas": "assets/goblin/NE.png",
+          "mirror": false,
+          "source": "source-art/goblin-NE.png",
+          "sourceSha256": "4e8a555879567bda47f08fc4a69715f646240aab9e287746f5af46b831a7542c",
+          "baseSha256": "c7f97ff7aa830eeeb762cb7e2a69537ec3cfedffb3712e7cb3f3a698379e0a6e",
+          "guideSha256": "301c08043aa2b048c5528c089aa4903c3a0443bbdf95b9c20aaf10911a622047",
+          "sha256": "a8fe4ae5260118f777a1a5ec3a992653d1df27cf23a2962313486d1386541c39",
+          "scale": 0.34993924665856624,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                173,
+                127,
+                524,
+                538
+              ],
+              "offset": [
+                66,
+                79
+              ],
+              "visibleBounds": [
+                66,
+                79,
+                190,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                128,
+                144,
+                496,
+                556
+              ],
+              "offset": [
+                63,
+                78
+              ],
+              "visibleBounds": [
+                64,
+                79,
+                192,
+                223
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                166,
+                31,
+                507,
+                508
+              ],
+              "offset": [
+                68,
+                56
+              ],
+              "visibleBounds": [
+                69,
+                57,
+                188,
+                223
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                115,
+                144,
+                585,
+                515
+              ],
+              "offset": [
+                45,
+                93
+              ],
+              "visibleBounds": [
+                46,
+                93,
+                211,
+                223
+              ]
+            }
+          ]
+        },
+        "E": {
+          "atlas": "assets/goblin/E.png",
+          "mirror": false,
+          "source": "source-art/goblin-E.png",
+          "sourceSha256": "109d3d68c8df7fb9d5d5030515e92f873e88100f8d84bc9c5093ea1b302b7f2f",
+          "baseSha256": "5b4b344279c52cb6846faa0c6e56399862a0c8d0ba635990966ad8aab49c8012",
+          "guideSha256": "b8f3e6d310eb31742f6463833f43bca33cc1b66017e65e44500c3ff8f33eee1e",
+          "sha256": "841e20f24ec0f2d6c83a838a8f18956af2e2f7638a0668793ba9e38043bc5e04",
+          "scale": 0.3143459915611814,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                162,
+                87,
+                538,
+                564
+              ],
+              "offset": [
+                69,
+                73
+              ],
+              "visibleBounds": [
+                70,
+                74,
+                188,
+                224
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                138,
+                87,
+                501,
+                558
+              ],
+              "offset": [
+                71,
+                75
+              ],
+              "visibleBounds": [
+                71,
+                75,
+                186,
+                224
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                159,
+                35,
+                502,
+                544
+              ],
+              "offset": [
+                74,
+                63
+              ],
+              "visibleBounds": [
+                74,
+                64,
+                182,
+                224
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                101,
+                110,
+                574,
+                543
+              ],
+              "offset": [
+                53,
+                87
+              ],
+              "visibleBounds": [
+                53,
+                87,
+                202,
+                224
+              ]
+            }
+          ]
+        },
+        "SE": {
+          "atlas": "assets/goblin/SE.png",
+          "mirror": false,
+          "source": "source-art/goblin-SE.png",
+          "sourceSha256": "cdc5acd24acd4318164a3210882cad0c06d1a7ecbf2d908c02cc96379bf37cac",
+          "baseSha256": "03420efb0e383325590111b91d7017b714721eb73b00ab5233c2ccbcad880dd3",
+          "guideSha256": "1df373631574e46dd94e8b85a728663912951284f6650903f30c786dfb1085a2",
+          "sha256": "388d05f953b05d986c5ff02587262c3e1f68d0b59114df7b9c99f8e8afe172d1",
+          "scale": 0.32119914346895073,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                129,
+                85,
+                502,
+                553
+              ],
+              "offset": [
+                68,
+                72
+              ],
+              "visibleBounds": [
+                68,
+                72,
+                188,
+                223
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                130,
+                85,
+                502,
+                551
+              ],
+              "offset": [
+                68,
+                73
+              ],
+              "visibleBounds": [
+                69,
+                73,
+                189,
+                224
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                156,
+                15,
+                531,
+                545
+              ],
+              "offset": [
+                67,
+                52
+              ],
+              "visibleBounds": [
+                67,
+                53,
+                189,
+                223
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                120,
+                101,
+                563,
+                549
+              ],
+              "offset": [
+                56,
+                79
+              ],
+              "visibleBounds": [
+                56,
+                79,
+                200,
+                224
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "bat": {
+      "directions": {
+        "S": {
+          "atlas": "assets/bat/S.png",
+          "mirror": false,
+          "source": "source-art/bat-S.png",
+          "sourceSha256": "bf5a90a345a2529e0e9aa166fc547688a8df59d53995396917fb181055b47c43",
+          "baseSha256": "b59a5362ed5ba3f7e8aba1b010f7966edc812bc71910d07c8eb71c9ec514fcce",
+          "guideSha256": "88aa311a771aef88c1783caecc984d82ad17f0c66ab5fb609d11e7fc9d5504fb",
+          "sha256": "d55e3519dd8763f3506a6b1f9905b4ec6f6bac595418eabaa7f7bcf495cfc342",
+          "scale": 0.3181148748159057,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                74,
+                169,
+                609,
+                513
+              ],
+              "offset": [
+                43,
+                85
+              ],
+              "visibleBounds": [
+                44,
+                86,
+                213,
+                196
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                0,
+                216,
+                580,
+                551
+              ],
+              "offset": [
+                36,
+                88
+              ],
+              "visibleBounds": [
+                36,
+                89,
+                221,
+                195
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                145,
+                100,
+                540,
+                433
+              ],
+              "offset": [
+                65,
+                89
+              ],
+              "visibleBounds": [
+                66,
+                90,
+                192,
+                196
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                3,
+                153,
+                594,
+                441
+              ],
+              "offset": [
+                34,
+                103
+              ],
+              "visibleBounds": [
+                34,
+                104,
+                222,
+                196
+              ]
+            }
+          ]
+        },
+        "SE": {
+          "atlas": "assets/bat/SE.png",
+          "mirror": false,
+          "source": "source-art/bat-SE.png",
+          "sourceSha256": "7139397e94fdeb2569b8c3ea59bca2f79080e084d333286fc01f315f01b0387d",
+          "baseSha256": "460ed102575363725d2eeb22a80c1b0723956fea22d57edb1cdc4cf58d568a5b",
+          "guideSha256": "a6102c4183e04efb33a3c739baa7713d56d8fd541fa5fc13a7e12407420086ed",
+          "sha256": "cc4ab19f0b0b48210661afc40e22aa67f9cb548f0657e73f4ed13a23c5987f25",
+          "scale": 0.3098995695839311,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                104,
+                142,
+                623,
+                511
+              ],
+              "offset": [
+                47,
+                80
+              ],
+              "visibleBounds": [
+                48,
+                81,
+                208,
+                195
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                100,
+                191,
+                571,
+                519
+              ],
+              "offset": [
+                55,
+                93
+              ],
+              "visibleBounds": [
+                56,
+                93,
+                202,
+                196
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                245,
+                100,
+                541,
+                479
+              ],
+              "offset": [
+                82,
+                77
+              ],
+              "visibleBounds": [
+                82,
+                78,
+                175,
+                196
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                107,
+                186,
+                560,
+                458
+              ],
+              "offset": [
+                57,
+                110
+              ],
+              "visibleBounds": [
+                58,
+                110,
+                199,
+                196
+              ]
+            }
+          ]
+        },
+        "E": {
+          "atlas": "assets/bat/E.png",
+          "mirror": false,
+          "source": "source-art/bat-E.png",
+          "sourceSha256": "aa11b1f338d3298feb02c7be0599d2b97d762a1a2abef4318d378d84b3544ec9",
+          "baseSha256": "fb89ee619e0a2d438582ef0e8708d434d3f16a2b5303925db9861ba1624d3a86",
+          "guideSha256": "45cda277f0df74e6c6cc98b8e010f6029a6ab6277793063ccaf50aae605c4f82",
+          "sha256": "0cc8c3bc3ebb1e59bc06f0d7a2a4200c6ec29c6cd6a67b69f4a3a6a6d5dcd133",
+          "scale": 0.26365795724465557,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                130,
+                99,
+                547,
+                517
+              ],
+              "offset": [
+                73,
+                85
+              ],
+              "visibleBounds": [
+                73,
+                85,
+                184,
+                196
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                124,
+                100,
+                508,
+                524
+              ],
+              "offset": [
+                77,
+                83
+              ],
+              "visibleBounds": [
+                77,
+                83,
+                179,
+                196
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                188,
+                77,
+                507,
+                498
+              ],
+              "offset": [
+                86,
+                84
+              ],
+              "visibleBounds": [
+                86,
+                84,
+                171,
+                196
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                77,
+                101,
+                569,
+                474
+              ],
+              "offset": [
+                63,
+                97
+              ],
+              "visibleBounds": [
+                64,
+                97,
+                194,
+                196
+              ]
+            }
+          ]
+        },
+        "NE": {
+          "atlas": "assets/bat/NE.png",
+          "mirror": false,
+          "source": "source-art/bat-NE.png",
+          "sourceSha256": "94c6ccdb9e2d12adbdbb6831bf5207f5be3badcf98bd71b80bba318f56fa54e4",
+          "baseSha256": "c26cb2372a23e3ddda675996f08b41d09e1de43eba590d215b2e3e0a7069d54e",
+          "guideSha256": "a62919c50969a8e19b22b2bb8f0f86f27e07ae3b97f967f0d2fcac151af971b1",
+          "sha256": "30daf16357978a55b269d0bbe02581a514132c354a65759699cf3c3676cde943",
+          "scale": 0.2644628099173554,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                105,
+                125,
+                625,
+                549
+              ],
+              "offset": [
+                59,
+                83
+              ],
+              "visibleBounds": [
+                59,
+                83,
+                198,
+                196
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                50,
+                168,
+                569,
+                591
+              ],
+              "offset": [
+                59,
+                83
+              ],
+              "visibleBounds": [
+                59,
+                83,
+                197,
+                196
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                197,
+                67,
+                493,
+                451
+              ],
+              "offset": [
+                89,
+                93
+              ],
+              "visibleBounds": [
+                89,
+                93,
+                168,
+                196
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                19,
+                101,
+                567,
+                522
+              ],
+              "offset": [
+                55,
+                84
+              ],
+              "visibleBounds": [
+                55,
+                84,
+                201,
+                196
+              ]
+            }
+          ]
+        },
+        "N": {
+          "atlas": "assets/bat/N.png",
+          "mirror": false,
+          "source": "source-art/bat-N.png",
+          "sourceSha256": "2ec6cbf0603abdf1c77eec3010233e28a8c4beb073b2e752f31b9c29e272d20e",
+          "baseSha256": "9279363d38986933c327b3eba4434477b11805148b70796c19e2d089d10bf84f",
+          "guideSha256": "aece679b87711487ece11592db811b9286df8aa5fde8ca28641745081cee8cab",
+          "sha256": "2b93c6e56f0c965e036d74928281d6283e46a3a80eeda00995433858da29a230",
+          "scale": 0.3312883435582822,
+          "registration": [
+            {
+              "pose": 0,
+              "sourceBounds": [
+                65,
+                191,
+                599,
+                529
+              ],
+              "offset": [
+                39,
+                83
+              ],
+              "visibleBounds": [
+                40,
+                83,
+                217,
+                195
+              ]
+            },
+            {
+              "pose": 1,
+              "sourceBounds": [
+                21,
+                218,
+                583,
+                532
+              ],
+              "offset": [
+                34,
+                91
+              ],
+              "visibleBounds": [
+                35,
+                92,
+                221,
+                196
+              ]
+            },
+            {
+              "pose": 2,
+              "sourceBounds": [
+                152,
+                134,
+                519,
+                454
+              ],
+              "offset": [
+                67,
+                89
+              ],
+              "visibleBounds": [
+                68,
+                89,
+                190,
+                196
+              ]
+            },
+            {
+              "pose": 3,
+              "sourceBounds": [
+                10,
+                150,
+                594,
+                451
+              ],
+              "offset": [
+                31,
+                95
+              ],
+              "visibleBounds": [
+                31,
+                96,
+                226,
+                195
+              ]
+            }
+          ]
+        },
+        "SW": {
+          "atlas": "assets/bat/SW.png",
+          "mirror": true,
+          "mirrorSource": "SE",
+          "sha256": "4361c2c9beb7920d97d047d7dde9d5a30a678a637e0143b251cb17e98d06c789"
+        },
+        "W": {
+          "atlas": "assets/bat/W.png",
+          "mirror": true,
+          "mirrorSource": "E",
+          "sha256": "ba9f78aac8681a332b6a08711afcc521d249fde1d59d710d25e6d7101c5c6ee7"
+        },
+        "NW": {
+          "atlas": "assets/bat/NW.png",
+          "mirror": true,
+          "mirrorSource": "NE",
+          "sha256": "97793ee56b85f9fed508bdc7910d1994157f082378df3ad00d44f3df5f07d737"
+        }
+      }
+    }
+  }
+}

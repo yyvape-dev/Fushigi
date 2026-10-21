@@ -1,0 +1,34 @@
+{
+  "dateJST": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "records": [
+    {
+      "id": "N",
+      "prompt": "Correct ONE game attack strike sprite. Reference1 is ADOPTED bald goblin idle for direction N. Reference2 is the EXACT 3D strike pose and projection to follow. Reference3 is WRONG attack: club swings sideways to screen right; REPLACE that with a forward DOWNWARD strike away from viewer. Keep the goblin BACK facing viewer, don't turn or expose its face, absolutely bald green scalp, brown leather outfit and original proportions. Anatomical RIGHT hand swings its club forward in its facing direction, not laterally. N faces straight AWAY FROM VIEWER. Club and right fist are largely OCCLUDED BEHIND torso/head after the forward downward strike. Do not put the club sideways on screen right. Follow guide2, including occlusion. A mostly hidden club is correct. Both feet planted, bent knees, torso leaning forward. Only one wooden club held by right hand; empty left hand. Match existing art style and camera, complete character fully within a square transparent image with large margins, no VFX/text/shadows.",
+      "direction": "N",
+      "status": "used",
+      "source": "source-art/goblin-N-strike-fixed.png",
+      "base": "../assets/goblin/N.png",
+      "guide": "guides/goblin-N-3.png"
+    },
+    {
+      "id": "NW",
+      "prompt": "Correct ONE game attack strike sprite. Reference1 is ADOPTED bald goblin idle for direction NW. Reference2 is the EXACT 3D strike pose and projection to follow. Reference3 is WRONG attack: club swings sideways to screen right; REPLACE that with a forward DOWNWARD strike away from viewer. Keep the goblin BACK facing viewer, don't turn or expose its face, absolutely bald green scalp, brown leather outfit and original proportions. Anatomical RIGHT hand swings its club forward in its facing direction, not laterally. NW faces away toward SCREEN UPPER LEFT. The club must extend in front of the character toward SCREEN LEFT, partly hidden by head/body; see guide2. NEVER extend club screen right. Both feet planted, bent knees, torso leaning forward. Only one wooden club held by right hand; empty left hand. Match existing art style and camera, complete character fully within a square transparent image with large margins, no VFX/text/shadows.",
+      "direction": "NW",
+      "status": "rejected: club swapped to near left arm",
+      "source": "source-art/goblin-NW-strike-fixed.png",
+      "base": "../assets/goblin/NW.png",
+      "guide": "guides/goblin-NW-3.png"
+    },
+    {
+      "id": "NW2",
+      "prompt": "ONE corrected NW rear-diagonal attack pose for the same completely bald green goblin. Reference1=adopted NW idle. Reference2=EXACT 3D anatomical strike guide. Reference3=wrong generated correction that holds club in LEFT hand: DO NOT COPY ITS ARMS. Goblin back is visible, nose points away toward screen UPPER LEFT. CRITICAL ANATOMY: the visible NEAR arm originating from shoulder on viewer LEFT is the goblin's anatomical LEFT arm, and MUST be EMPTY, hanging/bent down by viewer-left hip. The club is in the FAR anatomical RIGHT hand, on FAR side of torso; that RIGHT arm and fist are mostly HIDDEN BEHIND the goblin's head/torso while striking FORWARD away from camera toward upper-left. The club may be largely hidden too; only a small tip visible beyond far side is fine. Do not expose the club by putting it in the near left hand. Do not extend the right arm sideways to viewer right. Follow guide2 literally for empty near hand and occlusion of far right arm/club. Keep bald green scalp, pointed ears, brown leather vest/shorts, bare green feet, knees slightly bent, torso leaning forward. NO face visible from rear. FULL body centered on transparent square canvas with margins, original detailed 3D figure style, no labels or ground shadows.",
+      "direction": "NW",
+      "status": "used",
+      "source": "source-art/goblin-NW-strike-right-hand.png",
+      "base": "../assets/goblin/NW.png",
+      "guide": "guides/goblin-NW-3.png"
+    }
+  ],
+  "S_windup": "Original art crossed the equal row boundary. Expand crop upward to y=565; no regeneration."
+}
