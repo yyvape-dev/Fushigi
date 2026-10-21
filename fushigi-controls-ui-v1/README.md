@@ -33,3 +33,7 @@ node tests/harness.js index.html tests/test_mvp.js
 ## 操作盤のグラフィック
 
 配置承認後、`assets/control-skin.css` で石板・真鍮の縁・留め具、浮き彫り矢印と剣の紋章を追加。CSSと同梱SVGで再現し、遠隔画像へ依存しない。押下は沈み込み、固定モードは灯りで識別。座標・ヒット領域と動作は変更していない。9配置の確認画像を更新。
+
+## 採用された生成UI
+
+Aの漆・真鍮とBの円形操作盤を採用。生成PNGを半透明の背景として実装。原画と記録は `source-art/`。円形の8方向実タップ検証は `python fushigi-controls-ui-v1/check_compass.py`。

@@ -1,0 +1,28 @@
+/* Generated lacquer/brass art; arrows and feedback stay opaque for legibility. */
+#pad{display:block;width:var(--pad);height:var(--pad);border-radius:50%;background:none;filter:drop-shadow(0 3px 5px #0006)}
+#pad::before{inset:0;border:0;border-radius:50%;background:center/contain no-repeat url('ui-art/lacquer-compass.png');box-shadow:none;opacity:.72;transform:rotate(-22.5deg)}
+#pad .dp:not(.wait){position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none;transform:none;transition:background .08s}
+#pad .dp:not(.wait)::after{position:absolute;left:var(--arrow-x);top:var(--arrow-y);width:21px;height:24px;margin:0;transform:translate(-50%,-50%) rotate(var(--arrow-angle));filter:drop-shadow(0 1px 2px #000);pointer-events:none}
+#pad .dp:not(.wait).on{background:radial-gradient(circle,#ffd58a25 25%,#e8ae5370 90%);box-shadow:inset 0 0 13px #ffe0a155;transform:none}
+#pad .dp:focus-visible{outline:3px solid #ffe6aa;outline-offset:-4px}
+#pad .wait{position:absolute;left:34%;top:34%;width:32%;height:32%;padding:0;border:0;border-radius:50%;background:#100e0940;box-shadow:none;color:#fff2d0;font-size:10px;text-shadow:0 1px 3px #000,0 0 4px #000;z-index:2;transform:none}
+#pad .wait.on{background:#d29e4f66;box-shadow:inset 0 0 12px #ffe6a0;transform:none}
+#atk{background:radial-gradient(circle at 35% 25%,#655044c9,#251e1bc9 64%,#151411d9 68%);border-color:#cdb481}
+#moveModes button,#lft .btn,#lft #menubtn{background:var(--skin-lines),linear-gradient(145deg,#34312ad9,#161612cf);border-color:#a78d60;color:#f1e4ca}
+#gameMenu,#cfg,#hist{background:var(--skin-lines),linear-gradient(125deg,#292720ed,#131310ed);border-color:#bea06c}
+#bagDetail{background:var(--skin-lines),linear-gradient(130deg,#2d2921ed,#151410ed)!important}
+#bag .phead{background:linear-gradient(90deg,#302a20e6,#171611aa)}
+#menuDock{background:var(--skin-lines),linear-gradient(140deg,#343027ee,#171510ed)}
+#menuDock button,#bagDetail .acts button{background:linear-gradient(#413a2e,#221f19);border-color:#a58d62}
+#menuDock .confirm{background:linear-gradient(#d6bd87,#a78a56)}
+@media(prefers-reduced-motion:reduce){#pad .dp{transition:none}}
+
+/* Eight matching radial hit regions; center is the separate wait control. */
+#pad [data-d="0,-1"]{clip-path:polygon(50% 50%,30.866% 3.806%,33.928% 2.653%,37.059% 1.704%,40.245% 0.961%,43.474% 0.428%,46.730% 0.107%,50.000% 0.000%,53.270% 0.107%,56.526% 0.428%,59.755% 0.961%,62.941% 1.704%,66.072% 2.653%,69.134% 3.806%);--arrow-x:50.00%;--arrow-y:15.00%}
+#pad [data-d="1,-1"]{clip-path:polygon(50% 50%,69.134% 3.806%,72.114% 5.156%,75.000% 6.699%,77.779% 8.427%,80.438% 10.332%,82.967% 12.408%,85.355% 14.645%,87.592% 17.033%,89.668% 19.562%,91.573% 22.221%,93.301% 25.000%,94.844% 27.886%,96.194% 30.866%);--arrow-x:74.75%;--arrow-y:25.25%}
+#pad [data-d="1,0"]{clip-path:polygon(50% 50%,96.194% 30.866%,97.347% 33.928%,98.296% 37.059%,99.039% 40.245%,99.572% 43.474%,99.893% 46.730%,100.000% 50.000%,99.893% 53.270%,99.572% 56.526%,99.039% 59.755%,98.296% 62.941%,97.347% 66.072%,96.194% 69.134%);--arrow-x:85.00%;--arrow-y:50.00%}
+#pad [data-d="1,1"]{clip-path:polygon(50% 50%,96.194% 69.134%,94.844% 72.114%,93.301% 75.000%,91.573% 77.779%,89.668% 80.438%,87.592% 82.967%,85.355% 85.355%,82.967% 87.592%,80.438% 89.668%,77.779% 91.573%,75.000% 93.301%,72.114% 94.844%,69.134% 96.194%);--arrow-x:74.75%;--arrow-y:74.75%}
+#pad [data-d="0,1"]{clip-path:polygon(50% 50%,69.134% 96.194%,66.072% 97.347%,62.941% 98.296%,59.755% 99.039%,56.526% 99.572%,53.270% 99.893%,50.000% 100.000%,46.730% 99.893%,43.474% 99.572%,40.245% 99.039%,37.059% 98.296%,33.928% 97.347%,30.866% 96.194%);--arrow-x:50.00%;--arrow-y:85.00%}
+#pad [data-d="-1,1"]{clip-path:polygon(50% 50%,30.866% 96.194%,27.886% 94.844%,25.000% 93.301%,22.221% 91.573%,19.562% 89.668%,17.033% 87.592%,14.645% 85.355%,12.408% 82.967%,10.332% 80.438%,8.427% 77.779%,6.699% 75.000%,5.156% 72.114%,3.806% 69.134%);--arrow-x:25.25%;--arrow-y:74.75%}
+#pad [data-d="-1,0"]{clip-path:polygon(50% 50%,3.806% 69.134%,2.653% 66.072%,1.704% 62.941%,0.961% 59.755%,0.428% 56.526%,0.107% 53.270%,0.000% 50.000%,0.107% 46.730%,0.428% 43.474%,0.961% 40.245%,1.704% 37.059%,2.653% 33.928%,3.806% 30.866%);--arrow-x:15.00%;--arrow-y:50.00%}
+#pad [data-d="-1,-1"]{clip-path:polygon(50% 50%,3.806% 30.866%,5.156% 27.886%,6.699% 25.000%,8.427% 22.221%,10.332% 19.562%,12.408% 17.033%,14.645% 14.645%,17.033% 12.408%,19.562% 10.332%,22.221% 8.427%,25.000% 6.699%,27.886% 5.156%,30.866% 3.806%);--arrow-x:25.25%;--arrow-y:25.25%}
