@@ -25,6 +25,17 @@ for i,d in enumerate(m.D):
  frames[0].save(P/'assets'/f'{d}.png');views[d]={'idle':f'assets/{d}.png'}
  if motion:
   atlas=Image.new('RGBA',(512,256));atlas.alpha_composite(frames[1],(0,0));atlas.alpha_composite(frames[2],(256,0));atlas.save(P/'assets'/f'{d}-motion.png');views[d]['motion']=f'assets/{d}-motion.png'
+# Ground contact is based on the boot band, not the tail/kunai silhouette.
+# Store explicit translations for every painted pose; never warp the artwork.
+for d in m.D:
+ atlas=Image.open(P/'assets'/f'{d}-motion.png')
+ poses={'idle':Image.open(P/'assets'/f'{d}.png'),'walk':atlas.crop((0,0,256,256)),'attack':atlas.crop((256,0,512,256))}
+ anchors={};bands={}
+ for action,frame in poses.items():
+  alpha=frame.getchannel('A').point(lambda a:255 if a>=100 else 0);box=alpha.getbbox();top=box[3]-24;band=alpha.crop((0,top,256,box[3])).getbbox()
+  anchors[action]=[(band[0]+band[2])/2,box[3]-8]
+  bands[action]=[band[0],top+band[1],band[2],top+band[3]]
+ views[d]['anchors']=anchors;views[d]['bootBands']=bands
 meta={'name':'ユズナミキ','origin':[128,224],'scale':scale,'motionSourceScale':mu,'fixedSWSourceScale':unit,'mirroring':False,'views':views,'sha256':{str(f.relative_to(P)):hashlib.sha256(f.read_bytes()).hexdigest() for f in (P/'assets').glob('*.png')}}
 (P/'ally.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n')
 sheet=Image.new('RGBA',(2048,256))
