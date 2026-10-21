@@ -827,6 +827,7 @@ function keyOut(im) {
 }
 function loadSprite(key, src) {
   const im = new Image();
+  im.crossOrigin = 'anonymous';
   im.onload = () => { try { SPRITES[key] = keyOut(im); kick(); } catch (e) { console.warn('画像を処理できませんでした:', key, e); } };
   im.onerror = () => {};
   im.src = src;

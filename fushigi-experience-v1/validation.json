@@ -9,11 +9,9 @@
       "lighting": {
         "centerAlpha": 255,
         "edgeAlpha": 76,
-        "diagonalAlpha": 0,
-        "ceilingMean": 45.19187500000001,
-        "ceilingRange": 138
+        "diagonalAlpha": 0
       },
-      "hiddenRouteConcealed": true,
+      "unvisitedTerrainVisible": true,
       "fullTileStairs": 5,
       "stairsStayAndDescend": true,
       "keyboardAndTouchMenu": true,
@@ -29,11 +27,9 @@
       "lighting": {
         "centerAlpha": 255,
         "edgeAlpha": 74,
-        "diagonalAlpha": 0,
-        "ceilingMean": 51.221666666666614,
-        "ceilingRange": 118
+        "diagonalAlpha": 0
       },
-      "hiddenRouteConcealed": true,
+      "unvisitedTerrainVisible": true,
       "fullTileStairs": 5,
       "stairsStayAndDescend": true,
       "keyboardAndTouchMenu": true,
@@ -49,11 +45,9 @@
       "lighting": {
         "centerAlpha": 255,
         "edgeAlpha": 80,
-        "diagonalAlpha": 0,
-        "ceilingMean": 48.09375000000002,
-        "ceilingRange": 130
+        "diagonalAlpha": 0
       },
-      "hiddenRouteConcealed": true,
+      "unvisitedTerrainVisible": true,
       "fullTileStairs": 5,
       "stairsStayAndDescend": true,
       "keyboardAndTouchMenu": true,
