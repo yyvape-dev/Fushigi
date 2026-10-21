@@ -80,6 +80,7 @@ canvas{display:block;touch-action:none}
 .set{display:flex;align-items:center;gap:10px;padding:12px 10px;border-bottom:1px solid #2a2a3a}
 .set .lab{flex:1;font-size:15px}.set small{color:#99a;font-size:12px}
 </style>
+<link rel="stylesheet" href="assets/ergonomic-ui.css?v=hands-v1">
 <style>#reviewTools{position:fixed;z-index:9;right:12px;top:48px;display:flex;gap:5px;max-width:95vw;padding:5px;background:#140f23bd;border:1px solid #b99751;box-sizing:border-box;overflow-x:auto}#reviewTools select,#reviewTools button{font:12px monospace;color:#f6e9c8;background:#2a2038;border:1px solid #a68b56;padding:7px 5px;touch-action:manipulation}body.menu-visible #reviewTools,body.bag-visible #reviewTools{display:none}@media(orientation:portrait){#reviewTools{top:74px;left:10px;right:10px}}</style></head>
 <body>
 <div id="hud"><span id="where"></span><span id="bagc"></span><div id="bars"><div class="bar"><i id="hpf"></i><b id="hp"></b></div><div class="bar bl" id="blbar"><i id="blf"></i><b id="belly"></b></div></div></div>
@@ -2483,5 +2484,6 @@ boot();
 if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); DungeonExperience.load(render); }
 </script>
 <script src="assets/controls-ui.js?v=controls-v1"></script>
+<script src="assets/ergonomic-ui.js?v=hands-v1"></script>
 <script src="fushigi-experience-v1/review-tools.js"></script></body>
 </html>

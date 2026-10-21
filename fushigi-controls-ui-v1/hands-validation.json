@@ -1,0 +1,56 @@
+[
+  {
+    "viewport": "portrait",
+    "hand": "both",
+    "onScreen": true,
+    "touchMenuFlow": true
+  },
+  {
+    "viewport": "portrait",
+    "hand": "right",
+    "onScreen": true,
+    "touchMenuFlow": true
+  },
+  {
+    "viewport": "portrait",
+    "hand": "left",
+    "onScreen": true,
+    "touchMenuFlow": true
+  },
+  {
+    "viewport": "landscape",
+    "hand": "both",
+    "onScreen": true,
+    "touchMenuFlow": true
+  },
+  {
+    "viewport": "landscape",
+    "hand": "right",
+    "onScreen": true,
+    "touchMenuFlow": true
+  },
+  {
+    "viewport": "landscape",
+    "hand": "left",
+    "onScreen": true,
+    "touchMenuFlow": true
+  },
+  {
+    "viewport": "small",
+    "hand": "both",
+    "onScreen": true,
+    "touchMenuFlow": true
+  },
+  {
+    "viewport": "small",
+    "hand": "right",
+    "onScreen": true,
+    "touchMenuFlow": true
+  },
+  {
+    "viewport": "small",
+    "hand": "left",
+    "onScreen": true,
+    "touchMenuFlow": true
+  }
+]
