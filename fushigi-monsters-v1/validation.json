@@ -78,26 +78,26 @@
       "S": {
         "visibleBounds": [
           63,
-          72,
-          194,
+          73,
+          193,
           223
         ],
         "mirror": false
       },
       "SW": {
         "visibleBounds": [
-          64,
+          65,
           71,
-          193,
+          192,
           223
         ],
         "mirror": false
       },
       "W": {
         "visibleBounds": [
-          77,
+          76,
           69,
-          179,
+          180,
           223
         ],
         "mirror": false
@@ -105,7 +105,7 @@
       "NW": {
         "visibleBounds": [
           68,
-          72,
+          70,
           188,
           223
         ],
@@ -114,35 +114,35 @@
       "N": {
         "visibleBounds": [
           63,
-          80,
-          194,
+          78,
+          193,
           223
         ],
         "mirror": false
       },
       "NE": {
         "visibleBounds": [
-          69,
+          67,
           80,
-          188,
+          189,
           223
         ],
         "mirror": false
       },
       "E": {
         "visibleBounds": [
-          78,
           76,
-          179,
+          75,
+          180,
           223
         ],
         "mirror": false
       },
       "SE": {
         "visibleBounds": [
-          69,
+          68,
           75,
-          188,
+          189,
           223
         ],
         "mirror": false
@@ -151,16 +151,16 @@
     "bat": {
       "S": {
         "visibleBounds": [
-          46,
-          89,
-          211,
+          47,
+          87,
+          209,
           195
         ],
         "mirror": false
       },
       "SE": {
         "visibleBounds": [
-          60,
+          59,
           87,
           197,
           195
@@ -169,16 +169,16 @@
       },
       "E": {
         "visibleBounds": [
-          87,
-          83,
-          170,
+          85,
+          84,
+          172,
           195
         ],
         "mirror": false
       },
       "NE": {
         "visibleBounds": [
-          58,
+          60,
           83,
           198,
           195
@@ -187,9 +187,9 @@
       },
       "N": {
         "visibleBounds": [
-          45,
-          86,
-          211,
+          48,
+          87,
+          208,
           195
         ],
         "mirror": false
@@ -198,16 +198,16 @@
         "visibleBounds": [
           60,
           87,
-          197,
+          198,
           195
         ],
         "mirror": true
       },
       "W": {
         "visibleBounds": [
-          87,
-          83,
-          170,
+          85,
+          84,
+          172,
           195
         ],
         "mirror": true
@@ -216,7 +216,7 @@
         "visibleBounds": [
           59,
           83,
-          199,
+          197,
           195
         ],
         "mirror": true
@@ -236,7 +236,7 @@
       "noPageOverflow": true,
       "floorThemes": 5,
       "directions": 8,
-      "faceVersions": 2
+      "faceVersions": 3
     },
     {
       "name": "portrait",
@@ -250,7 +250,7 @@
       "noPageOverflow": true,
       "floorThemes": 5,
       "directions": 8,
-      "faceVersions": 2
+      "faceVersions": 3
     },
     {
       "name": "landscape",
@@ -264,7 +264,7 @@
       "noPageOverflow": true,
       "floorThemes": 5,
       "directions": 8,
-      "faceVersions": 2
+      "faceVersions": 3
     }
   ]
 }
