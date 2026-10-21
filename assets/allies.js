@@ -3,7 +3,7 @@
  const D=['S','SW','W','NW','N','NE','E','SE'];
  const src=typeof document!=='undefined'&&document.currentScript?.src;
  const base=src?new URL('../fushigi-allies-v1/',src).href:'fushigi-allies-v1/';
- const state={actor:null,used:false,open:false,ready:false,error:null,images:{}};
+ const state={actor:null,used:false,open:false,renderScale:1.25,ready:false,error:null,images:{}};
  const distance=(a,b)=>Math.max(Math.abs(a.x-b.x),Math.abs(a.y-b.y));
  const at=(x,y)=>state.actor?.x===x&&state.actor?.y===y?state.actor:null;
  const stats=a=>({attack:Math.max(1,Math.round(playerAtk()+2+(a.lv-1)*.8)-(a.poison||0)),defense:Math.max(0,defBonus()-1+Math.floor((a.lv-1)/3)),maxhp:26+4*(a.lv-1)});
@@ -65,7 +65,7 @@
   if(choices.length){e.x=choices[0].x;e.y=choices[0].y;}return true;
  }
  async function load(redraw){try{const paths=D.flatMap(d=>[d+'.png',d+'-motion.png']);await Promise.all(paths.map(path=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{state.images[path]=im;resolve();};im.onerror=()=>reject(Error(path));im.src=base+'assets/'+path;})));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('助っ人画像',e);redraw();}}
- function draw(g,a,t,camX,camY){const px=camX+a.vx*TS,py=camY+a.vy*tilePitchY(),s=TS*CHAR_K[charPref]/192,x=px+TS/2,y=py+tilePitchY();
+ function draw(g,a,t,camX,camY){const px=camX+a.vx*TS,py=camY+a.vy*tilePitchY(),s=TS*CHAR_K[charPref]*state.renderScale/192,x=px+TS/2,y=py+tilePitchY();
   g.fillStyle='rgba(0,0,0,.3)';g.beginPath();g.ellipse(x,y-5,TS*.28,TS*.09,0,0,Math.PI*2);g.fill();
   const attacking=a.attackStart!=null&&t-a.attackStart<300,walking=t<a.walkEnd,face=attacking?a.attackFace:a.face,d=MonsterSprites.direction(face||[0,1]);let image=state.images[d+'.png'],sx=0;
   if(attacking&&t-a.attackStart>=35&&t-a.attackStart<240){image=state.images[d+'-motion.png'];sx=256;}else if(walking&&Math.floor((t-a.walkStart)/80)%2===0){image=state.images[d+'-motion.png'];}
