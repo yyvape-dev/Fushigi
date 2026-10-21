@@ -1,0 +1,31 @@
+{
+  "dateJST": "2026-10-21",
+  "tool": "image_gen.imagegen",
+  "records": [
+    {
+      "id": "icons",
+      "prompt": "Create a production game asset sheet for a charming detailed 3D miniature Japanese dungeon roguelike. Transparent background. EXACT FOUR separate assets, TWO columns TWO rows, one fully visible asset centered with generous margins in each equal cell. Camera orthographic, 26 degrees above horizon, gentle top-left light, richly shaded crisp game icon silhouettes readable at 32px. Top left: GITAN MONEY, a small burgundy drawstring pouch spilling a few large bright gold coins with square center holes, NO currency letters or logo. Top right: WOODEN ARROWS, bundle of three wooden shafts with pale feather fletching and silver arrowheads, diagonally resting, readable as arrows. Bottom left: SHOP STALL, compact warm wooden merchant counter with a simple red fabric canopy, no merchant, no text, no currency glyph, no ground plane. Bottom right: single large shiny golden oval coin with square hole, thick rim, for HUD money icon. NO frames, labels, text, background, or cast floor shadows. Consistent art style across all four.",
+      "output": "source-art/icons.png",
+      "transparent_background": true
+    },
+    {
+      "id": "traps",
+      "prompt": "Create SIX game trap floor sprites on TRANSPARENT background, clean THREE columns TWO rows of equal square cells. One complete trap per cell, large margins, no object crosses cells. High quality 3D miniature dungeon game style, camera orthographic looking down at floor at 26 degrees elevation, crisp silhouettes and readable simple symbols, subtle material shading. Top row left to right: PITFALL = square old bronze pressure hatch with a large cracked dark hole/collapsing center and stone rim; LANDMINE = low flat circular iron pressure plate with copper center, orange-red warning studs (no text); SLEEP GAS = low metal floor vent with three small violet vapor puffs, obvious round vent holes. Bottom row: HUNGER = ochre bronze pressure plate engraved with a simple empty rice-bowl pictogram (no letters); WARP = blue-cyan concentric runic floor ring with a distinct spiral, no words; SUMMON = dark iron-and-crimson pressure plate bearing a simple horned monster face pictogram and red gems. Each rests on the floor; no floating collectible look, no generic exclamation mark. Shadows only within the asset, NO surrounding ground plane, no text, no labels. Keep each centered and fully visible.",
+      "output": "source-art/traps.png",
+      "transparent_background": true
+    },
+    {
+      "id": "stairs",
+      "prompt": "Create a game terrain texture sheet of SIX fully OPAQUE square stair tiles, THREE columns TWO rows, perfectly flush edge-to-edge grid with NO gutters, NO borders, no labels. Each tile is viewed orthographically from above (floor terrain texture to later vertically compress). A DOWN staircase occupies the ENTIRE square tile: opening nearly touches all four tile edges with only a very thin stone lip. Four or five broad descending treads run horizontally left-to-right, descending from BOTTOM of image toward TOP; visible vertical risers, strong bright lit bottom/near entrance lip, deep dark shadow at far upper end. Obvious staircase even at 48px. The stairs are CUT INTO the floor, not an above-ground ladder or freestanding miniature. Strong occlusion in cracks and underside of each step, continuous material at edges, clear dramatic depth, not a tiny icon surrounded by floor. SAME exact geometry/layout across all SIX tiles with different materials. Row1 left: mossy forest stone, earthy grey-brown with small moss edge flecks. Row1 middle: warm beige-grey natural limestone. Row1 right: weathered pale sandstone ruins with ancient chipped straight masonry. Row2 left: blue-white crystalline ice with frosted risers and icy blue deep shadow. Row2 middle: dark volcanic basalt with restrained red-orange cracks along stone lips, no lava filling steps. Row2 right: repeat limestone alternative slightly darker. Rich hand-polished 3D rendered terrain, soft natural lighting, no characters, no objects, no UI or words. SIX square cells in 3x2 full-bleed grid.",
+      "output": "source-art/stairs.png",
+      "transparent_background": false
+    },
+    {
+      "id": "ceiling",
+      "prompt": "Five natural opaque overhead bedrock materials in a 3-column 2-row sheet: forest earth and roots, limestone, weathered ruins, ice, volcanic rock. Continuous rock surface without cliff islands, characters, UI or text. Bottom right alternate limestone.",
+      "output": "source-art/ceiling.png",
+      "transparent_background": false,
+      "note": "Prompt summary retained after generation; generated source is archived."
+    }
+  ]
+}

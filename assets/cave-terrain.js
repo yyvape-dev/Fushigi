@@ -4,9 +4,9 @@
  const ids=['forest','limestone','ruins','ice','volcano'];
  const state={ready:false,error:null,version:'wall-relief-v1',images,cache,pitch:PITCH,ids};
  const keys=['floor0','floor1','floor2','floor3','wallT0','wallT1','wallF0','wallF1','stairs'];
- state.load=async function(redraw){try{await Promise.all(ids.flatMap(id=>keys.map(key=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{images[id+':'+key]=im;resolve();};im.onerror=()=>reject(Error(id+'/'+key));im.src='assets/dungeon/locations-v1/'+id+'/'+key+'.webp';}))));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('ロケーション画像読込失敗',e);redraw();}};
+ state.load=async function(redraw){try{await Promise.all(ids.flatMap(id=>keys.map(key=>new Promise((resolve,reject)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{images[id+':'+key]=im;resolve();};im.onerror=()=>reject(Error(id+'/'+key));im.src='assets/dungeon/locations-v1/'+id+'/'+key+'.webp';}))));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('ロケーション画像読込失敗',e);redraw();}};
  state.topology=function(map,x,y){const f=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;let edges=0,diagonals=0;[[0,-1],[1,0],[0,1],[-1,0]].forEach(([dx,dy],i)=>{if(f(x+dx,y+dy))edges|=1<<i;});[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([dx,dy],i)=>{if(f(x+dx,y+dy))diagonals|=1<<i;});return {edges,diagonals};};
- state.rise=(map,x,y,size)=>size*((state.topology(map,x,y).edges&1)?.10:.36);
+ state.rise=(map,x,y,size)=>size*((state.topology(map,x,y).edges&1)?.22:.55);
  function canvas(w=SIZE,h=SIZE){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
  function art(id,key){return images[id+':'+key];}
  function patch(id,key){const k=id+':patch:'+key;if(cache.has(k))return cache.get(k);const c=canvas(),g=c.getContext('2d');g.drawImage(art(id,key),0,0,SIZE,SIZE);g.globalCompositeOperation='destination-in';const r=g.createRadialGradient(64,64,18,64,64,62);r.addColorStop(0,'#000');r.addColorStop(1,'#0000');g.fillStyle=r;g.fillRect(0,0,SIZE,SIZE);cache.set(k,c);return c;}
@@ -42,27 +42,30 @@
   const {edges,diagonals}=state.topology(map,x,y);
   // Neighbour-owned radii depend on world coordinates, not just topology.
   const k=[id,x,y,seed,edges,diagonals,variant].join(':');if(cache.has(k))return cache.get(k);
-  const rise=(edges&1)?13:46,p=105,c=canvas(128,160),g=c.getContext('2d');
+  const rise=(edges&1)?28:70,p=105,c=canvas(128,184),g=c.getContext('2d');
   const footprint=state.footprint(map,x,y,seed,id),top=canvas(128,p),tg=top.getContext('2d');
   tg.drawImage(footprint,0,0,128,p);
   // Extrude the actual scalloped footprint. A rectangular facade would fill
   // the negative space back in and undo the partial-cell silhouette.
-  const face=canvas(128,160),fg=face.getContext('2d');
-  for(let z=rise;z>=0;z--)fg.drawImage(top,0,46-z);
-  fg.globalCompositeOperation='destination-out';fg.drawImage(top,0,46-rise);
+  const face=canvas(128,184),fg=face.getContext('2d');
+  for(let z=rise;z>=0;z--)fg.drawImage(top,0,70-z);
+  fg.globalCompositeOperation='destination-out';fg.drawImage(top,0,70-rise);
   fg.globalCompositeOperation='source-in';
-  fg.drawImage(art(id,'wallF'+variant),phaseX*128,0,128,256,0,0,128,160);
+  fg.drawImage(art(id,'wallF'+variant),phaseX*128,0,128,256,0,0,128,184);
+  // Darker vertical faces distinguish raised rock from the walkable floor.
+  fg.globalCompositeOperation='source-atop';
+  const shadow=fg.createLinearGradient(0,0,0,184);shadow.addColorStop(0,'rgba(0,0,0,.12)');shadow.addColorStop(1,'rgba(0,0,0,.55)');fg.fillStyle=shadow;fg.fillRect(0,0,128,184);
   g.drawImage(face,0,0);
   const cap=canvas(128,p),cg=cap.getContext('2d');
   cg.drawImage(art(id,'wallT'+variant),phaseX*128,phaseY*64,128,128,0,0,128,p);
   cg.globalCompositeOperation='destination-in';cg.drawImage(top,0,0);
-  g.drawImage(cap,0,46-rise);
+  g.drawImage(cap,0,70-rise);
   if(cache.size>512)cache.clear();cache.set(k,c);return c;
  }
  state.draw=function(g,key,px,py,size,{map,x=0,y=0,theme,seed=0}){if(!state.ready)return false;const id=ids.includes(theme?.id)?theme.id:'limestone',h=size*PITCH;g.imageSmoothingEnabled=true;
   if(key.startsWith('floor')){const hash=(((x*73856093)^(y*19349663)^seed)>>>0),v=hash%31===0?3:hash%3;ground(g,px,py,size,h,id,x,y,v);return true;}
   if(key==='stairs'){ground(g,px,py,size,h,id,x,y,1);g.drawImage(patch(id,'stairs'),px,py,size,h);return true;}
-  if(key!=='wallF'&&key!=='wallT')return false;const {edges,diagonals}=state.topology(map,x,y);ground(g,px,py,size,h,id,x,y,1);const v=(((x>>1)*37^(y>>1)*71^seed)>>>0)&1;g.drawImage(bank(id,map,x,y,seed,v,x&1,y&1),px,py-size*46/128,size,size*160/128);return true;
+  if(key!=='wallF'&&key!=='wallT')return false;const {edges,diagonals}=state.topology(map,x,y);ground(g,px,py,size,h,id,x,y,1);const v=(((x>>1)*37^(y>>1)*71^seed)>>>0)&1;g.drawImage(bank(id,map,x,y,seed,v,x&1,y&1),px,py-size*70/128,size,size*184/128);return true;
  };
  root.CaveTerrain=state;
 })(typeof window==='undefined'?globalThis:window);

@@ -1,0 +1,26 @@
+/* Menus stay in the world; selection and actions occupy separate translucent panes. */
+#bag{inset:max(66px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(16px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left));background:none;padding:0;pointer-events:none;gap:0;max-width:1050px}
+#bag .phead,#bag .tabs{pointer-events:auto;width:43%;box-sizing:border-box;background:rgba(17,12,34,.90);border-left:1px solid #b99751;border-right:1px solid #b99751}
+#bag .phead{padding:7px 10px;border-top:2px solid #d5b56e;border-bottom:1px solid #b99751}
+#bag .ptitle{font-size:14px;color:#f4e4b8}#bag .tabs{padding:5px;gap:3px;border-bottom:1px solid #a88948}
+#bag .tab{padding:5px 8px;border-radius:3px;background:transparent;border-color:transparent;color:#d8ccb7}
+#bag .tab.on{color:#ffeaa6;border-color:#ad8e4d;background:#9a793829}
+.bag-body{flex:1;min-height:0;display:grid;grid-template-columns:43% minmax(0,1fr);gap:16px;align-items:end}
+#bagList{pointer-events:auto;box-sizing:border-box;align-self:stretch;min-height:0;padding:5px;background:rgba(17,12,34,.87);border:1px solid #b99751;border-top:0;scroll-behavior:smooth}
+#bag .row{margin:0 0 2px;border:0;border-radius:2px;background:transparent}
+#bag .main{min-height:34px;padding:3px 7px;gap:7px;cursor:pointer}
+#bag .nm{font-size:14px;color:#faf1d8}#bag .ct{font-size:12px}#bag .ic{width:26px;height:26px;background:transparent;border-radius:0}#bag .ic img{width:26px;height:26px}
+#bag .row.sel{background:#ead15b}#bag .row.sel .nm,#bag .row.sel .nm i,#bag .row.sel .ct{color:#201e18}
+#bagDetail{pointer-events:auto;background:rgba(17,12,34,.90);border:1px solid #b99751;border-top:2px solid #d5b56e;color:#eee1bd;min-height:135px;max-height:70%;overflow:auto;touch-action:pan-y;padding:12px;box-shadow:0 8px 32px #0005}
+#bagDetail h2{font-size:16px;margin:0 0 8px;padding-bottom:6px;border-bottom:1px solid #9c824a}
+#bagDetail .ds{padding:0;font-size:13px;line-height:1.6;color:#e1dccb;min-height:40px}
+#bagDetail .acts{padding:10px 0 0;flex-wrap:wrap;gap:6px}
+#bagDetail .acts button{min-height:40px;flex:1 0 65px;background:#30243b;border:1px solid #a78a51;color:#f1e4c2;border-radius:3px;font-size:13px}
+#bagDetail .acts button.chosen{background:#ead15b;color:#201e18;border-color:#f7e695}
+.bag-help{font-size:11px;color:#bdb49a;margin-top:10px}body.bag-visible #pad,body.bag-visible #lft,body.bag-visible #act{opacity:0;pointer-events:none}
+#stairsPrompt{position:fixed;z-index:12;left:50%;bottom:25%;transform:translateX(-50%);width:min(310px,85vw);box-sizing:border-box;padding:15px;background:rgba(18,13,34,.95);border:1px solid #b99751;border-top:3px solid #d5b56e;box-shadow:0 8px 40px #0008;color:#f5e8c5;font-family:inherit}
+#stairsPrompt[hidden]{display:none}#stairsPrompt h2{font-size:17px;margin:0 0 8px}#stairsPrompt p{font-size:13px;margin:0 0 13px}
+#stairsPrompt .choices{display:flex;gap:8px}#stairsPrompt button{flex:1;min-height:44px;border:1px solid #ad8e51;background:#2b2239;color:#f1e4c2;border-radius:3px;font:inherit}#stairsPrompt button.selected{background:#ead15b;color:#201e18}
+.hud-coin{display:inline-block;width:17px;height:17px;vertical-align:middle;margin-left:8px;object-fit:contain}
+@media(orientation:landscape){#bag{inset:54px 16px 12px}#bag .main{min-height:28px}#bagDetail{max-height:80%}#bag .phead .sm{padding:5px 7px;font-size:11px}}
+@media(max-width:580px) and (orientation:portrait){#bag{inset:80px 10px max(14px,env(safe-area-inset-bottom))}#bag .phead,#bag .tabs{width:100%}.bag-body{grid-template-columns:1fr;grid-template-rows:minmax(0,1fr) auto;gap:8px}#bagDetail{max-height:220px;min-height:100px;padding:10px}#bag .main{min-height:38px}#bag .nm{font-size:14px}}

@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Fushigi Core</title>
+<link rel="stylesheet" href="assets/dungeon-experience.css?v=experience-v1">
 <style>
 html,body{margin:0;height:100%;background:#0d0d12;color:#ddd;font-family:monospace;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 canvas{display:block;touch-action:none}
@@ -105,7 +106,12 @@ canvas{display:block;touch-action:none}
 <div id="bag" class="panel" hidden>
   <div class="phead"><span class="ptitle" id="bagTitle"></span><button class="sm" id="autoBtn"></button><button class="sm" id="cfgBtn">設定</button><button class="sm" id="bagClose">閉じる</button></div>
   <div class="tabs" id="bagTabs"></div>
-  <div class="plist" id="bagList"></div>
+  <div class="bag-body"><div class="plist" id="bagList"></div><aside id="bagDetail" aria-live="polite"></aside></div>
+</div>
+
+<div id="stairsPrompt" role="dialog" aria-modal="true" aria-labelledby="stairsTitle" hidden>
+  <h2 id="stairsTitle">下り階段</h2><p>先へ降りますか？</p>
+  <div class="choices"><button id="stairsDown" class="selected">降りる</button><button id="stairsStay">そのまま</button></div>
 </div>
 
 <div id="wh" class="panel" hidden>
@@ -134,6 +140,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/dungeon-generator.js?v=locations-v1"></script>
 <script src="assets/cave-terrain.js?v=wall-relief-v1"></script>
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
+<script src="assets/dungeon-experience.js?v=experience-v1"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -820,6 +827,7 @@ function keyOut(im) {
 }
 function loadSprite(key, src) {
   const im = new Image();
+  im.crossOrigin = 'anonymous';
   im.onload = () => { try { SPRITES[key] = keyOut(im); kick(); } catch (e) { console.warn('画像を処理できませんでした:', key, e); } };
   im.onerror = () => {};
   im.src = src;
@@ -862,6 +870,7 @@ function scaledOf(im, S, cover) {
 }
 // k>1 のとき：マスより大きく描く。足元（下端中央）はマスに合わせ、上と左右にはみ出す（キャラ用）
 function blit(key, px, py, g = ctx, k = 1, tileX, tileY) {
+  if (key==='stairs' && scene==='dungeon' && DungeonExperience.stairs(g,px,py,TS,tilePitchY(),floorPlan?.theme?.id||'limestone')) return;
   if (g === ctx && scene === 'dungeon' && drawDungeonArt(key, px, py, g, tileX, tileY)) return;
   const S = TS * k; px -= (S - TS) / 2; py -= (S - TS);
   const ext = SPRITES[extName(key)];
@@ -894,12 +903,14 @@ let eqRings = [null, null];       // 装備中の腕輪（2枠。持ち物の中
 let autoPick = false;             // 自動拾い（既定OFF：踏んでも拾わず、足元に載るだけ）
 let uid = 0;
 let bagOpen = false, bagTab = '全部', bagSel = null;
+let bagActionMode = false, bagActionIndex = 0, stairsOpen = false, stairsChoice = 0;
 let whOpen = false, whSide = 'bag', whSel = null, whMsg = '';
 let cfgOpen = false, DPR = 1;
 let bellyBonus = 0, atkUp = 0, floorLight = false, hasteFlip = false;   // この冒険の間だけ有効：最大満腹度の増減／ちからの草／この階があかるい／倍速の交互フラグ
 const BASE_HP = 20;
 let belly = MAXBELLY, bellyWarn = 99, hungerPref = 0;   // 満腹度（%）／直近の警告段階／減る速さ 0=標準 1=速い(確認用)
 let roomGrid = [];                // ダンジョンの部屋番号マップ（部屋の中=番号、それ以外=-1）
+let visibilityRevision = 0;
 let mapMode = 1;                  // 地図：0=非表示 1=小 2=大
 let zoomPref = 0;                 // 表示サイズ：0=自動 1=小(32) 2=中(48) 3=大(64) 4=特大(80) 5=最大(96)
 let charPref = 2;                 // キャラの大きさ：マスの何倍で描くか（マスから上と左右にはみ出す。マス自体は大きくならない）
@@ -932,7 +943,7 @@ const decItem = t => { const [ty, pl] = String(t).split(':'); return ITEMS[ty] ?
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
-const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen;
+const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen || stairsOpen;
 function rollType() {
   const ks = Object.keys(ITEMS).filter(k => (ITEMS[k].from || 1) <= floorNo);
   let r = Math.random() * ks.reduce((a, k) => a + ITEMS[k].w, 0);
@@ -1015,6 +1026,7 @@ function playerRoom() {
 }
 
 function newFloor() {
+  closeStairs();
   player.action=null;player.walkEnd=0;
   floorLight = false;
   genMap();
@@ -1119,6 +1131,7 @@ function triggerTrap(tr) {                                        // 罠を踏�
 // =====================================================================
 function snapVis() { for (const e of [player, ...enemies]) { e.vx = e.x; e.vy = e.y; e.bump = null; } }
 function toTown(fromDungeon) {
+  closeStairs();
   scene = 'town'; buildTown();
   enemies = []; floorItems = []; traps = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
   player.lv = 1; player.exp = 0; atkUp = 0; player.maxhp = BASE_HP; player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus(); floorLight = false;
@@ -1189,6 +1202,7 @@ function los(x0, y0, x1, y1) {
   return true;
 }
 function updateVis() {
+  visibilityRevision++;
   vis = Array.from({ length: MH }, () => new Array(MW).fill(false));
   if (scene === 'town') { for (let y = 0; y < MH; y++) vis[y].fill(true); return; }   // 町は全部見える
   // 本家の見え方：部屋は明るく全体が見える。通路では周囲1マスしか見えない。見た場所は地図に残る
@@ -1406,9 +1420,9 @@ function playerMove(dx, dy) {
       if (t === GATE) say(`ダンジョンの入口だ。行き先：${DUNGEONS[dungeonId].name}（${DUNGEONS[dungeonId].floors}階）。「潜る」で出発。${Object.keys(DUNGEONS).filter(unlocked).length > 1 ? '行き先は設定で変えられる。' : ''}`);
     } else {
       if (t === STAIRS) {
-        const dg = DUNGEONS[dungeonId];
-        if (floorNo >= dg.floors) { clearDungeon(); return; }
-        floorNo++; say(`${floorNo}階へ降りた。`); newFloor(); startFade(); render(); return;
+        endTurn();
+        if (!dead && scene==='dungeon' && map[player.y][player.x]===STAIRS) openStairs();
+        return;
       }
       const tr = trapAt(nx, ny);
       if (tr && triggerTrap(tr)) return;
@@ -1421,10 +1435,25 @@ function playerMove(dx, dy) {
   endTurn();
 }
 
-// 状況ボタン：足元のアイテムを拾う / 倉庫に入る / ダンジョンへ潜る
+function closeStairs() { stairsOpen=false;const el=document.getElementById('stairsPrompt');if(el)el.hidden=true; }
+function updateStairsChoice() { document.getElementById('stairsDown').classList.toggle('selected',stairsChoice===0);document.getElementById('stairsStay').classList.toggle('selected',stairsChoice===1); }
+function openStairs() {
+  if(dead||scene!=='dungeon'||map[player.y][player.x]!==STAIRS)return;
+  holdStop();stairsOpen=true;stairsChoice=0;document.getElementById('stairsPrompt').hidden=false;updateStairsChoice();render();
+}
+function chooseStairs(down) {
+  const valid=stairsOpen&&scene==='dungeon'&&!dead&&map[player.y][player.x]===STAIRS;
+  closeStairs();if(!valid){render();return;}
+  if(!down){say('階段の上にとどまった。');render();return;}
+  if(floorNo>=DUNGEONS[dungeonId].floors){clearDungeon();return;}
+  floorNo++;say(`${floorNo}階へ降りた。`);newFloor();startFade();render();
+}
+
+// 状況ボタン：足元の階段・アイテム / 店 / 町の施設
 function ctxInfo() {
   if (dead) return null;
   if (scene === 'dungeon') {
+    if (map[player.y][player.x]===STAIRS) return {label:'階段',fn:openStairs};
     if (itemAt(player.x, player.y)) return { label: '拾う', fn: playerPickUp };
     return atDungeonShop() ? { label: '店', fn: openWh } : null;
   }
@@ -1446,11 +1475,11 @@ function playerPickUp() {
   endTurn();
 }
 
-// Attackボタン：向いている方向の敵を殴る。いなければ隣接する敵を自動で狙う。誰もいなければターン消費なし（町では「決定」）
+// Attackボタン：向いている方向の敵を殴る。いなければ隣接する敵を自動で狙う。誰もいなくても素振りで1ターン進む（町では施設の「決定」のみ）
 function playerAttack() {
   if (uiBlocked() || guardDead()) return;
   player.action=null;player.walkEnd=0;
-  if (scene === 'town') { const c = ctxInfo(); if (c) c.fn(); else { player.swing = now(); player.attackFace = player.face.slice(); say('素振りをした。'); render(); } return; }
+  if (scene === 'town') { player.swing=0;const c = ctxInfo(); if (c) c.fn(); else { say('町では攻撃できない。'); render(); } return; }
   if (player.st.confuse > 0) {                                  // 混乱：向きがでたらめ。敵がいなければ空振り
     const d = DIRS8[rnd(0, 7)]; player.face = d;
     const o = geomOK(player.x, player.y, d[0], d[1]) ? enemyAt(player.x + d[0], player.y + d[1]) : null;
@@ -1474,7 +1503,7 @@ function playerAttack() {
   if (!t) {
     const tr = trapAt(player.x + fx_, player.y + fy_);
     if (tr && !tr.seen) { tr.seen = true; player.swing = now(); player.attackFace = player.face.slice(); kick(); say(`${TRAPS[tr.kind].name}を見つけた！`); fxText(tr.x, tr.y, '罠！', TRAPS[tr.kind].col); endTurn(); return; }
-    say('周りに敵がいない。'); render(); return;
+    player.swing=now();player.attackFace=player.face.slice();kick();say('素振りをした。');endTurn();return;
   }
   hitEnemy(t);
   endTurn();
@@ -1744,8 +1773,8 @@ function dropType(key) {
 const $ = id => document.getElementById(id);
 const bagEl = $('bag'), listEl = $('bagList'), tabsEl = $('bagTabs');
 const whEl = $('wh'), whListEl = $('whList'), whSegEl = $('whSeg');
-function openBag() { if (dead) { guardDead(); return; } if (whOpen) return; holdStop(); bagOpen = true; bagEl.hidden = false; renderBag(); render(); }
-function closeBag() { bagOpen = false; bagSel = null; bagEl.hidden = true; }
+function openBag() { if (dead) { guardDead(); return; } if (whOpen||stairsOpen) return; holdStop(); bagOpen = true;bagActionMode=false;bagActionIndex=0;bagEl.hidden = false;document.body?.classList?.add('bag-visible'); renderBag(); render(); }
+function closeBag() { bagOpen = false; bagSel = null;bagActionMode=false;bagEl.hidden = true;document.body?.classList?.remove('bag-visible'); }
 function toggleBag() { if (bagOpen) { closeBag(); render(); } else openBag(); }
 function groups(list) {
   const m = new Map();
@@ -1774,27 +1803,49 @@ function renderBag() {
   if (!cats.includes(bagTab)) bagTab = '全部';
   tabsEl.innerHTML = cats.map(c => `<button class="tab${c === bagTab ? ' on' : ''}" data-tab="${c}">${c}</button>`).join('');
   const shown = gs.filter(g => bagTab === '全部' || ITEMS[g.type].cat === bagTab);
-  if (bagSel && !shown.some(g => g.key === bagSel)) bagSel = null;
+  if (!shown.some(g => g.key === bagSel)) bagSel = shown[0]?.key || null;
   const st = listEl.scrollTop;
-  listEl.innerHTML = shown.length ? shown.map(g => rowHtml(g, g.key === bagSel,
-    `<button data-act="use" data-type="${g.key}">${ITEMS[g.type].equip ? (isEq(g.items[0]) ? '外す' : '装備') : ITEMS[g.type].throwOnly ? '投げる' : '使う'}</button><button data-act="drop" data-type="${g.key}">置く</button>` + (ITEMS[g.type].throwOnly ? '' : `<button data-act="throw" data-type="${g.key}">投げる</button>`) +
-    (ITEMS[g.type].equip || ITEMS[g.type].charges ? '' : `<button data-act="quick" data-type="${g.type}">${quick === g.type ? '★解除' : '★クイック'}</button>`))).join('') : '<div class="empty">何も持っていない</div>';
+  listEl.innerHTML = shown.length ? shown.map(g => rowHtml(g,false,'').replace('class="row"',`class="row${g.key===bagSel?' sel':''}"`)).join('') : '<div class="empty">何も持っていない</div>';
   listEl.scrollTop = st;
+  const selected=shown.find(g=>g.key===bagSel),detail=$('bagDetail');
+  if(selected){
+    const d=ITEMS[selected.type],acts=bagActions(selected);bagActionIndex=Math.min(bagActionIndex,acts.length-1);
+    detail.innerHTML=`<h2>${itemName(selected.items[0])}</h2><div class="ds">${isKnown(selected.type)?d.desc||'':'効果はわからない。使うか身につけると分かる。'}</div><div class="acts">`+acts.map((a,i)=>`<button data-act="${a.act}" data-type="${a.type}" class="${bagActionMode&&i===bagActionIndex?'chosen':''}">${a.label}</button>`).join('')+`</div><div class="bag-help">${bagActionMode?'← → 操作を選ぶ ／ 決定で実行 ／ Escで一覧':'↑ ↓ 選ぶ ／ 決定で操作を選ぶ ／ Escで戻る'}</div>`;
+  }else detail.innerHTML='<h2>持ち物</h2><div class="ds">道具を拾うと、ここで使ったり装備したりできます。</div>';
 }
-listEl.addEventListener('click', ev => {
+function bagActions(g){const d=ITEMS[g.type];return [
+  {act:'use',type:g.key,label:d.equip?(isEq(g.items[0])?'外す':'装備'):d.throwOnly?'投げる':'使う'},
+  {act:'drop',type:g.key,label:'置く'},
+  ...(!d.throwOnly?[{act:'throw',type:g.key,label:'投げる'}]:[]),
+  ...(!d.equip&&!d.charges?[{act:'quick',type:g.type,label:quick===g.type?'★解除':'★クイック'}]:[])
+];}
+function bagAction(act,type){
+  if(act==='use')useType(type);else if(act==='drop')dropType(type);else if(act==='throw')throwType(type);else if(act==='quick'){quick=quick===type?null:type;saveGame();renderBag();render();}
+}
+function bagClick(ev){
   const a = ev.target.closest('[data-act]');
   if (a) {
-    const type = a.dataset.type;
-    if (a.dataset.act === 'use') useType(type);
-    else if (a.dataset.act === 'drop') dropType(type);
-    else if (a.dataset.act === 'throw') throwType(type);
-    else if (a.dataset.act === 'quick') { quick = quick === type ? null : type; saveGame(); renderBag(); render(); }
+    bagAction(a.dataset.act,a.dataset.type);
     return;
   }
   const s = ev.target.closest('[data-sel]');
-  if (s) { bagSel = bagSel === s.dataset.sel ? null : s.dataset.sel; renderBag(); }
-});
-tabsEl.addEventListener('click', ev => { const t = ev.target.closest('[data-tab]'); if (t) { bagTab = t.dataset.tab; renderBag(); } });
+  if (s) { bagSel=s.dataset.sel;bagActionMode=false;bagActionIndex=0;renderBag(); }
+}
+listEl.addEventListener('click',bagClick);$('bagDetail').addEventListener('click',bagClick);
+tabsEl.addEventListener('click', ev => { const t = ev.target.closest('[data-tab]'); if (t) { bagTab = t.dataset.tab;bagActionMode=false;bagActionIndex=0; renderBag(); } });
+function bagKey(k){
+  if(k==='Escape'){if(bagActionMode){bagActionMode=false;renderBag();}else{closeBag();render();}return;}
+  const shown=groups(inv).filter(g=>bagTab==='全部'||ITEMS[g.type].cat===bagTab),i=shown.findIndex(g=>g.key===bagSel),g=shown[i];
+  if(!g)return;
+  if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(k)){
+    const step=k==='ArrowDown'||k==='ArrowRight'?1:-1;
+    if(bagActionMode)bagActionIndex=(bagActionIndex+step+bagActions(g).length)%bagActions(g).length;
+    else bagSel=shown[(i+step+shown.length)%shown.length].key;
+    renderBag();listEl.querySelector?.('.row.sel')?.scrollIntoView?.({block:'nearest'});return;
+  }
+  if(['Enter','z','x'].includes(k)){if(!bagActionMode){bagActionMode=true;bagActionIndex=0;renderBag();}else{const a=bagActions(g)[bagActionIndex];bagAction(a.act,a.type);}}
+}
+$('stairsDown').addEventListener('click',()=>chooseStairs(true));$('stairsStay').addEventListener('click',()=>chooseStairs(false));
 $('autoBtn').addEventListener('click', () => { autoPick = !autoPick; saveGame(); renderBag(); });
 $('bagClose').addEventListener('click', () => { closeBag(); render(); });
 $('bagbtn').addEventListener('click', toggleBag);
@@ -1950,7 +2001,7 @@ function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) 
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
   setH('where', scene === 'town' ? `町　踏破${clears}　${DUNGEONS[dungeonId].name}` : `${DUNGEONS[dungeonId].name} ${floorNo}F ${floorPlan?.theme.name || ''}<br><small>ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}</small>`);
-  setH('bagc', `持${inv.length}/${MAXBAG}　${gold}G`);
+  setH('bagc', `持${inv.length}/${MAXBAG}<img class="hud-coin" src="assets/dungeon/experience-v1/coin.png" alt="ギタン"> ${gold.toLocaleString()}G`);
   setH('belly', `満腹度 ${belly}/${maxBelly()}`);
   setS('blbar', 'display', scene === 'dungeon' ? 'block' : 'none');
   setS('blf', 'width', Math.max(0, Math.min(100, belly / maxBelly() * 100)).toFixed(1) + '%');
@@ -2223,7 +2274,7 @@ function draw() {
   const townArt = scene === 'town' && SPRITES.town;
   if (townArt) drawTownArt(camX, camY);                                          // 町は一枚絵（判定は内部の格子のまま）
   for (let y = y0; y <= y1 && !townArt; y++) for (let x = x0; x <= x1; x++) {
-    if (!seen[y][x]) continue;
+    if (!dungeon && !seen[y][x]) continue;
     const px = camX + x * TS, py = camY + y * tilePitchY();
     const key = tileKey(x, y);
     if (!dungeon && !key.startsWith('ground')) blit('ground0', px, py);          // 透過画像の下地
@@ -2231,19 +2282,18 @@ function draw() {
     blit(key, px, py, ctx, 1, x, y);
     if (dungeon) {
       if (m > 0) shadeTile(key, x, y, px, py, m);
-      if (vis[y][x]) {                                                             // 視界の明暗：離れるほど暗く
-        const a = Math.min(0.3 + 0.12 * m, (((x - player.vx) ** 2 + (y - player.vy) ** 2) / (SIGHT * SIGHT)) * (0.3 + 0.12 * m));
-        if (a > 0.02) { ctx.fillStyle = `rgba(0,0,0,${a.toFixed(3)})`; ctx.fillRect(px, py, TS, tilePitchY()); }
-      } else { ctx.fillStyle = 'rgba(0,0,0,.62)'; const rise=map[y][x]===WALL&&CaveTerrain.ready?CaveTerrain.rise(map,x,y,TS):0;ctx.fillRect(px,py-rise,TS,tilePitchY()+rise); }
     }
   }
   if (dungeon && floorShop && seen[floorShop.y][floorShop.x]) {
     const px=camX+floorShop.x*TS, py=camY+floorShop.y*tilePitchY();
+    if (!DungeonExperience.shop(ctx,px,py,TS,tilePitchY())) {
     ctx.fillStyle='#73502d';ctx.fillRect(px+TS*.12,py+TS*.22,TS*.76,TS*.55);
     ctx.fillStyle='#ffdf82';ctx.font=Math.round(TS*.35)+'px sans-serif';ctx.textAlign='center';ctx.fillText('店',px+TS*.5,py+TS*.64);
+    }
   }
   if (scene === 'town' && showGrid) drawTownGrid(camX, camY);
   if (dungeon) for (const tr of traps) if (tr.seen && seen[tr.y][tr.x]) {                          // 見つけた罠：色つきのひし形
+    if (DungeonExperience.trap(ctx,tr.kind,camX+tr.x*TS,camY+tr.y*tilePitchY(),TS,tilePitchY())) continue;
     const cx = camX + (tr.x + 0.5) * TS, cy = camY + (tr.y + 0.55) * tilePitchY(), r = TS * 0.32;
     ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.beginPath(); ctx.moveTo(cx, cy - r); ctx.lineTo(cx + r, cy); ctx.lineTo(cx, cy + r); ctx.lineTo(cx - r, cy); ctx.closePath(); ctx.fill();
     ctx.strokeStyle = TRAPS[tr.kind].col; ctx.lineWidth = Math.max(2, TS * 0.07); ctx.stroke();
@@ -2261,6 +2311,7 @@ function draw() {
       ctx.fillStyle = '#000'; ctx.fillText(mk[0], px + TS / 2 + 1, py - TS * 0.45 + 1); ctx.fillStyle = mk[1]; ctx.fillText(mk[0], px + TS / 2, py - TS * 0.45);
     }
   }
+  if(dungeon)DungeonExperience.fog(ctx,{width:innerWidth,height:innerHeight,size:TS,pitch:tilePitchY(),camX,camY,player,rooms,roomIndex:playerRoom(),roomGrid,map,seen,theme:floorPlan?.theme?.id,terrain:CaveTerrain,revision:visibilityRevision,seed:floorPlan?.artSeed});
   const [ppx, ppy] = drawEntity('player', player, t, camX, camY);
   ctx.fillStyle = '#ffd54a';                                                       // 向きの目印（Attackの狙い先）
   ctx.beginPath(); ctx.arc(ppx + TS / 2 + player.face[0] * TS * 0.42, ppy + tilePitchY() / 2 + player.face[1] * tilePitchY() * 0.42, Math.max(2, TS * 0.07), 0, Math.PI * 2); ctx.fill();
@@ -2378,6 +2429,7 @@ const KEYS = {
 };
 addEventListener('keydown', ev => {
   const k = ev.key;
+  if(stairsOpen){ev.preventDefault();if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(k)){stairsChoice=1-stairsChoice;updateStairsChoice();}else if(['Enter','z','x'].includes(k))chooseStairs(stairsChoice===0);else if(k==='Escape')chooseStairs(false);return;}
   if (k === 'Escape' && histOpen) { closeHist(); return; }
   if (histOpen) { if (k === 'v') closeHist(); return; }
   if (k === 'Escape' && cfgOpen) { closeCfg(); renderBag(); render(); return; }
@@ -2386,8 +2438,8 @@ addEventListener('keydown', ev => {
   if (whOpen) return;
   if (k === 'v' && !bagOpen && !whOpen) { toggleHist(); return; }                                 // メッセージ履歴
   if (k === 'm' && !bagOpen) { mapMode = (mapMode + 1) % 3; saveGame(); render(); return; }   // 地図 OFF→小→大
-  if (k === 'i' || k === 'Tab' || (k === 'Escape' && bagOpen)) { ev.preventDefault(); toggleBag(); return; }   // 持ち物
-  if (bagOpen) return;
+  if (k === 'i' || k === 'Tab') { ev.preventDefault(); toggleBag(); return; }   // 持ち物
+  if (bagOpen) {ev.preventDefault();bagKey(k);return;}
   const m = KEYS[k] || KEYS[k.toLowerCase()];
   if (m) { ev.preventDefault(); playerMove(m[0], m[1]); }
   else if (k === 'z' || k === 'x' || k === 'Enter') { ev.preventDefault(); playerAttack(); }   // Attack / 決定
@@ -2421,7 +2473,7 @@ resize();
 loadExternalAssets();
 loadRig();
 boot();
-if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); }
+if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); DungeonExperience.load(render); }
 </script>
 </body>
 </html>

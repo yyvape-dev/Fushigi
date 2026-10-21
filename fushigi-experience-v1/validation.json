@@ -1,0 +1,58 @@
+{
+  "viewports": [
+    {
+      "label": "landscape",
+      "size": [
+        844,
+        390
+      ],
+      "lighting": {
+        "centerAlpha": 255,
+        "edgeAlpha": 76,
+        "diagonalAlpha": 0
+      },
+      "unvisitedTerrainVisible": true,
+      "fullTileStairs": 5,
+      "stairsStayAndDescend": true,
+      "keyboardAndTouchMenu": true,
+      "errors": [],
+      "missing": []
+    },
+    {
+      "label": "portrait",
+      "size": [
+        390,
+        844
+      ],
+      "lighting": {
+        "centerAlpha": 255,
+        "edgeAlpha": 74,
+        "diagonalAlpha": 0
+      },
+      "unvisitedTerrainVisible": true,
+      "fullTileStairs": 5,
+      "stairsStayAndDescend": true,
+      "keyboardAndTouchMenu": true,
+      "errors": [],
+      "missing": []
+    },
+    {
+      "label": "desktop",
+      "size": [
+        1280,
+        720
+      ],
+      "lighting": {
+        "centerAlpha": 255,
+        "edgeAlpha": 80,
+        "diagonalAlpha": 0
+      },
+      "unvisitedTerrainVisible": true,
+      "fullTileStairs": 5,
+      "stairsStayAndDescend": true,
+      "keyboardAndTouchMenu": true,
+      "errors": [],
+      "missing": []
+    }
+  ]
+}
