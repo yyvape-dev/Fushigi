@@ -81,6 +81,7 @@
   player.x = st[0] - nb[0]; player.y = st[1] - nb[1]; snapVis();
   const bagBefore = inv.length;
   playerMove(nb[0], nb[1]);
+  ok('stairs: stepping prompts without clearing', stairsOpen && scene === 'dungeon'); chooseStairs(true);
   ok('clear: back in town, bag kept, clears+1, saved', scene === 'town' && inv.length === bagBefore && clears === 1 && JSON.parse(__store[SAVE_KEY]).clears === 1);
 
   // --- 死亡：持ち物ロスト、倉庫は無事
@@ -121,6 +122,7 @@
       else if (r === 9) doCtx();
       else if (r === 10 && inv.length) dropType(inv[0].type);
       else playerMove(0, 0);
+      if(stairsOpen)chooseStairs(true);
       if (inv.length > MAXBAG || player.hp > player.maxhp || wh.length > MAXWH) bug++;
       if (floorItems.some((f, i) => floorItems.findIndex(o => o.x === f.x && o.y === f.y) !== i)) bug++;
       if (t % 40 === 0) draw();                                     // 描画も定期的に通して例外を拾う
@@ -145,6 +147,7 @@
     const c0 = clears, d0 = deaths; let steps = 0;
     for (; steps < 600 && scene === 'dungeon'; steps++) {
       if (dead) { deadAt = -1e9; playerMove(0, 0); break; }
+      if(stairsOpen){chooseStairs(true);continue;}
       if (player.hp <= 8 && inv.length) { useQuick(); continue; }
       const adj = DIRS.find(([dx, dy]) => geomOK(player.x, player.y, dx, dy) && enemyAt(player.x + dx, player.y + dy));
       if (adj) { player.face = adj; playerAttack(); continue; }
@@ -315,7 +318,7 @@
   ok('3F: enter dungeon on floor 1', scene === 'dungeon' && floorNo === 1);
   const stepStairs = () => {
     enemies = []; let st = null; for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (map[y][x] === STAIRS) st = [x, y];
-    for (const [dx, dy] of DIRS) { const x = st[0] - dx, y = st[1] - dy; if (inb(x, y) && map[y][x] === FLOOR && geomOK(x, y, dx, dy)) { player.x = x; player.y = y; snapVis(); playerMove(dx, dy); return true; } }
+    for (const [dx, dy] of DIRS) { const x = st[0] - dx, y = st[1] - dy; if (inb(x, y) && map[y][x] === FLOOR && geomOK(x, y, dx, dy)) { player.x = x; player.y = y; snapVis(); playerMove(dx, dy);if(stairsOpen)chooseStairs(true); return true; } }
     return false;
   };
   belly = 77; player.hp = 13; const bagCarry = inv.map(i => i.type).join();
@@ -400,7 +403,7 @@
   { localStorage.removeItem(SAVE_KEY); gift = false; boot();
     ok('gift: 5 weapons/shields given once on a fresh boot', ['stick', 'sword', 'axe', 'woodshield', 'ironshield'].every(t => wh.some(i => i.type === t)) && gift === true);
     const n0 = wh.length; boot(); ok('gift: not given twice after save/load', wh.length === n0 || wh.length === n0);
-    scene = 'town'; toTown(false); player.x = 11; player.y = 9; snapVis(); player.swing = 0; playerAttack(); ok('town: attack button does a practice swing (no turn)', player.swing > 0); }
+    scene = 'town'; toTown(false); player.x = 11; player.y = 9; snapVis(); player.swing = 0; playerAttack(); ok('town: attack is blocked (no swing)', player.swing === 0); }
   ok('log position default is bottom-right', logPos === 1);
   // ===== 追加：戦闘の演出（斬撃・火花・揺れ）=====
   { const fresh = () => { scene = 'dungeon'; floorNo = 1; newFloor(); dead = false; vfx.length = 0; shakeAmp = 0; };
@@ -674,7 +677,7 @@
     ok('traps: all six kinds can appear', (() => { const k = new Set(); for (let i = 0; i < 200; i++) { setup(2, true); traps.forEach(t => k.add(t.kind)); } return k.size === 6; })());
     // --- 発見
     setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'gas', seen: false }]; const t0 = turn; playerAttack(); ok('trap: Attack at a hidden trap tile reveals it and uses a turn', traps[0].seen && turn === t0 + 1 && player.st.sleep === 0 && /見つけた/.test(msgHistory[msgHistory.length - 2] + msgHistory[msgHistory.length - 1])); }
-    setup(); flat(); { const t0 = turn; playerAttack(); ok('trap: Attack at nothing costs no turn', turn === t0); }
+    setup(); flat(); { const t0 = turn; playerAttack(); ok('trap: empty swing consumes one turn', turn === t0 + 1 && player.swing > 0); }
     setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'gas', seen: false }, { x: player.x + 3, y: player.y, kind: 'mine', seen: false }]; inv = [mkItem('eyeherb')]; useType(inv[0].type); ok('めぐすり草: reveals every trap', traps.every(t => t.seen)); }
     // --- 発動
     setup(); flat(); { traps = [{ x: player.x + 1, y: player.y, kind: 'gas', seen: false }]; playerMove(1, 0); ok('gas trap: sleep (4 turns) and it stays', traps.length === 1 && traps[0].seen && player.hp > 0); }
@@ -711,7 +714,7 @@
     setup(); { inv = [mkItem('herb'), mkItem('herb')]; useType('herb'); ok('identify: all herbs of the type are known afterwards', isKnown('herb') && itemName(inv[0]) === ITEMS.herb.name); }
     setup(); { inv = [mkItem('herb'), mkItem('scroll'), mkItem('ring_regen'), mkItem('identscroll')]; useType('identscroll'); ok('identscroll: identifies everything in the bag', isKnown('herb') && isKnown('scroll') && isKnown('ring_regen') && isKnown('identscroll') && !isKnown('firestaff')); }
     setup(); { inv = [mkItem('identscroll')]; useType('identscroll'); ok('identscroll: with nothing to identify it is still used up', inv.length === 0); }
-    setup(); { inv = [mkItem('herb')]; renderBag(); bagSel = 'herb'; renderBag(); ok('bag: unknown items are marked and their description is hidden', /<i>\?<\/i>/.test(listEl.innerHTML) && /効果はわからない/.test(listEl.innerHTML) && !/HP/.test(listEl.innerHTML.split('class="ds"')[1] || '')); closeBag(); bagSel = null; }
+    setup(); { inv = [mkItem('herb')]; renderBag(); bagSel = 'herb'; renderBag(); ok('bag: unknown items are marked and their description is hidden', /<i>\?<\/i>/.test(listEl.innerHTML) && /効果はわからない/.test($('bagDetail').innerHTML) && !/HP/.test($('bagDetail').innerHTML)); closeBag(); bagSel = null; }
     setup(); { quick = 'herb'; render(); ok('quick button shows the alias', $('quick').innerHTML.includes(alias.herb)); quick = 'potion'; }
     setup(); { inv = []; useType('herb'); ok('use: "not carrying" message uses the alias', /持っていない/.test(msgHistory[msgHistory.length - 1]) && msgHistory[msgHistory.length - 1].includes(alias.herb)); }
     setup(); { identify('herb'); toTown(false); enterDungeon(); ok('enterDungeon: identification resets', !isKnown('herb') && Object.keys(alias).length > 10); }
@@ -766,8 +769,8 @@
     setup(); flat(); { const e = mkE('goblin', 3, 0, 30); e.st.sleep = 5; ACC.t = 0; inv = [mkItem('arrow', 1)]; throwType('arrow'); ok('throw: sleeping enemies are always hit', e.hp < 30); ACC.t = 1; }
     setup(); { scene = 'town'; inv = [mkItem('arrow', 3)]; throwType('arrow'); ok('throw: not in town', invCount('arrow') === 3); scene = 'dungeon'; }
     setup(); flat(); { inv = [mkItem('arrow', 3)]; quick = 'arrow'; useQuick(); ok('quick slot: arrows can be thrown from the quick button', invCount('arrow') === 2); render(); ok('quick slot: shows the arrow count', /×2/.test($('quick').innerHTML)); quick = 'potion'; }
-    setup(); flat(); { inv = [mkItem('arrow', 3)]; renderBag(); bagSel = 'arrow'; renderBag(); ok('bag: arrows show one 投げる button and no separate throw action', (listEl.innerHTML.match(/投げる<\/button>/g) || []).length === 1 && !/data-act="throw"/.test(listEl.innerHTML)); bagSel = null; closeBag(); }
-    setup(); flat(); { inv = [mkItem('potion')]; renderBag(); bagSel = 'potion'; renderBag(); ok('bag: other items get a 投げる button', /data-act="throw"/.test(listEl.innerHTML)); bagSel = null; closeBag(); }
+    setup(); flat(); { inv = [mkItem('arrow', 3)]; renderBag(); bagSel = 'arrow'; renderBag(); ok('bag: arrows show one 投げる button and no separate throw action', ($('bagDetail').innerHTML.match(/投げる<\/button>/g) || []).length === 1 && !/data-act="throw"/.test($('bagDetail').innerHTML)); bagSel = null; closeBag(); }
+    setup(); flat(); { inv = [mkItem('potion')]; renderBag(); bagSel = 'potion'; renderBag(); ok('bag: other items get a 投げる button', /data-act="throw"/.test($('bagDetail').innerHTML)); bagSel = null; closeBag(); }
     // --- 保存
     { toTown(false); gold = 77; bank = 123; shopStock = [mkItem('potion'), mkItem('arrow', 6)]; dungeonId = 'first'; wh = [mkItem('arrow', 3), mkItem('arrow', 4)]; saveGame(); gold = 0; bank = 0; shopStock = []; wh = []; loadGame();
       ok('save: gold, bank, shop stock and merged arrow stacks survive', gold === 77 && bank === 123 && shopStock.length === 2 && shopStock[1].plus === 6 && wh.length === 1 && wh[0].plus === 7); wh = []; }

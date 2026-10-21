@@ -1,0 +1,64 @@
+{
+  "viewports": [
+    {
+      "label": "landscape",
+      "size": [
+        844,
+        390
+      ],
+      "lighting": {
+        "centerAlpha": 255,
+        "edgeAlpha": 76,
+        "diagonalAlpha": 0,
+        "ceilingMean": 45.19187500000001,
+        "ceilingRange": 138
+      },
+      "hiddenRouteConcealed": true,
+      "fullTileStairs": 5,
+      "stairsStayAndDescend": true,
+      "keyboardAndTouchMenu": true,
+      "errors": [],
+      "missing": []
+    },
+    {
+      "label": "portrait",
+      "size": [
+        390,
+        844
+      ],
+      "lighting": {
+        "centerAlpha": 255,
+        "edgeAlpha": 74,
+        "diagonalAlpha": 0,
+        "ceilingMean": 51.221666666666614,
+        "ceilingRange": 118
+      },
+      "hiddenRouteConcealed": true,
+      "fullTileStairs": 5,
+      "stairsStayAndDescend": true,
+      "keyboardAndTouchMenu": true,
+      "errors": [],
+      "missing": []
+    },
+    {
+      "label": "desktop",
+      "size": [
+        1280,
+        720
+      ],
+      "lighting": {
+        "centerAlpha": 255,
+        "edgeAlpha": 80,
+        "diagonalAlpha": 0,
+        "ceilingMean": 48.09375000000002,
+        "ceilingRange": 130
+      },
+      "hiddenRouteConcealed": true,
+      "fullTileStairs": 5,
+      "stairsStayAndDescend": true,
+      "keyboardAndTouchMenu": true,
+      "errors": [],
+      "missing": []
+    }
+  ]
+}

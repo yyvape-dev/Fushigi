@@ -1,0 +1,145 @@
+{
+  "dateJST": "2026-10-21",
+  "assets": [
+    {
+      "key": "gold",
+      "source": "icons",
+      "cell": 0,
+      "path": "assets/gold.png",
+      "sha256": "b00eae01d77320e3cdd19b4f0cfd0348db40712cc331cf5193f202e3f461ce46"
+    },
+    {
+      "key": "arrow",
+      "source": "icons",
+      "cell": 1,
+      "path": "assets/arrow.png",
+      "sha256": "bf815454375e58318f60eec604596144c2add8a67c9c57f1c1f3e3479c5c0844"
+    },
+    {
+      "key": "shop",
+      "source": "icons",
+      "cell": 2,
+      "path": "assets/dungeon/experience-v1/shop.png",
+      "sha256": "93c6769e37c1bae8edfd4bccdc0c24326ebc79a685ec5f2caa63187c08990ed0"
+    },
+    {
+      "key": "coin",
+      "source": "icons",
+      "cell": 3,
+      "path": "assets/dungeon/experience-v1/coin.png",
+      "sha256": "80bc709e896d94e08fe4f2a6738975894f32598192c75f43bc68569368d50a5f"
+    },
+    {
+      "key": "pit",
+      "source": "traps",
+      "cell": 0,
+      "path": "assets/dungeon/experience-v1/trap-pit.png",
+      "sha256": "d3c754d29a24479c36849fb006c0bbfc920261eb8e62b4ab4861dfa1c611c229"
+    },
+    {
+      "key": "mine",
+      "source": "traps",
+      "cell": 1,
+      "path": "assets/dungeon/experience-v1/trap-mine.png",
+      "sha256": "bf871815a22064ad0750b1952c679d48313012d2163e080c411cc3cc3842aeb5"
+    },
+    {
+      "key": "gas",
+      "source": "traps",
+      "cell": 2,
+      "path": "assets/dungeon/experience-v1/trap-gas.png",
+      "sha256": "1a7235ec78496aec274076ae8259586c791afc4277f6d63aa2e9df79a2871300"
+    },
+    {
+      "key": "hungry",
+      "source": "traps",
+      "cell": 3,
+      "path": "assets/dungeon/experience-v1/trap-hungry.png",
+      "sha256": "b7babbb76c6985b07aeb5b1c10172755e94ca1f66ba8b355d68694b2948c27e8"
+    },
+    {
+      "key": "warp",
+      "source": "traps",
+      "cell": 4,
+      "path": "assets/dungeon/experience-v1/trap-warp.png",
+      "sha256": "87c6d325033f67503b47431321f29d7f69609726d5f78965986776eadc3eca59"
+    },
+    {
+      "key": "summon",
+      "source": "traps",
+      "cell": 5,
+      "path": "assets/dungeon/experience-v1/trap-summon.png",
+      "sha256": "261aa513eadf4b2ab48dd18b1f8f0012f63480c1d299af6f78d280d9c86d4c5b"
+    },
+    {
+      "key": "stairs-forest",
+      "source": "stairs",
+      "cell": 0,
+      "path": "assets/dungeon/experience-v1/stairs-forest.webp",
+      "sha256": "3d9165fdaa52841c1ceb542540fa15b98d55c83f6784e61d18cb81928c9dcd3f"
+    },
+    {
+      "key": "stairs-limestone",
+      "source": "stairs",
+      "cell": 1,
+      "path": "assets/dungeon/experience-v1/stairs-limestone.webp",
+      "sha256": "904465dce107c9a5ee349a8fe7a5dbaf31e99dbdb413d293592f0b99ed4ac493"
+    },
+    {
+      "key": "stairs-ruins",
+      "source": "stairs",
+      "cell": 2,
+      "path": "assets/dungeon/experience-v1/stairs-ruins.webp",
+      "sha256": "b93a1f575b86d034f27a0f9aae3f84399613cafbf698c738800ea2e36cf98309"
+    },
+    {
+      "key": "stairs-ice",
+      "source": "stairs",
+      "cell": 3,
+      "path": "assets/dungeon/experience-v1/stairs-ice.webp",
+      "sha256": "914c0c6665c84459c9c7c0aea6fd35fb45878771053332cb47c3035a571a9217"
+    },
+    {
+      "key": "stairs-volcano",
+      "source": "stairs",
+      "cell": 4,
+      "path": "assets/dungeon/experience-v1/stairs-volcano.webp",
+      "sha256": "d7d0559b08b2444dca106dff2a1731b8812f002b9b3051fe6dbea1c6279737e4"
+    },
+    {
+      "key": "ceiling-forest",
+      "source": "ceiling",
+      "cell": 0,
+      "path": "assets/dungeon/experience-v1/ceiling-forest.webp",
+      "sha256": "504940354c9037d92bb8304d45f8dc36bd0cf0247219c8ac4463af9662b89884"
+    },
+    {
+      "key": "ceiling-limestone",
+      "source": "ceiling",
+      "cell": 1,
+      "path": "assets/dungeon/experience-v1/ceiling-limestone.webp",
+      "sha256": "2e41d701a1f532097a2cbfc98cb5723eb65b22274098103f9e57f3b07d51f7fd"
+    },
+    {
+      "key": "ceiling-ruins",
+      "source": "ceiling",
+      "cell": 2,
+      "path": "assets/dungeon/experience-v1/ceiling-ruins.webp",
+      "sha256": "1ebe2079dc27e77077b873dab24a630a5c665db889665e227235948ea6219cbc"
+    },
+    {
+      "key": "ceiling-ice",
+      "source": "ceiling",
+      "cell": 3,
+      "path": "assets/dungeon/experience-v1/ceiling-ice.webp",
+      "sha256": "4999c57b32a6d0d17a896219bef798323b2a20b0033f0f57420efa8893826f38"
+    },
+    {
+      "key": "ceiling-volcano",
+      "source": "ceiling",
+      "cell": 4,
+      "path": "assets/dungeon/experience-v1/ceiling-volcano.webp",
+      "sha256": "ac822a0f21bce303f3495b5ec66352370363f8d60a2e366eed8a0faa47ed4cf6"
+    }
+  ]
+}
