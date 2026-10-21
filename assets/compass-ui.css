@@ -1,13 +1,18 @@
 /* Generated lacquer/brass art; arrows and feedback stay opaque for legibility. */
 #pad{display:block;width:var(--pad);height:var(--pad);border-radius:50%;background:none;filter:drop-shadow(0 3px 5px #0006)}
-#pad::before{inset:0;border:0;border-radius:50%;background:center/contain no-repeat url('ui-art/lacquer-compass.png');box-shadow:none;opacity:.72;transform:rotate(-22.5deg)}
+#pad::before{inset:0;border:0;border-radius:50%;background:center/contain no-repeat url('ui-art/lacquer-compass-v3.png');box-shadow:none;opacity:.72;transform:none}
 #pad .dp:not(.wait){position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;border-radius:50%;background:transparent;box-shadow:none;transform:none;transition:background .08s}
-#pad .dp:not(.wait)::after{position:absolute;left:var(--arrow-x);top:var(--arrow-y);width:21px;height:24px;margin:0;transform:translate(-50%,-50%) rotate(var(--arrow-angle));filter:drop-shadow(0 1px 2px #000);pointer-events:none}
+#pad .dp:not(.wait)::after{content:none;display:none}
 #pad .dp:not(.wait).on{background:radial-gradient(circle,#ffd58a25 25%,#e8ae5370 90%);box-shadow:inset 0 0 13px #ffe0a155;transform:none}
 #pad .dp:focus-visible{outline:3px solid #ffe6aa;outline-offset:-4px}
 #pad .wait{position:absolute;left:34%;top:34%;width:32%;height:32%;padding:0;border:0;border-radius:50%;background:#100e0940;box-shadow:none;color:#fff2d0;font-size:10px;text-shadow:0 1px 3px #000,0 0 4px #000;z-index:2;transform:none}
 #pad .wait.on{background:#d29e4f66;box-shadow:inset 0 0 12px #ffe6a0;transform:none}
-#atk{background:radial-gradient(circle at 35% 25%,#655044c9,#251e1bc9 64%,#151411d9 68%);border-color:#cdb481}
+#atk{isolation:isolate;background:none;border:0;box-shadow:none;justify-content:flex-end;padding:0 0 12%;text-shadow:0 1px 3px #000,0 0 4px #000;transform:none}
+#atk::before{position:absolute;inset:0;z-index:-1;width:100%;height:100%;background:center/contain no-repeat url('ui-art/attack-medallion.png');opacity:.84;filter:none;pointer-events:none}
+#atk::after{content:"";position:absolute;inset:3%;z-index:-1;border-radius:50%;opacity:0;background:radial-gradient(circle,#ffd48a12 35%,#ffc76855 95%);box-shadow:inset 0 0 10px #ffe6a1,0 0 12px #edbb6d88;pointer-events:none;transition:opacity .08s}
+#atk.on{background:none;border:0;box-shadow:none;transform:none}
+#atk.on::before{filter:brightness(1.25);opacity:1}
+#atk.on::after{opacity:1}
 #moveModes button,#lft .btn,#lft #menubtn{background:var(--skin-lines),linear-gradient(145deg,#34312ad9,#161612cf);border-color:#a78d60;color:#f1e4ca}
 #gameMenu,#cfg,#hist{background:var(--skin-lines),linear-gradient(125deg,#292720ed,#131310ed);border-color:#bea06c}
 #bagDetail{background:var(--skin-lines),linear-gradient(130deg,#2d2921ed,#151410ed)!important}
