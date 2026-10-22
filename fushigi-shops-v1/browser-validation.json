@@ -1,0 +1,47 @@
+[
+  {
+    "viewport": "portrait",
+    "size": [
+      390,
+      844
+    ],
+    "loadedPoses": 72,
+    "preview": true,
+    "pickupPayment": true,
+    "dialogFits": true,
+    "inputFrozen": true,
+    "sale": true,
+    "theft": true,
+    "errors": []
+  },
+  {
+    "viewport": "landscape",
+    "size": [
+      844,
+      390
+    ],
+    "loadedPoses": 72,
+    "preview": true,
+    "pickupPayment": true,
+    "dialogFits": true,
+    "inputFrozen": true,
+    "sale": true,
+    "theft": true,
+    "errors": []
+  },
+  {
+    "viewport": "small",
+    "size": [
+      320,
+      640
+    ],
+    "loadedPoses": 72,
+    "preview": true,
+    "pickupPayment": true,
+    "dialogFits": true,
+    "inputFrozen": true,
+    "sale": true,
+    "theft": true,
+    "errors": []
+  }
+]

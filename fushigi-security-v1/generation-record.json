@@ -1,7 +1,33 @@
 {
-  "status": "initial design, not approved or integrated",
-  "reference": "user royal guards image; approved shopkeeper art for game style",
-  "prompt": "source-art/design-prompt.txt",
-  "output": "source-art/initial-design.png",
-  "sha256": "6bee213703a47c671d33d843aa0e63557bce515b6c219d497d7506e5afbfe1bb"
+  "status": "approved designs; black dog requested; integrated",
+  "references": {
+    "idle": [
+      "source-art/approved-black-design.png",
+      "guides/guard-idle.png or dog-idle.png"
+    ],
+    "motion": [
+      "matching direction in source-art/guard-idle.png or dog-idle.png",
+      "corresponding guides/kind-action.png"
+    ]
+  },
+  "prompts": "generation-prompts.json",
+  "fixes": [
+    "guard-walk-SE-fixed.png: keep correct anatomical right spear/left shield",
+    "guard-attack-S-fixed.png: frontal thrust, not leftward",
+    "guard-attack-wide.png: 2 columns by 4 rows to isolate spear tips"
+  ],
+  "registration": "security.json, one scale per original source sheet and explicit foot/paw contact; single-image fixes have documented own source scale",
+  "sha256": {
+    "source-art/initial-design.png": "6bee213703a47c671d33d843aa0e63557bce515b6c219d497d7506e5afbfe1bb",
+    "source-art/dog-idle.png": "2a569035f7e49545c7cea923fa4dc4e5154d6623cccf99ea3eba02819e9b6e51",
+    "source-art/guard-idle.png": "b608cf5ae3f36ccd8bf7ae0f13c53bc2a7c563348070907d2761fb4b0f3f2ca3",
+    "source-art/guard-walk.png": "a81cc8e3e9ef5eff9d1e9cdca523fb9dc48621198b3cf2863becfe009da43514",
+    "source-art/guard-attack-S-fixed.png": "74cd315ad99957b1281832db89e425a220ad84aa3faebe40a5e16d062c18ced1",
+    "source-art/guard-attack.png": "6946a0b2350d437e56ca4440d30ecd632e675bbdc0f280316d35ee389f32ad35",
+    "source-art/dog-attack.png": "26d2577f966bf862a29bef0ad774491759468f7121a134489f73d074dca4165d",
+    "source-art/guard-attack-wide.png": "a9fecbf7be19f8273604652d99ec124990f574a8572c802b9e200b4f62d38cb5",
+    "source-art/approved-black-design.png": "6d4f1b9f6a161072e653d0378fed0c6a5d9a8d0d5c3c9a07fb831aca886bbb25",
+    "source-art/dog-walk.png": "f0eebc8130bddfde0b242318c981cef2ddec46c5e8a1d217e066bc64a47450a5",
+    "source-art/guard-walk-SE-fixed.png": "c6d636a324f2e5324cde97ad35db51f553992bc0d5feb3dc799ad781c919bd8b"
+  }
 }

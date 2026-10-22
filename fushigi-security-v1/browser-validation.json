@@ -1,0 +1,47 @@
+[
+  {
+    "viewport": "portrait",
+    "size": [
+      390,
+      844
+    ],
+    "loadedPoses": 48,
+    "allDirectionsAndActions": true,
+    "oneKeeperPerEntrance": true,
+    "unpaidBlocksAllExits": true,
+    "paidClearsExits": true,
+    "theftSpawn": true,
+    "floorChangeEndsPursuit": true,
+    "errors": []
+  },
+  {
+    "viewport": "landscape",
+    "size": [
+      844,
+      390
+    ],
+    "loadedPoses": 48,
+    "allDirectionsAndActions": true,
+    "oneKeeperPerEntrance": true,
+    "unpaidBlocksAllExits": true,
+    "paidClearsExits": true,
+    "theftSpawn": true,
+    "floorChangeEndsPursuit": true,
+    "errors": []
+  },
+  {
+    "viewport": "small",
+    "size": [
+      320,
+      640
+    ],
+    "loadedPoses": 48,
+    "allDirectionsAndActions": true,
+    "oneKeeperPerEntrance": true,
+    "unpaidBlocksAllExits": true,
+    "paidClearsExits": true,
+    "theftSpawn": true,
+    "floorChangeEndsPursuit": true,
+    "errors": []
+  }
+]

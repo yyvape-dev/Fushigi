@@ -37,6 +37,7 @@ def main():
    sample=palette(frame,'brown').resize((166,166));sheet.paste(sample,(i*192+13,row*224+30),sample);g.text((i*192+8,row*224+7),d+' '+action,fill='#e2c89c');g.line((i*192,row*224+175,i*192+192,row*224+175),fill='#514d49')
  lana=Image.open(P.parent/'fushigi-equipment-v3/assets/hero-base/S.png');colors.paste(lana,(0,0),lana)
  sheet.save(P/'all-poses.png');colors.save(P/'three-colors.png')
+ if (P/'source-art/carpet.png').exists():Image.open(P/'source-art/carpet.png').resize((256,256),Image.Resampling.LANCZOS).save(P/'assets/carpet.png')
  for path in sorted((P/'source-art').glob('*.png')):meta['sha256'][str(path.relative_to(P))]=sha(path)
  for path in sorted((P/'assets').rglob('*.png')):meta['sha256'][str(path.relative_to(P))]=sha(path)
  (P/'merchant.json').write_text(json.dumps(meta,ensure_ascii=False,indent=2)+'\n');print('Registered 72 poses, shared scale',scale)

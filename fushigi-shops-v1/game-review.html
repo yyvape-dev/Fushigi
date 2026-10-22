@@ -151,7 +151,8 @@ canvas{display:block;touch-action:none}
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
 <link rel="stylesheet" href="assets/allies.css?v=dialog-v4">
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
-<script src="assets/dungeon-shop.js?v=shops-v1"></script>
+<script src="assets/dungeon-shop.js?v=security-v1"></script>
+<script src="assets/shop-security.js?v=security-v1"></script>
 <script src="assets/allies.js?v=shops-v1"></script>
 <script src="assets/monster-roster.js?v=families-v2"></script>
 <script src="assets/monster-families.js?v=families-v2"></script>
@@ -557,6 +558,7 @@ const ENEMIES = {
   dragon: { name: 'ドラゴン', from: 9, w: 1, hp: f => 40 + f * 2, atk: f => [5, 8 + Math.floor(f / 2)], breath: f => [4, 7 + Math.floor(f / 3)], def: 4, exp: 70, ai: 'breath', art: 'ogre', hue: 140, col: '#ff5030' },
 };
 if(typeof MonsterRoster!=='undefined')MonsterRoster.install(ENEMIES);
+ShopSecurity.install(ENEMIES);
 const eT = e => e.isShopkeeper ? {name:'店主',def:ShopSystem.tiers[floorShop.tier].def} : ENEMIES[e.kind] || ENEMIES.goblin;
 // 杖・巻物の共通処理：向いている方向の最初の敵（射程8）／ダメージを与える
 let zapDir = [0, 1];
@@ -570,9 +572,9 @@ function lineTarget() {                                         // 向いてい�
   }
   return null;
 }
-function zapTarget() { const t = lineTarget();if(t?.e.isShopkeeper)ShopSystem.steal('店主に杖を向けた！'); if (!t) say('しかし、何も起こらなかった。'); return t; }
+function zapTarget() { const t = lineTarget();if (!t) say('しかし、何も起こらなかった。'); return t; }
 function zapHit(e, dmg, label) {
-  if(e.isShopkeeper){ShopSystem.hit(dmg);return;}
+  if(e.isShopkeeper){ShopSystem.hit(dmg,e);return;}
   e.hp -= dmg; e.aware = true; e.flash = now() + 130; if (e.st) e.st.sleep = 0; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
   if (e.hp <= 0) { say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); killEnemy(e); }
   else { say(`${label}で${eT(e).name}に${dmg}ダメージ。`); afterDamage(e); }
@@ -615,7 +617,7 @@ function killEnemy(e, noExp) {
   const i = enemies.indexOf(e); if (i >= 0) enemies.splice(i, 1);
   if (e.loot) { dropAt(e.x, e.y, e.loot); say(`盗まれた${itemName(e.loot)}を取り返した！`); e.loot = null; }
   if (!noExp && Math.random() < 0.25) dropAt(e.x, e.y, mkItem('gold', rnd(5, 15) + floorNo * 3));
-  if (!noExp) { const xp=Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)))); gainExp(xp); AllySystem.gainExp(xp); }
+  if (!noExp && !ShopSecurity.isSecurity(e)) { const xp=Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)))); gainExp(xp); AllySystem.gainExp(xp); }
 }
 // ダメージを受けて生き残った後：ブヨブヨは分裂する（3回まで。子は経験値が半分ずつ）
 function afterDamage(e) {
@@ -709,7 +711,7 @@ function ringTick() {
   }
   if (n('leak') && Math.random() < 0.04 * n('leak')) {
     const c = inv.filter(i => !isEq(i));
-    if (c.length && !itemAt(player.x, player.y)) { const it = c[rnd(0, c.length - 1)]; inv.splice(inv.indexOf(it), 1); floorItems.push({ x: player.x, y: player.y, item: it }); say(`${itemName(it)}を落としてしまった！`); }
+    if (c.length && !itemAt(player.x, player.y)) { const it = c[rnd(0, c.length - 1)]; inv.splice(inv.indexOf(it), 1); floorItems.push({ x: player.x, y: player.y, item: it });ShopSystem.landed(it,player.x,player.y); say(`${itemName(it)}を落としてしまった！`); }
   }
   if (n('summon') && Math.random() < 0.03 * n('summon')) {
     const R = rooms[rnd(0, rooms.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
@@ -851,7 +853,7 @@ function loadSprite(key, src) {
   im.onerror = () => {};
   im.src = src;
 }
-const ASSET_KEYS = ['player', ...Object.keys(ENEMIES).filter(k=>!ENEMIES[k].tier||ENEMIES[k].tier===1), 'floor', 'wall', 'stairs', 'ground', 'tree', 'roof', 'hwall', 'door', 'gate', 'pillar', 'town', ...new Set(Object.values(ICON_BY_CAT)), ...Object.keys(ITEMS).filter(k => !ITEMS[k].icon || ITEMS[k].equip === 'weapon' || ITEMS[k].equip === 'shield')];   // town = 町全体の一枚絵（あれば町のタイル絵より優先）
+const ASSET_KEYS = ['player', ...Object.keys(ENEMIES).filter(k=>!ENEMIES[k].security&&(!ENEMIES[k].tier||ENEMIES[k].tier===1)), 'floor', 'wall', 'stairs', 'ground', 'tree', 'roof', 'hwall', 'door', 'gate', 'pillar', 'town', ...new Set(Object.values(ICON_BY_CAT)), ...Object.keys(ITEMS).filter(k => !ITEMS[k].icon || ITEMS[k].equip === 'weapon' || ITEMS[k].equip === 'shield')];   // town = 町全体の一枚絵（あれば町のタイル絵より優先）
 function loadExternalAssets() {
   if (typeof Image === 'undefined' || typeof location === 'undefined' || location.protocol === 'file:') return;
   for (const k of ASSET_KEYS) loadSprite(k, `assets/${k}.png`);
@@ -1087,6 +1089,7 @@ function newFloor() {
   seen = Array.from({ length: MH }, () => new Array(MW).fill(false));
   ShopSystem.setup();
   AllySystem.newFloor();
+  ShopSecurity.newFloor();
   snapVis();
   updateVis();
 }
@@ -1152,7 +1155,7 @@ function triggerTrap(tr) {                                        // 罠を踏�
 // =====================================================================
 //  シーン遷移：町 ⇄ ダンジョン
 // =====================================================================
-function snapVis() { for (const e of [player, ...enemies,...(scene==='dungeon'&&floorShop?.keeper?.hp>0?[floorShop.keeper]:[])]) { e.vx = e.x; e.vy = e.y; e.bump = null; } }
+function snapVis() { for (const e of [player, ...enemies,...ShopSystem.keepers().filter(k=>k.hp>0)]) { e.vx = e.x; e.vy = e.y; e.bump = null; } }
 function toTown(fromDungeon) {
   closeStairs();
   ShopSystem.reset();
@@ -1363,7 +1366,7 @@ function hungerTick() {
 // 1ターン分の処理。倍速のときは2回に1回、敵も空腹も進まない
 function turnCore() {
   const free = scene === 'dungeon' && player.st.haste > 0 && (hasteFlip = !hasteFlip);
-  if (scene === 'dungeon' && !free) { ShopSystem.tick(); if (!dead) AllySystem.tick(); if (!dead) enemyTurn(); }
+  if (scene === 'dungeon' && !free) { ShopSecurity.tick(); ShopSystem.tick(); if (!dead) AllySystem.tick(); if (!dead) enemyTurn(); }
   if (!free) turn++;
   if (!dead && scene === 'dungeon' && !free) { hungerTick(); ringTick(); }
   if (!dead && !free && turn % Math.max(2, Math.round(10 / (1 + ringN('regen')))) === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;
@@ -1485,7 +1488,7 @@ function ctxInfo() {
   if (scene === 'dungeon') {
     if (map[player.y][player.x]===STAIRS) return {label:'階段',fn:openStairs};
     if (itemAt(player.x, player.y)) return { label: '拾う', fn: playerPickUp };
-    if(floorShop&&!floorShop.hostile&&(ShopSystem.inside(player.x,player.y)||Math.max(Math.abs(player.x-floorShop.keeper.x),Math.abs(player.y-floorShop.keeper.y))<=1))return {label:'店主',fn:ShopSystem.talk};
+    if(floorShop&&!floorShop.hostile&&(ShopSystem.inside(player.x,player.y)||ShopSystem.nearby()))return {label:'店主',fn:ShopSystem.talk};
     if(AllySystem.nearby())return {label:'話す',fn:AllySystem.talk};
     return atDungeonShop() ? { label: '店', fn: openWh } : null;
   }
@@ -1519,7 +1522,7 @@ function playerAttack() {
     endTurn(); return;
   }
   const [fx_, fy_] = player.face;
-  if(geomOK(player.x,player.y,fx_,fy_)&&ShopSystem.at(player.x+fx_,player.y+fy_)){ShopSystem.hit();endTurn();return;}
+  if(geomOK(player.x,player.y,fx_,fy_)&&ShopSystem.at(player.x+fx_,player.y+fy_)){ShopSystem.hit(undefined,ShopSystem.at(player.x+fx_,player.y+fy_));endTurn();return;}
   let t = geomOK(player.x, player.y, fx_, fy_) ? enemyAt(player.x + fx_, player.y + fy_) : null;
   if (!t) {
     for (let dy = -1; dy <= 1 && !t; dy++) for (let dx = -1; dx <= 1 && !t; dx++) {
@@ -1579,6 +1582,7 @@ function enemyTurn() {
   const d = distMap();
   for (const e of [...enemies]) {
     const T = eT(e), S = e.st || (e.st = {}), ai = T.ai || 'melee';
+    if(ShopSecurity.isSecurity(e)){if(e.spawnTurn===turn)continue;e.aware=true;e.lost=0;}
     if (e.mh) continue;                                           // 魔物部屋で眠っている敵（部屋に入ると目覚める）
     if (S.sleep > 0) { S.sleep--; continue; }                     // 眠っている敵は動かない（殴られると起きる）
     const confused = S.confuse > 0; if (confused) S.confuse--;
@@ -1588,7 +1592,7 @@ function enemyTurn() {
       if(!confused && AllySystem.enemyAction(e,T)){if(dead)return;continue;}
       const dist = Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y));
       if (dist <= (ringN('sneak') ? 3 : SIGHT) && los(e.x, e.y, player.x, player.y)) { e.aware = true; e.lost = 0; }
-      else if (step === 0 && e.aware && ++e.lost > 10) e.aware = false;
+      else if (!ShopSecurity.isSecurity(e) && step === 0 && e.aware && ++e.lost > 10) e.aware = false;
       if (e.loot) {                                               // 盗んだ後は逃げる。しばらく逃げ切られると消えて、盗んだ物は戻らない
         if (++e.fleeT > 40) { enemies.splice(enemies.indexOf(e), 1); say(`${T.name}は盗んだ物を持って消えた…`); break; }
         let best = null, bd = d[e.y][e.x];
@@ -1721,9 +1725,10 @@ function throwType(key) {
   }
   const dir = player.st.confuse > 0 ? DIRS8[rnd(0, 7)] : player.face; player.face = dir; if (dir[0]) player.fl = dir[0] < 0; player.swing = now(); player.attackFace = player.face.slice(); kick();
   let x = player.x, y = player.y, tgt = null;
-  for (let i = 0; i < 8; i++) { if (!geomOK(x, y, dir[0], dir[1])) break; x += dir[0]; y += dir[1]; const e = enemyAt(x, y); if (ShopSystem.at(x,y)) { tgt={shopkeeper:true,x,y};break; } if (e) { tgt = e; break; } }
+  for (let i = 0; i < 8; i++) { if (!geomOK(x, y, dir[0], dir[1])) break; x += dir[0]; y += dir[1]; const e = enemyAt(x, y); if (ShopSystem.at(x,y)) { tgt={shopkeeper:true,actor:ShopSystem.at(x,y),x,y};break; } if (e) { tgt = e; break; } }
+  if(ShopSystem.lot(one)&&!ShopSystem.inside(x,y))ShopSystem.landed(one,x,y);
   let lost = false;
-  if(tgt?.shopkeeper){ShopSystem.hit(d.stack?rnd(5,8):1);ShopSystem.consume(one);lost=true;}
+  if(tgt?.shopkeeper){ShopSystem.hit(d.stack?rnd(5,8):1,tgt.actor);ShopSystem.consume(one);lost=true;}
   else if (tgt) {
     const T = eT(tgt), sleeping = tgt.st && tgt.st.sleep > 0;
     if (!sleeping && Math.random() >= ACC.t) { say(`${itemName(one)}を投げたが、はずれた。`); fxText(tgt.x, tgt.y, 'MISS', '#cfd8e8'); tgt.aware = true; }
@@ -2330,6 +2335,7 @@ function draw() {
       if (m > 0) shadeTile(key, x, y, px, py, m);
     }
   }
+  if(dungeon)ShopSystem.floorArt(ctx,camX,camY);
   if (scene === 'town' && showGrid) drawTownGrid(camX, camY);
   if (dungeon) for (const tr of traps) if (tr.seen && seen[tr.y][tr.x]) {                          // 見つけた罠：色つきのひし形
     if (DungeonExperience.trap(ctx,tr.kind,camX+tr.x*TS,camY+tr.y*tilePitchY(),TS,tilePitchY())) continue;
@@ -2339,8 +2345,9 @@ function draw() {
     ctx.fillStyle = TRAPS[tr.kind].col; ctx.font = 'bold ' + Math.round(TS * 0.34) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('!', cx, cy + 1);
   }
   for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
-  for (const e of [...enemies,...(AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon&&floorShop?.keeper?.hp>0?[floorShop.keeper]:[])].sort((a,b)=>a.vy-b.vy)) if (vis[e.y][e.x]) {
+  for (const e of [...enemies,...(AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):[])].sort((a,b)=>a.vy-b.vy)) if (vis[e.y][e.x]) {
     if(e.isShopkeeper){ShopSystem.draw(ctx,e,t,camX,camY);continue;}
+    if(ShopSecurity.isSecurity(e)){const [px,py]=ShopSecurity.draw(ctx,e,t,camX,camY);ctx.fillStyle='#211b22';ctx.fillRect(px,py+tilePitchY()-3,TS,3);ctx.fillStyle='#e46267';ctx.fillRect(px,py+tilePitchY()-3,TS*e.hp/e.maxhp,3);continue;}
     if(e.isAlly){AllySystem.draw(ctx,e,t,camX,camY);continue;}
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
     ctx.fillStyle = '#000'; ctx.fillRect(px, py + tilePitchY() - 3, TS, 3);
@@ -2391,9 +2398,9 @@ function draw() {
 // アニメーション：動いている間だけ rAF を回す
 function stepVis(dt) {
   AllySystem.animate(dt);
-  for (const e of [player, ...enemies,...(scene==='dungeon'&&floorShop?.keeper?.hp>0?[floorShop.keeper]:[])]) {
+  for (const e of [player, ...enemies,...ShopSystem.keepers().filter(k=>k.hp>0)]) {
     const dx = e.x - e.vx, dy = e.y - e.vy, d = Math.hypot(dx, dy);
-    if (e !== player && typeof MonsterSprites !== 'undefined' && MonsterSprites.has(e.kind) && d>.001 && d<=2.5) {
+    if (e !== player && typeof MonsterSprites !== 'undefined' && (MonsterSprites.has(e.kind)||ShopSecurity.isSecurity(e)) && d>.001 && d<=2.5) {
       if (e.monsterTargetX !== e.x || e.monsterTargetY !== e.y) {
         e.monsterTargetX=e.x; e.monsterTargetY=e.y;
         e.monsterFace=[Math.sign(dx),Math.sign(dy)];
@@ -2408,7 +2415,7 @@ function stepVis(dt) {
 }
 function animating(t) {
   if(AllySystem.animating(t))return true;
-  const keeper=scene==='dungeon'&&floorShop?.keeper;if(keeper&&(keeper.walkEnd>t||t-keeper.attackStart<300))return true;
+  if(ShopSystem.keepers().some(k=>k.walkEnd>t||t-k.attackStart<300))return true;
   if (t - fadeT < 350 || (hurtT && t - hurtT < 260) || fx.length || vfx.length || (shakeAmp && t - shakeT0 < shakeLife)) return true;
   if (player.swing && t - player.swing < SWING_MS) return true;
   if (player.action && t-player.action.t0 < player.action.duration) return true;
@@ -2520,7 +2527,7 @@ resize();
 loadExternalAssets();
 loadRig();
 boot();
-if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); AllySystem.load(render); DungeonExperience.load(render); }
+if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
 </script>
 <script src="assets/controls-ui.js?v=yuzunamiki-v1"></script>
 <script src="assets/ergonomic-ui.js?v=hands-v1"></script>

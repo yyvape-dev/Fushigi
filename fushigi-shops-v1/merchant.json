@@ -56,6 +56,7 @@
   "sha256": {
     "source-art/approved-design.png": "404815e5d706935c350c243c36c31ccef86065eff0399fb52a3f95fca9b15a73",
     "source-art/attack-eight.png": "27f5e0f0a23f01497d23882e420dc17c07d88ba8955723cf57da3bda76e25c12",
+    "source-art/carpet.png": "cae12b7adcf06608f804d9f203f92fc697c28d50d5a1e80bd2b6cab02471048c",
     "source-art/idle-eight.png": "d9c9608483236da2df6eb427e6e8a4fcca1c8d1d0e564cb7e49960a5d3055af5",
     "source-art/walk-eight.png": "bca8dfc3113f4c1c42b519ab610fb2b8ea670c9437341c1d688f29688c62a1d6",
     "assets/brown/E-attack.png": "d32a269c5faaafafa28a852e969945aeefc74b0498bb9e5bcb8db383a8c1b395",
@@ -82,6 +83,7 @@
     "assets/brown/W-attack.png": "a1a405bc4a75d24bdc8a27dd18ecf64573fe01591e55c4732e7a7c8250305505",
     "assets/brown/W-walk.png": "c9ff8a664d3e415771a6cf26a6f9702836a1ce8a77e611fb3906c32bcee73f01",
     "assets/brown/W.png": "055275e27b602045a3d705e435d9cdb6cde981b8fd305b6029d64976e5c145a2",
+    "assets/carpet.png": "a97a91367c90e53a744a066a23710b7105e1cf9d2dd4b3fd5cdaf0bcc711cd27",
     "assets/crimson/E-attack.png": "cb3b96a459417a5663b60bbdffa757765878d0c6b47963b219820d3a1ce22092",
     "assets/crimson/E-walk.png": "7ad9013914e322081dae7ac3ec95d67edbdef4a0fba02547c2bc08e706c8792c",
     "assets/crimson/E.png": "9ac96d3a5646a14a190cb34b039d973062046bd911a4c4879c2c78d0a2eb7252",

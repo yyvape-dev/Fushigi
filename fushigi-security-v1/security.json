@@ -1,0 +1,854 @@
+{
+  "actors": {
+    "shop_guard": {
+      "name": "番兵",
+      "frameSize": [
+        512,
+        320
+      ],
+      "origin": [
+        256,
+        280
+      ],
+      "bodyHeight": 191,
+      "sharedScale": 0.5026315789473684,
+      "views": {
+        "S": {
+          "idle": "assets/guard/S-idle.png",
+          "walk": "assets/guard/S-walk.png",
+          "attack": "assets/guard/S-attack.png"
+        },
+        "SW": {
+          "idle": "assets/guard/SW-idle.png",
+          "walk": "assets/guard/SW-walk.png",
+          "attack": "assets/guard/SW-attack.png"
+        },
+        "W": {
+          "idle": "assets/guard/W-idle.png",
+          "walk": "assets/guard/W-walk.png",
+          "attack": "assets/guard/W-attack.png"
+        },
+        "NW": {
+          "idle": "assets/guard/NW-idle.png",
+          "walk": "assets/guard/NW-walk.png",
+          "attack": "assets/guard/NW-attack.png"
+        },
+        "N": {
+          "idle": "assets/guard/N-idle.png",
+          "walk": "assets/guard/N-walk.png",
+          "attack": "assets/guard/N-attack.png"
+        },
+        "NE": {
+          "idle": "assets/guard/NE-idle.png",
+          "walk": "assets/guard/NE-walk.png",
+          "attack": "assets/guard/NE-attack.png"
+        },
+        "E": {
+          "idle": "assets/guard/E-idle.png",
+          "walk": "assets/guard/E-walk.png",
+          "attack": "assets/guard/E-attack.png"
+        },
+        "SE": {
+          "idle": "assets/guard/SE-idle.png",
+          "walk": "assets/guard/SE-walk.png",
+          "attack": "assets/guard/SE-attack.png"
+        }
+      }
+    },
+    "shop_dog": {
+      "name": "番犬",
+      "frameSize": [
+        256,
+        256
+      ],
+      "origin": [
+        128,
+        224
+      ],
+      "bodyHeight": 128,
+      "sharedScale": 0.3688760806916426,
+      "views": {
+        "S": {
+          "idle": "assets/dog/S-idle.png",
+          "walk": "assets/dog/S-walk.png",
+          "attack": "assets/dog/S-attack.png"
+        },
+        "SW": {
+          "idle": "assets/dog/SW-idle.png",
+          "walk": "assets/dog/SW-walk.png",
+          "attack": "assets/dog/SW-attack.png"
+        },
+        "W": {
+          "idle": "assets/dog/W-idle.png",
+          "walk": "assets/dog/W-walk.png",
+          "attack": "assets/dog/W-attack.png"
+        },
+        "NW": {
+          "idle": "assets/dog/NW-idle.png",
+          "walk": "assets/dog/NW-walk.png",
+          "attack": "assets/dog/NW-attack.png"
+        },
+        "N": {
+          "idle": "assets/dog/N-idle.png",
+          "walk": "assets/dog/N-walk.png",
+          "attack": "assets/dog/N-attack.png"
+        },
+        "NE": {
+          "idle": "assets/dog/NE-idle.png",
+          "walk": "assets/dog/NE-walk.png",
+          "attack": "assets/dog/NE-attack.png"
+        },
+        "E": {
+          "idle": "assets/dog/E-idle.png",
+          "walk": "assets/dog/E-walk.png",
+          "attack": "assets/dog/E-attack.png"
+        },
+        "SE": {
+          "idle": "assets/dog/SE-idle.png",
+          "walk": "assets/dog/SE-walk.png",
+          "attack": "assets/dog/SE-attack.png"
+        }
+      }
+    }
+  },
+  "mirroring": false,
+  "sha256": {
+    "source-art/approved-black-design.png": "6d4f1b9f6a161072e653d0378fed0c6a5d9a8d0d5c3c9a07fb831aca886bbb25",
+    "source-art/dog-attack.png": "26d2577f966bf862a29bef0ad774491759468f7121a134489f73d074dca4165d",
+    "source-art/dog-idle.png": "2a569035f7e49545c7cea923fa4dc4e5154d6623cccf99ea3eba02819e9b6e51",
+    "source-art/dog-walk.png": "f0eebc8130bddfde0b242318c981cef2ddec46c5e8a1d217e066bc64a47450a5",
+    "source-art/guard-attack-S-fixed.png": "74cd315ad99957b1281832db89e425a220ad84aa3faebe40a5e16d062c18ced1",
+    "source-art/guard-attack-wide.png": "a9fecbf7be19f8273604652d99ec124990f574a8572c802b9e200b4f62d38cb5",
+    "source-art/guard-attack.png": "6946a0b2350d437e56ca4440d30ecd632e675bbdc0f280316d35ee389f32ad35",
+    "source-art/guard-idle.png": "b608cf5ae3f36ccd8bf7ae0f13c53bc2a7c563348070907d2761fb4b0f3f2ca3",
+    "source-art/guard-walk-SE-fixed.png": "c6d636a324f2e5324cde97ad35db51f553992bc0d5feb3dc799ad781c919bd8b",
+    "source-art/guard-walk.png": "a81cc8e3e9ef5eff9d1e9cdca523fb9dc48621198b3cf2863becfe009da43514",
+    "source-art/initial-design.png": "6bee213703a47c671d33d843aa0e63557bce515b6c219d497d7506e5afbfe1bb",
+    "assets/dog/E-attack.png": "4dc83ac083eff6d82931e77591a6d5befabecbba9428d56acc59672e73e2ece0",
+    "assets/dog/E-idle.png": "20a35a33e0bf2cc408262cf6a9a85c0fdd0353545e98c0da05cdb5559aca1dbe",
+    "assets/dog/E-walk.png": "10136a471a11a820348385186736261e0ce4ef42faed5b658e4b08983dc04850",
+    "assets/dog/N-attack.png": "6818af9629108728d6ee8c0c1e7388ff9517cd05420b703e891dab83ad75da72",
+    "assets/dog/N-idle.png": "168bc95ab1c10b1755ea84d28c068a1602236b174390ffbb460d5b694d6ec86d",
+    "assets/dog/N-walk.png": "ee74b4c3d415e36b25bcc01844a48797f33045b827a62631a60acd824f05222d",
+    "assets/dog/NE-attack.png": "c0ec61ada58dc7ce6daf296dea35f685bdde30973e75dab9e7e578809727161e",
+    "assets/dog/NE-idle.png": "6359f6c277216814e104202ac07b97a873c7e05ac4297a1bd750dd8e2badc7d8",
+    "assets/dog/NE-walk.png": "b4b2e22ee0de4318c24671bb95933f9705ddfd87488ef2e455352e51044d4e94",
+    "assets/dog/NW-attack.png": "a60119462358149cfe7bf4b88d85240e8c46a21c0be6d500058050b146112d14",
+    "assets/dog/NW-idle.png": "c8f9bdfc52042f5e004219d26bd296e2e66fbe0b5b02c07a31a01ce593aa20c6",
+    "assets/dog/NW-walk.png": "958ded74da820ede4915a7a47ed1928502c43addaac356ee9eca1cb4b8aa83ae",
+    "assets/dog/S-attack.png": "edd67ba1a49c1f653b16a623c806b602eedefcf4e3edebfc33d76d2a9787d7be",
+    "assets/dog/S-idle.png": "611f936d3c829d4c1bdc1a328b4d862ac5941b1167b16aec9b27f76cd7361b51",
+    "assets/dog/S-walk.png": "75e142d1738121c1085ab594d79e4884d82e305a1714b687d28eb163367e2c1c",
+    "assets/dog/SE-attack.png": "8c2d58ee796e604436e791f6237c000047676d0dec1ad7278856d14ac597acd0",
+    "assets/dog/SE-idle.png": "a8f302e5edace9084456ce705ab1c8f701b0f007a570dc531b27c1d1fd22b7ba",
+    "assets/dog/SE-walk.png": "abfef636e4db7fb550a024082f3774f6c24094104706756589208068d5362a36",
+    "assets/dog/SW-attack.png": "90e157a239a62ec9161c560290ad59b55c032d24923ea5350d47f1b77c48372e",
+    "assets/dog/SW-idle.png": "902b1618acfb680c75702dfe874dea2b2563f36a4f1d2709d1a32a6e5457f874",
+    "assets/dog/SW-walk.png": "cdc33ecd0908e4533d1f58e899c2ba419c1017c78a7713a24de0fdceac5e1055",
+    "assets/dog/W-attack.png": "edac874f3d38bb5a57d9a2afb6ce316b86d9e6ed12dd1dd0f484123db64511a3",
+    "assets/dog/W-idle.png": "5d8ea5f9c41c19efa4a59b770457d8a3de15c7ea06f3799a9b0b61203c321385",
+    "assets/dog/W-walk.png": "0261b7eab60937886737575de6f88e1bbe84a0cd8fda0d0ab7cebcb3ce621617",
+    "assets/guard/E-attack.png": "9cab76b7a450515287805d3f827326ffc4f1b004fcd677dd035030d485a208c4",
+    "assets/guard/E-idle.png": "6f50329e2c126b1c172559baf9e78f6eb22c66c360b2a01fb5ed78d59c6ef7e0",
+    "assets/guard/E-walk.png": "d33a2364aa3e99d49b81157bd9c7aa6f6a0ec65b5314b7d3721d199084b6b6d1",
+    "assets/guard/N-attack.png": "8f2f2581538162b0be30f741f54d6af72d36fcb74545333ebb99427d1c6aef6c",
+    "assets/guard/N-idle.png": "6240949aeb710afc965bd0cb9eaac05c29e7e43a653f757f53b0a5d6a867b4f3",
+    "assets/guard/N-walk.png": "194982790d2e4f7db39ebf8d937a14cb6e2d0ab87b1f4a5ada8e700147f1eaeb",
+    "assets/guard/NE-attack.png": "622952b5f2eceec1ceda93c027c4f08606d1082d39f6b7deef74c28fc50a4d8d",
+    "assets/guard/NE-idle.png": "fd612384b26fd3ee4f350b7a35e23ef947a2767b8e8934d76da7338ad3273005",
+    "assets/guard/NE-walk.png": "0f945ae542561185483ff730e4cdfe6aebbafd1e87201261ca444b9e2b61314f",
+    "assets/guard/NW-attack.png": "cf3d1c037847e37f514837a08e36ec10967b31bf634b1d9141345b34f417aa5c",
+    "assets/guard/NW-idle.png": "37b7d40720cc59414538be40053ed219d1c6353b9e7dfc4a673fa63156a40524",
+    "assets/guard/NW-walk.png": "718b5f4a95f04e5d884d25c5467f036ed6454f008e38cad4227d06d8bb8a9574",
+    "assets/guard/S-attack.png": "14214badc3c64cfa609eebc41bbba8133e6d97c603dd009c0c7c48186146cb6c",
+    "assets/guard/S-idle.png": "353d37480b272b1f7c8db327472ad1cbc0f62a5952579d6a329e56f22a91db08",
+    "assets/guard/S-walk.png": "95ba06ea58ef1482344d5162f1e16b97daa6718c7217308956e33755e5e17555",
+    "assets/guard/SE-attack.png": "ab453a947f05a298c1c8cd1548ca48c26bd155ca0e8e84cbf70043712da3a0de",
+    "assets/guard/SE-idle.png": "8b7dc01d50ae3da11e846c6e909618c3d7dd3727e26a4324cfda4a2dea8e3935",
+    "assets/guard/SE-walk.png": "0f0a91be533b9adaf64f66c5ce348429038424d75cfef1727f8670f88b8e57d7",
+    "assets/guard/SW-attack.png": "1c8d0bd414943adcffcf7e361f0dea343428eb437feef6101f6d223e29cdf653",
+    "assets/guard/SW-idle.png": "e2e95c29fabd0826569f16fef0f91701da3109e8694a482ad3e3c2e8fece5f3f",
+    "assets/guard/SW-walk.png": "aed09d4ad496ceb9484de09f0d7760d3cacc41e0bb4d6f42e983e6c55ed54877",
+    "assets/guard/W-attack.png": "2c72fdf47337976030daa84ad947b3f6a76eac0f06b7cf5db464a7522d80b080",
+    "assets/guard/W-idle.png": "0b40ce3476ed861079eef42a80a2c7fe834fe0b63376d73063855ca1e3d032be",
+    "assets/guard/W-walk.png": "7eb9a87def26e738949c0f1515eb46273767e07ea0dd4f3f0841263e57115a60"
+  },
+  "registration": {
+    "guard": {
+      "S-idle": {
+        "source": "source-art/guard-idle.png",
+        "contact": [
+          129.0,
+          434
+        ],
+        "bootOrPawBand": [
+          29,
+          405,
+          229,
+          438
+        ],
+        "sourceScale": 0.5026315789473684
+      },
+      "SW-idle": {
+        "source": "source-art/guard-idle.png",
+        "contact": [
+          134.0,
+          438
+        ],
+        "bootOrPawBand": [
+          41,
+          409,
+          227,
+          442
+        ],
+        "sourceScale": 0.5026315789473684
+      },
+      "W-idle": {
+        "source": "source-art/guard-idle.png",
+        "contact": [
+          81.5,
+          435
+        ],
+        "bootOrPawBand": [
+          16,
+          406,
+          147,
+          439
+        ],
+        "sourceScale": 0.5026315789473684
+      },
+      "NW-idle": {
+        "source": "source-art/guard-idle.png",
+        "contact": [
+          141.5,
+          437
+        ],
+        "bootOrPawBand": [
+          56,
+          408,
+          227,
+          441
+        ],
+        "sourceScale": 0.5026315789473684
+      },
+      "N-idle": {
+        "source": "source-art/guard-idle.png",
+        "contact": [
+          164.5,
+          440
+        ],
+        "bootOrPawBand": [
+          52,
+          411,
+          277,
+          444
+        ],
+        "sourceScale": 0.5026315789473684
+      },
+      "NE-idle": {
+        "source": "source-art/guard-idle.png",
+        "contact": [
+          159.0,
+          442
+        ],
+        "bootOrPawBand": [
+          66,
+          413,
+          252,
+          446
+        ],
+        "sourceScale": 0.5026315789473684
+      },
+      "E-idle": {
+        "source": "source-art/guard-idle.png",
+        "contact": [
+          98.0,
+          443
+        ],
+        "bootOrPawBand": [
+          29,
+          414,
+          167,
+          447
+        ],
+        "sourceScale": 0.5026315789473684
+      },
+      "SE-idle": {
+        "source": "source-art/guard-idle.png",
+        "contact": [
+          142.5,
+          449
+        ],
+        "bootOrPawBand": [
+          39,
+          419,
+          246,
+          453
+        ],
+        "sourceScale": 0.5026315789473684
+      },
+      "S-walk": {
+        "source": "source-art/guard-walk.png",
+        "contact": [
+          130.0,
+          476
+        ],
+        "bootOrPawBand": [
+          74,
+          444,
+          186,
+          480
+        ],
+        "sourceScale": 0.4681372549019608
+      },
+      "SW-walk": {
+        "source": "source-art/guard-walk.png",
+        "contact": [
+          135.0,
+          458
+        ],
+        "bootOrPawBand": [
+          60,
+          428,
+          210,
+          462
+        ],
+        "sourceScale": 0.4681372549019608
+      },
+      "W-walk": {
+        "source": "source-art/guard-walk.png",
+        "contact": [
+          123.5,
+          448
+        ],
+        "bootOrPawBand": [
+          24,
+          418,
+          223,
+          452
+        ],
+        "sourceScale": 0.4681372549019608
+      },
+      "NW-walk": {
+        "source": "source-art/guard-walk.png",
+        "contact": [
+          198.5,
+          474
+        ],
+        "bootOrPawBand": [
+          158,
+          442,
+          239,
+          478
+        ],
+        "sourceScale": 0.4681372549019608
+      },
+      "N-walk": {
+        "source": "source-art/guard-walk.png",
+        "contact": [
+          120.5,
+          461
+        ],
+        "bootOrPawBand": [
+          90,
+          430,
+          151,
+          465
+        ],
+        "sourceScale": 0.4681372549019608
+      },
+      "NE-walk": {
+        "source": "source-art/guard-walk.png",
+        "contact": [
+          126.0,
+          463
+        ],
+        "bootOrPawBand": [
+          89,
+          432,
+          163,
+          467
+        ],
+        "sourceScale": 0.4681372549019608
+      },
+      "E-walk": {
+        "source": "source-art/guard-walk.png",
+        "contact": [
+          116.0,
+          453
+        ],
+        "bootOrPawBand": [
+          17,
+          423,
+          215,
+          457
+        ],
+        "sourceScale": 0.4681372549019608
+      },
+      "SE-walk": {
+        "source": "source-art/guard-walk-SE-fixed.png",
+        "contact": [
+          384.5,
+          1231
+        ],
+        "bootOrPawBand": [
+          88,
+          1142,
+          681,
+          1235
+        ],
+        "sourceScale": 0.18597857838364168
+      },
+      "S-attack": {
+        "source": "source-art/guard-attack-S-fixed.png",
+        "contact": [
+          334.0,
+          1224
+        ],
+        "bootOrPawBand": [
+          221,
+          1136,
+          447,
+          1228
+        ],
+        "sourceScale": 0.15604575163398693
+      },
+      "SW-attack": {
+        "source": "source-art/guard-attack-wide.png",
+        "contact": [
+          320.0,
+          305
+        ],
+        "bootOrPawBand": [
+          211,
+          286,
+          429,
+          309
+        ],
+        "sourceScale": 0.6121794871794872
+      },
+      "W-attack": {
+        "source": "source-art/guard-attack-wide.png",
+        "contact": [
+          361.0,
+          301
+        ],
+        "bootOrPawBand": [
+          235,
+          282,
+          487,
+          305
+        ],
+        "sourceScale": 0.6121794871794872
+      },
+      "NW-attack": {
+        "source": "source-art/guard-attack-wide.png",
+        "contact": [
+          296.5,
+          313
+        ],
+        "bootOrPawBand": [
+          171,
+          293,
+          422,
+          317
+        ],
+        "sourceScale": 0.6121794871794872
+      },
+      "N-attack": {
+        "source": "source-art/guard-attack-wide.png",
+        "contact": [
+          124.5,
+          383
+        ],
+        "bootOrPawBand": [
+          29,
+          358,
+          220,
+          387
+        ],
+        "sourceScale": 0.6121794871794872
+      },
+      "NE-attack": {
+        "source": "source-art/guard-attack-wide.png",
+        "contact": [
+          37.0,
+          354
+        ],
+        "bootOrPawBand": [
+          8,
+          331,
+          66,
+          358
+        ],
+        "sourceScale": 0.6121794871794872
+      },
+      "E-attack": {
+        "source": "source-art/guard-attack-wide.png",
+        "contact": [
+          124.5,
+          325
+        ],
+        "bootOrPawBand": [
+          1,
+          304,
+          248,
+          329
+        ],
+        "sourceScale": 0.6121794871794872
+      },
+      "SE-attack": {
+        "source": "source-art/guard-attack-wide.png",
+        "contact": [
+          189.5,
+          325
+        ],
+        "bootOrPawBand": [
+          0,
+          304,
+          379,
+          329
+        ],
+        "sourceScale": 0.6121794871794872
+      }
+    },
+    "dog": {
+      "S-idle": {
+        "source": "source-art/dog-idle.png",
+        "contact": [
+          142.0,
+          349
+        ],
+        "bootOrPawBand": [
+          2,
+          327,
+          282,
+          353
+        ],
+        "sourceScale": 0.3688760806916426
+      },
+      "SW-idle": {
+        "source": "source-art/dog-idle.png",
+        "contact": [
+          144.0,
+          365
+        ],
+        "bootOrPawBand": [
+          18,
+          342,
+          270,
+          369
+        ],
+        "sourceScale": 0.3688760806916426
+      },
+      "W-idle": {
+        "source": "source-art/dog-idle.png",
+        "contact": [
+          241.0,
+          355
+        ],
+        "bootOrPawBand": [
+          95,
+          332,
+          387,
+          359
+        ],
+        "sourceScale": 0.3688760806916426
+      },
+      "NW-idle": {
+        "source": "source-art/dog-idle.png",
+        "contact": [
+          220.5,
+          367
+        ],
+        "bootOrPawBand": [
+          132,
+          343,
+          309,
+          371
+        ],
+        "sourceScale": 0.3688760806916426
+      },
+      "N-idle": {
+        "source": "source-art/dog-idle.png",
+        "contact": [
+          137.5,
+          343
+        ],
+        "bootOrPawBand": [
+          3,
+          321,
+          272,
+          347
+        ],
+        "sourceScale": 0.3688760806916426
+      },
+      "NE-idle": {
+        "source": "source-art/dog-idle.png",
+        "contact": [
+          168.5,
+          360
+        ],
+        "bootOrPawBand": [
+          5,
+          337,
+          332,
+          364
+        ],
+        "sourceScale": 0.3688760806916426
+      },
+      "E-idle": {
+        "source": "source-art/dog-idle.png",
+        "contact": [
+          152.0,
+          357
+        ],
+        "bootOrPawBand": [
+          2,
+          334,
+          302,
+          361
+        ],
+        "sourceScale": 0.3688760806916426
+      },
+      "SE-idle": {
+        "source": "source-art/dog-idle.png",
+        "contact": [
+          221.0,
+          358
+        ],
+        "bootOrPawBand": [
+          98,
+          335,
+          344,
+          362
+        ],
+        "sourceScale": 0.3688760806916426
+      },
+      "S-walk": {
+        "source": "source-art/dog-walk.png",
+        "contact": [
+          197.5,
+          366
+        ],
+        "bootOrPawBand": [
+          147,
+          342,
+          248,
+          370
+        ],
+        "sourceScale": 0.3516483516483517
+      },
+      "SW-walk": {
+        "source": "source-art/dog-walk.png",
+        "contact": [
+          179.0,
+          373
+        ],
+        "bootOrPawBand": [
+          103,
+          349,
+          255,
+          377
+        ],
+        "sourceScale": 0.3516483516483517
+      },
+      "W-walk": {
+        "source": "source-art/dog-walk.png",
+        "contact": [
+          254.5,
+          360
+        ],
+        "bootOrPawBand": [
+          65,
+          337,
+          444,
+          364
+        ],
+        "sourceScale": 0.3516483516483517
+      },
+      "NW-walk": {
+        "source": "source-art/dog-walk.png",
+        "contact": [
+          232.0,
+          375
+        ],
+        "bootOrPawBand": [
+          167,
+          351,
+          297,
+          379
+        ],
+        "sourceScale": 0.3516483516483517
+      },
+      "N-walk": {
+        "source": "source-art/dog-walk.png",
+        "contact": [
+          130.5,
+          370
+        ],
+        "bootOrPawBand": [
+          30,
+          346,
+          231,
+          374
+        ],
+        "sourceScale": 0.3516483516483517
+      },
+      "NE-walk": {
+        "source": "source-art/dog-walk.png",
+        "contact": [
+          113.0,
+          368
+        ],
+        "bootOrPawBand": [
+          3,
+          344,
+          223,
+          372
+        ],
+        "sourceScale": 0.3516483516483517
+      },
+      "E-walk": {
+        "source": "source-art/dog-walk.png",
+        "contact": [
+          196.5,
+          355
+        ],
+        "bootOrPawBand": [
+          5,
+          332,
+          388,
+          359
+        ],
+        "sourceScale": 0.3516483516483517
+      },
+      "SE-walk": {
+        "source": "source-art/dog-walk.png",
+        "contact": [
+          196.5,
+          374
+        ],
+        "bootOrPawBand": [
+          145,
+          350,
+          248,
+          378
+        ],
+        "sourceScale": 0.3516483516483517
+      },
+      "S-attack": {
+        "source": "source-art/dog-attack.png",
+        "contact": [
+          241.5,
+          365
+        ],
+        "bootOrPawBand": [
+          185,
+          341,
+          298,
+          369
+        ],
+        "sourceScale": 0.3526170798898072
+      },
+      "SW-attack": {
+        "source": "source-art/dog-attack.png",
+        "contact": [
+          225.0,
+          368
+        ],
+        "bootOrPawBand": [
+          167,
+          344,
+          283,
+          372
+        ],
+        "sourceScale": 0.3526170798898072
+      },
+      "W-attack": {
+        "source": "source-art/dog-attack.png",
+        "contact": [
+          242.5,
+          343
+        ],
+        "bootOrPawBand": [
+          59,
+          321,
+          426,
+          347
+        ],
+        "sourceScale": 0.3526170798898072
+      },
+      "NW-attack": {
+        "source": "source-art/dog-attack.png",
+        "contact": [
+          255.0,
+          368
+        ],
+        "bootOrPawBand": [
+          174,
+          344,
+          336,
+          372
+        ],
+        "sourceScale": 0.3526170798898072
+      },
+      "N-attack": {
+        "source": "source-art/dog-attack.png",
+        "contact": [
+          162.5,
+          369
+        ],
+        "bootOrPawBand": [
+          3,
+          345,
+          322,
+          373
+        ],
+        "sourceScale": 0.3526170798898072
+      },
+      "NE-attack": {
+        "source": "source-art/dog-attack.png",
+        "contact": [
+          156.0,
+          368
+        ],
+        "bootOrPawBand": [
+          103,
+          344,
+          209,
+          372
+        ],
+        "sourceScale": 0.3526170798898072
+      },
+      "E-attack": {
+        "source": "source-art/dog-attack.png",
+        "contact": [
+          149.5,
+          346
+        ],
+        "bootOrPawBand": [
+          0,
+          324,
+          299,
+          350
+        ],
+        "sourceScale": 0.3526170798898072
+      },
+      "SE-attack": {
+        "source": "source-art/dog-attack.png",
+        "contact": [
+          177.5,
+          368
+        ],
+        "bootOrPawBand": [
+          119,
+          344,
+          236,
+          372
+        ],
+        "sourceScale": 0.3526170798898072
+      }
+    }
+  }
+}

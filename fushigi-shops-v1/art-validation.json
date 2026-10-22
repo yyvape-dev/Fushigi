@@ -4,6 +4,5 @@
   "transparentMargins": true,
   "mirroring": false,
   "threeClothingColors": true,
-  "browserVerification": "pending: automatic approval review could not run because of usage limit",
-  "production": "not published"
+  "browserVerification": "see browser-validation.json"
 }

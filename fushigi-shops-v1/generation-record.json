@@ -23,5 +23,6 @@
     "guides/walk-sheet.png": "63f05a21f94c8b15fd9925fadd91858c22ecbca82af145bfed425916d5d39b66",
     "guides/idle-sheet.png": "9187855814b233559c1aeabc1cd341974617e62d6c145aafe072d96c37b2a550",
     "guides/attack-sheet.png": "f0e946d3eff3d65a50c26aa217af78bd669de15d5fb633d0faa8406c6fbbd60d"
-  }
+  },
+  "carpetPrompt": "../fushigi-security-v1/generation-prompts.json:carpet"
 }

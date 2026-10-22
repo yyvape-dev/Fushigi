@@ -15,5 +15,5 @@ for tier in ['brown','indigo','crimson']:
    count+=1
  for left,right in [('SW','SE'),('W','E'),('NW','NE')]:assert ImageOps.mirror(Image.open(P/'assets'/tier/(left+'.png'))).tobytes()!=Image.open(P/'assets'/tier/(right+'.png')).tobytes()
 assert len({Image.open(P/'assets'/tier/'S.png').tobytes() for tier in ['brown','indigo','crimson']})==3
-result={'registeredPoses':count,'hashes':True,'transparentMargins':True,'mirroring':False,'threeClothingColors':True,'browserVerification':'pending: automatic approval review could not run because of usage limit','production':'not published'}
+result={'registeredPoses':count,'hashes':True,'transparentMargins':True,'mirroring':False,'threeClothingColors':True,'browserVerification':'see browser-validation.json' if (P/'browser-validation.json').exists() else 'pending'}
 (P/'art-validation.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n');print('ALL OK: 72 unique color/direction/action sprites, transparency, margins, hashes, no mirror pairs')
