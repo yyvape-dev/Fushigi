@@ -1,0 +1,285 @@
+{
+  "name": "アベニウス",
+  "status": "idle-review",
+  "frameSize": [
+    256,
+    256
+  ],
+  "origin": [
+    128,
+    224
+  ],
+  "heightToGround": 192,
+  "renderScale": 1,
+  "lanaCrownY": 33,
+  "sourceScale": 0.4360730593607306,
+  "mirroring": false,
+  "ability": {
+    "name": "一閃",
+    "range": 4,
+    "returnsToOrigin": true,
+    "maxUsesPerEnemy": 1,
+    "status": "specified-not-implemented"
+  },
+  "views": {
+    "S": {
+      "idle": "assets/S.png",
+      "sourceCell": [
+        0,
+        0,
+        393,
+        520
+      ],
+      "sourceBootRegion": [
+        125,
+        440,
+        315,
+        496
+      ],
+      "sourceBootBand": [
+        130,
+        440,
+        311,
+        492
+      ],
+      "sourceContact": [
+        220.5,
+        484
+      ],
+      "sourceCrownY": 46,
+      "anchor": [
+        128,
+        224
+      ],
+      "registeredCrownY": 33.0
+    },
+    "SW": {
+      "idle": "assets/SW.png",
+      "sourceCell": [
+        393,
+        0,
+        773,
+        520
+      ],
+      "sourceBootRegion": [
+        490,
+        440,
+        650,
+        507
+      ],
+      "sourceBootBand": [
+        500,
+        440,
+        646,
+        502
+      ],
+      "sourceContact": [
+        573.0,
+        494
+      ],
+      "sourceCrownY": 46,
+      "anchor": [
+        128,
+        224
+      ],
+      "registeredCrownY": 28.639269406392685
+    },
+    "W": {
+      "idle": "assets/W.png",
+      "sourceCell": [
+        773,
+        0,
+        1157,
+        520
+      ],
+      "sourceBootRegion": [
+        875,
+        440,
+        1005,
+        511
+      ],
+      "sourceBootBand": [
+        888,
+        440,
+        992,
+        505
+      ],
+      "sourceContact": [
+        940.0,
+        497
+      ],
+      "sourceCrownY": 47,
+      "anchor": [
+        128,
+        224
+      ],
+      "registeredCrownY": 27.76712328767124
+    },
+    "NW": {
+      "idle": "assets/NW.png",
+      "sourceCell": [
+        1157,
+        0,
+        1536,
+        520
+      ],
+      "sourceBootRegion": [
+        1240,
+        440,
+        1435,
+        506
+      ],
+      "sourceBootBand": [
+        1254,
+        440,
+        1422,
+        500
+      ],
+      "sourceContact": [
+        1338.0,
+        492
+      ],
+      "sourceCrownY": 53,
+      "anchor": [
+        128,
+        224
+      ],
+      "registeredCrownY": 32.56392694063928
+    },
+    "N": {
+      "idle": "assets/N.png",
+      "sourceCell": [
+        0,
+        520,
+        433,
+        1024
+      ],
+      "sourceBootRegion": [
+        105,
+        913,
+        305,
+        979
+      ],
+      "sourceBootBand": [
+        111,
+        913,
+        300,
+        973
+      ],
+      "sourceContact": [
+        205.5,
+        965
+      ],
+      "sourceCrownY": 544,
+      "anchor": [
+        128,
+        224
+      ],
+      "registeredCrownY": 40.41324200913243
+    },
+    "NE": {
+      "idle": "assets/NE.png",
+      "sourceCell": [
+        433,
+        520,
+        813,
+        1024
+      ],
+      "sourceBootRegion": [
+        510,
+        913,
+        710,
+        976
+      ],
+      "sourceBootBand": [
+        511,
+        913,
+        695,
+        971
+      ],
+      "sourceContact": [
+        603.0,
+        963
+      ],
+      "sourceCrownY": 538,
+      "anchor": [
+        128,
+        224
+      ],
+      "registeredCrownY": 38.66894977168948
+    },
+    "E": {
+      "idle": "assets/E.png",
+      "sourceCell": [
+        813,
+        520,
+        1140,
+        1024
+      ],
+      "sourceBootRegion": [
+        905,
+        918,
+        1030,
+        983
+      ],
+      "sourceBootBand": [
+        919,
+        918,
+        1022,
+        977
+      ],
+      "sourceContact": [
+        970.5,
+        969
+      ],
+      "sourceCrownY": 538,
+      "anchor": [
+        128,
+        224
+      ],
+      "registeredCrownY": 36.05251141552512
+    },
+    "SE": {
+      "idle": "assets/SE.png",
+      "sourceCell": [
+        1140,
+        520,
+        1536,
+        1024
+      ],
+      "sourceBootRegion": [
+        1280,
+        920,
+        1460,
+        985
+      ],
+      "sourceBootBand": [
+        1286,
+        920,
+        1449,
+        979
+      ],
+      "sourceContact": [
+        1367.5,
+        971
+      ],
+      "sourceCrownY": 536,
+      "anchor": [
+        128,
+        224
+      ],
+      "registeredCrownY": 34.3082191780822
+    }
+  },
+  "sha256": {
+    "assets/E.png": "58be7fb0acd205cd52dcfa737eeddc6696e32612b16003f801b86d4e20c53d8b",
+    "assets/N.png": "226e6efe3a0c2ba893fac6137ca6fb209891c72daff43bd7ac4fe03c92965921",
+    "assets/NE.png": "dfc22bbcc0aa07fa34a86898fd39b27d0d275a371008815bc807cb2b84785c99",
+    "assets/NW.png": "ac1f1d6b99cd85d827255284de5c728691d95930269fb509d418a6007dc84024",
+    "assets/S.png": "6eaad116a4f76466f883eae230ddc5a75319b1cb4f91bc52f864a5f081867373",
+    "assets/SE.png": "74df6fc0a1929ee1408a06af9683f8abc06a9703633b889d38645a1550bf44b7",
+    "assets/SW.png": "c188ac10304c9a55ae7d9e46bbb21f24b5a066b50f70e411fae1faf612ebac41",
+    "assets/W.png": "ed149ceacd036d1fa85e97c29f97b1d2a0a7004c803d8747b71fca263d7050cf",
+    "source-art/idle-eight.png": "c13726e4a3b6d40aadbdf7b9bb0a60a82467f5da202e0066dba8619477466f5e"
+  }
+}
