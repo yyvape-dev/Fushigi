@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Fushigi Core</title>
 <link rel="stylesheet" href="assets/dungeon-experience.css?v=experience-v1">
-<link rel="stylesheet" href="assets/controls-ui.css?v=controls-v1">
+<link rel="stylesheet" href="assets/controls-ui.css?v=ground-v2">
 <style>
 html,body{margin:0;height:100%;background:#0d0d12;color:#ddd;font-family:monospace;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent}
 canvas{display:block;touch-action:none}
@@ -155,7 +155,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/allies.js?v=neutral-walk-v1"></script>
 <script src="assets/monster-roster.js?v=families-v2"></script>
 <script src="assets/monster-families.js?v=families-v2"></script>
-<script src="assets/dungeon-experience.js?v=soft-room-v2"></script>
+<script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
 <script>
 'use strict';
@@ -1170,6 +1170,7 @@ function triggerTrap(tr) {                                        // 罠を踏�
 function snapVis() { for (const e of [player, ...enemies,...ShopSystem.keepers().filter(k=>k.hp>0)]) { e.vx = e.x; e.vy = e.y; e.bump = null; } }
 function toTown(fromDungeon) {
   closeStairs();
+  if(menuOpen&&typeof closeGameMenu==='function')closeGameMenu();
   ShopSystem.reset();
   scene = 'town'; AllySystem.reset(); buildTown();
   enemies = []; floorItems = []; traps = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
@@ -1474,10 +1475,13 @@ function playerMove(dx, dy, {skipPickup=false}={}) {
       checkHouse();
       const f = itemAt(player.x, player.y);
       if (f && !skipPickup && f.item.type === 'gold') { gold += f.item.plus; floorItems.splice(floorItems.indexOf(f), 1); fxText(player.x, player.y, '+' + f.item.plus + 'G', '#ffd54a'); say(`${f.item.plus}ギタンを拾った。（所持金 ${gold}G）`); }
-      else if (f) { if (autoPick && !skipPickup) takeFloor(f); else say(`足元に${itemName(f.item)}がある。`); }
+      else if (f) { if (autoPick && !skipPickup && !ShopSystem.unpaid(f.item)) takeFloor(f); else say(`足元に${itemName(f.item)}がある。`); }
     }
   }
   endTurn();
+  // Complete the movement turn before pausing on a shop item's choices.
+  const under=scene==='dungeon'&&!dead&&!e?itemAt(player.x,player.y):null;
+  if(under&&ShopSystem.unpaid(under.item)&&!uiBlocked())openGroundMenu();
 }
 
 function closeStairs() { stairsOpen=false;const el=document.getElementById('stairsPrompt');if(el)el.hidden=true; }
@@ -1499,7 +1503,7 @@ function ctxInfo() {
   if (dead) return null;
   if (scene === 'dungeon') {
     if (map[player.y][player.x]===STAIRS) return {label:'階段',fn:openStairs};
-    if (itemAt(player.x, player.y)) return { label: '拾う', fn: playerPickUp };
+    if (itemAt(player.x, player.y)) return { label: '足元', fn: openGroundMenu };
     if(floorShop&&!floorShop.hostile&&(ShopSystem.inside(player.x,player.y)||ShopSystem.nearby()))return {label:'店主',fn:ShopSystem.talk};
     if(AllySystem.nearby())return {label:'話す',fn:AllySystem.talk};
     return atDungeonShop() ? { label: '店', fn: openWh } : null;
@@ -1725,17 +1729,19 @@ function bankMove(toBank) {
 //   矢は当たると5〜8ダメージ。草を投げると、眠り・混乱・毒の草は敵にも効く。それ以外は1ダメージ
 // =====================================================================
 ACC.t = 0.84;
-function throwType(key) {
+function throwType(key, floorEntry=null) {
   if (guardDead()) return;
-  const it = firstOf(key); if (!it) return;
+  const it = floorEntry?floorEntry.item:firstOf(key); if (!it) return;
   if (scene !== 'dungeon') { say('町では投げられない。'); closeBag(); render(); return; }
   const d = ITEMS[it.type]; let one;
-  if (d.stack) { it.plus--; one = { id: ++uid, type: it.type, plus: 1 }; ShopSystem.split(it,one); if (it.plus <= 0) inv.splice(inv.indexOf(it), 1); }
+  const removeSource=()=>{if(floorEntry){const i=floorItems.indexOf(floorEntry);if(i>=0)floorItems.splice(i,1);}else{const i=inv.indexOf(it);if(i>=0)inv.splice(i,1);}};
+  if (d.stack) { it.plus--; one = { id: ++uid, type: it.type, plus: 1 }; ShopSystem.split(it,one); if (it.plus <= 0) removeSource(); }
   else {
     if (eqWeapon === it) eqWeapon = null; if (eqShield === it) eqShield = null; eqRings = eqRings.map(r => r === it ? null : r); belly = Math.min(belly, maxBelly());
-    inv.splice(inv.indexOf(it), 1); one = it;
+    removeSource(); one = it;
   }
   const dir = player.st.confuse > 0 ? DIRS8[rnd(0, 7)] : player.face; player.face = dir; if (dir[0]) player.fl = dir[0] < 0; player.swing = now(); player.attackFace = player.face.slice(); kick();
+  if(floorEntry)ShopSystem.pickup(one); // A thrown unit leaves its floor source, including shop ownership.
   let x = player.x, y = player.y, tgt = null;
   for (let i = 0; i < 8; i++) { if (!geomOK(x, y, dir[0], dir[1])) break; x += dir[0]; y += dir[1]; const e = enemyAt(x, y); if (ShopSystem.at(x,y)) { tgt={shopkeeper:true,actor:ShopSystem.at(x,y),x,y};break; } if (e) { tgt = e; break; } }
   if(ShopSystem.lot(one)&&!ShopSystem.inside(x,y))ShopSystem.landed(one,x,y);
@@ -1782,13 +1788,19 @@ function toggleEquip(it) {                                      // 着脱でき�
   return true;
 }
 function playUseMotion(kind,prop) { player.action = {kind,prop,t0:now(),face:player.face.slice(),duration:kind==='scroll'?560:kind==='staff'?380:520}; player.swing=0;player.walkEnd=0;kick(); }
-function useType(key) {
+function useType(key, floorEntry=null) {
   if (guardDead()) return;
-  const it = firstOf(key);
+  const it = floorEntry?floorEntry.item:firstOf(key);
   if (!it) { say(`${ITEMS[key] ? dispName(key) : 'それ'}を持っていない。`); render(); return; }
-  if (ITEMS[it.type].equip) { if (!toggleEquip(it)) { render(); renderBag(); return; } saveGame(); closeBag(); endTurn(); return; }   // 装備品：着脱でターン経過
+  if (ITEMS[it.type].equip) {
+    if(floorEntry){
+      if(ITEMS[it.type].equip==='ring'&&!eqRings.includes(null)){say('腕輪は2つまでしか付けられない。先に外そう。');render();return;}
+      if(!takeFloor(floorEntry)){render();return;}
+    }
+    if (!toggleEquip(it)) { render(); renderBag(); return; } saveGame(); closeBag(); endTurn(); return;
+  }   // 装備品：着脱でターン経過
   if (player.st.mute > 0 && (ITEMS[it.type].cat === '草' || ITEMS[it.type].cat === '巻物')) { say('くちなし状態で使えない！'); render(); renderBag(); return; }
-  if (ITEMS[it.type].throwOnly) { throwType(key); return; }
+  if (ITEMS[it.type].throwOnly) { throwType(key,floorEntry); return; }
   const nm0 = dispName(it.type), wasKnown = isKnown(it.type);
   const idAfter = () => { if (!wasKnown && identify(it.type)) void nm0; };
   if (ITEMS[it.type].staff) {                                    // 杖：回数を1つ消費。0回でも振れる（何も起こらない）
@@ -1801,7 +1813,8 @@ function useType(key) {
   const category=ITEMS[it.type].cat;
   if(category==='巻物')playUseMotion('scroll','scroll');
   else if(['食','草','種','薬'].includes(category))playUseMotion('consume',category==='食'?'food':category==='薬'?'potion':'herb');
-  inv.splice(inv.indexOf(it), 1); idAfter();saveGame();
+  if(floorEntry){const i=floorItems.indexOf(floorEntry);if(i>=0)floorItems.splice(i,1);}else inv.splice(inv.indexOf(it), 1);
+  idAfter();saveGame();
   closeBag(); endTurn();
 }
 function useQuick() {
@@ -2541,8 +2554,8 @@ loadRig();
 boot();
 if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
 </script>
-<script src="assets/controls-ui.js?v=yuzunamiki-v1"></script>
-<script src="assets/ergonomic-ui.js?v=hands-v1"></script>
+<script src="assets/controls-ui.js?v=ground-v2"></script>
+<script src="assets/ergonomic-ui.js?v=ground-v2"></script>
 <script>AllySystem.init();ShopSystem.init();</script>
 </body>
 </html>

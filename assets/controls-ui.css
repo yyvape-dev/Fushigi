@@ -4,3 +4,5 @@
 #gameMenu:has(#menuInfo:not([hidden])) #menuList{display:none}body:has(#cfg:not([hidden])) #moveModes,body:has(#hist:not([hidden])) #moveModes{visibility:hidden}#moveModes button:active{background:#e8cc63;color:#201c20}@media(orientation:landscape){.menu-row{min-height:34px;padding:5px 12px}}
 
 @media(orientation:landscape){.menu-row{min-height:32px;padding:4px 12px}#gameMenu header .sm{padding:6px 10px}}
+.ground-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.ground-actions .sm{min-width:70px;min-height:44px}.ground-actions .chosen{background:#dfc785!important;color:#24221c!important}.ground-price{color:#ffe09a;font-weight:bold}
+#gameMenu:has(#menuInfo:not([hidden])) .layout-choice{display:none}#menuInfo:has(.ground-actions){line-height:1.35}#menuInfo:has(.ground-actions) h2{margin:6px 0}#menuInfo:has(.ground-actions) p{margin:6px 0}#menuInfo .ground-actions{margin:8px 0 0}

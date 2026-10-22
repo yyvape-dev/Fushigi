@@ -56,7 +56,9 @@
    const r=rooms[roomIndex];rg.fillStyle='#fff';
    // Merge the room footprint before blurring: per-tile blur accumulates
    // opacity at tile seams and leaves a visibly rectangular light boundary.
-   for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)if(map[y]?.[x]!==0&&roomGrid[y]?.[x]===roomIndex)rg.fillRect(camX+x*size,camY+y*pitch,size,pitch);
+   // Include the surrounding tile ring: tall sprites at the room edge
+   // (especially shopkeepers) extend above their floor tile into this area.
+   for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)if(map[y]?.[x]!==0&&roomGrid[y]?.[x]===roomIndex)rg.fillRect(camX+(x-1)*size,camY+(y-1)*pitch,size*3,pitch*3);
    feather(reveal,lg,width,height,Math.max(12,size*.75));
   }
   const px=camX+(player.vx+.5)*size,py=camY+(player.vy+.6)*pitch,radius=size*(blind?.70:2.05);

@@ -9,6 +9,8 @@
  const values=[32,48,64,80,96,112].map(x=>alpha(x,176));
  assert(values.every((a,i)=>!i||a<=values[i-1]),'room edge fades smoothly inward');
  assert(new Set(values).size>=5&&values[0]>values[5],'room edge has multiple intermediate brightness levels');
+ assert(alpha(256,48)<45,'one-tile outside ring lights the head of a north-edge shopkeeper');
+ assert(alpha(256,16)>alpha(256,48)+30,'light still fades beyond the extra tile ring');
  const before=g.getImageData(0,0,width,height).data.slice();g.clearRect(0,0,width,height);DungeonExperience.fog(g,options);
  assert(Buffer.from(before).equals(Buffer.from(g.getImageData(0,0,width,height).data)),'cached lighting matches first draw');
  for(let y=2;y<6;y++)for(let x=2;x<6;x++){map[y][x]=0;grid[y][x]=-1;}
