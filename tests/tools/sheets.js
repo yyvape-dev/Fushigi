@@ -21,6 +21,10 @@ const HINT = {
   skeleton: '骨だけのスケルトン（剣と丸い盾を持つ）', archer: '黄色い帽子をかぶった小柄な弓兵（小さな弓を構える）', thief: '茶色のどろぼうタヌキ（大きな風呂敷包みを背負う）', sleepy: '青紫の眠そうなキノコ（目を閉じた顔）',
   bomb: 'オレンジの丸い体のばくだん虫（頭に火のついた導火線）', ogre: '赤茶色の大柄なオーガ（金棒を持つ）', dazzle: '水色のカエル（目が渦巻き）', venom: '黄緑のどくバチ（大きな針）',
   ghost: '薄青く半透明のゴースト（足がなくふわふわ浮く）', minotaur: '牛の頭を持つ大きな戦士ミノタウロス（大きな斧を持つ）', dragon: '赤い小型のドラゴン（翼を持ち、口から炎が漏れる）',
+  // --- 深層の敵（能力が特徴。絵でも一目で分かるように）
+  ninja: '紺色の装束のニンジャ（目だけ出した覆面、手に手裏剣、前かがみで素早そう）', caster: '紫のとんがり帽子とローブのまじゅつ師（杖の先に光る玉、うつろな目）', mimic: '金の縁取りの木の宝箱（ふたの隙間から長い舌と鋭い歯がのぞく）',
+  summoner: '黄色い法衣の小さな坊主（大きな金の鈴を片手に鳴らしている）', charged: 'ごつごつした灰色の大岩（表面に黄色い稲妻が走り、小さな目が二つ）', cannon: '緑がかった鎧の兵士が肩に太い大砲を担いでいる（どっしり立つ）',
+  lord: '黒紫のうろこの巨大なドラゴンの主（金の王冠、大きな翼、赤く光る目、威圧感）',
   // --- 手持ち用（主人公が持つ絵）：武器は刃を真上に向けて縦に置く
   woodsword: '木の刀', bronzesword: '青銅の太刀', katana: '細身のカタナ', dotanuki: '分厚い胴田貫（刀）',
   minoaxe: '牛の角の飾りがついた斧（刃は右側）', renkentou: '二重の刃の刀', kamaitachi: '三日月形の妖刀', healsword: '緑の宝玉がついた剣', steakknife: '巨大なステーキナイフ',
@@ -36,6 +40,7 @@ const SHEETS = [
   { id: 'bread', name: 'パン4種（小さなパン・パン・大きなパン・カビの生えたパン）', cols: 2, keys: ['bread_small', 'bread', 'bread_big', 'bread_moldy'], note: 'どれも床に置いた姿。大きさの違いが分かるように、小さなパンはマスの55%、パンは75%、大きなパンは95%、カビの生えたパンは75%の大きさにする。' },
   { id: 'enemyA', name: '敵（前半8種）', foot: true, keys: ['slime', 'goblin', 'bat', 'blob', 'skeleton', 'archer', 'thief', 'sleepy'], note: ENEMY_NOTE },
   { id: 'enemyB', name: '敵（後半7種）', foot: true, keys: ['bomb', 'ogre', 'dazzle', 'venom', 'ghost', 'minotaur', 'dragon'], note: ENEMY_NOTE },
+  { id: 'enemyC', name: '敵（深層6種＋主）', foot: true, keys: ['ninja', 'caster', 'mimic', 'summoner', 'charged', 'cannon', 'lord'], note: ENEMY_NOTE },
 ];
 const sheetCols = sh => sh.cols || 4;
 const sheetRows = sh => Math.ceil(sh.keys.length / sheetCols(sh));

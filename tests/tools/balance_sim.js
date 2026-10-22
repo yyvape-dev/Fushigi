@@ -54,7 +54,7 @@
   const agg={runs:0,clear:0,deathHunger:0,deathCombat:0,stuck:0,floors:{}};
   for(let n=0;n<RUNS;n++){
    localStorage.removeItem(SAVE_KEY);RunSave.clear();
-   clears=5;deaths=0;wh=[];gold=0;inv=kit?[mkItem('sword',0),mkItem('woodshield',0),mkItem('potion'),mkItem('potion')]:[];eqWeapon=eqShield=null;eqRings=[null,null];
+   clears=5;dClears={first:3,second:2};deaths=0;wh=[];gold=0;inv=kit?[mkItem('sword',0),mkItem('woodshield',0),mkItem('potion'),mkItem('potion')]:[];eqWeapon=eqShield=null;eqRings=[null,null];
    if(kit){eqWeapon=inv[0];eqShield=inv[1];}
    autoPick=true;dead=false;toTown(false);dungeonId=DID;enterDungeon();agg.runs++;
    let lastFloor=0,st=null,fl=null,guard=0;
