@@ -152,10 +152,10 @@ canvas{display:block;touch-action:none}
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
 <script src="assets/dungeon-shop.js?v=entrances-v2"></script>
 <script src="assets/shop-security.js?v=security-v1"></script>
-<script src="assets/allies.js?v=shops-v1"></script>
+<script src="assets/allies.js?v=neutral-walk-v1"></script>
 <script src="assets/monster-roster.js?v=families-v2"></script>
 <script src="assets/monster-families.js?v=families-v2"></script>
-<script src="assets/dungeon-experience.js?v=experience-v1"></script>
+<script src="assets/dungeon-experience.js?v=soft-room-v2"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
 <script>
 'use strict';
@@ -2267,7 +2267,7 @@ function drawMinimap() {
     ctx.fillStyle = map[y][x] === STAIRS ? '#ffd54a' : vis[y][x] ? 'rgba(195,210,255,.9)' : 'rgba(110,130,205,.65)';
     ctx.fillRect(bx + x * sc, by + y * sc, sc, sc);
   }
-  for (const f of floorItems) if (seen[f.y][f.x] || senseItems()) { ctx.fillStyle = '#ff6ad5'; ctx.fillRect(bx + f.x * sc, by + f.y * sc, sc, sc); }
+  for (const f of floorItems) if (seen[f.y][f.x] || senseItems()) { ctx.fillStyle = '#409cff'; ctx.fillRect(bx + f.x * sc, by + f.y * sc, sc, sc); }
   for (const e of enemies) if (vis[e.y][e.x] || senseEnemies()) { ctx.fillStyle = '#ff4d4d'; ctx.fillRect(bx + e.x * sc, by + e.y * sc, sc, sc); }
   ctx.fillStyle = '#000'; ctx.fillRect(bx + player.x * sc - 2, by + player.y * sc - 2, sc + 4, sc + 4);
   ctx.fillStyle = '#fff'; ctx.fillRect(bx + player.x * sc - 1, by + player.y * sc - 1, sc + 2, sc + 2);

@@ -29,6 +29,14 @@
   a=setup();a.following=false;AllySystem.state.used=false;const turnBefore=turn;playerAttack();verify(AllySystem.state.open&&turn===turnBefore&&a.hp===26,'neutral NPC attack opens conversation without damage or turn');verify(AllySystem.recruit()&&a.following&&AllySystem.state.used&&!AllySystem.state.open,'recruitment explicitly starts following');
   setup();AllySystem.reset();floorNo=1;AllySystem.newFloor();verify(!AllySystem.state.actor,'no encounter on first floor');floorNo=2;AllySystem.newFloor();a=AllySystem.state.actor;verify(a&&!a.following&&!enemyAt(a.x,a.y)&&!trapAt(a.x,a.y),'random encounter on eligible floor uses a free tile');
   a=setup();a.following=false;player.x=14;e=enemy(8,10);enemyTurn();verify(e.x!==a.x||e.y!==a.y,'hostile movement cannot overlap neutral ally');
+  for(const kind of ['yuzunamiki','avenius','sherininya']){
+   a=setup();a.kind=kind;a.following=false;a.x=a.vx=5;a.y=a.vy=5;a.face=[1,0];e=enemy(7,5);hp=e.hp;const allyHP=a.hp;
+   AllySystem.tick();verify(a.x===6&&a.y===5&&a.walkEnd>0&&e.hp===hp&&!a.attackStart&&!a.castStart&&!a.dash,'neutral '+kind+' walks without attacks or abilities');
+   verify(!AllySystem.enemyAction(e,eT(e))&&a.hp===allyHP,'enemy does not target neutral '+kind);
+   AllySystem.tick();verify(!enemyAt(a.x,a.y),'neutral '+kind+' never overlaps enemy');
+  }
+  a=setup();a.following=false;const origin=[a.x,a.y];AllySystem.tick();verify(a.x===origin[0]&&a.y===origin[1],'neutral waits beside hero for conversation');
+  a=setup();a.following=false;a.x=5;a.y=5;for(const [dx,dy] of DIRS8)map[a.y+dy][a.x+dx]=WALL;AllySystem.tick();verify(a.x===5&&a.y===5,'surrounded neutral waits without crossing walls');
   a=setup();toTown(false);verify(!AllySystem.state.actor&&!AllySystem.state.used,'town resets run-only companionship');
   a=setup();a.boost=4;scene='town';e=enemy(8,10);AllySystem.tick();verify(e.hp===1000,'no ally combat in town');AllySystem.reset();
   console.log('ALL OK: '+count+' ally checks: stats, wall kunai, haste duration, XP, hostile targeting, retreat, floor following, recruitment and occupancy');
