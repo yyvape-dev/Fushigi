@@ -1,0 +1,54 @@
+{
+  "poses": 24,
+  "game": [
+    {
+      "viewport": "portrait",
+      "size": [
+        390,
+        844
+      ],
+      "gameplayChecks": 42,
+      "saveIsolated": true,
+      "portraitAndRecruitment": true,
+      "hudAndStatus": true,
+      "flashReturnAndOneUse": true,
+      "blockedFlash": true,
+      "renderedDirections": 8,
+      "renderedMotionPoses": 16,
+      "javascriptErrors": []
+    },
+    {
+      "viewport": "landscape",
+      "size": [
+        844,
+        390
+      ],
+      "gameplayChecks": 42,
+      "saveIsolated": true,
+      "portraitAndRecruitment": true,
+      "hudAndStatus": true,
+      "flashReturnAndOneUse": true,
+      "blockedFlash": true,
+      "renderedDirections": 8,
+      "renderedMotionPoses": 16,
+      "javascriptErrors": []
+    },
+    {
+      "viewport": "small",
+      "size": [
+        320,
+        640
+      ],
+      "gameplayChecks": 42,
+      "saveIsolated": true,
+      "portraitAndRecruitment": true,
+      "hudAndStatus": true,
+      "flashReturnAndOneUse": true,
+      "blockedFlash": true,
+      "renderedDirections": 8,
+      "renderedMotionPoses": 16,
+      "javascriptErrors": []
+    }
+  ],
+  "productionEntryLoaded": true
+}

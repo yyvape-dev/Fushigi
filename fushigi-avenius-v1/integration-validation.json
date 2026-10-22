@@ -1,0 +1,14 @@
+{
+  "aveniusGameplayChecks": 42,
+  "existingAllyChecks": 36,
+  "responsiveViewports": 3,
+  "registeredPoses": 24,
+  "productionEntryLoadsBothCompanions": true,
+  "mvp": "ALL OK",
+  "mvpFirstRun": "Known randomized gold pile count assertion failed; complete rerun passed.",
+  "sourceIdleUnchanged": true,
+  "approvedHeroEquipmentMonstersUnchanged": true,
+  "rebuildMetadataIdentical": true,
+  "nodeSyntaxChecks": "passed",
+  "diffWhitespaceCheck": "passed"
+}

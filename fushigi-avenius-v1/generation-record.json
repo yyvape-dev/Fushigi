@@ -31,9 +31,15 @@
   ],
   "mirroring": false,
   "sha256": {
+    "source-art/NE-idle-reference.png": "130f7e8bb47cb6e20b18955c0fb5ddecb6d1c938253b6976f8d48974184c8338",
+    "source-art/NE-walk-before.png": "23477aa8a03f3290ec05002d03c245d65dd87c403f808635918d0d12d5c54d62",
+    "source-art/NE-walk-fixed.png": "68c4f1568d5b128af5426bae60bcc4010009a41b0ebe924a18542cee40be97eb",
     "source-art/approved-design.png": "802b9254696ca15cf8d3d2998f3c441b091abe6ea1a5531d47c2581605a097bc",
+    "source-art/attack-eight.png": "51e0865210782c52c57ae6d9bd6100318a15120dc17b9b8b23188d8a4cbbe866",
     "source-art/direction-guide.png": "aa1ccf9728370df1c8e6811d1f08231888b2984c536b606e00534587667e690d",
     "source-art/idle-eight-v1.png": "4e0c84f4d4b3c7a85c8a381e6270c68c641140fff77dc6207886766481cd9505",
-    "source-art/idle-eight.png": "c13726e4a3b6d40aadbdf7b9bb0a60a82467f5da202e0066dba8619477466f5e"
+    "source-art/idle-eight.png": "c13726e4a3b6d40aadbdf7b9bb0a60a82467f5da202e0066dba8619477466f5e",
+    "source-art/motion-first.png": "763fdfec95270b133a36dc70b573096e72c8f28655851b76ea73035a93f7d8c3",
+    "source-art/walk-eight.png": "94b71202e457d8f347923986116b554e5736af8e2a13f0dce00b9ae018eb6875"
   }
 }

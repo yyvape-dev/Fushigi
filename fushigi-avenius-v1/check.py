@@ -33,12 +33,14 @@ with sync_playwright() as p:
         page.goto(BASE);page.wait_for_function('window.AveniusPreviewState?.ready')
         assert page.locator('figure').count()==8
         assert page.evaluate('document.documentElement.scrollWidth<=innerWidth')
-        loaded=page.evaluate('Object.values(images.lana).concat(Object.values(images.avenius)).every(im=>im.complete&&im.naturalWidth===256)')
+        loaded=page.evaluate('Object.values(images.lana).concat(Object.values(images.avenius)).every(im=>im.complete&&im.naturalWidth===256)&&Object.values(images.aveniusMotion).length===8&&Object.values(images.aveniusMotion).every(im=>im.complete&&im.naturalWidth===640)')
         assert loaded
         for d in M['views']:
             page.select_option('#direction',d)
             assert page.evaluate('AveniusPreviewState.direction')==d
         page.select_option('#direction','S')
+        for action in ['walk','attack','idle']:
+            page.select_option('#action',action);assert page.evaluate('AveniusPreviewState.action')==action
         page.locator('.stage').screenshot(path=str(P/f'comparison-{name}.png'))
         page.screenshot(path=str(P/f'preview-{name}.png'),full_page=True)
         page.select_option('#size','96');assert page.evaluate('AveniusPreviewState.scale')==.5
@@ -50,7 +52,7 @@ with sync_playwright() as p:
         assert page.evaluate('AveniusPreviewState.direction')=='SE'
         page.locator('#rotate').click();assert page.locator('#rotate').get_attribute('aria-pressed')=='false'
         assert not errors,errors
-        results.append({'viewport':name,'size':[w,h],'eightDirections':True,'imagesLoaded':16,
+        results.append({'viewport':name,'size':[w,h],'eightDirections':True,'imagesLoaded':24,
                         'sizeSwitch':True,'guides':True,'keyboard':True,'autoRotation':True,
                         'horizontalOverflow':False,'javascriptErrors':errors})
         page.close()
@@ -63,4 +65,4 @@ report={'registeredIdlePoses':8,'commonSourceScale':M['sourceScale'],'groundAnch
         'crownYByDirection':{d:round(v['registeredCrownY'],2) for d,v in M['views'].items()},
         'browser':results,'url':BASE}
 (P/'validation.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')
-print('ALL OK: eight unique idle sprites, alpha/margins/hashes, shared scale, three responsive viewports, 16 images, directions/size/guides/keyboard/rotation.')
+print('ALL OK: eight unique idle sprites, alpha/margins/hashes, shared scale, three responsive viewports, 24 images, directions/size/guides/keyboard/rotation.')
