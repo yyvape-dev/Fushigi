@@ -23,8 +23,8 @@
  function leaveFloor(){if(debt())steal('代金を払わず、店のある階を離れた！');clearTags();close();state.wanted=false;ShopSecurity.reset();}
  function reset(){leaveFloor();state.wanted=false;ShopSecurity.reset();}
  function steal(reason){if(!floorShop||floorShop.hostile)return;floorShop.hostile=true;state.wanted=true;close();say(reason+' 店主が怒った！');clearTags();ShopSecurity.alert();}
- function stock(tier){const defaults=['potion','onigiri','arrow'].map(k=>mkItem(k));let ks=Object.keys(ITEMS).filter(k=>ITEMS[k].w>0&&(ITEMS[k].from||1)<=floorNo+tier*4&&!['gold','weed','potion','onigiri','arrow'].includes(k));if(tier===2){const rare=ks.filter(k=>ITEMS[k].w<=2);if(rare.length)ks=rare;}
-  for(let n=0;n<8&&ks.length;n++){const weight=k=>Math.pow(ITEMS[k].w,tier===0?1:tier===1?0:-.5);let r=Math.random()*ks.reduce((s,k)=>s+weight(k),0),k=ks[0];for(const c of ks){r-=weight(c);if(r<0){k=c;break;}}const it=mkItem(k);if(ITEMS[k].equip&&ITEMS[k].equip!=='ring')it.plus=Math.max(it.plus,tier);defaults.push(it);}return defaults;}
+ function stock(tier,count=11){const defaults=['potion','onigiri','arrow'].map(k=>mkItem(k));let ks=Object.keys(ITEMS).filter(k=>ITEMS[k].w>0&&(ITEMS[k].from||1)<=floorNo+tier*4&&!['gold','weed','potion','onigiri','arrow'].includes(k));if(tier===2){const rare=ks.filter(k=>ITEMS[k].w<=2);if(rare.length)ks=rare;}
+  for(let n=0;n<count-3&&ks.length;n++){const weight=k=>Math.pow(ITEMS[k].w,tier===0?1:tier===1?0:-.5);let r=Math.random()*ks.reduce((s,k)=>s+weight(k),0),k=ks[0];for(const c of ks){r-=weight(c);if(r<0){k=c;break;}}const it=mkItem(k);if(ITEMS[k].equip&&ITEMS[k].equip!=='ring')it.plus=Math.max(it.plus,tier);defaults.push(it);}return defaults;}
  // Count corridor mouths, not every room tile touching a parallel corridor.
  function entrances(ri){const r=rooms[ri],ring=new Map(),dirs=[[1,0],[-1,0],[0,1],[0,-1]],doors=new Map();
   // Only join contacts along the immediate outside rim. A distant corridor
@@ -51,11 +51,10 @@
   for(let i=0;i<s.doors.length;i++)assign(i,new Set());
   const used=new Set(homes.filter(Boolean).map(c=>c.x+','+c.y));for(let i=0;i<s.doors.length;i++){const door=s.doors[i],home=homes[i]||cells.filter(c=>!used.has(c.x+','+c.y)).sort((a,b)=>distance(a,door)-distance(b,door))[0]||door;used.add(home.x+','+home.y);s.keepers.push({x:home.x,y:home.y,vx:home.x,vy:home.y,hp:cfg.hp,maxhp:cfg.hp,face:[Math.sign(r.cx-home.x),Math.sign(r.cy-home.y)],home:{...home},door:{...door},isShopkeeper:true});}
   s.keeper=s.keepers[0]||null;
-  cells.sort((a,b)=>Math.abs(a.y-r.cy)-Math.abs(b.y-r.cy)||a.x-b.x);const goods=cells.filter(c=>!used.has(c.x+','+c.y));
-  // 商品は隣り合わないように間隔をあけ、出入口のそばは通路として空ける（足りないときだけ詰める）
-  const apart=[],rest=[];for(const c of goods){const nearDoor=s.doors.some(d=>Math.abs(c.x-d.x)+Math.abs(c.y-d.y)<=1),nearGoods=apart.some(p=>Math.abs(c.x-p.x)+Math.abs(c.y-p.y)<=1);(nearDoor||nearGoods?rest:apart).push(c);}
-  const placement=apart.concat(rest);
-  for(const it of stock(tier)){const c=placement.shift();if(!c)break;tag(it);floorItems.push({...c,item:it});}
+  // シレン6に合わせる：商品は7〜16個、部屋の床に無作為に置く（隣り合ってよい）。店番の立ち位置と出入口だけは空ける
+  const placement=cells.filter(c=>!used.has(c.x+','+c.y));for(let i=placement.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[placement[i],placement[j]]=[placement[j],placement[i]];}
+  const count=s.count??(7+Math.floor(Math.random()*10));
+  for(const it of stock(tier,Math.min(count,placement.length))){const c=placement.shift();if(!c)break;tag(it);floorItems.push({...c,item:it});}
  }
  function pay(){const cost=Math.ceil(debt());if(!cost){talk('お勘定は済んでいる。');return false;}if(gold<cost){talk('お金が足りない。商品を床に戻すこともできる。');return false;}
   gold-=cost;for(const [id,l]of state.lots)if(l.claimed||l.used){delete l.item.shopLot;state.lots.delete(id);}inv=mergeStacks(inv);say(cost+'Gを支払った。');for(const k of keepers())if(k.hp>0)moveKeeper(k,k.home,false);saveGame();talk('確かに受け取った。また寄ってくれ。');return true;}

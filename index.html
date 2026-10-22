@@ -1114,10 +1114,8 @@ function placeDungeonShop(stairsRoom) {
   if (floorNo < 2 || Math.random() >= .25) return;
   const candidates = rooms.map((r, i) => i).filter(i => i > 0 && rooms[i] !== stairsRoom && !rooms[i].mh);
   if (!candidates.length) return;
-  // 店は広い部屋に置く（商品11個＋店主が歩ける広さ）。面積40以上の部屋があればその中から、無ければ最も広い部屋
-  const area = i => rooms[i].w * rooms[i].h, wide = candidates.filter(i => area(i) >= 40 && rooms[i].shape === 'rect');
-  const pool = wide.length ? wide : candidates.filter(i => area(i) === Math.max(...candidates.map(area)));
-  const ri = pool[rnd(0, pool.length - 1)], r = rooms[ri]; r.role = 'shop';
+  // 店の部屋は広さで選ばない（シレン6も部屋の広さ条件は確認できない）。部屋の最小が5×5なので、狭すぎる店は出ない
+  const ri = candidates[rnd(0, candidates.length - 1)], r = rooms[ri]; r.role = 'shop';
   const townStock = shopStock; rollShop(floorNo); const stock = shopStock; shopStock = townStock;
   floorShop = {room: ri, stock, x: r.cx, y: r.cy};
   const outside = o => roomGrid[o.y][o.x] !== ri;
@@ -1139,7 +1137,8 @@ function placeHouse(stairsRoom) {
   if (floorNo < 2 || rooms.length < 4 || Math.random() >= MH_RATE.v) return;
   const c = rooms.map((r, i) => i).filter(i => i > 0 && rooms[i] !== stairsRoom && rooms[i].role !== 'shop' && rooms[i].w * rooms[i].h >= 12).filter(i=>{const r=rooms[i];let count=0;for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)if(map[y][x]===FLOOR&&!corridorAdj(x,y))count++;return count>=8;});
   if (!c.length) return;
-  const ri = c[rnd(0, c.length - 1)], R = rooms[ri]; R.mh = true;R.role='monster';
+  const bigC = c.filter(i => rooms[i].big), pick = bigC.length ? bigC : c;   // 大部屋があれば優先（迫力を出すための独自ルール）
+  const ri = pick[rnd(0, pick.length - 1)], R = rooms[ri]; R.mh = true;R.role='monster';
   enemies=enemies.filter(e=>roomGrid[e.y][e.x]!==ri);floorItems=floorItems.filter(f=>f.item.type==='gold'||roomGrid[f.y][f.x]!==ri);   // ギタンは残す（各階に1個以上を保つ）
   const cells=[];for(let y=R.y;y<R.y+R.h;y++)for(let x=R.x;x<R.x+R.w;x++)if(map[y][x]===FLOOR&&!enemyAt(x,y)&&!itemAt(x,y)&&!trapAt(x,y)&&!corridorAdj(x,y))cells.push([x,y]);
   const free=()=>cells.length?cells.splice(rnd(0,cells.length-1),1)[0]:null;

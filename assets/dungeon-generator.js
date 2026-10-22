@@ -104,7 +104,7 @@
    if(s.kind==='room'){
     // 大部屋（約30%。8×5以上の長方形）：店・魔物部屋の候補になる。店に商品を並べても歩ける広さを確保するため
     const big=iw>=8&&ih>=5&&chance(.3);
-    const w=big?int(8,Math.min(10,iw)):int(4,Math.min(10,iw)),h=big?int(5,Math.min(7,ih)):int(3,Math.min(6,ih)),x=s.x+2+int(0,iw-w),y=s.y+2+int(0,ih-h);
+    const w=big?int(8,Math.min(10,iw)):int(Math.min(5,iw),Math.min(10,iw)),h=big?int(5,Math.min(7,ih)):int(Math.min(5,ih),Math.min(6,ih)),x=s.x+2+int(0,iw-w),y=s.y+2+int(0,ih-h);
     s.room={x,y,w,h,cx:x+(w>>1),cy:y+(h>>1),role:'ordinary',shape:'rect',big};
     for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)put(xx,yy);
     if(!big)carveShape(s.room);
