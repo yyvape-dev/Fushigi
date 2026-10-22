@@ -12,6 +12,22 @@
  state.trap=function(g,kind,x,y,size,pitch){const im=state.images['trap-'+kind];if(!im)return false;g.imageSmoothingEnabled=true;g.drawImage(im,x+size*.03,y-pitch*.10,size*.94,pitch*1.04);return true;};
  state.shop=function(g,x,y,size,pitch){const im=state.images.shop;if(!im)return false;g.imageSmoothingEnabled=true;g.drawImage(im,x-size*.10,y-pitch*.65,size*1.2,size*1.2);return true;};
  function layer(name,w,h){let c=state.layers[name];if(!c)c=state.layers[name]=document.createElement('canvas');if(c.width!==w||c.height!==h){c.width=w;c.height=h;}const g=c.getContext('2d');g.clearRect(0,0,w,h);g.globalCompositeOperation='source-over';g.globalAlpha=1;g.filter='none';return [c,g];}
+ // Three separable box passes approximate a Gaussian. Work at quarter size
+ // so mobile browsers get the same feathering without Canvas.filter support.
+ function feather(mask,g,width,height,radius){
+  const w=Math.ceil(width/4),h=Math.ceil(height/4),[small,sg]=layer('soft-mask',w,h);
+  sg.drawImage(mask,0,0,w,h);const pixels=sg.getImageData(0,0,w,h),data=pixels.data;
+  let a=new Float32Array(w*h),b=new Float32Array(w*h);for(let i=0;i<a.length;i++)a[i]=data[i*4+3];
+  const r=Math.max(1,Math.round(radius/4)),span=r*2+1;
+  for(let pass=0;pass<3;pass++){
+   for(let y=0;y<h;y++){const row=y*w;let sum=0;for(let x=0;x<=r&&x<w;x++)sum+=a[row+x];
+    for(let x=0;x<w;x++){b[row+x]=sum/span;if(x-r>=0)sum-=a[row+x-r];if(x+r+1<w)sum+=a[row+x+r+1];}}
+   for(let x=0;x<w;x++){let sum=0;for(let y=0;y<=r&&y<h;y++)sum+=b[y*w+x];
+    for(let y=0;y<h;y++){a[y*w+x]=sum/span;if(y-r>=0)sum-=b[(y-r)*w+x];if(y+r+1<h)sum+=b[(y+r+1)*w+x];}}
+  }
+  for(let i=0;i<a.length;i++){data[i*4]=data[i*4+1]=data[i*4+2]=255;data[i*4+3]=Math.round(a[i]);}
+  sg.putImageData(pixels,0,0);g.save();g.imageSmoothingEnabled=true;g.drawImage(small,0,0,width,height);g.restore();
+ }
  // Terrain remains visible under ambient shadow outside the soft local light.
  state.fog=function(g,{width,height,size,pitch,camX,camY,player,rooms,roomIndex,roomGrid,map,seen,theme,terrain,revision=0,seed=0}){
   const cacheKey=[width,height,size,pitch,camX,camY,player.vx,player.vy,roomIndex,player.st?.blind>0,theme,state.ready,revision,seed].join(':');
@@ -37,10 +53,11 @@
   cg.globalCompositeOperation='source-over';
   const blind=player.st?.blind>0;
   if(roomIndex>=0&&!blind){
-   const r=rooms[roomIndex];lg.filter='blur('+Math.max(12,size*.58)+'px)';lg.fillStyle='#fff';
-   // Follow the actual room footprint, rather than its enclosing rectangle.
-   for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)if(map[y]?.[x]!==0&&roomGrid[y]?.[x]===roomIndex)lg.fillRect(camX+x*size-size*.1,camY+y*pitch-pitch*.1,size*1.2,pitch*1.2);
-   lg.filter='none';
+   const r=rooms[roomIndex];rg.fillStyle='#fff';
+   // Merge the room footprint before blurring: per-tile blur accumulates
+   // opacity at tile seams and leaves a visibly rectangular light boundary.
+   for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)if(map[y]?.[x]!==0&&roomGrid[y]?.[x]===roomIndex)rg.fillRect(camX+x*size,camY+y*pitch,size,pitch);
+   feather(reveal,lg,width,height,Math.max(12,size*.75));
   }
   const px=camX+(player.vx+.5)*size,py=camY+(player.vy+.6)*pitch,radius=size*(blind?.70:2.05);
   const glow=lg.createRadialGradient(px,py,size*.30,px,py,radius);glow.addColorStop(0,'#fff');glow.addColorStop(.40,'rgba(255,255,255,.95)');glow.addColorStop(.72,'rgba(255,255,255,.5)');glow.addColorStop(1,'rgba(255,255,255,0)');lg.fillStyle=glow;lg.fillRect(0,0,width,height);

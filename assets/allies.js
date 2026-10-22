@@ -67,7 +67,15 @@
   for(const e of ray.targets)if(enemies.includes(e))strike(a,e);
   a.face=ray.face.slice();a.attackFace=ray.face.slice();kick();return true;
  }
- function tick(){if(!live()||dead)return;const a=state.actor;if(a.cooldown>0)a.cooldown--;
+ function tick(){if(scene!=='dungeon'||dead||!state.actor||state.actor.hp<=0)return;const a=state.actor;
+  if(!a.following){
+   // Unrecruited travelers wander without targeting or fighting monsters.
+   // Pause beside Rana so approaching them still allows a conversation.
+   if(nearby())return;
+   const choices=DIRS8.map(([dx,dy])=>({x:a.x+dx,y:a.y+dy,dx,dy})).filter(c=>geomOK(a.x,a.y,c.dx,c.dy)&&free(c.x,c.y));
+   if(choices.length){const forward=choices.find(c=>c.dx===a.face[0]&&c.dy===a.face[1]);const next=forward&&Math.random()<.7?forward:choices[rnd(0,choices.length-1)];move(a,next.x,next.y);}return;
+  }
+  if(a.cooldown>0)a.cooldown--;
   if(a.st.sleep>0){a.st.sleep--;if(a.boost>0)a.boost--;return;}const confused=a.st.confuse>0;if(confused)a.st.confuse--;
   const inBattle=enemies.some(e=>!e.mh&&distance(a,e)<=5&&los(a.x,a.y,e.x,e.y));
   if(a.kind==='yuzunamiki'&&!confused&&!a.boost&&!a.cooldown&&inBattle&&Math.random()<.12){a.boost=4;a.cooldown=12;a.castStart=now();fxText(a.x,a.y,'狐火の襲','#d9a0ff');say('ユズナミキは「狐火の襲」！ 本人だけ4ターン倍速。');}
