@@ -13,6 +13,7 @@
  };
  const config=a=>roster[a?.kind]||roster.yuzunamiki;
  const state={actor:null,used:false,open:false,renderScale:1.20,registration:{},ready:false,error:null,images:{},art:{}};
+ const merchantAt=(x,y)=>typeof ShopSystem!=='undefined'&&ShopSystem.at(x,y);
  const distance=(a,b)=>Math.max(Math.abs(a.x-b.x),Math.abs(a.y-b.y));
  const at=(x,y)=>state.actor?.x===x&&state.actor?.y===y?state.actor:null;
  const stats=a=>({attack:Math.max(1,Math.round(playerAtk()+config(a).attack+(a.lv-1)*config(a).growth)-(a.poison||0)),defense:Math.max(0,defBonus()+config(a).defense+Math.floor((a.lv-1)/3)),maxhp:config(a).hp+4*(a.lv-1)});
@@ -20,7 +21,7 @@
  function hide(){state.open=false;document.body?.classList?.remove('ally-dialog-open');const el=document.getElementById('allyPrompt');if(el)el.hidden=true;if(state.returnFocus?.isConnected)state.returnFocus.focus({preventScroll:true});state.returnFocus=null;}
  function reset(){state.actor=null;state.used=false;hide();}
  function make(x,y,kind='yuzunamiki'){if(!roster[kind])kind='yuzunamiki';const lv=Math.max(1,player.lv),hp=roster[kind].hp+4*(lv-1);return {kind,name:roster[kind].name,isAlly:true,x,y,vx:x,vy:y,lv,exp:0,hp,maxhp:hp,following:false,face:[0,1],st:{},boost:0,cooldown:0,issenUsed:new WeakSet()};}
- function free(x,y){return inb(x,y)&&map[y][x]===FLOOR&&!enemyAt(x,y)&&!ShopSystem.at(x,y)&&!itemAt(x,y)&&!trapAt(x,y)&&!(player.x===x&&player.y===y);}
+ function free(x,y){return inb(x,y)&&map[y][x]===FLOOR&&!enemyAt(x,y)&&!merchantAt(x,y)&&!itemAt(x,y)&&!trapAt(x,y)&&!(player.x===x&&player.y===y);}
  function newFloor(){
   hide();const a=state.actor;
   if(a?.following){
@@ -71,7 +72,7 @@
   const inBattle=enemies.some(e=>!e.mh&&distance(a,e)<=5&&los(a.x,a.y,e.x,e.y));
   if(a.kind==='yuzunamiki'&&!confused&&!a.boost&&!a.cooldown&&inBattle&&Math.random()<.12){a.boost=4;a.cooldown=12;a.castStart=now();fxText(a.x,a.y,'狐火の襲','#d9a0ff');say('ユズナミキは「狐火の襲」！ 本人だけ4ターン倍速。');}
   for(let step=0;step<(a.boost>0?2:1);step++){
-   if(confused){const [dx,dy]=DIRS8[rnd(0,7)],x=a.x+dx,y=a.y+dy;if(geomOK(a.x,a.y,dx,dy)&&!enemyAt(x,y)&&!ShopSystem.at(x,y)&&!(player.x===x&&player.y===y))move(a,x,y);continue;}
+   if(confused){const [dx,dy]=DIRS8[rnd(0,7)],x=a.x+dx,y=a.y+dy;if(geomOK(a.x,a.y,dx,dy)&&!enemyAt(x,y)&&!merchantAt(x,y)&&!(player.x===x&&player.y===y))move(a,x,y);continue;}
    if(a.kind==='avenius'){
     const targets=enemies.filter(e=>!e.mh&&!a.issenUsed.has(e)&&distance(a,e)<=4&&los(a.x,a.y,e.x,e.y)).sort((x,y)=>distance(a,x)-distance(a,y));
     if(targets.some(e=>issen(a,e)))continue;
@@ -80,7 +81,7 @@
    const target=a.kind==='sherininya'?null:enemies.filter(e=>!e.mh&&(a.kind==='avenius'?distance(a,e)===1&&geomOK(a.x,a.y,e.x-a.x,e.y-a.y):distance(a,e)<=2&&aligned(a.x,a.y,e.x,e.y))).sort((x,y)=>distance(a,x)-distance(a,y))[0];
    if(target){strike(a,target);continue;}
    const d=distMap(),current=d[a.y][a.x];if(current<=1)break;
-   const choices=DIRS8.map(([dx,dy])=>({x:a.x+dx,y:a.y+dy,dx,dy})).filter(c=>geomOK(a.x,a.y,c.dx,c.dy)&&d[c.y][c.x]>=1&&d[c.y][c.x]<current&&!enemyAt(c.x,c.y)&&!ShopSystem.at(c.x,c.y)).sort((x,y)=>d[x.y][x.x]-d[y.y][y.x]);
+   const choices=DIRS8.map(([dx,dy])=>({x:a.x+dx,y:a.y+dy,dx,dy})).filter(c=>geomOK(a.x,a.y,c.dx,c.dy)&&d[c.y][c.x]>=1&&d[c.y][c.x]<current&&!enemyAt(c.x,c.y)&&!merchantAt(c.x,c.y)).sort((x,y)=>d[x.y][x.x]-d[y.y][y.x]);
    if(choices.length)move(a,choices[0].x,choices[0].y);
   }
   if(a.boost>0)a.boost--;if(turn%10===0&&a.hp<a.maxhp)a.hp++;
@@ -96,7 +97,7 @@
    if(state.actor){if(T.ai==='sleepy')a.st.sleep=T.statusTurns||5;if(T.ai==='dazzle')a.st.confuse=T.statusTurns||8;if(T.ai==='venom')a.poison=Math.min(4,(a.poison||0)+1);}return true;
   }
   if(T.spd==='still'||T.spd==='slow'&&turn%2===1)return true;
-  const choices=DIRS8.map(([dx,dy])=>({x:e.x+dx,y:e.y+dy,dx,dy})).filter(c=>inb(c.x,c.y)&&(T.ai==='ghost'||geomOK(e.x,e.y,c.dx,c.dy))&&!enemyAt(c.x,c.y)&&!ShopSystem.at(c.x,c.y)&&!at(c.x,c.y)&&!(player.x===c.x&&player.y===c.y)&&distance(c,a)<dist).sort((x,y)=>distance(x,a)-distance(y,a));
+  const choices=DIRS8.map(([dx,dy])=>({x:e.x+dx,y:e.y+dy,dx,dy})).filter(c=>inb(c.x,c.y)&&(T.ai==='ghost'||geomOK(e.x,e.y,c.dx,c.dy))&&!enemyAt(c.x,c.y)&&!merchantAt(c.x,c.y)&&!at(c.x,c.y)&&!(player.x===c.x&&player.y===c.y)&&distance(c,a)<dist).sort((x,y)=>distance(x,a)-distance(y,a));
   if(choices.length){e.x=choices[0].x;e.y=choices[0].y;}return true;
  }
  async function load(redraw){try{await Promise.all(Object.entries(artBases).map(async([kind,pathBase])=>{const response=await fetch(pathBase+'ally.json?v=sherininya-v1');if(!response.ok)throw Error(kind+' ally.json '+response.status);const metadata=await response.json(),art={registration:metadata.views,motionFrameSize:metadata.motionFrameSize,images:{}};state.art[kind]=art;const paths=D.flatMap(d=>[d+'.png',d+'-motion.png']);await Promise.all(paths.map(path=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>{art.images[path]=im;resolve();};im.onerror=()=>reject(Error(kind+' '+path));im.src=pathBase+'assets/'+path;})));if(kind==='yuzunamiki'){state.registration=art.registration;state.images=art.images;}}));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('助っ人画像',e);redraw();}}
