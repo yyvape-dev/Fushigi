@@ -5,23 +5,26 @@
  scene='dungeon';dungeonId='second';
  for(let n=0;n<200;n++){
   floorNo=n%12+1;newFloor();layouts.add(floorPlan.style);themes.add(floorPlan.theme.id);
-  const dist=distMap();
+  // 敵AI用の distMap() は90歩で打ち切るため、広い階の到達確認には使えない。上限なしの幅優先探索で確認する
+  const dist=Array.from({length:MH},()=>new Array(MW).fill(-1)),queue=[[player.x,player.y]];dist[player.y][player.x]=0;
+  for(let i=0;i<queue.length;i++){const [x,y]=queue[i];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;if(!geomOK(x,y,dx,dy))continue;const nx=x+dx,ny=y+dy;if(dist[ny][nx]>=0)continue;dist[ny][nx]=dist[y][x]+1;queue.push([nx,ny]);}}
   for(const r of rooms)assert(dist[r.cy][r.cx]>=0,'unreachable room');
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(map[y][x]===STAIRS)assert(dist[y][x]>=0,'unreachable stairs');
   for(const o of [...enemies,...floorItems,...traps])assert(map[o.y]?.[o.x]===FLOOR,'content on solid/stairs');
   if(rooms.some(r=>r.mh))houses++;
   if(floorShop){
    shops++;const r=rooms[floorShop.room];assert(r.role==='shop'&&!r.mh&&floorShop.room!==0,'role conflict');
-   assert(![...enemies,...traps,...floorItems].some(o=>roomGrid[o.y][o.x]===floorShop.room),'shop overlap');
+   assert(![...enemies,...traps].some(o=>roomGrid[o.y][o.x]===floorShop.room),'enemy/trap overlap');
+   const goods=floorItems.filter(o=>roomGrid[o.y][o.x]===floorShop.room);assert(goods.length>0&&goods.every(o=>ShopSystem.lot(o.item)),'floor merchandise ownership');
+   assert(ShopSystem.keepers().length===floorShop.doors.length,'attendant count');
    const townStock=shopStock,originalTown=shopStock.slice(),whBefore=wh.slice(),bankBefore=bank;
-   player.x=r.cx;player.y=r.cy;openWh();assert(whOpen&&whSide==='shop','shop menu');
-   gold=10000;inv=[];const it=floorShop.stock[0],cost=priceOf(it),count=floorShop.stock.length;
-   shopBuy(ikey(it));assert(gold===10000-cost&&floorShop.stock.length===count-1&&inv.length===1,'purchase');
-   const afterBuy=gold;shopSell(ikey(inv[0]));assert(gold>afterBuy&&!inv.length,'sale');
+   const f=goods[0],it=f.item;player.x=f.x;player.y=f.y;gold=10000;inv=[];openWh();assert(ShopSystem.state.open&&!whOpen,'shop dialogue');ShopSystem.close();
+   takeFloor(f);const cost=Math.ceil(ShopSystem.debt());assert(cost>0&&gold===10000,'unpaid pickup');ShopSystem.pay();assert(gold===10000-cost&&inv.includes(it)&&!ShopSystem.lot(it),'settlement');ShopSystem.close();
+   const afterBuy=gold;dropType(ikey(it));ShopSystem.sell(it.id);assert(gold>afterBuy&&!inv.length&&ShopSystem.lot(it),'sale');ShopSystem.close();
    whTransfer('anything',true);bankMove(true);
    assert(bank===bankBefore&&JSON.stringify(wh)===JSON.stringify(whBefore),'dungeon accessed bank or warehouse');
    assert(shopStock===townStock&&shopStock.every((v,i)=>v===originalTown[i]),'town stock leaked');
-   closeWh();openWh();assert(floorShop.stock.length===count-1,'stock reset on reopen');closeWh();
+   const count=floorItems.length;openWh();ShopSystem.close();assert(floorItems.length===count,'stock reset on reopen');
   }
  }
  assert(shops>0&&houses>0&&layouts.size===3&&themes.size===5,'missing modules');

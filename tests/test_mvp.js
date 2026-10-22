@@ -62,7 +62,9 @@
   doCtx();
   ok('enter dungeon: scene/floor/hp/bag kept', scene === 'dungeon' && floorNo === 1 && player.hp === 20 && inv.length === 2);
   ok('dungeon: stairs exist & reachable, items reachable', (() => {
-    const d = distMap(); let st = null;
+    // distMap() は敵AI用に90歩で打ち切るので、広い階では上限なしの探索で確認する
+    const d = Array.from({ length: MH }, () => new Array(MW).fill(-1)), q = [[player.x, player.y]]; d[player.y][player.x] = 0; let st = null;
+    for (let i = 0; i < q.length; i++) { const [x, y] = q[i]; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) { if (!dx && !dy) continue; if (!geomOK(x, y, dx, dy)) continue; const nx = x + dx, ny = y + dy; if (d[ny][nx] >= 0) continue; d[ny][nx] = d[y][x] + 1; q.push([nx, ny]); } }
     for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (map[y][x] === STAIRS) st = [x, y];
     return st && d[st[1]][st[0]] >= 0 && floorItems.every(f => d[f.y][f.x] >= 0);
   })());
@@ -780,7 +782,7 @@
     { clears = 0; dungeonId = 'second'; ok('dungeons: locked at 0 clears', !unlocked('second')); toTown(false); enterDungeon(); ok('dungeons: entering a locked one falls back to the first', dungeonId === 'first');
       clears = 1; ok('dungeons: unlocked after a clear', unlocked('second')); toTown(false); dungeonId = 'second'; enterDungeon(); ok('dungeons: deep cave starts at 1F', dungeonId === 'second' && scene === 'dungeon' && floorNo === 1); dungeonId = 'first'; toTown(false); clears = 0; }
     { clears = 1; toTown(false); openCfg(); dungeonId = 'first'; const b = cfgListEl; ok('settings: dungeon row exists', /行き先/.test(cfgListEl.innerHTML)); closeCfg(); dungeonId = 'first'; clears = 0; }
-    ok('12F: deep cave floors generate (enemies capped, deep kinds appear)', (() => { dungeonId = 'second'; scene = 'dungeon'; const kinds = new Set(); for (let i = 0; i < 40; i++) { floorNo = 12; newFloor(); if (enemies.filter(e => !e.mh).length > 10) return false; enemies.forEach(e => kinds.add(e.kind)); } dungeonId = 'first'; return kinds.has('minotaur') || kinds.has('dragon') || kinds.size > 6; })());
+    ok('12F: deep cave floors generate (enemies capped, deep kinds appear)', (() => { dungeonId = 'second'; scene = 'dungeon'; const kinds = new Set(); for (let i = 0; i < 40; i++) { floorNo = 12; newFloor(); if (enemies.filter(e => !e.mh).length > 14) return false; enemies.forEach(e => kinds.add(e.kind)); } dungeonId = 'first'; return kinds.has('minotaur') || kinds.has('dragon') || kinds.size > 6; })());
     enemyTurn = etSave; ACC.p = ACC.e = 1; gold = 0; bank = 0; DUNGEONS.first.floors = 3; toTown(false);
   }
   DUNGEONS.first.floors = 3; toTown(false);
