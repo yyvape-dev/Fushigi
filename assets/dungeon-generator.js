@@ -83,23 +83,43 @@
    if(adj.get(s.id).size>=2&&roomCount-1>=minRooms&&chance(.25)){s.kind='node';roomCount--;}
   }
   const map=Array.from({length:height},()=>Array(width).fill(0)),put=(x,y)=>{map[y][x]=1;};
+  // 部屋の形：長方形の外枠(x,y,w,h)の隅を削って L字・十字にする。外枠(rooms の x,y,w,h)は変えない
+  const clear=(x0,y0,x1,y1)=>{for(let yy=y0;yy<=y1;yy++)for(let xx=x0;xx<=x1;xx++)map[yy][xx]=0;};
+  const refill=R=>{for(let yy=R.y;yy<R.y+R.h;yy++)for(let xx=R.x;xx<R.x+R.w;xx++)put(xx,yy);};
+  const carveShape=R=>{
+   const {x,y,w,h}=R;
+   if(w>=7&&h>=5&&chance(.2)){                    // 十字：四隅を削る。腕の太さは3マス以上
+    const cw=int(1,Math.floor((w-3)/2)),ch=int(1,Math.floor((h-3)/2));
+    clear(x,y,x+cw-1,y+ch-1);clear(x+w-cw,y,x+w-1,y+ch-1);clear(x,y+h-ch,x+cw-1,y+h-1);clear(x+w-cw,y+h-ch,x+w-1,y+h-1);
+    R.shape='cross';
+   }else if(w>=6&&h>=4&&chance(.25)){             // L字：1つの隅を削る。腕の太さは2マス以上
+    const cw=int(2,w-2),ch=int(1,h-2),left=chance(.5),top=chance(.5);
+    clear(left?x:x+w-cw,top?y:y+h-ch,left?x+cw-1:x+w-1,top?y+ch-1:y+h-1);
+    R.shape='L';
+   }
+   if(!map[R.cy][R.cx]){refill(R);R.shape='rect';}   // 中心（階段・店の位置）が床でなければ長方形に戻す
+  };
   for(const s of act){
    const iw=s.w-4,ih=s.h-4;                      // 区画の縁から2マスは空ける（隣の部屋と通路の余白）
    if(s.kind==='room'){
     const w=int(4,Math.min(10,iw)),h=int(3,Math.min(6,ih)),x=s.x+2+int(0,iw-w),y=s.y+2+int(0,ih-h);
-    s.room={x,y,w,h,cx:x+(w>>1),cy:y+(h>>1),role:'ordinary'};
+    s.room={x,y,w,h,cx:x+(w>>1),cy:y+(h>>1),role:'ordinary',shape:'rect'};
     for(let yy=y;yy<y+h;yy++)for(let xx=x;xx<x+w;xx++)put(xx,yy);
+    carveShape(s.room);
    }else{s.nx=s.x+2+int(0,iw-1);s.ny=s.y+2+int(0,ih-1);}
   }
   // 出入口：部屋の壁の外側1マス。区画の各辺に最大1本
   const door=(s,dir)=>{
    if(s.kind==='node')return {x:s.nx,y:s.ny};
    if(s.doors[dir])return s.doors[dir];
-   const R=s.room;let p;
-   if(dir==='E')p={x:R.x+R.w,y:int(R.y,R.y+R.h-1)};
-   else if(dir==='W')p={x:R.x-1,y:int(R.y,R.y+R.h-1)};
-   else if(dir==='S')p={x:int(R.x,R.x+R.w-1),y:R.y+R.h};
-   else p={x:int(R.x,R.x+R.w-1),y:R.y-1};
+   const R=s.room,pick=a=>a[int(0,a.length-1)];
+   const col=x=>{const a=[];for(let yy=R.y;yy<R.y+R.h;yy++)if(map[yy][x])a.push(yy);return a;};   // 辺に沿った床のある行・列だけを出入口の候補にする
+   const row=y=>{const a=[];for(let xx=R.x;xx<R.x+R.w;xx++)if(map[y][xx])a.push(xx);return a;};
+   let p;
+   if(dir==='E')p={x:R.x+R.w,y:pick(col(R.x+R.w-1))};
+   else if(dir==='W')p={x:R.x-1,y:pick(col(R.x))};
+   else if(dir==='S')p={x:pick(row(R.y+R.h-1)),y:R.y+R.h};
+   else p={x:pick(row(R.y)),y:R.y-1};
    return s.doors[dir]=p;
   };
   const hline=(y,x0,x1)=>{for(let x=Math.min(x0,x1);x<=Math.max(x0,x1);x++)put(x,y);};
