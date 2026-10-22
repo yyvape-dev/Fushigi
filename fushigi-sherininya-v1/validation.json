@@ -1,0 +1,68 @@
+{
+  "registeredIdlePoses": 8,
+  "commonSourceScale": 0.4152173913043478,
+  "groundAnchor": [
+    128,
+    224
+  ],
+  "mirroring": false,
+  "sCrownMatchesLana": true,
+  "crownYByDirection": {
+    "S": 33.0,
+    "SW": 33.42,
+    "W": 35.08,
+    "NW": 36.32,
+    "N": 35.49,
+    "NE": 34.25,
+    "E": 32.17,
+    "SE": 32.58
+  },
+  "browser": [
+    {
+      "viewport": "portrait",
+      "size": [
+        390,
+        844
+      ],
+      "eightDirections": true,
+      "imagesLoaded": 24,
+      "sizeSwitch": true,
+      "guides": true,
+      "keyboard": true,
+      "autoRotation": true,
+      "horizontalOverflow": false,
+      "javascriptErrors": []
+    },
+    {
+      "viewport": "landscape",
+      "size": [
+        844,
+        390
+      ],
+      "eightDirections": true,
+      "imagesLoaded": 24,
+      "sizeSwitch": true,
+      "guides": true,
+      "keyboard": true,
+      "autoRotation": true,
+      "horizontalOverflow": false,
+      "javascriptErrors": []
+    },
+    {
+      "viewport": "small",
+      "size": [
+        320,
+        640
+      ],
+      "eightDirections": true,
+      "imagesLoaded": 24,
+      "sizeSwitch": true,
+      "guides": true,
+      "keyboard": true,
+      "autoRotation": true,
+      "horizontalOverflow": false,
+      "javascriptErrors": []
+    }
+  ],
+  "url": "http://127.0.0.1:8000/fushigi-sherininya-v1/preview.html"
+}

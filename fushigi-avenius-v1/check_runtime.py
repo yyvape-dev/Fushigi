@@ -60,7 +60,7 @@ with sync_playwright() as p:
   results.append({'viewport':name,'size':[w,h],'gameplayChecks':42,'saveIsolated':True,'portraitAndRecruitment':True,'hudAndStatus':True,'flashReturnAndOneUse':True,'blockedFlash':True,'renderedDirections':8,'renderedMotionPoses':16,'javascriptErrors':errors});page.close()
  # Actual production entry point also loads both companions, not just review.
  page=b.new_page(viewport={'width':390,'height':844});page.goto(base.replace('fushigi-avenius-v1/game-review.html','index.html'));page.wait_for_function('AllySystem.state.ready',timeout=120000)
- assert page.evaluate("SAVE_KEY==='fushigi_core_save_v1'&&Object.keys(AllySystem.state.art).length===2")
+ assert page.evaluate("SAVE_KEY==='fushigi_core_save_v1'&&Object.keys(AllySystem.state.art).length===3")
  b.close()
 (P/'runtime-validation.json').write_text(json.dumps({'poses':24,'game':results,'productionEntryLoaded':True},ensure_ascii=False,indent=2)+'\n')
 print('ALL OK: 24 poses; 42 gameplay checks and real renderer in three sizes; dialog/HUD/status/save isolation; production loads both allies.')

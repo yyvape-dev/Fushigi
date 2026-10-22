@@ -31,7 +31,7 @@
   a=setup();a.following=false;AllySystem.state.used=false;playerAttack();verify(AllySystem.state.open&&turn===1,'neutral Avenius opens zero-turn conversation');verify(AllySystem.recruit()&&a.following&&AllySystem.state.used,'Avenius recruits');
   a=setup();e=enemy(5,10);AllySystem.tick();floorNo=4;newFloor();verify(AllySystem.state.actor===a&&a.kind==='avenius'&&!a.dash,'stairs retain companion and cancel old dash');verify(a.issenUsed.has(e),'same object use state survives floors');
   a=setup();a.hp=1;player.x=12;enemy(8,10);enemyTurn();verify(!AllySystem.state.actor&&!dead&&AllySystem.state.used,'Avenius retreats independently');
-  setup();AllySystem.reset();floorNo=2;let calls=0;Math.random=()=>++calls<3?.1:.9;AllySystem.newFloor();verify(AllySystem.state.actor?.kind==='avenius','random encounter can select second roster member');
+  setup();AllySystem.reset();floorNo=2;let calls=0;Math.random=()=>++calls<3?.1:.5;AllySystem.newFloor();verify(AllySystem.state.actor?.kind==='avenius','random encounter can select second roster member');
   a=setup();toTown(false);verify(!AllySystem.state.actor&&!AllySystem.state.used,'town resets Avenius run');
   a=setup();scene='town';e=enemy(5,10);AllySystem.tick();verify(e.hp===1000,'no Avenius dungeon combat in town');
   console.log('ALL OK: '+count+' Avenius checks: range, LOS, landing, identity, return, accuracy, status, XP, recruitment, encounters, stairs, retreat and hero haste.');
