@@ -157,6 +157,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/monster-families.js?v=families-v2"></script>
 <script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
+<script src="assets/run-save.js?v=run-save-v1"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -665,7 +666,7 @@ function checkDeath(msg) {
     inv.splice(k, 1); inv.push(mkItem('weed')); player.hp = player.maxhp; cureBad();
     fxText(player.x, player.y, '復活！', '#fff2a0'); vfxShake(5, 300); say('復活の草が光った！ 生き返った！'); return false;
   }
-  player.hp = 0; dead = true; deadAt = now(); say(msg); return true;
+  player.hp = 0; dead = true; deadAt = now(); say(msg); RunSave.save(); return true;   // 力尽きた時点で記録（再読み込みで取り消せない）
 }
 function hurtPlayer(n, msg) {                                   // 敵以外から受けるダメージ（草・爆風）。無敵なら無効
   if (player.st.invinc > 0) { fxText(player.x, player.y, '0', '#9ad8ff'); return false; }
@@ -972,10 +973,12 @@ function rollType() {
 }
 
 // ===== 保存（倉庫・持ち物・記録）=====
-function saveGame() {
+function saveGame(departure) {
   try {
+    // 冒険中は、持ち物・装備・所持金を出発時のまま残す（途中の物は RunSave が持つ）。再読み込みで拾った物を町へ持ち帰れる抜け道をふさぐ
+    const prev = scene === 'dungeon' && !departure ? JSON.parse(localStorage.getItem(SAVE_KEY) || 'null') : null, keep = !!(prev && prev.v === 1);
     const carried=inv.filter(it=>!ShopSystem.unpaid(it));
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: carried.map(encItem), eq: [carried.indexOf(eqWeapon), carried.indexOf(eqShield)], rings: eqRings.map(r => carried.indexOf(r)), gift, quick, clears, deaths, gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref, vfxPref }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: keep ? prev.bag : carried.map(encItem), eq: keep ? prev.eq : [carried.indexOf(eqWeapon), carried.indexOf(eqShield)], rings: keep ? prev.rings : eqRings.map(r => carried.indexOf(r)), gift, quick, clears, deaths, gold: keep ? prev.gold : gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref, vfxPref }));
   } catch (_) {}
 }
 function loadGame() {
@@ -1104,6 +1107,7 @@ function newFloor() {
   ShopSecurity.newFloor();
   snapVis();
   updateVis();
+  RunSave.save();                                               // 階に入るたびに冒険を保存
 }
 function atDungeonShop() { return scene === 'dungeon' && floorShop && playerRoom() === floorShop.room; }
 function activeShopStock() { return atDungeonShop() ? floorShop.stock : shopStock; }
@@ -1171,6 +1175,7 @@ function triggerTrap(tr) {                                        // 罠を踏�
 // =====================================================================
 function snapVis() { for (const e of [player, ...enemies,...ShopSystem.keepers().filter(k=>k.hp>0)]) { e.vx = e.x; e.vy = e.y; e.bump = null; } }
 function toTown(fromDungeon) {
+  RunSave.clear();                                              // 冒険が終わったので途中保存は消す
   closeStairs();
   if(menuOpen&&typeof closeGameMenu==='function')closeGameMenu();
   ShopSystem.reset();
@@ -1192,7 +1197,7 @@ function enterDungeon() {
   player.maxhp = BASE_HP; player.hp = player.maxhp; player.lv = 1; player.exp = 0; player.face = [0, 1]; player.st = newStatus();   // レベル・体力は毎回リセット（本家と同じ）
   atkUp = 0; bellyBonus = 0; floorLight = false; belly = maxBelly(); bellyWarn = 99;
   shuffleAliases();                                             // 草・巻物・腕輪・杖の仮名を入れ替える（識別はリセット）
-  saveGame();                                                   // 出発時点の持ち物を保存
+  saveGame(true);                                               // 出発時点の持ち物を保存
   newFloor();
   say(`${DUNGEONS[dungeonId].name}に入った。`);
   startFade(); render();
@@ -1218,7 +1223,10 @@ function boot() {
   if (!shopStock.length) rollShop();
   const giftMsg = !gift;
   if (!gift) { for (const t of ['stick', 'sword', 'axe', 'woodshield', 'ironshield']) wh.push(mkItem(t, 0)); gift = true; }   // 動作確認用：武器と盾を倉庫へ（1回だけ）
+  const resumed = RunSave.restore();                             // 冒険の途中で閉じていたら、その場面から再開
+  if (resumed === true) { say(`${DUNGEONS[dungeonId].name} ${floorNo}階から再開した。`); snapVis(); updateVis(); startFade(); render(); return; }
   toTown(false);
+  if (resumed === 'dead') say('前回の冒険は力尽きていた…持ち物と所持金を失った。（倉庫・預金は無事）');
   say('町に着いた。倉庫で道具を用意して、入口から潜ろう。');
   if (giftMsg) say('倉庫に武器と盾を入れておいた。持ち物に出して装備してみよう。');
   render();
