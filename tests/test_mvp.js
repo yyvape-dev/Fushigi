@@ -626,7 +626,8 @@
     setup(); { const e = mk('goblin', 1, 0, 1); inv = [mkItem('annihilatescroll')]; useType('annihilatescroll'); ok('annihilate scroll: no exp', player.exp === 0); void e; }
     setup(); { player.lv = 5; player.exp = 3; player.maxhp = 36; toTown(false); ok('toTown: level/exp/max HP reset', player.lv === 1 && player.exp === 0 && player.maxhp === BASE_HP); }
     // 敵の表
-    ok('enemies: 60 kinds, each has exp/def/hp/atk', Object.keys(ENEMIES).length === 60 && Object.values(ENEMIES).every(T => T.exp > 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
+    ok('enemies: 60 ordinary kinds, each has exp/def/hp/atk', Object.values(ENEMIES).filter(T => !T.security).length === 60 && Object.values(ENEMIES).filter(T => !T.security).every(T => T.exp > 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
+    ok('enemies: two theft-only pursuers, excluded from ordinary drops and experience', Object.values(ENEMIES).filter(T => T.security).length === 2 && Object.values(ENEMIES).filter(T => T.security).every(T => T.w === 0 && T.exp === 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
     ok('enemies: borrowed-art kinds name an existing art key', Object.values(ENEMIES).filter(T => T.art).every(T => ENEMIES[T.art]));
     ok('enemies: base slime is replaced by upper ranks before 7F', (() => { for (let i = 0; i < 300; i++) if (rollEnemy(7) === 'slime') return false; return true; })());
     ok('enemies: deep kinds only appear deep', (() => { for (let i = 0; i < 300; i++) if (['minotaur', 'dragon'].includes(rollEnemy(5))) return false; const s = new Set(); for (let i = 0; i < 600; i++) s.add(rollEnemy(10)); return s.has('minotaur') && s.has('dragon'); })());
@@ -784,4 +785,5 @@
   }
   DUNGEONS.first.floors = 3; toTown(false);
   console.log(fail.length ? 'FAIL: ' + fail.join(' | ') : 'ALL OK');
+  if(fail.length)throw Error(fail.length+' MVP checks failed');
 })();

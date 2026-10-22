@@ -25,10 +25,31 @@
  function steal(reason){if(!floorShop||floorShop.hostile)return;floorShop.hostile=true;state.wanted=true;close();say(reason+' 店主が怒った！');clearTags();ShopSecurity.alert();}
  function stock(tier){const defaults=['potion','onigiri','arrow'].map(k=>mkItem(k));let ks=Object.keys(ITEMS).filter(k=>ITEMS[k].w>0&&(ITEMS[k].from||1)<=floorNo+tier*4&&!['gold','weed','potion','onigiri','arrow'].includes(k));if(tier===2){const rare=ks.filter(k=>ITEMS[k].w<=2);if(rare.length)ks=rare;}
   for(let n=0;n<8&&ks.length;n++){const weight=k=>Math.pow(ITEMS[k].w,tier===0?1:tier===1?0:-.5);let r=Math.random()*ks.reduce((s,k)=>s+weight(k),0),k=ks[0];for(const c of ks){r-=weight(c);if(r<0){k=c;break;}}const it=mkItem(k);if(ITEMS[k].equip&&ITEMS[k].equip!=='ring')it.plus=Math.max(it.plus,tier);defaults.push(it);}return defaults;}
+ // Count corridor mouths, not every room tile touching a parallel corridor.
+ function entrances(ri){const r=rooms[ri],ring=new Map(),dirs=[[1,0],[-1,0],[0,1],[0,-1]],doors=new Map();
+  // Only join contacts along the immediate outside rim. A distant corridor
+  // loop must not collapse two separate doorways into one.
+  for(let y=r.y-1;y<=r.y+r.h;y++)for(let x=r.x-1;x<=r.x+r.w;x++)if((x===r.x-1||x===r.x+r.w||y===r.y-1||y===r.y+r.h)&&inb(x,y)&&map[y][x]===FLOOR&&roomGrid[y][x]<0)ring.set(x+','+y,{x,y});
+  const seen=new Set();for(const [key,start]of ring){if(seen.has(key))continue;const q=[start],candidates=new Map();seen.add(key);
+   for(let i=0;i<q.length;i++){const c=q[i];for(const [dx,dy]of dirs){const x=c.x+dx,y=c.y+dy,next=x+','+y;if(ring.has(next)&&!seen.has(next)){seen.add(next);q.push(ring.get(next));}if(inb(x,y)&&roomGrid[y][x]===ri&&map[y][x]===FLOOR)candidates.set(next,{x,y});}}
+   const rank=c=>{const corner=(c.x===r.x||c.x===r.x+r.w-1)&&(c.y===r.y||c.y===r.y+r.h-1);const stem=dirs.some(([dx,dy])=>{const x=c.x+dx,y=c.y+dy,nx=x+dx,ny=y+dy;return ring.has(x+','+y)&&inb(nx,ny)&&map[ny][nx]===FLOOR&&roomGrid[ny][nx]<0;});return (corner?1000:0)+(stem?-10:0)+Math.abs(c.x-r.cx)+Math.abs(c.y-r.cy);};
+   const door=[...candidates.values()].sort((a,b)=>rank(a)-rank(b))[0];if(door)doors.set(door.x+','+door.y,door);
+  }return [...doors.values()];
+ }
  function setup(forcedTier){if(!floorShop)return;const s=floorShop,r=rooms[s.room],v=Math.random(),tier=forcedTier??(v<.7?0:v<.94?1:2),cfg=tiers[tier];s.tier=tier;s.hostile=false;s.stock=[];s.doors=[];s.keepers=[];
-  const cells=[];for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++){if(map[y][x]!==FLOOR)continue;if(corridorAdj(x,y))s.doors.push({x,y});else cells.push({x,y});}
+  s.doors=entrances(s.room);const doorKeys=new Set(s.doors.map(c=>c.x+','+c.y));
+  // Keep the outside corridor intact and close excess room-side contacts.
+  const excess=[];for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)if(map[y][x]===FLOOR&&corridorAdj(x,y)&&!doorKeys.has(x+','+y))excess.push({x,y});
+  for(const c of excess)map[c.y][c.x]=WALL;
+  // Two sealed edges can leave an unused corner tile isolated inside the wall.
+  for(const x of [r.x,r.x+r.w-1])for(const y of [r.y,r.y+r.h-1])if(map[y][x]===FLOOR&&!doorKeys.has(x+','+y)&&![[1,0],[-1,0],[0,1],[0,-1]].some(([dx,dy])=>inb(x+dx,y+dy)&&map[y+dy][x+dx]===FLOOR))map[y][x]=WALL;
+  const cells=[];for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)if(map[y][x]===FLOOR&&!doorKeys.has(x+','+y))cells.push({x,y});
   // Each opening has its own attendant. Stand beside it while no bill is due.
-  const used=new Set();for(const door of s.doors){const home=cells.filter(c=>!used.has(c.x+','+c.y)&&geomOK(door.x,door.y,c.x-door.x,c.y-door.y)&&distance(c,door)===1).sort((a,b)=>Math.abs(a.x-door.x)+Math.abs(a.y-door.y)-Math.abs(b.x-door.x)-Math.abs(b.y-door.y))[0]||door;used.add(home.x+','+home.y);s.keepers.push({x:home.x,y:home.y,vx:home.x,vy:home.y,hp:cfg.hp,maxhp:cfg.hp,face:[Math.sign(r.cx-home.x),Math.sign(r.cy-home.y)],home:{...home},door:{...door},isShopkeeper:true});}
+  // Match standby cells so one attendant cannot take another's only free spot.
+  const homes=[],occupied=new Map(),options=s.doors.map(door=>cells.filter(c=>distance(c,door)===1&&geomOK(door.x,door.y,c.x-door.x,c.y-door.y)).sort((a,b)=>Math.abs(a.x-door.x)+Math.abs(a.y-door.y)-Math.abs(b.x-door.x)-Math.abs(b.y-door.y)));
+  const assign=(i,seen)=>{for(const c of options[i]){const key=c.x+','+c.y;if(seen.has(key))continue;seen.add(key);const owner=occupied.get(key);if(owner===undefined||assign(owner,seen)){occupied.set(key,i);homes[i]=c;return true;}}return false;};
+  for(let i=0;i<s.doors.length;i++)assign(i,new Set());
+  const used=new Set(homes.filter(Boolean).map(c=>c.x+','+c.y));for(let i=0;i<s.doors.length;i++){const door=s.doors[i],home=homes[i]||cells.filter(c=>!used.has(c.x+','+c.y)).sort((a,b)=>distance(a,door)-distance(b,door))[0]||door;used.add(home.x+','+home.y);s.keepers.push({x:home.x,y:home.y,vx:home.x,vy:home.y,hp:cfg.hp,maxhp:cfg.hp,face:[Math.sign(r.cx-home.x),Math.sign(r.cy-home.y)],home:{...home},door:{...door},isShopkeeper:true});}
   s.keeper=s.keepers[0]||null;
   cells.sort((a,b)=>Math.abs(a.y-r.cy)-Math.abs(b.y-r.cy)||a.x-b.x);const goods=cells.filter(c=>!used.has(c.x+','+c.y));
   for(const it of stock(tier)){const c=goods.shift();if(!c)break;tag(it);floorItems.push({...c,item:it});}
@@ -64,5 +85,5 @@
   document.getElementById('shopActions')?.addEventListener('click',ev=>{const b=ev.target.closest('[data-shop]');if(!b)return;const action=b.dataset.shop;if(action==='pay')pay();else if(action==='sell')sell(+b.dataset.id);else if(action==='steal'){steal('代金を払わず持ち出そうとした！');render();}else{close();render();}});
   document.addEventListener('keydown',ev=>{if(!state.open)return;ev.stopImmediatePropagation();if(ev.key==='Escape'){ev.preventDefault();close();render();return;}const buttons=[...document.getElementById('shopActions').querySelectorAll('button')],i=buttons.indexOf(document.activeElement);if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Tab'].includes(ev.key)){ev.preventDefault();const n=ev.key==='ArrowUp'||ev.key==='ArrowLeft'||ev.shiftKey?-1:1;buttons[(i+n+buttons.length)%buttons.length]?.focus();}else if(['Enter',' ','z','x'].includes(ev.key)){ev.preventDefault();document.activeElement?.click();}},true);
  }
- root.ShopSystem={state,tiers,inside,keepers,nearby,at,lot,unpaid,pickup,debt,consume,rollback,split,landed,close,leaveFloor,reset,steal,setup,pay,offers,sell,talk,beforeMove,boundary,hit,tick,draw,floorArt,prices,init};
+ root.ShopSystem={state,tiers,inside,keepers,nearby,at,entrances,lot,unpaid,pickup,debt,consume,rollback,split,landed,close,leaveFloor,reset,steal,setup,pay,offers,sell,talk,beforeMove,boundary,hit,tick,draw,floorArt,prices,init};
 })(typeof window!=='undefined'?window:globalThis);
