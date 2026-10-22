@@ -45,7 +45,7 @@
   document.getElementById('allyJoin').hidden=a.following;document.getElementById('allyStay').textContent=a.following?'戻る':'そのまま';
   (a.following?document.getElementById('allyStay'):document.getElementById('allyJoin')).focus?.();render();
  }
- function gainExp(n){if(!live())return;const a=state.actor;a.exp+=n;while(a.lv<MAX_LV&&a.exp>=expNeed(a.lv)){a.exp-=expNeed(a.lv);a.lv++;a.maxhp=stats(a).maxhp;a.hp=Math.min(a.maxhp,a.hp+4);fxText(a.x,a.y,'Lv'+a.lv,'#c9a7ff');say(config(a).name+'はレベル'+a.lv+'になった！');}}
+ function gainExp(n){if(!live())return;const a=state.actor;a.exp+=n;while(a.lv<MAX_LV&&a.exp>=expNeed(a.lv)){a.exp-=expNeed(a.lv);a.lv++;a.maxhp=stats(a).maxhp;a.hp=Math.min(a.maxhp,a.hp+4);fxText(a.x,a.y,'Lv'+a.lv,'#c9a7ff');if(typeof EventVfx!=='undefined')EventVfx.play('level',a.x,a.y,{entity:a,duration:850});say(config(a).name+'はレベル'+a.lv+'になった！');}}
  function strike(a,e,issen=false){a.face=[Math.sign(e.x-a.x),Math.sign(e.y-a.y)];a.attackFace=a.face.slice();a.attackStart=now();a.walkEnd=0;const c=config(a);
   if(!issen&&!(e.st?.sleep>0)&&Math.random()>=ACC.p){fxText(e.x,e.y,'MISS','#d7c3ff');say(c.name+'の'+c.verb+'は外れた。');return;}
   const damage=Math.max(1,Math.round((stats(a).attack-eT(e).def+1)*(.875+Math.random()*.25)));e.hp-=damage;e.aware=true;e.flash=now()+130;if(e.st)e.st.sleep=0;
