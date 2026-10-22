@@ -125,6 +125,7 @@
       else if (r === 10 && inv.length) dropType(inv[0].type);
       else playerMove(0, 0);
       if(stairsOpen)chooseStairs(true);
+      if(menuOpen)uiBack(); // Inspect/leave the new ground choices before the next bot action.
       if (inv.length > MAXBAG || player.hp > player.maxhp || wh.length > MAXWH) bug++;
       if (floorItems.some((f, i) => floorItems.findIndex(o => o.x === f.x && o.y === f.y) !== i)) bug++;
       if (t % 40 === 0) draw();                                     // 描画も定期的に通して例外を拾う

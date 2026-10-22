@@ -10,7 +10,7 @@ function chooseHandLayout(value){if(!['auto','both','right','left'].includes(val
 function touchMenuBack(){if(stairsOpen){chooseStairs(false);return;}if(whOpen){closeWh();render();return;}uiBack();}
 function touchMenuKey(key){
  if(stairsOpen){if(key==='Enter')chooseStairs(stairsChoice===0);else {stairsChoice=1-stairsChoice;updateStairsChoice();}return;}
- if(menuOpen&&!$('menuInfo').hidden){if(key==='Enter')$('menuGroundAction')?.click();else $('gameMenu').scrollBy({top:key==='ArrowUp'?-120:120,behavior:'smooth'});return;}
+ if(menuOpen&&!$('menuInfo').hidden){if(groundMenuKey(key))return;if(key==='Enter')$('menuGroundAction')?.click();else $('gameMenu').scrollBy({top:key==='ArrowUp'?-120:120,behavior:'smooth'});return;}
  if(bagOpen){bagKey(key);return;}
  if(cfgOpen){const buttons=[...$('cfgList').querySelectorAll('button')],i=buttons.indexOf(document.activeElement);if(key==='Enter'){if(i>=0)buttons[i].click();else buttons[0]?.focus();}else buttons[(i+(key==='ArrowDown'?1:buttons.length-1)+buttons.length)%buttons.length]?.focus();return;}
  if(histOpen){$('histList').scrollBy({top:key==='ArrowUp'?-150:150,behavior:'smooth'});return;}
