@@ -1,0 +1,68 @@
+{
+  "registeredIdlePoses": 8,
+  "commonSourceScale": 0.4360730593607306,
+  "groundAnchor": [
+    128,
+    224
+  ],
+  "mirroring": false,
+  "sCrownMatchesLana": true,
+  "crownYByDirection": {
+    "S": 33.0,
+    "SW": 28.64,
+    "W": 27.77,
+    "NW": 32.56,
+    "N": 40.41,
+    "NE": 38.67,
+    "E": 36.05,
+    "SE": 34.31
+  },
+  "browser": [
+    {
+      "viewport": "portrait",
+      "size": [
+        390,
+        844
+      ],
+      "eightDirections": true,
+      "imagesLoaded": 16,
+      "sizeSwitch": true,
+      "guides": true,
+      "keyboard": true,
+      "autoRotation": true,
+      "horizontalOverflow": false,
+      "javascriptErrors": []
+    },
+    {
+      "viewport": "landscape",
+      "size": [
+        844,
+        390
+      ],
+      "eightDirections": true,
+      "imagesLoaded": 16,
+      "sizeSwitch": true,
+      "guides": true,
+      "keyboard": true,
+      "autoRotation": true,
+      "horizontalOverflow": false,
+      "javascriptErrors": []
+    },
+    {
+      "viewport": "small",
+      "size": [
+        320,
+        640
+      ],
+      "eightDirections": true,
+      "imagesLoaded": 16,
+      "sizeSwitch": true,
+      "guides": true,
+      "keyboard": true,
+      "autoRotation": true,
+      "horizontalOverflow": false,
+      "javascriptErrors": []
+    }
+  ],
+  "url": "http://127.0.0.1:8000/fushigi-avenius-v1/preview.html"
+}

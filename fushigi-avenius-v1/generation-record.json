@@ -1,0 +1,39 @@
+{
+  "date": "2026-10-22",
+  "status": "8-direction idle review, not gameplay integration",
+  "approvedDesign": "source-art/approved-design.png",
+  "initial": {
+    "prompt": "Produce an 8-direction IDLE GAME SPRITE SHEET of ONLY AVENIUS, the dark-haired character on RIGHT in reference 1. The blonde character is a style/proportion reference ONLY, do not draw her. Reference 2 is the EXACT camera-and-direction mannequin sheet to follow. Layout exactly 4 columns x 2 rows, EQUAL CELLS. Top row S facing viewer, SW facing lower-left (45 degrees), W strict profile facing screen LEFT (90 degrees), NW three-quarter BACK facing upper-left (135 degrees). Bottom row N straight BACK, NE three-quarter BACK facing upper-right, E strict profile facing screen RIGHT, SE three-quarter FRONT facing lower-right. Exactly these eight views matching corresponding mannequin cells, don't substitute front faces for back views. Orthographic camera elevated 26 degrees, visible top of head as in guide, fixed identical chibi proportions and physical height across all 8 views, not an eye-level character turnaround. Same idle standing pose in all views, feet gently apart, arms slightly away from body. Preserve approved AVENIUS design: big chibi head, short body/limbs SAME as guide and approved design, dark brown-black bob with STRONG vivid TEAL INNER HAIR along both sides and underside, bright saturated AZURE BLUE eyes, small white flowers on ANATOMICAL LEFT side only (viewer right in S), white puff sleeves with broad muted blue-teal stripes, fitted charcoal cuirass/corset, very SHORT white ornate skirt exposing small upper thigh gap above black armored boots, burgundy-purple cape falling behind to knee height and fastened at left shoulder, black gauntlets. She holds the same turquoise luminous single straight sword with ornate gold hilt in ANATOMICAL RIGHT hand only, arm down and sword pointing downward and outward in relaxed idle. Left hand empty, NO shield. Side/back views MUST keep anatomical right sword hand and left flower side, no horizontal flips: W view nearer hand is her LEFT empty hand, sword arm is far side; E view nearer hand is her RIGHT sword hand. In back view right sword is on viewer RIGHT, flower on viewer LEFT. Cape visible on back, no face on back views. Match warm hand-painted high quality storybook sprite style and simplified facial features in approved reference. Flat color clarity readable at 96px high. Each cell contains one complete full-body isolated sprite including entire sword with ample padding, no cropping, no overlapping between cells. All crowns and boot contact lines aligned within cells; DON'T size by sword or cape extents. TRUE TRANSPARENT background throughout, NO shadows, no grid lines, NO text or labels. Recreate character as individual complete game sprites, not a diagram or comparison scene. Eight directions are independently drawn, not mirrored.",
+    "references": [
+      "source-art/approved-design.png",
+      "source-art/direction-guide.png"
+    ],
+    "output": "source-art/idle-eight-v1.png"
+  },
+  "correction": {
+    "prompt": "Correct directional angles on the supplied AVENIUS sprite sheet (reference 1). Reference 2 is the APPROVED exact design, reference 3 is the original EIGHT DIRECTION 3D MANNEQUIN CAMERA GUIDE. Maintain the same 4 columns x2 rows, all 8 full-body character sprites, same dimensions, transparent background, no labels. Preserve approved short white skirt, dark bob with vivid teal inner hair, bright blue eyes, white flowers on her anatomical LEFT, right handed turquoise sword, burgundy cape, chibi proportions. Preserve S, W, N, E, SE sprites very closely; do not redesign. Corrections: SW (top row 2nd) must face distinctly 45 DEGREES toward screen lower-LEFT, nose/torso rotated LEFT, matching guide SW, not near frontal. NW (top row 4th) must face distinctly 45 degrees toward screen upper-LEFT, three-quarter REAR with a visible sliver of LEFT profile on screen LEFT, nose silhouette pointing LEFT, visible cheek edge/ear, LEFT sleeve and empty LEFT hand on near side; sword in RIGHT hand farther side. Not a straight-back view! NE (bottom row 2nd) must face distinctly 45 degrees toward screen upper-RIGHT, three-quarter REAR with RIGHT profile sliver on screen RIGHT, nose silhouette pointing RIGHT, visible right cheek edge/ear, RIGHT arm/sword on near side. Not a straight-back view! Show only a narrow cheek sliver on these back-diagonal views, not full face. Follow NW NE mannequin CAMERA orientation closely and rotate entire head and body together, not merely turn face. Maintain 26-degree elevated orthographic game camera, same height and pose, no camera perspective. Make N (bottom left) a clean straight BACK view with no face at all; sword on screen right, flower on screen left. Do NOT mirror designs. Leave ample transparent gutters between cells, no cut-off sword. True alpha transparent background with no glow clouds or ground shadows.",
+    "references": [
+      "source-art/idle-eight-v1.png",
+      "source-art/approved-design.png",
+      "source-art/direction-guide.png"
+    ],
+    "output": "source-art/idle-eight.png"
+  },
+  "directions": [
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE",
+    "E",
+    "SE"
+  ],
+  "mirroring": false,
+  "sha256": {
+    "source-art/approved-design.png": "802b9254696ca15cf8d3d2998f3c441b091abe6ea1a5531d47c2581605a097bc",
+    "source-art/direction-guide.png": "aa1ccf9728370df1c8e6811d1f08231888b2984c536b606e00534587667e690d",
+    "source-art/idle-eight-v1.png": "4e0c84f4d4b3c7a85c8a381e6270c68c641140fff77dc6207886766481cd9505",
+    "source-art/idle-eight.png": "c13726e4a3b6d40aadbdf7b9bb0a60a82467f5da202e0066dba8619477466f5e"
+  }
+}
