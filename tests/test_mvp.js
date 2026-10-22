@@ -436,6 +436,7 @@
       scene = 'dungeon'; floorNo = 3; newFloor(); dead = false; eqWeapon = eqShield = null; eqRings = [null, null]; inv = []; enemies = []; floorItems = [];
       player.st = newStatus(); player.maxhp = 20; player.hp = 20; atkUp = 0; bellyBonus = 0; belly = 100; floorLight = false; calls = 0; enemyTurn = stub; player.face = [1, 0]; turn = 1;   // turn=1：自然回復の周期に当たらないように
     };
+    const flat = () => { for (let dy = -3; dy <= 3; dy++) for (let dx = -4; dx <= 4; dx++) { const x = player.x + dx, y = player.y + dy; if (inb(x, y) && x > 0 && y > 0 && x < MW - 1 && y < MH - 1) map[y][x] = FLOOR; } };   // 部屋の形に依存しないよう、周囲を平らにする
     const mkE = (dx, dy, hp = 30, kind = 'goblin') => { const x = player.x + dx, y = player.y + dy; map[y][x] = FLOOR; const e = { kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: true, lost: 0, flash: 0, bump: null, fl: false, st: {} }; enemies.push(e); return e; };
     const give = (t, plus) => { const it = mkItem(t, plus); inv.push(it); return it; };
 
@@ -478,7 +479,7 @@
     setup(); player.st.confuse = 9; { let faces = new Set(); for (let i = 0; i < 40; i++) { player.face = [1, 0]; playerMove(1, 0); faces.add(player.face.join()); } ok('confusion: movement direction is random', faces.size >= 3); }
 
     // --- 巻物（部屋の敵が対象）
-    setup(); { const a = mkE(1, 0), b = mkE(-1, 1); inv = [give('confscroll'), give('sleepscroll'), give('hastescroll'), give('vacuumscroll')];
+    setup(); flat(); { const a = mkE(1, 0), b = mkE(-1, 1); inv = [give('confscroll'), give('sleepscroll'), give('hastescroll'), give('vacuumscroll')];
       useType('confscroll'); ok('confscroll: confuses every enemy in the room', a.st.confuse === 15 && b.st.confuse === 15);
       useType('sleepscroll'); ok('sleepscroll: sleeps them', a.st.sleep === 20 && b.st.sleep === 20);
       useType('hastescroll'); ok('hastescroll: speeds them up', a.st.boost === 20);
@@ -511,7 +512,7 @@
     setup(); { eqRings[0] = give('ring_boom'); const e = mkE(1, 0, 30); R(0, () => ringTick()); ok('ring_boom: explodes — enemy hurt 10, player left at 1 HP', e.hp === 20 && player.hp === 1);
       setup(); eqRings[0] = give('ring_warp'); const ox = player.x, oy = player.y; let moved = false; for (let i = 0; i < 20 && !moved; i++) { R(0, () => ringTick()); moved = player.x !== ox || player.y !== oy; } ok('ring_warp: eventually warps', moved);
       setup(); eqRings[0] = give('ring_leak'); give('potion'); R(0, () => ringTick()); ok('ring_leak: drops an unworn item at your feet', inv.filter(i => i.type === 'potion').length === 0 && floorItems.some(f => f.item.type === 'potion'));
-      setup(); eqRings[0] = give('ring_summon'); for (const r of vis) r.fill(false); const n0 = enemies.length; R(0, () => { for (let i = 0; i < 30 && enemies.length === n0; i++) ringTick(); }); ok('ring_summon: a new enemy appears', enemies.length > n0); }
+      setup(); eqRings[0] = give('ring_summon'); for (const r of vis) r.fill(false); const n0 = enemies.length; { const r0 = rooms[0]; if (!(player.x === r0.x && player.y === r0.y)) map[r0.y][r0.x] = FLOOR; for (const e of enemies.slice()) if (e.x === r0.x && e.y === r0.y) enemies.splice(enemies.indexOf(e), 1); } const n1 = enemies.length; R(0, () => { for (let i = 0; i < 30 && enemies.length === n1; i++) ringTick(); }); ok('ring_summon: a new enemy appears', enemies.length > n1); }
     setup(); { eqRings[0] = give('ring_sneak'); enemyTurn = etSave; const e = mkE(-2, 0); e.aware = false; player.face = [1, 0]; const far = { ...e }; void far; e.x = player.x + 5; e.y = player.y; map[e.y][e.x] = FLOOR; for (let x = player.x; x <= e.x; x++) map[player.y][x] = FLOOR;
       endTurn(); ok('ring_sneak: an enemy 5 tiles away does not notice you', e.aware === false); eqRings = [null, null]; endTurn(); ok('without ring_sneak, the same enemy notices you', e.aware === true); enemyTurn = stub; }
     setup(); { eqRings[0] = give('ring_moroha'); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('ring_moroha: a low roll is a critical hit (2 x 2 = 4)', 99 - e.hp === 4);
@@ -524,7 +525,7 @@
     setup(); { eqWeapon = give('steakknife', 0); const e = mkE(1, 0, 99); belly = 100; R(0, () => hitEnemy(e)); const a = 99 - e.hp; e.hp = 99; belly = 20; R(0, () => hitEnemy(e)); ok('steakknife: +3 when hungry', 99 - e.hp === a + 3); }
     setup(); { eqWeapon = give('harisen', 0); const e = mkE(1, 0, 99); map[player.y][player.x + 2] = FLOOR; R(0, () => hitEnemy(e)); ok('harisen: knocks the enemy back one tile', e.x === player.x + 2); }
     setup(); { eqWeapon = give('renkentou', 0); const e = mkE(1, 0, 99); R(0, () => hitEnemy(e)); ok('renkentou: attacks twice on a proc', 99 - e.hp === 4 * 2); }
-    setup(); { eqWeapon = give('kamaitachi', 0); player.face = [1, 0]; const a = mkE(1, 0, 99), b = mkE(1, -1, 99), c = mkE(1, 1, 99), d = mkE(-1, 0, 99); R(0, () => hitEnemy(a)); ok('kamaitachi: hits the front three tiles, not behind', a.hp < 99 && b.hp < 99 && c.hp < 99 && d.hp === 99); }
+    setup(); flat(); { eqWeapon = give('kamaitachi', 0); player.face = [1, 0]; const a = mkE(1, 0, 99), b = mkE(1, -1, 99), c = mkE(1, 1, 99), d = mkE(-1, 0, 99); R(0, () => hitEnemy(a)); ok('kamaitachi: hits the front three tiles, not behind', a.hp < 99 && b.hp < 99 && c.hp < 99 && d.hp === 99); }
     setup(); { eqWeapon = give('firesword', 0); player.face = [-1, 0]; const e = mkE(-2, 0, 99); playerAttack(); ok('firesword: fires at range when HP is full', e.hp === 91); player.hp = 5; e.hp = 99; playerAttack(); ok('firesword: no fire when HP is not full', e.hp === 99); }
     setup(); { eqWeapon = give('katana', 2); ok('katana+2: attack bonus 4+2', atkBonus() === 6); }
 

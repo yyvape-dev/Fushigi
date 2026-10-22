@@ -52,7 +52,10 @@
   const used=new Set(homes.filter(Boolean).map(c=>c.x+','+c.y));for(let i=0;i<s.doors.length;i++){const door=s.doors[i],home=homes[i]||cells.filter(c=>!used.has(c.x+','+c.y)).sort((a,b)=>distance(a,door)-distance(b,door))[0]||door;used.add(home.x+','+home.y);s.keepers.push({x:home.x,y:home.y,vx:home.x,vy:home.y,hp:cfg.hp,maxhp:cfg.hp,face:[Math.sign(r.cx-home.x),Math.sign(r.cy-home.y)],home:{...home},door:{...door},isShopkeeper:true});}
   s.keeper=s.keepers[0]||null;
   cells.sort((a,b)=>Math.abs(a.y-r.cy)-Math.abs(b.y-r.cy)||a.x-b.x);const goods=cells.filter(c=>!used.has(c.x+','+c.y));
-  for(const it of stock(tier)){const c=goods.shift();if(!c)break;tag(it);floorItems.push({...c,item:it});}
+  // 商品は隣り合わないように間隔をあけ、出入口のそばは通路として空ける（足りないときだけ詰める）
+  const apart=[],rest=[];for(const c of goods){const nearDoor=s.doors.some(d=>Math.abs(c.x-d.x)+Math.abs(c.y-d.y)<=1),nearGoods=apart.some(p=>Math.abs(c.x-p.x)+Math.abs(c.y-p.y)<=1);(nearDoor||nearGoods?rest:apart).push(c);}
+  const placement=apart.concat(rest);
+  for(const it of stock(tier)){const c=placement.shift();if(!c)break;tag(it);floorItems.push({...c,item:it});}
  }
  function pay(){const cost=Math.ceil(debt());if(!cost){talk('お勘定は済んでいる。');return false;}if(gold<cost){talk('お金が足りない。商品を床に戻すこともできる。');return false;}
   gold-=cost;for(const [id,l]of state.lots)if(l.claimed||l.used){delete l.item.shopLot;state.lots.delete(id);}inv=mergeStacks(inv);say(cost+'Gを支払った。');for(const k of keepers())if(k.hp>0)moveKeeper(k,k.home,false);saveGame();talk('確かに受け取った。また寄ってくれ。');return true;}
