@@ -403,7 +403,7 @@
       ok('rig: hurt/dead faces draw (and fall back when extra heads are missing)', !t3); delete RIG_IMG.head_hurt; }
     player.swing = 0; rigReady = false; for (const k of RIG_PARTS) delete RIG_IMG[k]; eqWeapon = eqShield = null; render(); ok('rig: falls back to flat sprite when not loaded', !rigOn()); }
   // ===== 追加：お試し装備の配布・町の素振り =====
-  { localStorage.removeItem(SAVE_KEY); gift = false; boot();
+  { localStorage.removeItem(SAVE_KEY); RunSave.clear(); gift = false; boot();
     ok('gift: 5 weapons/shields given once on a fresh boot', ['stick', 'sword', 'axe', 'woodshield', 'ironshield'].every(t => wh.some(i => i.type === t)) && gift === true);
     const n0 = wh.length; boot(); ok('gift: not given twice after save/load', wh.length === n0 || wh.length === n0);
     scene = 'town'; toTown(false); player.x = 11; player.y = 9; snapVis(); player.swing = 0; playerAttack(); ok('town: attack is blocked (no swing)', player.swing === 0); }
@@ -500,7 +500,7 @@
     // --- 腕輪
     setup(); { const r1 = give('ring_regen'), r2 = give('ring_regen'), r3 = give('ring_strength'); useType(ikey(r1)); useType(ikey(r2)); ok('rings: two can be worn at once', eqRings[0] === r1 && eqRings[1] === r2 && ringN('regen') === 2);
       const n0 = turn; useType(ikey(r3)); ok('rings: a third is refused', eqRings.every(r => r !== r3) && isEq(r3) === false && true); void n0;
-      saveGame(); eqRings = [null, null]; loadGame(); ok('rings: worn rings survive save/load', ringN('regen') === 2 && inv.filter(isEq).length === 2);
+      saveGame(true); eqRings = [null, null]; loadGame(); ok('rings: worn rings survive save/load', ringN('regen') === 2 && inv.filter(isEq).length === 2);
       useType(ikey(inv.find(isEq))); ok('rings: tapping a worn ring takes it off', ringN('regen') === 1);
       dropType(ikey(inv.find(isEq))); ok('rings: dropping a worn ring takes it off', ringN('regen') === 0); }
     setup(); { eqRings[0] = give('ring_strength'); ok('ring_strength: attack +2', atkBonus() === 2); eqRings[1] = give('ring_strength'); ok('ring_strength x2: attack +4', atkBonus() === 4);
