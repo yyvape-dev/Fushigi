@@ -471,20 +471,16 @@ const ITEMS = {
   // ===== 食べ物 =====
   gold: { name: 'ギタン', cat: '金', ch: '$', fg: '#ffd54a', w: 0, desc: 'お金。踏むと所持金に入る。死ぬと失う（預ければ残る）。', use() { return false; } },
   arrow: { name: '木の矢', cat: '矢', ch: '↑', fg: '#d8b078', w: 5, from: 1, stack: [4, 8], throwOnly: true, desc: '向いている方向へ投げる。当たると5〜8ダメージ（敵の守備力ぶん減る）。命中は約84%。' , use() { return false; } },
-  onigiri: {
-    name: 'おにぎり', cat: '食', ch: '●', fg: '#ffffff', w: 9, desc: '満腹度を50%回復する。',
-    use() {
-      if (belly >= maxBelly()) { say('おなかはいっぱいだ。'); return false; }
-      const before = belly; belly = Math.min(maxBelly(), belly + 50);
-      bellyWarn = bellyStage();
-      fxText(player.x, player.y, '満腹+' + (belly - before), '#ffe28a');
-      say(`おにぎりを食べた。満腹度+${belly - before}%`); return true;
-    },
-  },
+  // パン：満腹度を回復する。満腹のときに食べると最大満腹度が上がる（最大200%）。数値はシレン6のおにぎり系に合わせた
+  //   小さなパン=独自（桃まん相当）／パン=おにぎり／大きなパン=大きいおにぎり／カビの生えたパン=腐ったおにぎり
+  bread_small: { name: '小さなパン', cat: '食', ch: '●', fg: '#f0c890', w: 6, desc: '満腹度を25%回復する。満腹のときに食べると最大満腹度+1%。', use() { return eatBread(this, 25, 1, false); } },
+  bread: { name: 'パン', cat: '食', ch: '●', fg: '#e8b070', w: 11, desc: '満腹度を50%回復する。満腹のときに食べると最大満腹度+3%。', use() { return eatBread(this, 50, 3, false); } },
+  bread_big: { name: '大きなパン', cat: '食', ch: '●', fg: '#d89850', w: 3, from: 2, desc: '満腹度を100%回復する。満腹のときに食べると最大満腹度+4%。', use() { return eatBread(this, 100, 4, false); } },
+  bread_moldy: { name: 'カビの生えたパン', cat: '食', ch: '●', fg: '#9ab070', w: 4, desc: '満腹度を30%回復するが、5ダメージを受け、混乱・睡眠・目つぶし・ちから低下のどれかになる。', use() { return eatBread(this, 30, 0, true); } },
 };
 
 // 床・持ち物の絵はカテゴリで1つに固定する（のちの識別＝未鑑定の仕組みで、見た目から中身が分からないように）。
-//   草・種・巻物・腕輪・杖・剣・盾：assets/icon_<カテゴリ>.png ／ 回復薬・おにぎりは中身が最初から分かるので個別の絵。
+//   草・種・巻物・腕輪・杖・剣・盾：assets/icon_<カテゴリ>.png ／ 回復薬・パンは中身が最初から分かるので個別の絵。
 //   手持ちの絵（主人公が持つ剣・盾）だけは種類ごとに assets/<キー>.png（装備したときだけ見た目が変わる）
 // =====================================================================
 //  識別：草・種・巻物・腕輪・杖は、ダンジョンの中では仮の名前で出る（潜るたびに入れ替わる）。使う・装備すると、その種類が分かる
@@ -668,6 +664,28 @@ function checkDeath(msg) {
   }
   player.hp = 0; dead = true; deadAt = now(); say(msg); RunSave.save(); return true;   // 力尽きた時点で記録（再読み込みで取り消せない）
 }
+const MAXBELLY_CAP = 200;                                        // 最大満腹度の上限（シレン6と同じ）
+function eatBread(def, fill, grow, moldy) {                       // パンを食べる。食べたら true
+  const max = maxBelly(), full = belly >= max;
+  if (full && !grow && !moldy) { say('おなかはいっぱいだ。'); return false; }
+  let msg = `${def.name}を食べた。`;
+  if (full && grow) {
+    const add = Math.max(0, Math.min(grow, MAXBELLY_CAP - max)); bellyBonus += add; belly = maxBelly();
+    msg += add ? `最大満腹度が${add}%上がった！（${maxBelly()}%）` : '満腹度はもう上がらない。';
+    fxText(player.x, player.y, add ? '最大+' + add : '満腹', '#ffe28a');
+  } else {
+    const before = belly; belly = Math.min(max, belly + fill);
+    msg += `満腹度+${belly - before}%`; fxText(player.x, player.y, '満腹+' + (belly - before), '#ffe28a');
+  }
+  bellyWarn = bellyStage(); say(msg);
+  if (moldy) {
+    say('うっ…カビの味がする。');
+    if (hurtPlayer(5, `カビの生えたパンにあたって力尽きた…（${floorNo}階）`)) return true;
+    const k = ['confuse', 'sleep', 'blind', 'weak'][rnd(0, 3)];
+    if (addStatus(k, { confuse: 20, sleep: 5, blind: 12, weak: 40 }[k])) say({ confuse: '混乱した！', sleep: '眠ってしまった…', blind: '目の前が真っ暗だ！', weak: 'ちからが抜けた…' }[k]);
+  }
+  return true;
+}
 function hurtPlayer(n, msg) {                                   // 敵以外から受けるダメージ（草・爆風）。無敵なら無効
   if (player.st.invinc > 0) { fxText(player.x, player.y, '0', '#9ad8ff'); return false; }
   player.hp -= n; player.flash = now() + 130; hurtT = now(); fxText(player.x, player.y, '-' + n, '#ffb347'); vfxShake(3, 160);
@@ -719,6 +737,17 @@ function ringTick() {
   }
 }
 
+// 時間で敵が湧く（シレン6も一定ターンごとに湧く。風来街道で30ターンごと）。見えていない部屋の床に1体、敵が多すぎるときは湧かない
+const SPAWN = { every: 30, cap: 16 };
+function spawnTick() {
+  if (scene !== 'dungeon' || !floorPlan || turn - (floorPlan.t0 || 0) <= 0 || (turn - (floorPlan.t0 || 0)) % SPAWN.every) return;
+  if (enemies.filter(e => !ENEMIES[e.kind]?.security).length >= SPAWN.cap) return;
+  const pool = rooms.filter((r, i) => !r.mh && !(floorShop && floorShop.room === i));
+  for (let tries = 0; tries < 20 && pool.length; tries++) {
+    const R = pool[rnd(0, pool.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
+    if (map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x, y) && !ShopSystem.at(x, y) && !vis[y][x] && Math.max(Math.abs(x - player.x), Math.abs(y - player.y)) > 4) { spawnEnemy(x, y, false); return; }
+  }
+}
 function rollEnemy(f) {
   const ks = Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= f && f <= (ENEMIES[k].to || 99));
   let r = Math.random() * ks.reduce((a, k) => a + ENEMIES[k].w, 0);
@@ -756,16 +785,22 @@ const ART = {
     '................', '................', '......kkkk......', '......knnk......', '......kwwk......', '......kwwk......',
     '.....kwppwk.....', '....kwppppwk....', '...kwppPppppk...', '..kwppPpppppwk..', '..kppppppppppk..', '..kppppppppppk..',
     '...kppppppppk...', '....kkppppkk....', '.....kkkkkk.....', '................'],
-  onigiri: [
-    '................', '................', '.......kk.......', '......kwwk......', '.....kwwwwk.....', '....kwwwwwwk....',
-    '...kwwwwwwwwk...', '..kwwwwwwwwwwk..', '..kwwwwwwwwwwk..', '.kwwwwwwwwwwwwk.', '.kwwwwwwwwwwwwk.', '.kwwGGGGGGGGwwk.',
-    '.kwwGGGGGGGGwwk.', '.kyyGGGGGGGGyyk.', '..kkkkkkkkkkkk..', '................'],
+  bread: [
+    '................', '................', '................', '.....kkkkkk.....', '...kkwwwwwwkk...', '..kwwyywwyywwk..',
+    '.kwwwwwwwwwwwwk.', '.kwyywwyywwyywk.', '.kwwwwwwwwwwwwk.', '.kwwwwwwwwwwwwk.', '.kyyyyyyyyyyyyk.', '..kyyyyyyyyyyk..',
+    '...kkkkkkkkkk...', '................', '................', '................'],
+  bread_small: [
+    '................', '................', '................', '................', '................', '......kkkk......',
+    '.....kwwwwk.....', '....kwyywywk....', '....kwwwwwwk....', '....kyyyyyyk....', '.....kkkkkk.....', '................',
+    '................', '................', '................', '................'],
 };
 const PAL = { k: '#14141e', h: '#d6a85a', H: '#a77a35', s: '#f1c9a0', r: '#c8372d', R: '#8f2620', b: '#6b4423',
   g: '#4bb25a', e: '#ff3b3b', w: '#ffffff', n: '#9a6a3a', p: '#ff5fd0', P: '#ffb0ea', G: '#1f3b2c', y: '#cfd3e6' };
 // ITEMSの各キーにドット絵があれば登録（無ければ文字表示にフォールバック）
 for (const k of Object.keys(ENEMIES)) DEFAULT[k] = pixelArt(ART.goblin, { ...PAL, g: ENEMIES[k].col });   // 敵の仮絵：ゴブリンの色違い
-for (const k of ['player', 'potion', 'onigiri']) DEFAULT[k] = pixelArt(ART[k], k === 'potion' ? { ...PAL, w: '#cfe9ff' } : PAL);
+for (const k of ['player', 'potion']) DEFAULT[k] = pixelArt(ART[k], k === 'potion' ? { ...PAL, w: '#cfe9ff' } : PAL);
+// パンの仮絵（外部AIの絵 assets/<キー>.png を置けば自動で差し替わる）。小さなパンは縮めて描く
+for (const [k, pal] of [['bread', { w: '#e8b070', y: '#b8783a' }], ['bread_small', { w: '#f0c890', y: '#c08848' }], ['bread_big', { w: '#d89850', y: '#a86a30' }], ['bread_moldy', { w: '#b0a070', y: '#6f8a4a', G: '#4e7a3a' }]]) DEFAULT[k] = pixelArt(k === 'bread_small' ? ART.bread_small : ART.bread, { ...PAL, ...pal });
 
 // --- 床・壁など（手続き生成。位置ごとにバリエーション）
 for (let v = 0; v < 4; v++) {
@@ -960,7 +995,8 @@ function mergeStacks(list) {                                     // 矢などの
 }
 const invCount = type => ITEMS[type].stack ? inv.filter(i => i.type === type).reduce((a, i) => a + i.plus, 0) : inv.filter(i => i.type === type).length;
 const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '');
-const decItem = t => { const [ty, pl] = String(t).split(':'); return ITEMS[ty] ? mkItem(ty, pl === undefined ? undefined : (+pl | 0)) : null; };
+const RENAMED = { onigiri: 'bread' };                            // 名前を変えたアイテム（古いセーブの読み替え）
+const decItem = t => { let [ty, pl] = String(t).split(':'); ty = RENAMED[ty] || ty; return ITEMS[ty] ? mkItem(ty, pl === undefined ? undefined : (+pl | 0)) : null; };
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
@@ -1016,7 +1052,7 @@ let floorPlan = null, floorShop = null;
 function genMap() {
   MW = DW; MH = DH;
   const seed = (Math.random() * 4294967296) >>> 0;
-  floorPlan = DungeonGenerator.generate(DW, DH, seed, floorNo);
+  floorPlan = DungeonGenerator.generate(DW, DH, seed, floorNo); floorPlan.t0 = turn;   // t0：この階に来たターン（敵の湧きの起点。冒険の保存にも入る）
   map = floorPlan.map; rooms = floorPlan.rooms;
 }
 // 町：固定マップ（倉庫の建物と、ダンジョンの入口）
@@ -1078,7 +1114,7 @@ function newFloor() {
   placeDungeonShop(far);
   const enemyRooms=rooms.slice(1).filter(r=>r.role!=='shop'), itemRooms=rooms.filter(r=>r.role!=='shop');
   const scale = Math.max(1, rooms.length / 7);                  // 部屋が多い広い階ほど、敵・アイテム・罠も増やす（部屋7つを基準）
-  const n = Math.min(14, Math.round((3 + Math.min(floorNo, 7)) * scale));   // 最大14体
+  const n = Math.min(10, Math.round((3 + Math.floor(floorNo / 3)) * scale));   // 最初の敵：1階3体〜12階7体（広い階は増える。最大10体）。あとは時間で湧く（spawnTick）
   for (let i = 0, tries=0; i < n && tries<200; tries++) {
     const r = enemyRooms[rnd(0, enemyRooms.length - 1)];
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
@@ -1219,7 +1255,7 @@ function afterDeath() {                                         // 死亡：持�
 function boot() {
   player = { x: 0, y: 0, vx: 0, vy: 0, hp: BASE_HP, maxhp: BASE_HP, lv: 1, exp: 0, face: [0, 1], bump: null, flash: 0, fl: false, st: newStatus() };
   dead = false; floorNo = 1; turn = 0;
-  if (!loadGame()) { wh = [mkItem('potion'), mkItem('potion'), mkItem('potion'), mkItem('onigiri'), mkItem('onigiri')]; inv = []; quick = 'potion'; clears = 0; deaths = 0; }
+  if (!loadGame()) { wh = [mkItem('potion'), mkItem('potion'), mkItem('potion'), mkItem('bread'), mkItem('bread')]; inv = []; quick = 'potion'; clears = 0; deaths = 0; }
   if (!shopStock.length) rollShop();
   const giftMsg = !gift;
   if (!gift) { for (const t of ['stick', 'sword', 'axe', 'woodshield', 'ironshield']) wh.push(mkItem(t, 0)); gift = true; }   // 動作確認用：武器と盾を倉庫へ（1回だけ）
@@ -1391,7 +1427,7 @@ function turnCore() {
   const free = scene === 'dungeon' && player.st.haste > 0 && (hasteFlip = !hasteFlip);
   if (scene === 'dungeon' && !free) { ShopSecurity.tick(); ShopSystem.tick(); if (!dead) AllySystem.tick(); if (!dead) enemyTurn(); }
   if (!free) turn++;
-  if (!dead && scene === 'dungeon' && !free) { hungerTick(); ringTick(); }
+  if (!dead && scene === 'dungeon' && !free) { hungerTick(); ringTick(); spawnTick(); }
   if (!dead && !free && turn % Math.max(2, Math.round(10 / (1 + ringN('regen')))) === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;
   if (!dead) tickStatus();
 }
@@ -1583,6 +1619,9 @@ function clearShot(e) {                                          // 敵→プレ
   return true;
 }
 // 敵1体の攻撃（近接も遠距離も共通）。結果 {dead, hit, dmg}
+// 敵の攻撃力の調整（バランス計測 tests/tools/balance_sim.js で決めた値。深い階ほど少し弱める）
+const ENEMY_BAL = { atk: 1, deepFrom: 7, deepAtk: 1 };
+const enemyAtkK = () => ENEMY_BAL.atk * (floorNo >= ENEMY_BAL.deepFrom ? ENEMY_BAL.deepAtk : 1);
 function enemyStrike(e, T, range, verb) {
   const [lo, hi] = range;
   e.monsterFace = [Math.sign(player.x-e.x), Math.sign(player.y-e.y)];
@@ -1591,7 +1630,7 @@ function enemyStrike(e, T, range, verb) {
   if (e.x !== player.x) e.fl = player.x < e.x;
   if (Math.random() >= ACC.e) { say(`${T.name}の${verb}！ はずれた。`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
   if (sSeal() === 'dodge' && Math.random() < 0.25) { say(`${T.name}の${verb}！ ひらりとかわした！`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
-  let dmg = Math.max(1, rnd(lo, hi) - defBonus()), crit = false;
+  let dmg = Math.max(1, Math.round(rnd(lo, hi) * enemyAtkK()) - defBonus()), crit = false;
   if (Math.random() < 0.1 * ringN('moroha') + 0.15 * ringN('tsukon')) { crit = true; if (sSeal() !== 'critguard') dmg *= 2; }
   if (sSeal() === 'fullhalf' && player.hp >= player.maxhp) dmg = Math.max(1, Math.ceil(dmg / 2));
   if (player.st.invinc > 0) dmg = 0;
@@ -1707,9 +1746,9 @@ function priceOf(it) {                                          // 売値（買�
   return Math.max(10, Math.round(p / 10) * 10);
 }
 const sellPrice = it => Math.max(5, Math.floor(priceOf(it) / 2 / 5) * 5);
-function rollShop(maxFloor = 5) {                                           // いつもの品（回復薬・おにぎり・矢）＋ランダム8個
-  shopStock = [mkItem('potion'), mkItem('onigiri'), mkItem('arrow')];
-  const ks = Object.keys(ITEMS).filter(k => ITEMS[k].w > 0 && (ITEMS[k].from || 1) <= maxFloor && !['potion', 'onigiri', 'arrow', 'weed'].includes(k));
+function rollShop(maxFloor = 5) {                                           // いつもの品（回復薬・パン・矢）＋ランダム8個
+  shopStock = [mkItem('potion'), mkItem('bread'), mkItem('arrow')];
+  const ks = Object.keys(ITEMS).filter(k => ITEMS[k].w > 0 && (ITEMS[k].from || 1) <= maxFloor && !['potion', 'bread', 'arrow', 'weed'].includes(k));
   const tot = ks.reduce((a, k) => a + ITEMS[k].w, 0);
   for (let i = 0; i < 8; i++) { let r = Math.random() * tot, k = ks[0]; for (const c of ks) { r -= ITEMS[c].w; if (r < 0) { k = c; break; } } shopStock.push(mkItem(k)); }
 }

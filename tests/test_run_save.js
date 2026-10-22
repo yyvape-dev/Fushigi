@@ -6,7 +6,7 @@
 
  // --- 1. 出発して3階へ。持ち物・装備・識別・仲間・店の未精算を作ってから保存し、再起動で戻るか
  fresh();
- wh=[];inv=[mkItem('sword',2),mkItem('woodshield',1),mkItem('onigiri')];gold=300;saveGame();
+ wh=[];inv=[mkItem('sword',2),mkItem('woodshield',1),mkItem('bread')];gold=300;saveGame();
  dungeonId='second';enterDungeon();
  ok(scene==='dungeon'&&floorNo===1,'entered the dungeon');
  ok(RunSave.has(),'a floor entry writes the run save');
@@ -48,7 +48,7 @@
  ok(ra.issenUsed instanceof WeakSet,'ally per-enemy record is rebuilt');
  ok(!player.walkEnd&&!player.action,'no half-finished animation after resume');
  let err=null;try{for(let i=0;i<5;i++)endTurn();render();}catch(e){err=e;}ok(!err,'game keeps running after resume: '+(err&&err.stack));
- ok(mkItem('onigiri').id>Math.max(...inv.map(it=>it.id)),'new item ids do not collide with restored ones');
+ ok(mkItem('bread').id>Math.max(...inv.map(it=>it.id)),'new item ids do not collide with restored ones');
 
  // --- 2. 抜け道：冒険保存が無くなっても、道中で拾った物は町へ持ち帰れない
  RunSave.clear();boot();
@@ -68,9 +68,9 @@
  clearDungeon();ok(!RunSave.has()&&scene==='town','clearing the dungeon removes the run save');
 
  // --- 5. 壊れた保存は捨てて町から
- fresh();inv=[mkItem('onigiri')];saveGame();enterDungeon();
+ fresh();inv=[mkItem('bread')];saveGame();enterDungeon();
  localStorage.setItem(RunSave.KEY,'{"v":1,"state":{"root":{"$r":0},"table":[{"t":"o","v":{}}]}}');
- boot();ok(scene==='town'&&!RunSave.has()&&types(inv)==='onigiri:','a broken run save falls back to town with the departure bag');
+ boot();ok(scene==='town'&&!RunSave.has()&&types(inv)==='bread:','a broken run save falls back to town with the departure bag');
 
  // --- 6. 保存の大きさ（localStorage の上限5MBに対して十分小さいこと）
  fresh();enterDungeon();for(let i=0;i<3;i++){floorNo++;newFloor();}

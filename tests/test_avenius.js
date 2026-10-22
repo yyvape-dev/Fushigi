@@ -14,7 +14,7 @@
   a=setup();e=enemy(5,10);e.mh=true;AllySystem.tick();verify(e.hp===1000&&!a.issenUsed.has(e),'unawakened monster room is not attacked');
   a=setup();e=enemy(5,10);for(const [dx,dy]of DIRS8)map[e.y+dy][e.x+dx]=WALL;AllySystem.tick();verify(e.hp===1000&&!a.issenUsed.has(e),'no landing tile means no use consumed');
   a=setup();e=enemy(5,10);player.x=6;player.y=10;AllySystem.tick();verify(e.hp<1000&&!(a.dash.to.x===player.x&&a.dash.to.y===player.y),'landing never overlaps hero');
-  a=setup();e=enemy(5,10);floorItems=[{x:6,y:10,item:mkItem('onigiri')}];AllySystem.tick();verify(e.hp<1000&&!(a.dash.to.x===6&&a.dash.to.y===10),'landing avoids floor items');
+  a=setup();e=enemy(5,10);floorItems=[{x:6,y:10,item:mkItem('bread')}];AllySystem.tick();verify(e.hp<1000&&!(a.dash.to.x===6&&a.dash.to.y===10),'landing avoids floor items');
   a=setup();e=enemy(5,10);traps=[{x:6,y:10,kind:'mine',seen:false}];AllySystem.tick();verify(e.hp<1000&&!(a.dash.to.x===6&&a.dash.to.y===10),'landing avoids hidden traps');
   a=setup();e=enemy(5,10);Math.random=()=>.999;AllySystem.tick();verify(e.hp<1000&&a.issenUsed.has(e),'flash guaranteed hit even when normal accuracy fails');
   a=setup();e=enemy(5,10);e.st.sleep=3;AllySystem.tick();verify(e.st.sleep===0&&e.aware,'flash wakes surviving enemy');

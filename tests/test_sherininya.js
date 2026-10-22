@@ -12,7 +12,7 @@
   a=setup();near=enemy(8,10);far=enemy(7,10);map[10][7]=WALL;AllySystem.tick();verify(near.hp<1000&&far.hp===1000&&a.magicBeam.cells.length===1,'wall in second tile stops after first hit');
   a=setup();far=enemy(7,8);map[9][9]=WALL;map[10][8]=WALL;AllySystem.tick();verify(far.hp===1000,'closed diagonal corners block magic');
   a=setup();player.x=8;player.y=10;far=enemy(7,10);const hp=player.hp;AllySystem.tick();verify(far.hp<1000&&player.hp===hp,'passes through hero and never harms hero');verify(a.hp===24,'caster unharmed by own spell');
-  a=setup();far=enemy(7,10);floorItems=[{x:8,y:10,item:mkItem('onigiri')}];traps=[{x:8,y:10,kind:'mine',seen:false}];AllySystem.tick();verify(far.hp<1000&&floorItems.length===1&&traps.length===1,'items and traps neither block nor activate');
+  a=setup();far=enemy(7,10);floorItems=[{x:8,y:10,item:mkItem('bread')}];traps=[{x:8,y:10,kind:'mine',seen:false}];AllySystem.tick();verify(far.hp<1000&&floorItems.length===1&&traps.length===1,'items and traps neither block nor activate');
   a=setup();near=enemy(8,10);far=enemy(7,10);Math.random=()=>.999;AllySystem.tick();verify(near.hp===1000&&far.hp===1000&&a.magicBeam,'normal accuracy applies to each enemy');
   a=setup();near=enemy(8,10);far=enemy(7,10);let randomCalls=0;Math.random=()=>++randomCalls===1?.999:.1;AllySystem.tick();verify(near.hp===1000&&far.hp<1000,'a miss does not block penetration');
   a=setup();near=enemy(8,10,1);far=enemy(7,10,1);Math.random=()=>.9;AllySystem.tick();verify(enemies.length===0,'front kill does not block second kill');verify(player.exp>0&&a.exp===player.exp,'experience granted to both once per kill');

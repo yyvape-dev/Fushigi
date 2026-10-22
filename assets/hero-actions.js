@@ -4,7 +4,7 @@
  const loadImage=path=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error(path));im.src=path;});
  state.load=async function(redraw){try{const r=await fetch('fushigi-actions-v1/actions.json');if(!r.ok)throw Error('actions.json '+r.status);state.meta=await r.json();await Promise.all([
   ...Object.entries(state.meta.directions).flatMap(([d,row])=>Object.entries(row.actions).map(async([action,spec])=>state.images[d+':'+action]=await loadImage(spec.path))),
-  ...Object.entries({food:'onigiri',herb:'icon_herb',potion:'potion',scroll:'icon_scroll',staff:'icon_staff'}).map(async([key,name])=>state.props[key]=await loadImage('assets/'+name+'.png'))
+  ...Object.entries({food:'bread',herb:'icon_herb',potion:'potion',scroll:'icon_scroll',staff:'icon_staff'}).map(async([key,name])=>state.props[key]=await loadImage('assets/'+name+'.png').catch(e=>{if(key==='food')return loadImage('assets/onigiri.png');throw e;}))   // パンの絵が届くまでは、おにぎりの絵で食べる動作を出す
  ]);state.ready=true;redraw();}catch(e){state.error=e.message;console.error('動作画像読込失敗',e);}};
  state.frameAt=function(row,elapsed,loop=false){let t=loop?elapsed%row.durationMs:Math.min(elapsed,row.durationMs-1),sum=0;for(let i=0;i<row.frameMs.length;i++){sum+=row.frameMs[i];if(t<sum)return i;}return row.frameMs.length-1;};
  state.draw=function(g,id,x,y,height,action,elapsed,options={}){

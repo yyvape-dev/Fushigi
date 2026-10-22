@@ -250,14 +250,27 @@
   deadAt = -1e9; playerMove(0, 0);
   ok('starvation death returns to town', scene === 'town' && !dead && inv.length === 0);
   scene = 'town'; enterDungeon(); enemies = [];
-  inv = [mkItem('onigiri')]; belly = 100; const tt = turn; useType('onigiri');
-  ok('onigiri at full: not consumed, no turn', inv.length === 1 && turn === tt && belly === 100);
-  belly = 30; useType('onigiri');
-  ok('onigiri: +50%, consumed', belly === 80 && inv.length === 0);
-  belly = 10; bellyWarn = 10; inv = [mkItem('onigiri')]; useType('onigiri');
+  inv = [mkItem('bread')]; bellyBonus = 0; belly = 100; useType('bread');
+  ok('bread at full: max belly +3, belly refilled', inv.length === 0 && maxBelly() === 103 && belly === 103);
+  bellyBonus = 0; belly = 30; inv = [mkItem('bread')]; useType('bread');
+  ok('bread: +50%, consumed', belly === 80 && inv.length === 0);
+  belly = 30; inv = [mkItem('bread_small')]; useType('bread_small'); ok('small bread: +25%', belly === 55);
+  belly = 10; inv = [mkItem('bread_big')]; useType('bread_big'); ok('big bread: +100% (capped at max)', belly === 100);
+  bellyBonus = 0; belly = 100; inv = [mkItem('bread_big')]; useType('bread_big'); ok('big bread at full: max belly +4', maxBelly() === 104);
+  bellyBonus = 98; belly = maxBelly(); inv = [mkItem('bread_big')]; useType('bread_big'); ok('max belly stops at 200', maxBelly() === 200);
+  bellyBonus = 0; belly = 30; player.hp = player.maxhp = 30; player.st = newStatus(); inv = [mkItem('bread_moldy')]; { const rs = Math.random; Math.random = () => 0; try { useType('bread_moldy'); } finally { Math.random = rs; } }
+  ok('moldy bread: +30%, 5 damage, a bad status', belly === 60 && player.hp === 25 && ['confuse', 'sleep', 'blind', 'weak'].some(k => player.st[k] > 0));
+  player.st = newStatus(); bellyBonus = 0; belly = 100; inv = [mkItem('bread_small')]; const tt = turn; useType('bread_small'); ok('small bread at full: max belly +1', maxBelly() === 101 && inv.length === 0); bellyBonus = 0; belly = 100; void tt;
+  belly = 10; bellyWarn = 10; inv = [mkItem('bread')]; useType('bread');
   ok('eating resets warning stage', belly === 60 && bellyWarn === 99);
-  let oc = 0; for (let i = 0; i < 3000; i++) if (rollType() === 'onigiri') oc++;
-  ok('onigiri appears on floors (' + oc + '/3000)', oc > 200 && oc < 1700);
+  ok('old saves: onigiri becomes bread', decItem('onigiri').type === 'bread' && decItem('onigiri:0').type === 'bread');
+  { const e0 = enemies.slice(), t0 = turn; floorPlan.t0 = turn; enemies = []; for (let i = 0; i < SPAWN.every; i++) { turn++; spawnTick(); }
+    ok('enemies spawn over time (one per ' + SPAWN.every + ' turns, out of sight)', enemies.length === 1 && !vis[enemies[0].y][enemies[0].x]);
+    enemies = Array.from({ length: SPAWN.cap }, () => ({ kind: 'goblin', x: -9, y: -9 })); turn += SPAWN.every; spawnTick(); ok('spawning stops at the cap', enemies.length === SPAWN.cap);
+    enemies = e0; turn = t0; }
+  let oc = 0; for (let i = 0; i < 3000; i++) if (rollType() === 'bread') oc++;
+  ok('bread appears on floors (' + oc + '/3000)', oc > 100 && oc < 1700);
+  let food = 0; { const f0 = floorNo; floorNo = 5; for (let i = 0; i < 3000; i++) if (ITEMS[rollType()].cat === '食') food++; floorNo = f0; } ok('food is about 1 in 8 items (' + food + '/3000)', food > 250 && food < 550);
   scene = 'town'; belly = 50; const tb = turn; playerMove(0, 0); ok('no hunger tick in town', belly === 50);
   scene = 'dungeon'; belly = 77; refreshUI(); ok('HUD shows belly in dungeon', (cache.get('belly') || '').includes('77'));
   hungerPref = 1; saveGame(); hungerPref = 0; loadGame(); ok('hungerPref round trip', hungerPref === 1); hungerPref = 0;
@@ -317,7 +330,7 @@
   toTown(false);
   // ===== 追加：3階建て =====
   DUNGEONS.first.floors = 3; logPos = 1;
-  scene = 'town'; dead = false; wh = []; inv = [mkItem('potion'), mkItem('onigiri')]; toTown(false); player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx();
+  scene = 'town'; dead = false; wh = []; inv = [mkItem('potion'), mkItem('bread')]; toTown(false); player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx();
   ok('3F: enter dungeon on floor 1', scene === 'dungeon' && floorNo === 1);
   const stepStairs = () => {
     enemies = []; let st = null; for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (map[y][x] === STAIRS) st = [x, y];
@@ -571,7 +584,7 @@
     // --- 共通アイコン（識別のため、カテゴリで1つに固定）
     { const herbs = Object.keys(ITEMS).filter(k => ITEMS[k].cat === '草');
       ok('icons: every herb/seed/scroll/ring/staff/weapon/shield has a shared icon', Object.keys(ITEMS).filter(k => ITEMS[k].cat !== '薬' && ITEMS[k].cat !== '食').every(k => ITEMS[k].icon === ICON_BY_CAT[ITEMS[k].cat]));
-      ok('icons: potion and onigiri keep their own art', !ITEMS.potion.icon && !ITEMS.onigiri.icon && iconOf('potion') === 'potion' && iconOf('onigiri') === 'onigiri');
+      ok('icons: potion and bread keep their own art', !ITEMS.potion.icon && !ITEMS.bread.icon && iconOf('potion') === 'potion' && iconOf('bread') === 'bread');
       ok('icons: no shared art yet -> falls back to the item itself (placeholder)', iconOf('herb') === 'herb');
       const was = { h: SPRITES.icon_herb, s: SPRITES.icon_sword };
       const a = mkCanvas(64, 64); a.getContext('2d').fillStyle = '#0a0'; a.getContext('2d').fillRect(8, 8, 48, 48); SPRITES.icon_herb = a; SPRITES.icon_sword = a;
@@ -708,7 +721,7 @@
     // --- 識別
     ok('alias pools are big enough for every unidentified item (no collisions)', (() => { for (const [cat, pool] of Object.entries(ALIAS_POOL)) { const cats = cat === '草' ? ['草', '種'] : [cat]; const n = Object.keys(ITEMS).filter(k => cats.includes(ITEMS[k].cat) && ITEMS[k].unid).length; if (pool.words.length < n || new Set(pool.words).size !== pool.words.length) return false; } return true; })());
     setup(); ok('alias: every herb/seed/scroll/ring/staff has a unique alias with its theme suffix', (() => { const names = Object.keys(ITEMS).filter(k => ITEMS[k].unid).map(k => alias[k]); return names.every(Boolean) && new Set(names).size === names.length && ITEMS.herb.unid && /草$/.test(alias.herb) && /の巻物$/.test(alias.scroll) && /の腕輪$/.test(alias.ring_regen) && /の杖$/.test(alias.firestaff) && /の種$/.test(alias.bellyup); })());
-    ok('alias: weapons, shields, potions, onigiri and weeds are never hidden', ['sword', 'ironshield', 'potion', 'onigiri', 'weed'].every(k => !ITEMS[k].unid));
+    ok('alias: weapons, shields, potions, bread and weeds are never hidden', ['sword', 'ironshield', 'potion', 'bread', 'weed'].every(k => !ITEMS[k].unid));
     setup(); { const a1 = JSON.stringify(alias); let diff = false; for (let i = 0; i < 5 && !diff; i++) { shuffleAliases(); diff = JSON.stringify(alias) !== a1; } ok('alias: reshuffled on every dive', diff); }
     setup(); { const it = mkItem('herb'); ok('name: unknown herb shows its alias in the dungeon', itemName(it) === alias.herb && itemName(it) !== '薬草'); scene = 'town'; ok('name: true name in town', itemName(it) === ITEMS.herb.name); scene = 'dungeon'; }
     setup(); { const it = mkItem('firestaff'); ok('name: unknown staff hides its charges', /\[\?\]$/.test(itemName(it)) && !isKnown('firestaff')); identify('firestaff'); ok('name: identified staff shows charges', /\[\d+\]$/.test(itemName(it))); }
@@ -742,14 +755,14 @@
     setup(); { gold = 120; DUNGEONS.first.floors = 1; clearDungeon(); ok('clear: gold is kept', gold === 120); DUNGEONS.first.floors = 5; }
     { gold = 50; bank = 0; openWh(); bankMove(true); ok('bank: deposit all', gold === 0 && bank === 50); bankMove(false); ok('bank: withdraw all', gold === 50 && bank === 0); bankMove(false); ok('bank: empty withdraw is harmless', gold === 50 && /空/.test(whMsg)); closeWh(); }
     // --- 店
-    ok('shop: always stocks potion/onigiri/arrow + 8 random', (() => { for (let i = 0; i < 20; i++) { rollShop(); if (shopStock.length !== 11 || !['potion', 'onigiri', 'arrow'].every(k => shopStock.some(s => s.type === k))) return false; if (shopStock.some(s => s.type === 'gold' || s.type === 'weed')) return false; } return true; })());
+    ok('shop: always stocks potion/bread/arrow + 8 random', (() => { for (let i = 0; i < 20; i++) { rollShop(); if (shopStock.length !== 11 || !['potion', 'bread', 'arrow'].every(k => shopStock.some(s => s.type === k))) return false; if (shopStock.some(s => s.type === 'gold' || s.type === 'weed')) return false; } return true; })());
     ok('shop: stock changes when you come back to town', (() => { const a = JSON.stringify(shopStock.map(encItem)); let diff = false; for (let i = 0; i < 6 && !diff; i++) { toTown(true); diff = JSON.stringify(shopStock.map(encItem)) !== a; } return diff; })());
     ok('price: rarer is dearer; enhanced equipment costs more; arrows by count', (() => { const p = t => priceOf(mkItem(t, t === 'arrow' ? 5 : 0)); return p('katana') > p('woodsword') - 1 && priceOf(mkItem('sword', 3)) > priceOf(mkItem('sword', 0)) && p('arrow') === 30 && priceOf(mkItem('herb')) >= 100; })());
     ok('price: sell price is half or less, in steps of 5', (() => { const it = mkItem('herb'); return sellPrice(it) <= priceOf(it) / 2 && sellPrice(it) % 5 === 0 && sellPrice(it) > 0; })());
     { toTown(false); inv = []; gold = 1000; shopStock = [mkItem('potion'), mkItem('herb')]; openWh(); whSide = 'shop'; renderWh();
       const key = ikey(shopStock[0]), p = priceOf(shopStock[0]); shopBuy(key); ok('shop: buy takes the gold and moves the item to the bag', gold === 1000 - p && inv.length === 1 && inv[0].type === 'potion' && shopStock.length === 1);
       gold = 1; shopBuy(ikey(shopStock[0])); ok('shop: not enough gold -> nothing happens', shopStock.length === 1 && /足りない/.test(whMsg));
-      gold = 1000; inv = []; for (let i = 0; i < MAXBAG; i++) inv.push(mkItem('onigiri')); shopBuy(ikey(shopStock[0])); ok('shop: full bag -> nothing happens', shopStock.length === 1 && /いっぱい/.test(whMsg));
+      gold = 1000; inv = []; for (let i = 0; i < MAXBAG; i++) inv.push(mkItem('bread')); shopBuy(ikey(shopStock[0])); ok('shop: full bag -> nothing happens', shopStock.length === 1 && /いっぱい/.test(whMsg));
       inv = [mkItem('herb'), mkItem('sword', 1)]; eqWeapon = inv[1]; whSide = 'sell'; renderWh(); const g0 = gold; shopSell('sword:1E'); ok('shop: equipped gear cannot be sold', inv.length === 2 && gold === g0);
       shopSell('herb'); ok('shop: selling gives the sell price', inv.length === 1 && gold > g0);
       renderWh(); ok('shop: tabs render without errors (buy/sell)', (() => { try { whSide = 'shop'; renderWh(); whSide = 'sell'; renderWh(); whSide = 'bag'; renderWh(); return /所持金/.test($('whGold').textContent); } catch (e) { console.log(e); return false; } })());
