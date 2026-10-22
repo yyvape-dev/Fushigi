@@ -2,7 +2,9 @@
 
 ## ダンジョン生成の区画方式化とマップ拡大（2026-10-22）
 
-ユーザー依頼「ダンジョンの生成クオリティを上げる」。地形生成を区画方式へ置換し、マップを 40×25 → 56×32 に拡大。詳細・計測表は [DUNGEON_GENERATION.md](DUNGEON_GENERATION.md) の先頭節。変更：`assets/dungeon-generator.js`（全面置換、旧方式は退避用に残す）、`index.html`（`DW/DH`、`pathDist`、階段・敵・アイテム・罠の配置）、`tests/tools/dungeon_metrics.js`（新規。地形メトリクスとASCII一覧）。`tests/test_dungeon_modules.js` と `test_mvp.js` の到達確認は、90歩で打ち切る `distMap()` から上限なしの探索へ変更、12階の敵上限は10→14。全テストALL OK。**実機での歩き心地（広さ・歩数・敵の密度）は未確認**。次の候補：部屋の形の変化、`chain` の歩数調整、階全体のシード化。
+ユーザー依頼「ダンジョンの生成クオリティを上げる」。地形生成を区画方式へ置換し、マップを 40×25 → 56×32 に拡大。詳細・計測表は [DUNGEON_GENERATION.md](DUNGEON_GENERATION.md) の先頭節。変更：`assets/dungeon-generator.js`（全面置換、旧方式は退避用に残す）、`index.html`（`DW/DH`、`pathDist`、階段・敵・アイテム・罠の配置）、`tests/tools/dungeon_metrics.js`（新規。地形メトリクスとASCII一覧）。`tests/test_dungeon_modules.js` と `test_mvp.js` の到達確認は、90歩で打ち切る `distMap()` から上限なしの探索へ変更、12階の敵上限は10→14。全テストALL OK。**実機での歩き心地（広さ・歩数・敵の密度）は未確認**。次の候補：`chain` の歩数調整、階全体のシード化、洞窟状の部屋・大部屋。
+
+部屋の形（L字・十字、約15%）を追加済み（`feat/dungeon-room-shapes-v1`）。`rooms[].shape` を追加、外枠は不変。見た目は実機で未確認。
 
 ## 店・番兵・黒い番犬の本編統合（2026-10-22）
 

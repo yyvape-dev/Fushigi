@@ -39,9 +39,9 @@ function analyze(f) {
   const cells = new Set(f.rooms.map(r => Math.floor(r.cx / (W / 3)) + ',' + Math.floor(r.cy / (H / 3))));
   // 空白：8×8の窓で床が1マスも無い窓の割合（大きな空白＝無駄な空間）
   let emptyWin = 0, totalWin = 0; for (let y = 0; y + 8 <= H; y += 4) for (let x = 0; x + 8 <= W; x += 4) { totalWin++; let any = false; for (let yy = y; yy < y + 8 && !any; yy++) for (let xx = x; xx < x + 8; xx++) if (m[yy][xx]) { any = true; break; } if (!any) emptyWin++; }
-  return { rooms: f.rooms.length, block, floor, cover: floor / (W * H), corr, deadEnd, hugging, border, connected, maxPath, spread: cells.size, emptyWin: totalWin ? emptyWin / totalWin : 0, roomShapes: new Set(f.rooms.map(r => r.w + 'x' + r.h)).size };
+  return { rooms: f.rooms.length, block, floor, cover: floor / (W * H), corr, deadEnd, hugging, border, connected, maxPath, spread: cells.size, emptyWin: totalWin ? emptyWin / totalWin : 0, shaped: f.rooms.filter(r => r.shape && r.shape !== 'rect').length / Math.max(1, f.rooms.length), roomShapes: new Set(f.rooms.map(r => r.w + 'x' + r.h)).size };
 }
-const keys = ['rooms', 'floor', 'cover', 'corr', 'deadEnd', 'hugging', 'block', 'border', 'maxPath', 'spread', 'emptyWin'];
+const keys = ['rooms', 'floor', 'cover', 'corr', 'deadEnd', 'hugging', 'block', 'border', 'maxPath', 'spread', 'emptyWin', 'shaped'];
 const sum = Object.fromEntries(keys.map(k => [k, 0])); let notConn = 0, bad = 0; const styles = {}, mins = {}, maxs = {};
 for (let s = 1; s <= N; s++) {
   const f = G.generate(W, H, (s * 7919) >>> 0, 1 + (s % 12));
@@ -50,9 +50,9 @@ for (let s = 1; s <= N; s++) {
   if (f.map.length !== H || f.map[0].length !== W || !f.rooms.length) bad++;
   for (const k of keys) { sum[k] += a[k]; mins[k] = Math.min(mins[k] ?? 1e9, a[k]); maxs[k] = Math.max(maxs[k] ?? -1e9, a[k]); }
 }
-const fmt = (k, v) => k === 'cover' || k === 'emptyWin' ? (v * 100).toFixed(1) + '%' : v.toFixed(1);
+const fmt = (k, v) => k === 'cover' || k === 'emptyWin' || k === 'shaped' ? (v * 100).toFixed(1) + '%' : v.toFixed(1);
 console.log(`地形メトリクス ${W}x${H} / ${N}シード（平均 [最小〜最大]）`);
-const label = { rooms: '部屋数', floor: '床マス', cover: '床の占有率', corr: '通路マス', deadEnd: '通路の行き止まり', hugging: '部屋の壁に沿う通路マス', block: '通路の2×2の塊', border: '外周の床マス(0が正)', maxPath: '開始→最遠部屋の歩数', spread: '部屋のある3×3区画数(最大9)', emptyWin: '8×8の空白窓の割合' };
+const label = { rooms: '部屋数', floor: '床マス', cover: '床の占有率', corr: '通路マス', deadEnd: '通路の行き止まり', hugging: '部屋の壁に沿う通路マス', block: '通路の2×2の塊', border: '外周の床マス(0が正)', maxPath: '開始→最遠部屋の歩数', spread: '部屋のある3×3区画数(最大9)', emptyWin: '8×8の空白窓の割合', shaped: 'L字・十字の部屋の割合' };
 for (const k of keys) console.log(`  ${label[k].padEnd(22, '　')} ${fmt(k, sum[k] / N)}  [${fmt(k, mins[k])}〜${fmt(k, maxs[k])}]`);
 console.log(`  連結していない階: ${notConn} / 形が不正な階: ${bad} / 構成: ${JSON.stringify(styles)}`);
 for (let i = 0; i < ASCII; i++) {
