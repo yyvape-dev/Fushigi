@@ -1,6 +1,6 @@
 {
   "name": "アベニウス",
-  "status": "idle-review",
+  "status": "integrated-companion",
   "frameSize": [
     256,
     256
@@ -19,7 +19,10 @@
     "range": 4,
     "returnsToOrigin": true,
     "maxUsesPerEnemy": 1,
-    "status": "specified-not-implemented"
+    "status": "implemented",
+    "lineOfSight": true,
+    "guaranteedHit": true,
+    "durationMs": 360
   },
   "views": {
     "S": {
@@ -51,7 +54,22 @@
         128,
         224
       ],
-      "registeredCrownY": 33.0
+      "registeredCrownY": 33.0,
+      "anchors": {
+        "walk": [
+          160,
+          224
+        ],
+        "attack": [
+          160,
+          224
+        ],
+        "idle": [
+          128,
+          224
+        ]
+      },
+      "motion": "assets/S-motion.png"
     },
     "SW": {
       "idle": "assets/SW.png",
@@ -82,7 +100,22 @@
         128,
         224
       ],
-      "registeredCrownY": 28.639269406392685
+      "registeredCrownY": 28.639269406392685,
+      "anchors": {
+        "walk": [
+          160,
+          224
+        ],
+        "attack": [
+          160,
+          224
+        ],
+        "idle": [
+          128,
+          224
+        ]
+      },
+      "motion": "assets/SW-motion.png"
     },
     "W": {
       "idle": "assets/W.png",
@@ -113,7 +146,22 @@
         128,
         224
       ],
-      "registeredCrownY": 27.76712328767124
+      "registeredCrownY": 27.76712328767124,
+      "anchors": {
+        "walk": [
+          160,
+          224
+        ],
+        "attack": [
+          160,
+          224
+        ],
+        "idle": [
+          128,
+          224
+        ]
+      },
+      "motion": "assets/W-motion.png"
     },
     "NW": {
       "idle": "assets/NW.png",
@@ -144,7 +192,22 @@
         128,
         224
       ],
-      "registeredCrownY": 32.56392694063928
+      "registeredCrownY": 32.56392694063928,
+      "anchors": {
+        "walk": [
+          160,
+          224
+        ],
+        "attack": [
+          160,
+          224
+        ],
+        "idle": [
+          128,
+          224
+        ]
+      },
+      "motion": "assets/NW-motion.png"
     },
     "N": {
       "idle": "assets/N.png",
@@ -175,7 +238,22 @@
         128,
         224
       ],
-      "registeredCrownY": 40.41324200913243
+      "registeredCrownY": 40.41324200913243,
+      "anchors": {
+        "walk": [
+          160,
+          224
+        ],
+        "attack": [
+          160,
+          224
+        ],
+        "idle": [
+          128,
+          224
+        ]
+      },
+      "motion": "assets/N-motion.png"
     },
     "NE": {
       "idle": "assets/NE.png",
@@ -206,7 +284,22 @@
         128,
         224
       ],
-      "registeredCrownY": 38.66894977168948
+      "registeredCrownY": 38.66894977168948,
+      "anchors": {
+        "walk": [
+          160,
+          224
+        ],
+        "attack": [
+          160,
+          224
+        ],
+        "idle": [
+          128,
+          224
+        ]
+      },
+      "motion": "assets/NE-motion.png"
     },
     "E": {
       "idle": "assets/E.png",
@@ -237,7 +330,22 @@
         128,
         224
       ],
-      "registeredCrownY": 36.05251141552512
+      "registeredCrownY": 36.05251141552512,
+      "anchors": {
+        "walk": [
+          160,
+          224
+        ],
+        "attack": [
+          160,
+          224
+        ],
+        "idle": [
+          128,
+          224
+        ]
+      },
+      "motion": "assets/E-motion.png"
     },
     "SE": {
       "idle": "assets/SE.png",
@@ -268,18 +376,379 @@
         128,
         224
       ],
-      "registeredCrownY": 34.3082191780822
+      "registeredCrownY": 34.3082191780822,
+      "anchors": {
+        "walk": [
+          160,
+          224
+        ],
+        "attack": [
+          160,
+          224
+        ],
+        "idle": [
+          128,
+          224
+        ]
+      },
+      "motion": "assets/SE-motion.png"
     }
   },
   "sha256": {
+    "assets/E-motion.png": "2bd7cb312ad700d97a3581c31e73f7a0e3eb27dbb02d789eae7c602c149235eb",
     "assets/E.png": "58be7fb0acd205cd52dcfa737eeddc6696e32612b16003f801b86d4e20c53d8b",
+    "assets/N-motion.png": "196f157747153a85707156c7b2d604deda9828fe22562f7979670d954751a876",
     "assets/N.png": "226e6efe3a0c2ba893fac6137ca6fb209891c72daff43bd7ac4fe03c92965921",
+    "assets/NE-motion.png": "cbbd05c495ac97506de062001a7d83d9130aa906b2ae42644e9514f939079246",
     "assets/NE.png": "dfc22bbcc0aa07fa34a86898fd39b27d0d275a371008815bc807cb2b84785c99",
+    "assets/NW-motion.png": "1227eb4f013c829e360f461d0d97e968e18f260b9b06f9c8ad06d700bf05c044",
     "assets/NW.png": "ac1f1d6b99cd85d827255284de5c728691d95930269fb509d418a6007dc84024",
+    "assets/S-motion.png": "f94f046d664e5277693b89f33f31155a6e3b06fc2a5adb3ea6dc714d1f279ffb",
     "assets/S.png": "6eaad116a4f76466f883eae230ddc5a75319b1cb4f91bc52f864a5f081867373",
+    "assets/SE-motion.png": "c16a88a4335c039f179d6f56abf8a652d77509bc8cd95663688dfc7950485a4e",
     "assets/SE.png": "74df6fc0a1929ee1408a06af9683f8abc06a9703633b889d38645a1550bf44b7",
+    "assets/SW-motion.png": "cfc5c5c6dda6aa9bf8ccc7e589cb3ac6c875b93d2efddd8531726ce75d226764",
     "assets/SW.png": "c188ac10304c9a55ae7d9e46bbb21f24b5a066b50f70e411fae1faf612ebac41",
+    "assets/W-motion.png": "16f4ce02f5ec292a66f4323e0dff0fcc70c90062c6ff8f8a7f0212d50c3e4ef0",
     "assets/W.png": "ed149ceacd036d1fa85e97c29f97b1d2a0a7004c803d8747b71fca263d7050cf",
     "source-art/idle-eight.png": "c13726e4a3b6d40aadbdf7b9bb0a60a82467f5da202e0066dba8619477466f5e"
+  },
+  "motionFrameSize": [
+    320,
+    256
+  ],
+  "motionRegistration": {
+    "walk": {
+      "source": "walk-eight.png",
+      "sharedScale": 0.6563573883161512,
+      "views": {
+        "S": {
+          "sourceCell": [
+            0,
+            0,
+            317,
+            306
+          ],
+          "sourceBootBand": [
+            149,
+            244,
+            207,
+            305
+          ],
+          "sourceContact": [
+            178.0,
+            300
+          ],
+          "sourceCrownY": 5,
+          "scale": 0.6563573883161512
+        },
+        "SW": {
+          "sourceCell": [
+            317,
+            0,
+            642,
+            306
+          ],
+          "sourceBootBand": [
+            465,
+            245,
+            523,
+            304
+          ],
+          "sourceContact": [
+            494.0,
+            299
+          ],
+          "sourceCrownY": 7,
+          "scale": 0.6563573883161512
+        },
+        "W": {
+          "sourceCell": [
+            642,
+            0,
+            956,
+            306
+          ],
+          "sourceBootBand": [
+            700,
+            235,
+            850,
+            300
+          ],
+          "sourceContact": [
+            775.0,
+            295
+          ],
+          "sourceCrownY": 6,
+          "scale": 0.6563573883161512
+        },
+        "NW": {
+          "sourceCell": [
+            956,
+            0,
+            1278,
+            306
+          ],
+          "sourceBootBand": [
+            1070,
+            240,
+            1180,
+            305
+          ],
+          "sourceContact": [
+            1125.0,
+            300
+          ],
+          "sourceCrownY": 6,
+          "scale": 0.6563573883161512
+        },
+        "N": {
+          "sourceCell": [
+            0,
+            306,
+            336,
+            610
+          ],
+          "sourceBootBand": [
+            110,
+            540,
+            215,
+            605
+          ],
+          "sourceContact": [
+            162.5,
+            600
+          ],
+          "sourceCrownY": 310,
+          "scale": 0.6563573883161512
+        },
+        "NE": {
+          "sourceCell": [
+            0,
+            0,
+            1157,
+            1359
+          ],
+          "sourceBootBand": [
+            470,
+            1050,
+            669,
+            1225
+          ],
+          "sourceContact": [
+            569.5,
+            1207
+          ],
+          "sourceCrownY": 95,
+          "scale": 0.1699918415782838
+        },
+        "E": {
+          "sourceCell": [
+            652,
+            306,
+            993,
+            610
+          ],
+          "sourceBootBand": [
+            724,
+            535,
+            900,
+            599
+          ],
+          "sourceContact": [
+            812.0,
+            594
+          ],
+          "sourceCrownY": 310,
+          "scale": 0.6563573883161512
+        },
+        "SE": {
+          "sourceCell": [
+            993,
+            306,
+            1278,
+            610
+          ],
+          "sourceBootBand": [
+            1090,
+            535,
+            1219,
+            610
+          ],
+          "sourceContact": [
+            1154.5,
+            605
+          ],
+          "sourceCrownY": 311,
+          "scale": 0.6563573883161512
+        }
+      }
+    },
+    "attack": {
+      "source": "attack-eight.png",
+      "sharedScale": 0.5247252747252747,
+      "views": {
+        "S": {
+          "sourceCell": [
+            0,
+            0,
+            388,
+            436
+          ],
+          "sourceBootBand": [
+            143,
+            355,
+            244,
+            417
+          ],
+          "sourceContact": [
+            193.5,
+            411
+          ],
+          "sourceCrownY": 47,
+          "scale": 0.5247252747252747
+        },
+        "SW": {
+          "sourceCell": [
+            388,
+            0,
+            854,
+            436
+          ],
+          "sourceBootBand": [
+            642,
+            355,
+            701,
+            419
+          ],
+          "sourceContact": [
+            671.5,
+            413
+          ],
+          "sourceCrownY": 75,
+          "scale": 0.5247252747252747
+        },
+        "W": {
+          "sourceCell": [
+            854,
+            0,
+            1315,
+            436
+          ],
+          "sourceBootBand": [
+            1025,
+            350,
+            1240,
+            416
+          ],
+          "sourceContact": [
+            1132.5,
+            410
+          ],
+          "sourceCrownY": 78,
+          "scale": 0.5247252747252747
+        },
+        "NW": {
+          "sourceCell": [
+            1315,
+            0,
+            1774,
+            436
+          ],
+          "sourceBootBand": [
+            1500,
+            350,
+            1667,
+            430
+          ],
+          "sourceContact": [
+            1583.5,
+            424
+          ],
+          "sourceCrownY": 66,
+          "scale": 0.5247252747252747
+        },
+        "N": {
+          "sourceCell": [
+            0,
+            436,
+            416,
+            887
+          ],
+          "sourceBootBand": [
+            125,
+            765,
+            260,
+            837
+          ],
+          "sourceContact": [
+            192.5,
+            831
+          ],
+          "sourceCrownY": 520,
+          "scale": 0.5247252747252747
+        },
+        "NE": {
+          "sourceCell": [
+            416,
+            436,
+            901,
+            887
+          ],
+          "sourceBootBand": [
+            550,
+            750,
+            726,
+            825
+          ],
+          "sourceContact": [
+            638.0,
+            819
+          ],
+          "sourceCrownY": 489,
+          "scale": 0.5247252747252747
+        },
+        "E": {
+          "sourceCell": [
+            901,
+            436,
+            1351,
+            887
+          ],
+          "sourceBootBand": [
+            980,
+            760,
+            1186,
+            837
+          ],
+          "sourceContact": [
+            1083.0,
+            831
+          ],
+          "sourceCrownY": 495,
+          "scale": 0.5247252747252747
+        },
+        "SE": {
+          "sourceCell": [
+            1351,
+            436,
+            1774,
+            887
+          ],
+          "sourceBootBand": [
+            1410,
+            760,
+            1645,
+            835
+          ],
+          "sourceContact": [
+            1527.5,
+            829
+          ],
+          "sourceCrownY": 510,
+          "scale": 0.5247252747252747
+        }
+      }
+    }
   }
 }

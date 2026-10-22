@@ -1,0 +1,42 @@
+{
+  "date": "2026-10-22",
+  "lockedReference": "source-art/idle-eight.png",
+  "guide": "guides/motion-sheet.png",
+  "initial": {
+    "prompt": "Create a production transparent game sprite MOTION sheet of AVENIUS. Reference1 is her LOCKED canonical 8-direction idle sheet: use its EXACT corresponding direction design separately for every cell, never mirror. Reference2 is the 16-pose original hero mannequin motion guide. Match reference2 layout exactly: FOUR COLUMNS x FOUR ROWS, SIXTEEN independent full-body sprites. Row1 WALK S, SW, W, NW. Row2 WALK N, NE, E, SE. Row3 ATTACK S, SW, W, NW. Row4 ATTACK N, NE, E, SE. Direction means entire body points that way, S front, SW45deg screen left front, W strict left profile, NW rear-left with cheek sliver screen left, N straight back NO FACE, NE rear-right cheek sliver screen right, E strict right profile, SE front-right. Camera orthographic elevated26deg SAME as idle and guide. WALK: visibly stride a leg forward and other back, counter-swing arms, cape sways, sword stays in anatomical RIGHT hand, no generic idle duplicates. ATTACK: ONE decisive RIGHT-HANDED straight-sword thrust/slash EXTENDING TOWARD FACED WORLD DIRECTION, elbow extends, wrist visible gripping gold hilt, blade projects outward toward target, dynamic slight body lean, feet planted. Crucial S attack sword thrusts toward screen bottom; N attack thrusts AWAY toward top with sword partly OCCLUDED behind head/cape, not waving sideways; W attack extends LEFT, E RIGHT; diagonal attacks toward corresponding diagonal, right hand always grips sword. Follow actual guide pose and camera. Preserve EXACT approved chibi head/body proportions and physical crown-to-ground height across all16; no stretching. Costume: very SHORT white skirt exposing upper-thigh gap, vivid TEAL INNER HAIR under black bob on both sides/back, bright AZURE eyes, white left-side flowers, white blue-teal striped sleeves, black fitted cuirass and boots/gauntlets, knee-length burgundy purple cape with gold hem, turquoise single glowing sword and ornate gold hilt. Left hand empty NO shield. White flower on anatomical LEFT only: viewer RIGHT in S, viewer LEFT in N, visible on left profile W but hidden from right profile E. Anatomical RIGHT sword arm viewer LEFT in S, viewer RIGHT in N, near side in E, far side in W. Warm painted storybook sprite art matching canonical sheet, simplified clean face, small-game readability. Equal cells with generous transparent gutters and room for complete sword, no cutting, overlap, labels, grid, shadows or glow haze. True TRANSPARENT RGBA background. Each cell is independently drawn from locked corresponding idle view and pose guide. Only movement differs; exact character likeness is locked.",
+    "output": "source-art/motion-first.png",
+    "walkExtraction": [
+      0,
+      0,
+      1278,
+      610
+    ],
+    "note": "Attack row spacing insufficient; attacks regenerated separately. Visible NE hair ornament on wrong side corrected separately."
+  },
+  "attacks": {
+    "prompt": "Create a clean GAME ATTACK sprite sheet of Avenius using reference1 LOCKED eight-direction idle views individually, reference2 same character motion guide bottom eight cells (the attacks). Exactly 4 columns x2 rows: S SW W NW / N NE E SE, one decisive forward RIGHT-HANDED sword thrust/slash per cell. All body and face angles must follow corresponding locked idle view and guide. Canonical anatomy, hand and feet connected; sword gold hilt firmly in anatomical right glove, left empty. S front thrust sword forward screen DOWN with foreshortening, blade should stay near body and NOT extend below boots. SW attack toward bottom-left. W strict profile attacks LEFT. NW back-left thrusts toward upper-left with right sword partly behind body, LEFT side flower visible. N exact back attacks away screen UP with sword/arm mostly hidden behind head; no sword sticking toward screen right, no face. NE back-right attacks upper-right with near RIGHT sword arm, NO flower visible on right side (flowers are ONLY on far anatomical left side), matching locked NE reference. E strict right profile attacks RIGHT, NO flowers visible on right side. SE attacks lower-right with blade clearly extending toward screen right. Ensure exactly one sword in each cell. Keep same approved huge chibi head, short white skirt, vivid teal inner black bob, azure eyes, black armor/gloves/boots, burgundy cape. Small painted game-sprite style exactly matching locked idle, same character height and no redesign. Camera26deg elevated orthographic. IMPORTANT room: each sprite including sword must fit entirely WITHIN inner 70% width AND inner75% height of its own equal-sized cell. 15% empty padding EVERY edge, very wide fully transparent gutters between sprites, NO touching or overlapping cells. ALL sword tips intact. FULL transparent background NO shadows NO glow clouds NO trails NO particles, blade is clean luminous cyan but no cyan aura. No text. This is eight unique ATTACK POSES, not idle poses; preserve physical size across directions.",
+    "output": "source-art/attack-eight.png"
+  },
+  "walkNE": {
+    "prompt": "Repair reference1 single Avenius NE walking sprite. Reference2 is the LOCKED canonical NE idle view and exact design. Maintain the walking pose in reference1, same rear-right body angle and leg stride, same gold-hilt sword in anatomical RIGHT hand, huge chibi head/body size, short white skirt, black armor boots, burgundy cape. Remove the erroneous white flower ornament on visible RIGHT side of hair in reference1. All flowers belong on FAR anatomical LEFT and must be hidden exactly as in reference2 NE. Preserve teal inner hair clearly. Remove cyan cloud/trail around sword, leaving only a crisp single turquoise blade. Full character including sword, 15% transparent padding all sides, true TRANSPARENT background, no shadow, no text. Keep walking stride; don't revert to idle. Match reference2 camera26degree elevation and proportions. One single rear-right NE walking sprite only.",
+    "references": [
+      "source-art/NE-walk-before.png",
+      "source-art/NE-idle-reference.png"
+    ],
+    "output": "source-art/NE-walk-fixed.png"
+  },
+  "registration": "build_motion.py",
+  "mirroring": false,
+  "sha256": {
+    "source-art/NE-idle-reference.png": "130f7e8bb47cb6e20b18955c0fb5ddecb6d1c938253b6976f8d48974184c8338",
+    "source-art/NE-walk-before.png": "23477aa8a03f3290ec05002d03c245d65dd87c403f808635918d0d12d5c54d62",
+    "source-art/NE-walk-fixed.png": "68c4f1568d5b128af5426bae60bcc4010009a41b0ebe924a18542cee40be97eb",
+    "source-art/approved-design.png": "802b9254696ca15cf8d3d2998f3c441b091abe6ea1a5531d47c2581605a097bc",
+    "source-art/attack-eight.png": "51e0865210782c52c57ae6d9bd6100318a15120dc17b9b8b23188d8a4cbbe866",
+    "source-art/direction-guide.png": "aa1ccf9728370df1c8e6811d1f08231888b2984c536b606e00534587667e690d",
+    "source-art/idle-eight-v1.png": "4e0c84f4d4b3c7a85c8a381e6270c68c641140fff77dc6207886766481cd9505",
+    "source-art/idle-eight.png": "c13726e4a3b6d40aadbdf7b9bb0a60a82467f5da202e0066dba8619477466f5e",
+    "source-art/motion-first.png": "763fdfec95270b133a36dc70b573096e72c8f28655851b76ea73035a93f7d8c3",
+    "source-art/walk-eight.png": "94b71202e457d8f347923986116b554e5736af8e2a13f0dce00b9ae018eb6875"
+  }
+}

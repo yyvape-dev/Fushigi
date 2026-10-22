@@ -5,13 +5,14 @@
 <title>アベニウス — 8方向の待機絵</title>
 <link rel="stylesheet" href="preview.css">
 <main>
-  <nav><a href="../">本編</a><span>／</span><a href="../fushigi-allies-v1/preview.html">ユズナミキ</a></nav>
-  <header><p class="eyebrow">助っ人 02 · 待機基準絵</p><h1>アベニウス</h1><p>青緑のインナーカラー、蒼い瞳、閃光の剣。</p></header>
+  <nav><a href="game-review.html?flash=1">一閃を試す</a><span>／</span><a href="../">本編</a><span>／</span><a href="../fushigi-allies-v1/preview.html">ユズナミキ</a></nav>
+  <header><p class="eyebrow">助っ人 02 · 待機・歩行・剣攻撃</p><h1>アベニウス</h1><p>青緑のインナーカラー、蒼い瞳、閃光の剣。</p></header>
   <section aria-labelledby="comparison-title">
     <h2 id="comparison-title">ラナと同じ床に</h2>
     <p class="note">本編で採用済みのラナの画像と比較。共通の縮尺と足元で表示します。</p>
     <div class="controls">
       <label>向き <select id="direction"><option>S</option><option>SW</option><option>W</option><option>NW</option><option>N</option><option>NE</option><option>E</option><option>SE</option></select></label>
+      <label>動作 <select id="action"><option value="idle">待機</option><option value="walk">歩行</option><option value="attack">剣の攻撃</option></select></label>
       <label>表示 <select id="size"><option value="96">実寸 · 1マス64px</option><option value="192" selected>拡大 · 2倍</option></select></label>
       <label><input type="checkbox" id="guides" checked> 接地点・頭頂線</label>
       <button id="rotate" type="button" aria-pressed="false">方向を順に見る</button>
@@ -20,7 +21,7 @@
     <p id="status" role="status">画像を読み込み中…</p>
   </section>
   <section aria-labelledby="directions-title"><h2 id="directions-title">8方向を確認</h2><p class="note">剣は本人の右手、花飾りは左側。左右反転は使っていません。</p><div id="views"></div></section>
-  <section class="details"><div><h2>一閃</h2><p>4マス先までの敵へ一瞬で移動し、先制攻撃を当てて元の位置に戻る。敵1体につき1回まで。</p><p class="note">能力は仕様を記録した段階です。このページは待機絵の確認用で、本編への加入・戦闘・歩行は次の工程です。</p></div><a class="design" href="source-art/approved-design.png"><img src="source-art/approved-design.png" alt="承認済みの初期デザイン比較" loading="lazy"><span>承認済みデザインを開く ↗</span></a></section>
+  <section class="details"><div><h2>一閃</h2><p>4マス先までの敵へ一瞬で移動し、先制攻撃を当てて元の位置に戻る。敵1体につき1回まで。</p><p class="note">本編に実装済み。見通しのある敵と安全な着地点があると自動発動します。同じ敵への2回目以降は通常の剣で戦います。</p></div><a class="design" href="source-art/approved-design.png"><img src="source-art/approved-design.png" alt="承認済みの初期デザイン比較" loading="lazy"><span>承認済みデザインを開く ↗</span></a></section>
 </main>
 <script src="preview.js"></script>
 </html>
