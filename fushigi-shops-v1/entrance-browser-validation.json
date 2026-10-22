@@ -1,0 +1,35 @@
+[
+  {
+    "viewport": "portrait",
+    "entranceCases": [
+      2,
+      3
+    ],
+    "independentOfGoods": true,
+    "unpaidBlocksExits": true,
+    "paidClearsExits": true,
+    "errors": []
+  },
+  {
+    "viewport": "landscape",
+    "entranceCases": [
+      2,
+      3
+    ],
+    "independentOfGoods": true,
+    "unpaidBlocksExits": true,
+    "paidClearsExits": true,
+    "errors": []
+  },
+  {
+    "viewport": "small",
+    "entranceCases": [
+      2,
+      3
+    ],
+    "independentOfGoods": true,
+    "unpaidBlocksExits": true,
+    "paidClearsExits": true,
+    "errors": []
+  }
+]

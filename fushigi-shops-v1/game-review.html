@@ -151,7 +151,7 @@ canvas{display:block;touch-action:none}
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
 <link rel="stylesheet" href="assets/allies.css?v=dialog-v4">
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
-<script src="assets/dungeon-shop.js?v=security-v1"></script>
+<script src="assets/dungeon-shop.js?v=entrances-v2"></script>
 <script src="assets/shop-security.js?v=security-v1"></script>
 <script src="assets/allies.js?v=shops-v1"></script>
 <script src="assets/monster-roster.js?v=families-v2"></script>
@@ -163,7 +163,7 @@ canvas{display:block;touch-action:none}
 // =====================================================================
 //  設定
 // =====================================================================
-const DW = 40, DH = 25;           // ダンジョンのマップ寸法
+const DW = 56, DH = 32;           // ダンジョンのマップ寸法（区画方式は 14×10 マスの区画を 4×3 並べる）
 const TW = 22, TH = 15;           // 町のマップ寸法
 let MW = DW, MH = DH;             // 現在のマップ寸法
 let TS = 32;                      // 1マスのpx（16の倍数にしてドット絵をくっきり出す）
@@ -1047,6 +1047,15 @@ function playerRoom() {
   return -1;
 }
 
+// 歩く距離（4方向・上限なし）。部屋や階段の配置用。敵AI用の distMap() は90歩で打ち切るので別にしてある
+function pathDist(sx, sy) {
+  const d = Array.from({ length: MH }, () => new Array(MW).fill(-1)), q = [[sx, sy]]; d[sy][sx] = 0;
+  for (let i = 0; i < q.length; i++) {
+    const [x, y] = q[i];
+    for (const [dx, dy] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const nx = x + dx, ny = y + dy; if (inb(nx, ny) && map[ny][nx] !== WALL && d[ny][nx] < 0) { d[ny][nx] = d[y][x] + 1; q.push([nx, ny]); } }
+  }
+  return d;
+}
 function newFloor() {
   ShopSystem.leaveFloor();
   closeStairs();
@@ -1056,22 +1065,26 @@ function newFloor() {
   buildRoomGrid();
   const start = rooms[0];
   player.x = start.cx; player.y = start.cy;
-  // 階段：開始部屋から最も遠い部屋
-  let far = rooms[1], fd = -1;
-  for (const r of rooms) { const d = Math.abs(r.cx - start.cx) + Math.abs(r.cy - start.cy); if (d > fd) { fd = d; far = r; } }
+  // 階段：開始部屋から「歩く距離」が遠い部屋（最遠の7割以上の部屋からランダム。直線距離ではなく通路を含む実際の道のり）
+  const pd = pathDist(player.x, player.y);
+  const dOf = r => pd[r.cy][r.cx];
+  const maxD = Math.max(...rooms.slice(1).map(dOf));
+  const farRooms = rooms.slice(1).filter(r => dOf(r) >= maxD * 0.7);
+  const far = farRooms[rnd(0, farRooms.length - 1)];
   map[far.cy][far.cx] = STAIRS;
   enemies = [];floorItems=[];traps=[];
   placeDungeonShop(far);
   const enemyRooms=rooms.slice(1).filter(r=>r.role!=='shop'), itemRooms=rooms.filter(r=>r.role!=='shop');
-  const n = 3 + Math.min(floorNo, 7);
-  for (let i = 0, tries=0; i < n && tries<100; tries++) {
+  const scale = Math.max(1, rooms.length / 7);                  // 部屋が多い広い階ほど、敵・アイテム・罠も増やす（部屋7つを基準）
+  const n = Math.min(14, Math.round((3 + Math.min(floorNo, 7)) * scale));   // 最大14体
+  for (let i = 0, tries=0; i < n && tries<200; tries++) {
     const r = enemyRooms[rnd(0, enemyRooms.length - 1)];
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
-    if (map[y][x] !== FLOOR || enemyAt(x, y) || (x === player.x && y === player.y)) continue;
+    if (map[y][x] !== FLOOR || enemyAt(x, y) || (x === player.x && y === player.y) || pd[y][x] < 8) continue;   // 開始地点の近く(歩いて8マス未満)には置かない
     spawnEnemy(x, y, false);i++;
   }
-  floorItems = [];                                              // アイテム：1〜3個
-  const ni = rnd(2, 5);
+  floorItems = [];                                              // アイテム：2〜5個（広い階は増える）
+  const ni = Math.round(rnd(2, 5) * scale);
   for (let i = 0, tries=0; i < ni && tries<100; tries++) {
     const r = itemRooms[rnd(0, itemRooms.length - 1)];
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
@@ -1111,7 +1124,7 @@ function placeDungeonShop(stairsRoom) {
 const corridorAdj = (x, y) => [[1, 0], [-1, 0], [0, 1], [0, -1]].some(([dx, dy]) => inb(x + dx, y + dy) && map[y + dy][x + dx] !== WALL && roomGrid[y + dy][x + dx] < 0);   // 部屋の出入口（通路に面した床）
 function placeTraps(stairsRoom) {
   traps = [];
-  const dg = DUNGEONS[dungeonId], n = Math.min(5, 1 + Math.floor(floorNo / 3) + rnd(0, 1));
+  const dg = DUNGEONS[dungeonId], n = Math.min(7, Math.round(Math.min(5, 1 + Math.floor(floorNo / 3) + rnd(0, 1)) * Math.max(1, rooms.length / 7)));
   const kinds = Object.keys(TRAPS).filter(k => k !== 'pit' || floorNo < dg.floors);          // 最終階に穴は無い
   for (let i = 0, tries = 0; i < n && tries < 60; tries++) {
     const R = rooms[rnd(0, rooms.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
@@ -2532,5 +2545,5 @@ if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(
 <script src="assets/controls-ui.js?v=yuzunamiki-v1"></script>
 <script src="assets/ergonomic-ui.js?v=hands-v1"></script>
 <script>AllySystem.init();ShopSystem.init();</script>
-<script src="fushigi-shops-v1/stage.js?v=shops-v1"></script></body>
+<script src="fushigi-shops-v1/stage.js?v=entrances-v2"></script></body>
 </html>

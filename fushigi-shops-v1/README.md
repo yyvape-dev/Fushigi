@@ -49,3 +49,11 @@ node tests/harness.js index.html tests/test_mvp.js
 店舗の床は生成したワインレッドの絨毯。元原画は `source-art/carpet.png`、本編用は `assets/carpet.png`、プロンプトは番兵フォルダの `generation-prompts.json`。境界に金の縁を重ね、道具と未精算価格を読めるよう低コントラストにする。
 
 本家の参照と採用した挙動は `../fushigi-security-v1/README.md` を参照。本編の承認済みラナ・武器12/盾10・モンスター60・仲間3人の原画と倍率は変更していない。
+
+## 入口数の修正
+
+壁沿いの1本の通路が何マスも店に接する場合も、連続した開口部は1つの入口として数える。外周の遠くでつながる別の入口はまとめない。部屋側の余分な接触を壁へ戻して1マスの入口へ整え、各入口に1人を配置する。商品数によって店主は増減しない。
+
+`node tests/harness.js index.html tests/test_shop_entrances.js` で1,500生成seed・8,807部屋と再現seed13/3を検証。`python fushigi-shops-v1/check_entrances_browser.py` は入口2/3・商品数非依存・未精算封鎖・精算後通行を縦横小画面で確認する。結果と画面は `entrance-browser-validation.json` / `entrances-*.png`。
+
+最新の56×32区画方式・L字/十字を取り込んだ後も、1,500seed・11,404部屋で連結性・入口数・隣接待機を検証。旧方式の再現例は `tests/fixtures/shop-entrances-legacy.json` に固定し、地形生成の更新と独立して再現する。
