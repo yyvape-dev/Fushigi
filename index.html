@@ -144,7 +144,7 @@ canvas{display:block;touch-action:none}
 <script src="fushigi-equipment-v3/hero-base-renderer.js"></script>
 <script src="fushigi-equipment-v3/hero-attack-renderer.js"></script>
 <script src="assets/approved-hero.js?v=legacy-scale-v2"></script>
-<script src="assets/hero-actions.js?v=actions-v1"></script>
+<script src="assets/hero-actions.js?v=bread-art-v1"></script>
 <script src="assets/dungeon-generator.js?v=locations-v1"></script>
 <script src="assets/cave-terrain.js?v=wall-relief-v1"></script>
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
@@ -1943,7 +1943,7 @@ function useType(key, floorEntry=null) {
   if (!ITEMS[it.type].use(it)) { ShopSystem.rollback(shopUse);render(); renderBag(); return; }
   const category=ITEMS[it.type].cat;
   if(category==='巻物')playUseMotion('scroll','scroll');
-  else if(['食','草','種','薬'].includes(category))playUseMotion('consume',category==='食'?'food':category==='薬'?'potion':'herb');
+  else if(['食','草','種','薬'].includes(category))playUseMotion('consume',category==='食'?it.type:category==='薬'?'potion':'herb');
   if(floorEntry){const i=floorItems.indexOf(floorEntry);if(i>=0)floorItems.splice(i,1);}else inv.splice(inv.indexOf(it), 1);
   idAfter();saveGame();
   closeBag(); endTurn();
