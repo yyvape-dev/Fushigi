@@ -14,6 +14,8 @@ const SHEET_STYLE = '3Dレンダリングのビニールフィギュア風、柔
 const HINT = {
   // --- 床・持ち物の共通アイコン（カテゴリで1つ）
   icon_scroll: '紐で結んだ無地の巻物（羊皮紙色）', icon_ring: '赤い宝石のついた金の腕輪', icon_sword: '斜めに置いた鉄の剣', icon_shield: '正面向きの丸い鉄の盾',
+  // --- 食べ物（パン4種。床・持ち物で個別の絵）
+  bread_small: '小さな丸い白パン（手のひらサイズ）', bread: 'こんがり焼けた楕円のパン（コッペパン）', bread_big: '大きく丸いカンパーニュ風のパン（切れ目入り）', bread_moldy: '青緑のカビの斑点が生えた、しなびたパン',
   // --- 敵（右向き・斜め前から・全身。足元をそろえて切り出す）
   slime: '水色のぷるぷるしたスライム（目と口つき）', goblin: '緑の小さなゴブリン（とがった耳、棍棒を持つ）', bat: '紫のコウモリ（翼を広げている）', blob: 'ピンク紫のぶよぶよした塊（小さな顔つき）',
   skeleton: '骨だけのスケルトン（剣と丸い盾を持つ）', archer: '黄色い帽子をかぶった小柄な弓兵（小さな弓を構える）', thief: '茶色のどろぼうタヌキ（大きな風呂敷包みを背負う）', sleepy: '青紫の眠そうなキノコ（目を閉じた顔）',
@@ -31,6 +33,7 @@ const SHEETS = [
   { id: 'icons', name: '共通アイコン（巻物・腕輪・剣・盾）', cols: 2, keys: ['icon_scroll', 'icon_ring', 'icon_sword', 'icon_shield'], note: 'どれも床に落ちている姿のアイコン。形は単純で、色は控えめにする。' },
   { id: 'weapon', name: '手持ちの武器', keys: ['woodsword', 'bronzesword', 'katana', 'dotanuki', 'minoaxe', 'renkentou', 'kamaitachi', 'healsword', 'steakknife', 'harisen', 'skyblade', 'firesword'], note: '武器はすべて、刃（先端）を真上に向けて縦に置き、マスの高さいっぱいに描く。握る柄の位置はマスの下から約20%。' },
   { id: 'shield', name: '手持ちの盾', keys: ['bronzeshield', 'tekkoshield', 'onioookami', 'battlecounter', 'mikiri', 'konjo', 'zekkocho', 'haramochi', 'steakplate', 'minoshield'], note: '盾はすべて正面向きで、マスの85%の大きさ。' },
+  { id: 'bread', name: 'パン4種（小さなパン・パン・大きなパン・カビの生えたパン）', cols: 2, keys: ['bread_small', 'bread', 'bread_big', 'bread_moldy'], note: 'どれも床に置いた姿。大きさの違いが分かるように、小さなパンはマスの55%、パンは75%、大きなパンは95%、カビの生えたパンは75%の大きさにする。' },
   { id: 'enemyA', name: '敵（前半8種）', foot: true, keys: ['slime', 'goblin', 'bat', 'blob', 'skeleton', 'archer', 'thief', 'sleepy'], note: ENEMY_NOTE },
   { id: 'enemyB', name: '敵（後半7種）', foot: true, keys: ['bomb', 'ogre', 'dazzle', 'venom', 'ghost', 'minotaur', 'dragon'], note: ENEMY_NOTE },
 ];

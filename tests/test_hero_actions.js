@@ -2,7 +2,7 @@
  const assert=(v,m)=>{if(!v)throw Error(m);};
  scene='dungeon';floorNo=2;newFloor();enemies=[];traps=[];
  const use=(type)=>{inv=[mkItem(type,3)];player.st=newStatus();player.hp=10;belly=50;useType(ikey(inv[0]));};
- use('onigiri');assert(player.action?.kind==='consume'&&player.action.prop==='food','food action');
+ use('bread');assert(player.action?.kind==='consume'&&player.action.prop==='food','food action');
  use('herb');assert(player.action?.kind==='consume'&&player.action.prop==='herb','herb action');
  use('hastescroll');assert(player.action?.kind==='scroll','scroll action');
  use('firestaff');assert(player.action?.kind==='staff','staff action');

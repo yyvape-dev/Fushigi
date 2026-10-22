@@ -156,7 +156,7 @@
 
 ## 8. 新アイテムの絵（2026-10-20改訂：カテゴリ共通アイコン方式）
 **設計（ユーザー決定）**：後で「未識別」システムを入れるため、床・持ち物の見た目は**カテゴリで1種類に固定**。個別の絵は武器・盾の「装備時の手持ち絵」だけ。
-- 共通アイコン（`assets/<キー>.png`）：`icon_herb`(草)・`icon_seed`(種)・`icon_staff`(杖)＝取り込み済み／`icon_scroll`(巻物)・`icon_ring`(腕輪)・`icon_sword`(武器の床絵)・`icon_shield`(盾の床絵)＝**未作成**。薬=`potion`、食=`onigiri` は個別のまま（取り込み済み）。
+- 共通アイコン（`assets/<キー>.png`）：`icon_herb`(草)・`icon_seed`(種)・`icon_staff`(杖)＝取り込み済み／`icon_scroll`(巻物)・`icon_ring`(腕輪)・`icon_sword`(武器の床絵)・`icon_shield`(盾の床絵)＝**未作成**。薬=`potion` は個別のまま（取り込み済み）。食はパン4種 `bread_small`・`bread`・`bread_big`・`bread_moldy`（**未作成**。シート `bread`）。`onigiri` は旧食料で、食べる動作の手持ち絵の代わりにだけ使う。
 - 武器・盾の個別絵（装備すると手に出る。キー＝ITEMSのキー、末尾に数字を付けない）：woodsword, bronzesword, katana, dotanuki, minoaxe, renkentou, kamaitachi, healsword, steakknife, harisen, skyblade, firesword／bronzeshield, tekkoshield, onioookami, battlecounter, mikiri, konjo, zekkocho, haramochi, steakplate, minoshield（＋既存 sword, axe, stick, woodshield, ironshield）。
 - 絵が無い間は、共通アイコンが無ければ文字＋色の仮表示で遊べる。
 - 将来の識別：名前だけ変える（巻物=動物／草・種=色／腕輪=宝石／杖=木。本家の表記テーマ）。絵は変えない。

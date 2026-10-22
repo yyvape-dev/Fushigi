@@ -23,7 +23,7 @@
  function leaveFloor(){if(debt())steal('代金を払わず、店のある階を離れた！');clearTags();close();state.wanted=false;ShopSecurity.reset();}
  function reset(){leaveFloor();state.wanted=false;ShopSecurity.reset();}
  function steal(reason){if(!floorShop||floorShop.hostile)return;floorShop.hostile=true;state.wanted=true;close();say(reason+' 店主が怒った！');clearTags();ShopSecurity.alert();}
- function stock(tier,count=11){const defaults=['potion','onigiri','arrow'].map(k=>mkItem(k));let ks=Object.keys(ITEMS).filter(k=>ITEMS[k].w>0&&(ITEMS[k].from||1)<=floorNo+tier*4&&!['gold','weed','potion','onigiri','arrow'].includes(k));if(tier===2){const rare=ks.filter(k=>ITEMS[k].w<=2);if(rare.length)ks=rare;}
+ function stock(tier,count=11){const defaults=['potion','bread','arrow'].map(k=>mkItem(k));let ks=Object.keys(ITEMS).filter(k=>ITEMS[k].w>0&&(ITEMS[k].from||1)<=floorNo+tier*4&&!['gold','weed','potion','onigiri','arrow'].includes(k));if(tier===2){const rare=ks.filter(k=>ITEMS[k].w<=2);if(rare.length)ks=rare;}
   for(let n=0;n<count-3&&ks.length;n++){const weight=k=>Math.pow(ITEMS[k].w,tier===0?1:tier===1?0:-.5);let r=Math.random()*ks.reduce((s,k)=>s+weight(k),0),k=ks[0];for(const c of ks){r-=weight(c);if(r<0){k=c;break;}}const it=mkItem(k);if(ITEMS[k].equip&&ITEMS[k].equip!=='ring')it.plus=Math.max(it.plus,tier);defaults.push(it);}return defaults;}
  // Count corridor mouths, not every room tile touching a parallel corridor.
  function entrances(ri){const r=rooms[ri],ring=new Map(),dirs=[[1,0],[-1,0],[0,1],[0,-1]],doors=new Map();
