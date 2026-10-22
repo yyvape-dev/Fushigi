@@ -1,0 +1,28 @@
+{
+  "idle": "Create a production game sprite sheet with EXACTLY EIGHT full body views, 4 columns x 2 rows, transparent background, generous transparent gutters. Read left-to-right row 1 SOUTH front, SOUTHWEST facing screen left and down, WEST left profile, NORTHWEST back left; row 2 NORTH back, NORTHEAST back right, EAST right profile, SOUTHEAST front right. Reference 1 is APPROVED character design: ONLY the indigo BLUE VEST middle merchant, not the blonde girl and not the other two colors. Rugged mature bearded male shopkeeper, slicked-back dark brown hair, thick eyebrows, stern face, off-white rolled sleeves, sleeveless dark INDIGO BLUE laced vest and split tunic skirts, dark charcoal pants, brown leather belt, belt pouch, boots and wrist guard. NO weapon, no shield, no cape. Anatomical LEFT hand rests on hip, anatomical RIGHT fist hangs down; preserve sides in all views. Match approved art exactly: hand-painted illustrated chibi 2.7 heads tall, same height as Lana. Reference 2 shows original game mannequin camera and direction/foot/body-size guidelines; use camera and angle, replace mannequin appearance with merchant. Slightly broader male torso, same head-to-body proportions and feet baseline. Eight consistent equal-size figures; no labels, no text, no shadows/background, no overlapping cells. CRITICAL SW looks LEFT, SE looks RIGHT, back views show backs; no front repeated in back row.",
+  "motions": {
+    "walk": "Production sprite sheet EXACTLY eight full body merchant poses, four columns two rows, transparent background and transparent gutters. Order S,SW,W,NW / N,NE,E,SE. Reference1 is LOCKED eight directional idle art: use each matching direction's exact face, hairstyle, beard, clothing, height, chibi proportions. No changing outfit or anatomy, no mirrors. Indigo blue sleeveless laced split tunic over white rolled sleeves, brown belt/pouch/boots and charcoal trousers. Reference2 is same camera and directional motion pose guide; copy pose only, not mannequin appearance. No weapon, shield, text, symbols, shadows, ground, or background. Consistent size across all eight views, boots fully visible, generous margins. Draw the WALKING STRIDE passing step, one foot lifted and forward, other planted, arms naturally swing opposite legs and left hand leaves hip. Moderate visible stride. Same body height as idle, no jump. Back angles show back, SW looking left, SE right.",
+    "attack": "Production sprite sheet EXACTLY eight full body merchant poses, four columns two rows, transparent background and transparent gutters. Order S,SW,W,NW / N,NE,E,SE. Reference1 is LOCKED eight directional idle art: use each matching direction's exact face, hairstyle, beard, clothing, height, chibi proportions. No changing outfit or anatomy, no mirrors. Indigo blue sleeveless laced split tunic over white rolled sleeves, brown belt/pouch/boots and charcoal trousers. Reference2 is same camera and directional motion pose guide; copy pose only, not mannequin appearance. No weapon, shield, text, symbols, shadows, ground, or background. Consistent size across all eight views, boots fully visible, generous margins. Draw right-handed PUNCH impact, anatomical RIGHT fist extends forward in facing direction at chest height, LEFT fist guarding near chest. Torso leans slightly forward, one planted boot behind for balance. Clearly differs from idle and walk, same head size and broad body, bare-handed, no magic or effect. Back views show back and right fist extends away from viewer."
+  },
+  "references": {
+    "idle": [
+      "source-art/approved-design.png",
+      "guides/idle-sheet.png"
+    ],
+    "walk": [
+      "source-art/idle-eight.png",
+      "guides/walk-sheet.png"
+    ],
+    "attack": [
+      "source-art/idle-eight.png",
+      "guides/attack-sheet.png"
+    ]
+  },
+  "notes": "One source scale across all 24 poses; brown/indigo/crimson affect only blue cloth. No mirroring. Original Lana geometry/camera, altered arms/legs. PNG hashes: merchant.json.",
+  "guideHashes": {
+    "guides/walk-sheet.png": "63f05a21f94c8b15fd9925fadd91858c22ecbca82af145bfed425916d5d39b66",
+    "guides/idle-sheet.png": "9187855814b233559c1aeabc1cd341974617e62d6c145aafe072d96c37b2a550",
+    "guides/attack-sheet.png": "f0e946d3eff3d65a50c26aa217af78bd669de15d5fb633d0faa8406c6fbbd60d"
+  },
+  "carpetPrompt": "../fushigi-security-v1/generation-prompts.json:carpet"
+}

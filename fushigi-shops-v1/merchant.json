@@ -1,0 +1,552 @@
+{
+  "name": "店主",
+  "frameSize": [
+    256,
+    256
+  ],
+  "origin": [
+    128,
+    224
+  ],
+  "renderScale": 1,
+  "sharedSourceScale": 0.43018018018018017,
+  "mirroring": false,
+  "views": {
+    "S": {
+      "idle": "S.png",
+      "walk": "S-walk.png",
+      "attack": "S-attack.png"
+    },
+    "SW": {
+      "idle": "SW.png",
+      "walk": "SW-walk.png",
+      "attack": "SW-attack.png"
+    },
+    "W": {
+      "idle": "W.png",
+      "walk": "W-walk.png",
+      "attack": "W-attack.png"
+    },
+    "NW": {
+      "idle": "NW.png",
+      "walk": "NW-walk.png",
+      "attack": "NW-attack.png"
+    },
+    "N": {
+      "idle": "N.png",
+      "walk": "N-walk.png",
+      "attack": "N-attack.png"
+    },
+    "NE": {
+      "idle": "NE.png",
+      "walk": "NE-walk.png",
+      "attack": "NE-attack.png"
+    },
+    "E": {
+      "idle": "E.png",
+      "walk": "E-walk.png",
+      "attack": "E-attack.png"
+    },
+    "SE": {
+      "idle": "SE.png",
+      "walk": "SE-walk.png",
+      "attack": "SE-attack.png"
+    }
+  },
+  "sha256": {
+    "source-art/approved-design.png": "404815e5d706935c350c243c36c31ccef86065eff0399fb52a3f95fca9b15a73",
+    "source-art/attack-eight.png": "27f5e0f0a23f01497d23882e420dc17c07d88ba8955723cf57da3bda76e25c12",
+    "source-art/carpet.png": "cae12b7adcf06608f804d9f203f92fc697c28d50d5a1e80bd2b6cab02471048c",
+    "source-art/idle-eight.png": "d9c9608483236da2df6eb427e6e8a4fcca1c8d1d0e564cb7e49960a5d3055af5",
+    "source-art/walk-eight.png": "bca8dfc3113f4c1c42b519ab610fb2b8ea670c9437341c1d688f29688c62a1d6",
+    "assets/brown/E-attack.png": "d32a269c5faaafafa28a852e969945aeefc74b0498bb9e5bcb8db383a8c1b395",
+    "assets/brown/E-walk.png": "8b4adee22c0038ab3c19e57e2c04d35ac46cde319799c0fc014db67ea11fdbd6",
+    "assets/brown/E.png": "f0a8c4924734f99dfd9035fd06be46cf16c8b3f74b1b367c1d10b305c6e55b71",
+    "assets/brown/N-attack.png": "3b036d9f507ef8435607ca58771225cbaeb18cf0df2db4a987612edd4d61a431",
+    "assets/brown/N-walk.png": "8fc931e22d2fdf60cfa4d4c682dcc634c74c9402e31a2afeead9de027417fb5e",
+    "assets/brown/N.png": "3f6113a16a26dbb952368f08fc8eee5854613bfb128ee5a90338807f89613903",
+    "assets/brown/NE-attack.png": "38db32cf2a6f597733a9b469ad189dbd1945017bbfb217f17764d98f5a917acd",
+    "assets/brown/NE-walk.png": "938818bd8298376101b2d29f2115106123adefeb80bf14d675de79621d7e12a4",
+    "assets/brown/NE.png": "1a719b1e441aec044ef80855112991bc025821917f1a21db47076298368a0dbe",
+    "assets/brown/NW-attack.png": "904a35f1b36b598e42f63fda4ee5c0389b3c52e1f54fcc559f0d6c1718f10f92",
+    "assets/brown/NW-walk.png": "85dbd9c4803997fa233c1bdbe5fe43ba7b2d7206949d6100911478b86354becf",
+    "assets/brown/NW.png": "f7ecd58b932ad56e247d1b7658188cae6d409fa8613d464a17893335cd5d8070",
+    "assets/brown/S-attack.png": "5a10733957de48e5ca45596a8c1c8c0bcb05b96498c67fd1db1cc48ee4afd0f6",
+    "assets/brown/S-walk.png": "7659e8d3bce50c514daf9f46b76e264f61fedf8f0d52fa712e56c686b7c7d794",
+    "assets/brown/S.png": "67678cb275434f426fb58779bfd2ab111114d856abf5354dd171dcbfe8714806",
+    "assets/brown/SE-attack.png": "0783eb86679677218f378e338517a0a62f3b527ad70a29042713e9888853d50a",
+    "assets/brown/SE-walk.png": "2e0ededac885bc80afccc4f1d93a1eb7a5e9dd2ff76543645422811b71ebeb12",
+    "assets/brown/SE.png": "05b38784aa2013ffe5e85328c989f9d5808d74614dc243341905d10324cbda64",
+    "assets/brown/SW-attack.png": "f16a9f3ac257c7c6323ca060a7d3a32c97028f2da37269525990c1c43682dd59",
+    "assets/brown/SW-walk.png": "e51964034d4df6774b3c8294ee3a4f3fb652f1072ba0c05b62d9357ec875c62b",
+    "assets/brown/SW.png": "9de6a19ea369840dd4e67b9a57c7c9be92957b620757d8916580f2e4c238c0d3",
+    "assets/brown/W-attack.png": "a1a405bc4a75d24bdc8a27dd18ecf64573fe01591e55c4732e7a7c8250305505",
+    "assets/brown/W-walk.png": "c9ff8a664d3e415771a6cf26a6f9702836a1ce8a77e611fb3906c32bcee73f01",
+    "assets/brown/W.png": "055275e27b602045a3d705e435d9cdb6cde981b8fd305b6029d64976e5c145a2",
+    "assets/carpet.png": "a97a91367c90e53a744a066a23710b7105e1cf9d2dd4b3fd5cdaf0bcc711cd27",
+    "assets/crimson/E-attack.png": "cb3b96a459417a5663b60bbdffa757765878d0c6b47963b219820d3a1ce22092",
+    "assets/crimson/E-walk.png": "7ad9013914e322081dae7ac3ec95d67edbdef4a0fba02547c2bc08e706c8792c",
+    "assets/crimson/E.png": "9ac96d3a5646a14a190cb34b039d973062046bd911a4c4879c2c78d0a2eb7252",
+    "assets/crimson/N-attack.png": "634a9f95eff7fddf0cf4428f53c715da2fe08e5c3fcf0d7c0866406da137e8d8",
+    "assets/crimson/N-walk.png": "ca7b8654ca89558f07f708e908f0ccd18a6b9c25d9505aacd5a5b95a97d6de78",
+    "assets/crimson/N.png": "4cb21d4ee26cafff8c6e96d6b1c6707ee3cdc2f7c2389c992c19a252f71fd30a",
+    "assets/crimson/NE-attack.png": "d9ca10e50bc6d712286783252ce81d761fd301f1bf94e19ba88f5e697b900017",
+    "assets/crimson/NE-walk.png": "a2f6eefa0a6c6ba3b5c22c962398c2351743bbe3bcbf59c79c7296390f995a20",
+    "assets/crimson/NE.png": "3caf65b3c77312d7e0312e84ebb1ac026f2ee13728e1112e6c0c1f4773803f7d",
+    "assets/crimson/NW-attack.png": "08e6248a4d80b302b35c6f067399fd3b23af030d527040692eb8d85f69a54cd3",
+    "assets/crimson/NW-walk.png": "1dff20afbbfda36178a1ebb09ea6668c99279a4b0cadecced535e165d03833c5",
+    "assets/crimson/NW.png": "9a15524209c9c7d6c94cddcf26eddd6b2c0f86b358ae750771f0d72d5276d4f5",
+    "assets/crimson/S-attack.png": "e3a796fb6544b69c3d57b9d30d9609f7bea8d665d78cb207a21e296f65999352",
+    "assets/crimson/S-walk.png": "989a7709d34902c6de2eb2cad994629e7725a4a8a5cbf404ba23d4b23f4fcbfc",
+    "assets/crimson/S.png": "a1e1620aa489a088a11bcb9e121b407c8fb4aa22101e6d8effd56e5e74af6a2d",
+    "assets/crimson/SE-attack.png": "f8b7c6b00062976a8fbd828073598584ea52422b488371d31e444744759afd21",
+    "assets/crimson/SE-walk.png": "dc5dbaeccf2d98bbf80ca14b51fa440c6eaa4ccc188e856cfe4658b5d297d1c5",
+    "assets/crimson/SE.png": "eaedc4d06801a9bad27cef1b8e9408fb0c8e108ee1c17550f5a7a37ec4e67a14",
+    "assets/crimson/SW-attack.png": "2c9ddfc755578820e2efc015303dd2a5678b571ce6002929bf549c9e848f1fe1",
+    "assets/crimson/SW-walk.png": "336039a06fc5fa8113fe1389a038cbe70c395b19aa440722e3e0f3f89f355fd2",
+    "assets/crimson/SW.png": "a4d227672e29e2c0061a67005c590c24efda433f66aeced912e15c8e2d9c2833",
+    "assets/crimson/W-attack.png": "c3c4fe328a007ee56114f5dd07b171e01f22808f17fd707432fec74230a6c213",
+    "assets/crimson/W-walk.png": "d1b2258226768b4efa29a273349d16f5c07e68c5f5050be7b79a79e8bf1e795c",
+    "assets/crimson/W.png": "db8d0ea7f883bea944c59a3d927b4126ae54c82424c44fe06a94fb92023a250e",
+    "assets/indigo/E-attack.png": "7470b80ba8e9151a6ad06a6a01160dc7153ec65e46cb9b79213c47b289dfb498",
+    "assets/indigo/E-walk.png": "8f482af0d18daee6742b2752b87edc59222d0d207bfe9981f2d0a3390cd8b869",
+    "assets/indigo/E.png": "4fa6dbcc29cf71e960d0cc612a8b1cbf4543f60e16560c584c1f934c237532d4",
+    "assets/indigo/N-attack.png": "dbc23e278e98e27121d699b86b63f2b7276dd6add5c7716375f313b0092d0bac",
+    "assets/indigo/N-walk.png": "6ab6805c929316287d4badd372743d4da78a4fdcce340a12e2b87b6a6c8b286c",
+    "assets/indigo/N.png": "516d0c85d00ce92adf438da57118fd7efd033df62100aae090fbbb676e7a7c28",
+    "assets/indigo/NE-attack.png": "95694dfa38a9918ff204442ea71a36fecffa04626586bf5d00265baf871dd3e3",
+    "assets/indigo/NE-walk.png": "4b83eec75d1ca6f80ddee6a9ca6f8dddb8d52e48c17ec1597963cb17d0518dbd",
+    "assets/indigo/NE.png": "7eaf99f48a454c9c2b931d5bcada36a378665ae21537249ebf8f5a1af54729de",
+    "assets/indigo/NW-attack.png": "8ec27c6c26b43f38984b9105298be0bd7352663088bf7a269240c8e0c2018697",
+    "assets/indigo/NW-walk.png": "4e4a63aa16f2189e049220c60d39716260e0c55939c1f176f06d73a2ec04250c",
+    "assets/indigo/NW.png": "13bf0ad556e245158f4cef165fbb554c4eadab32ff8df2043124ea3f286ee112",
+    "assets/indigo/S-attack.png": "7c9081dd9269219ee0eb062149c7774eb4eacb8cc4ad531176f0d8e54030ac14",
+    "assets/indigo/S-walk.png": "49c75638c1c7ce1eab9c611c459768a02cda59355ae5c1e5db3ed2729d20d84e",
+    "assets/indigo/S.png": "4d96a4d9500add5c06a02195680dde12675249dade7cadf1e36d2f78e6d15c99",
+    "assets/indigo/SE-attack.png": "6183db6d536a8c241842281b01754c151c3dbce4adb80479417467251ac3ab94",
+    "assets/indigo/SE-walk.png": "96aae5fe715d461066b0e7c1d57bb2fd48bcb3ca58e48fd2a1350dd56c10afca",
+    "assets/indigo/SE.png": "e329980a88bedef5f1a7fbd63d2a9999fb61ed47bd8ac6603d88c2d4bd122e0b",
+    "assets/indigo/SW-attack.png": "eecfc9c930b556d814ddf24a647272ec9d5d96bb6ea64c6cc23120b8ecc05f07",
+    "assets/indigo/SW-walk.png": "ac13d7a7e9051a3f2b8a8fc1e062e5d7fa3f06decf81d10b97f54f9f86bd33be",
+    "assets/indigo/SW.png": "b1502b815c723a88e8e5c207de527d6bc6f7dd126388623b2620c184c38f039e",
+    "assets/indigo/W-attack.png": "c6c16aef1c63c6709822bf0e692fe30f8d67eb2aa7a80b351db74ab0b3a91ed4",
+    "assets/indigo/W-walk.png": "4f268a3e2e432bdde5bdcca4d26af779f7c069bef385897f79a55b913d00af63",
+    "assets/indigo/W.png": "e9d9d4c9aeef797fe76c159d85514268976781cee917c92997d1bfbacba1e8b8"
+  },
+  "registration": {
+    "idle": {
+      "S": {
+        "sourceSize": [
+          268,
+          452
+        ],
+        "bootBand": [
+          26,
+          423,
+          232,
+          450
+        ],
+        "contact": [
+          129.0,
+          446
+        ],
+        "crownY": 33.0
+      },
+      "SW": {
+        "sourceSize": [
+          261,
+          457
+        ],
+        "bootBand": [
+          29,
+          428,
+          221,
+          455
+        ],
+        "contact": [
+          125.0,
+          451
+        ],
+        "crownY": 30.849099099099107
+      },
+      "W": {
+        "sourceSize": [
+          195,
+          457
+        ],
+        "bootBand": [
+          32,
+          427,
+          149,
+          454
+        ],
+        "contact": [
+          90.5,
+          450
+        ],
+        "crownY": 31.709459459459453
+      },
+      "NW": {
+        "sourceSize": [
+          222,
+          455
+        ],
+        "bootBand": [
+          20,
+          425,
+          199,
+          452
+        ],
+        "contact": [
+          109.5,
+          448
+        ],
+        "crownY": 32.139639639639654
+      },
+      "N": {
+        "sourceSize": [
+          272,
+          451
+        ],
+        "bootBand": [
+          30,
+          422,
+          241,
+          449
+        ],
+        "contact": [
+          135.5,
+          445
+        ],
+        "crownY": 33.43018018018017
+      },
+      "NE": {
+        "sourceSize": [
+          248,
+          454
+        ],
+        "bootBand": [
+          39,
+          424,
+          225,
+          451
+        ],
+        "contact": [
+          132.0,
+          447
+        ],
+        "crownY": 33.0
+      },
+      "E": {
+        "sourceSize": [
+          195,
+          453
+        ],
+        "bootBand": [
+          42,
+          424,
+          157,
+          451
+        ],
+        "contact": [
+          99.5,
+          447
+        ],
+        "crownY": 32.56981981981983
+      },
+      "SE": {
+        "sourceSize": [
+          269,
+          456
+        ],
+        "bootBand": [
+          46,
+          427,
+          243,
+          454
+        ],
+        "contact": [
+          144.5,
+          450
+        ],
+        "crownY": 31.27927927927928
+      }
+    },
+    "walk": {
+      "S": {
+        "sourceSize": [
+          226,
+          471
+        ],
+        "bootBand": [
+          120,
+          441,
+          189,
+          469
+        ],
+        "contact": [
+          154.5,
+          465
+        ],
+        "crownY": 24.82657657657657
+      },
+      "SW": {
+        "sourceSize": [
+          277,
+          469
+        ],
+        "bootBand": [
+          62,
+          439,
+          151,
+          467
+        ],
+        "contact": [
+          106.5,
+          463
+        ],
+        "crownY": 26.117117117117118
+      },
+      "W": {
+        "sourceSize": [
+          226,
+          452
+        ],
+        "bootBand": [
+          18,
+          423,
+          199,
+          450
+        ],
+        "contact": [
+          108.5,
+          446
+        ],
+        "crownY": 33.0
+      },
+      "NW": {
+        "sourceSize": [
+          249,
+          470
+        ],
+        "bootBand": [
+          93,
+          440,
+          187,
+          468
+        ],
+        "contact": [
+          140.0,
+          464
+        ],
+        "crownY": 25.256756756756772
+      },
+      "N": {
+        "sourceSize": [
+          249,
+          451
+        ],
+        "bootBand": [
+          76,
+          422,
+          138,
+          449
+        ],
+        "contact": [
+          107.0,
+          445
+        ],
+        "crownY": 33.860360360360374
+      },
+      "NE": {
+        "sourceSize": [
+          278,
+          458
+        ],
+        "bootBand": [
+          34,
+          429,
+          105,
+          456
+        ],
+        "contact": [
+          69.5,
+          452
+        ],
+        "crownY": 30.849099099099107
+      },
+      "E": {
+        "sourceSize": [
+          243,
+          459
+        ],
+        "bootBand": [
+          32,
+          430,
+          229,
+          457
+        ],
+        "contact": [
+          130.5,
+          453
+        ],
+        "crownY": 30.418918918918934
+      },
+      "SE": {
+        "sourceSize": [
+          268,
+          459
+        ],
+        "bootBand": [
+          137,
+          430,
+          227,
+          457
+        ],
+        "contact": [
+          182.0,
+          453
+        ],
+        "crownY": 30.418918918918934
+      }
+    },
+    "attack": {
+      "S": {
+        "sourceSize": [
+          257,
+          458
+        ],
+        "bootBand": [
+          27,
+          429,
+          99,
+          456
+        ],
+        "contact": [
+          63.0,
+          452
+        ],
+        "crownY": 30.849099099099107
+      },
+      "SW": {
+        "sourceSize": [
+          301,
+          453
+        ],
+        "bootBand": [
+          56,
+          424,
+          126,
+          451
+        ],
+        "contact": [
+          91.0,
+          447
+        ],
+        "crownY": 33.0
+      },
+      "W": {
+        "sourceSize": [
+          285,
+          452
+        ],
+        "bootBand": [
+          115,
+          422,
+          213,
+          449
+        ],
+        "contact": [
+          164.0,
+          445
+        ],
+        "crownY": 33.43018018018017
+      },
+      "NW": {
+        "sourceSize": [
+          286,
+          456
+        ],
+        "bootBand": [
+          56,
+          426,
+          282,
+          453
+        ],
+        "contact": [
+          169.0,
+          449
+        ],
+        "crownY": 31.709459459459453
+      },
+      "N": {
+        "sourceSize": [
+          258,
+          462
+        ],
+        "bootBand": [
+          26,
+          432,
+          256,
+          459
+        ],
+        "contact": [
+          141.0,
+          455
+        ],
+        "crownY": 29.128378378378386
+      },
+      "NE": {
+        "sourceSize": [
+          302,
+          459
+        ],
+        "bootBand": [
+          6,
+          429,
+          275,
+          456
+        ],
+        "contact": [
+          140.5,
+          452
+        ],
+        "crownY": 30.418918918918934
+      },
+      "E": {
+        "sourceSize": [
+          333,
+          465
+        ],
+        "bootBand": [
+          3,
+          434,
+          105,
+          462
+        ],
+        "contact": [
+          54.0,
+          458
+        ],
+        "crownY": 27.83783783783784
+      },
+      "SE": {
+        "sourceSize": [
+          295,
+          467
+        ],
+        "bootBand": [
+          181,
+          437,
+          266,
+          465
+        ],
+        "contact": [
+          223.5,
+          461
+        ],
+        "crownY": 26.54729729729729
+      }
+    }
+  }
+}

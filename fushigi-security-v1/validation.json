@@ -1,0 +1,26 @@
+{
+  "shopChecks": 40,
+  "securityAndEntrances": 30,
+  "yuzunamiki": 36,
+  "avenius": 42,
+  "sherininya": 43,
+  "mvp": "ALL OK",
+  "merchantPoses": 72,
+  "securityPoses": 48,
+  "browserViewports": [
+    [
+      390,
+      844
+    ],
+    [
+      844,
+      390
+    ],
+    [
+      320,
+      640
+    ]
+  ],
+  "pursuit": "same floor only",
+  "visualInspection": true
+}

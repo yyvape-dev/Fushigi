@@ -1,0 +1,8 @@
+{
+  "registeredPoses": 72,
+  "hashes": true,
+  "transparentMargins": true,
+  "mirroring": false,
+  "threeClothingColors": true,
+  "browserVerification": "see browser-validation.json"
+}

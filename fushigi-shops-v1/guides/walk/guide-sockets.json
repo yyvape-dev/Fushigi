@@ -1,0 +1,224 @@
+{
+  "directions": [
+    {
+      "id": "S",
+      "index": 0,
+      "ground": [
+        256.0,
+        434.27
+      ],
+      "right_hand": [
+        183.82,
+        308.5
+      ],
+      "left_hand": [
+        328.18,
+        285.08
+      ],
+      "right_layer": "front",
+      "left_layer": "back",
+      "shield_width": 1.0,
+      "head_top": [
+        256.0,
+        55.07
+      ],
+      "head_center": [
+        256.0,
+        135.14
+      ]
+    },
+    {
+      "id": "SW",
+      "index": 1,
+      "ground": [
+        256.0,
+        434.27
+      ],
+      "right_hand": [
+        185.97,
+        282.82
+      ],
+      "left_hand": [
+        326.03,
+        310.76
+      ],
+      "right_layer": "back",
+      "left_layer": "front",
+      "shield_width": 0.707,
+      "head_top": [
+        256.0,
+        55.07
+      ],
+      "head_center": [
+        256.0,
+        135.14
+      ]
+    },
+    {
+      "id": "W",
+      "index": 2,
+      "ground": [
+        256.0,
+        434.27
+      ],
+      "right_hand": [
+        229.14,
+        265.32
+      ],
+      "left_hand": [
+        282.86,
+        328.26
+      ],
+      "right_layer": "back",
+      "left_layer": "front",
+      "shield_width": 0.2,
+      "head_top": [
+        256.0,
+        55.07
+      ],
+      "head_center": [
+        256.0,
+        135.14
+      ]
+    },
+    {
+      "id": "NW",
+      "index": 3,
+      "ground": [
+        256.0,
+        434.27
+      ],
+      "right_hand": [
+        288.05,
+        266.25
+      ],
+      "left_hand": [
+        223.95,
+        327.32
+      ],
+      "right_layer": "back",
+      "left_layer": "front",
+      "shield_width": 0.707,
+      "head_top": [
+        256.0,
+        55.07
+      ],
+      "head_center": [
+        256.0,
+        135.14
+      ]
+    },
+    {
+      "id": "N",
+      "index": 4,
+      "ground": [
+        256.0,
+        434.27
+      ],
+      "right_hand": [
+        328.18,
+        285.08
+      ],
+      "left_hand": [
+        183.82,
+        308.5
+      ],
+      "right_layer": "back",
+      "left_layer": "front",
+      "shield_width": 1.0,
+      "head_top": [
+        256.0,
+        55.07
+      ],
+      "head_center": [
+        256.0,
+        135.14
+      ]
+    },
+    {
+      "id": "NE",
+      "index": 5,
+      "ground": [
+        256.0,
+        434.27
+      ],
+      "right_hand": [
+        326.03,
+        310.76
+      ],
+      "left_hand": [
+        185.97,
+        282.82
+      ],
+      "right_layer": "front",
+      "left_layer": "back",
+      "shield_width": 0.707,
+      "head_top": [
+        256.0,
+        55.07
+      ],
+      "head_center": [
+        256.0,
+        135.14
+      ]
+    },
+    {
+      "id": "E",
+      "index": 6,
+      "ground": [
+        256.0,
+        434.27
+      ],
+      "right_hand": [
+        282.86,
+        328.26
+      ],
+      "left_hand": [
+        229.14,
+        265.32
+      ],
+      "right_layer": "front",
+      "left_layer": "back",
+      "shield_width": 0.2,
+      "head_top": [
+        256.0,
+        55.07
+      ],
+      "head_center": [
+        256.0,
+        135.14
+      ]
+    },
+    {
+      "id": "SE",
+      "index": 7,
+      "ground": [
+        256.0,
+        434.27
+      ],
+      "right_hand": [
+        223.95,
+        327.32
+      ],
+      "left_hand": [
+        288.05,
+        266.25
+      ],
+      "right_layer": "front",
+      "left_layer": "back",
+      "shield_width": 0.707,
+      "head_top": [
+        256.0,
+        55.07
+      ],
+      "head_center": [
+        256.0,
+        135.14
+      ]
+    }
+  ],
+  "frame_size": 512,
+  "projection": "orthographic",
+  "ortho_scale": 3.05,
+  "camera_elevation_degrees": 25.8493248967401
+}
