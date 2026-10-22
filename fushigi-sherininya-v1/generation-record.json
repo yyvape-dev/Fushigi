@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-22",
+  "name": "シェリニーニャ",
+  "approvedDesign": "source-art/approved-design.png",
+  "idle": {
+    "prompt": "Create canonical 8-direction IDLE game sprites of ONLY Sherininya, the white-haired hooded ADULT mage on RIGHT in reference1. Blonde Lana is proportion/style reference only, DO NOT draw her. Reference2 is the original Lana mannequin adjusted to relaxed bent-elbow magic hands, with exact8 directions and elevated26deg orthographic game camera. EXACT4 columns x2rows: S front, SW45deg front LEFT, W strict LEFT profile, NW45deg BACK LEFT with narrow left cheek sliver / N straight BACK no face, NE45deg BACK RIGHT with narrow right cheek sliver, E strict RIGHT profile, SE45deg front RIGHT. Match corresponding guide body AND head angle, never substitute straight back for back diagonal. Match locked design exactly: huge chibi head/short body same as mannequin, ivory-white chin-length bob with long bangs covering her own LEFT eye (viewer RIGHT in S), sleepy HALF-LIDDED cool gray-teal eyes, pale vermilion upper-eye makeup and soft dusty mauve cute UNDER-EYE CIRCLES, tiny indifferent mouth and lowered shoulders; languid, never wide-eyed or smiling alert. A modestly fuller clothed bust and softly fuller thighs are part of APPROVED design; maintain tasteful fully covered high-neck outfit. Soft oversized BLACK hood with rich TEAL inner lining, NOT a pointed witch hat. Black high collar capelet and cape with gold trim/buckle, rich teal lining at back/inside, short black gold-trim tunic dress, loose pale white-gray puff sleeves, black gloves, black knee-high laced boots and small upper-thigh gap. No armor plates, sword, staff, shield. Empty hands, one relaxed palm up, other loose, small subdued dark-violet ember above her ANATOMICAL LEFT hand as in approved design. Keep handedness and bangs asymmetry across all8, no mirrors. Same body size and crown-to-contact across cells, don't shrink body for hood. All stand grounded same relaxed pose. Warm hand-painted storybook game art matching approved design, face readable at96px sprite height. Each character fits entirely inside its own equal cell with generous completely TRANSPARENT gutters. No ground shadows or colored haze, no particles, no captions, no grid. TRUE transparent background. All full boots present. Prioritize EXACT sleepy expression, mauve eye circles, vermilion makeup, white bob, black/teal hood, fuller silhouette.",
+    "references": [
+      "source-art/approved-design.png",
+      "guides/idle-sheet.png"
+    ],
+    "output": "source-art/idle-eight.png"
+  },
+  "walk": {
+    "prompt": "Create eight WALK game sprites of adult hooded mage Sherininya. Reference1 is LOCKED8-direction idle art, use EXACT corresponding directional face/costume per cell. Reference2 is SAME hero mannequin with WALK legs, follow its stride and26degree elevated orthographic camera. 4columns x2rows S, SW, W, NW / N, NE, E, SE, in EXACT corresponding angles. W faces LEFT strictprofile, E RIGHT; NW NE are45-degree rear-diagonal with narrow cheek sliver, N fullyback with noface. Visible forward step with knees bent and other foot back, cape gently sways, hands relaxed low so WALK differs clearly from idle; keep sleepy slightly slouched shoulders, not running or lunging. EXACT locked ivory bob bangs cover anatomicalLEFT eye, half-lidded gray-teal eyes, pale vermilion eye makeup, soft cute mauve under-eye circles, full black/teal hood, fuller fully-clothed chest and softly fuller thighs, short black gold-trim tunic, loose white-gray sleeves, black gloves and knee-high laced boots, long black cape TEAL lining. No redesign, pointed hat, sword, staff or shield. AnatomicalLEFT hand carries small contained dark violet-black ember, right hand relaxed. True transparency, no glow cloud, shadow, particles, text or grid. Same physical body size/head ratio across8 and locked idle. All8 independently drawn not mirrored. Each complete body stays inside inner80% of equal cell with clear empty gutters; boots never cropped. Match soft painted storybook style, extremely important sleepy expression not wide-eyed.",
+    "references": [
+      "source-art/idle-eight.png",
+      "guides/walk-sheet.png"
+    ],
+    "output": "source-art/walk-eight.png"
+  },
+  "cast": {
+    "prompt": "Create eight CASTING/ATTACK game sprites of adult hooded mage Sherininya. Reference1 is LOCKED8-direction idle art, use EXACT corresponding directional face/costume individually. Reference2 is original hero mannequin adjusted to EMPTY-HAND MAGIC CAST, follow its arm joints and26degree elevated orthographic camera. 4columns x2rows S, SW, W, NW / N, NE, E, SE. All body and head angles same as corresponding idle guide. W strictprofile LEFT and palm casts LEFT; E strictprofile RIGHT and palm casts RIGHT; S front casts DOWN toward viewer with foreshortened arm, N exactback casts UP away with arm partly hidden behind body and hood. NW casts upperLEFT and NE upperRIGHT, matching45deg rear body orientation, not straightback copies. Spellcast uses ANATOMICAL LEFT arm extended FORWARD toward faced world direction, palm open with small contained black/violet orb hovering just past palm, other RIGHT hand near abdomen supporting incantation. No staff/sword/shield, no sword-swing pose. Feet planted, modest torso lean, casting arm elbow unfurled, clearly distinct from IDLE and WALK while same body size. Keep sleepy half-lidded expression even casting. EXACT locked ivory bob with bangs covering anatomical LEFT eye; grayteal iris, pale vermilion makeup, cute mauve under-eye circles, large black hood with teal edge/lining, fully clothed fuller chest, softly fuller thighs, short gold-trim black tunic, puff graywhite sleeves, black gloves and laced boots, black cape with TEAL inner lining. Warm painted storybook game style. All full bodies and hands/contained magic fit entirely within inner75% of every equal cell, wide transparent margins. NO beam or long spell trail on this sheet: in-game renderer adds projectile separately. No aura clouds, shadows, particles, text or grid. TRUE TRANSPARENT background. Eight independently painted views no horizontal flipping. Do not change head/body proportions or character likeness.",
+    "references": [
+      "source-art/idle-eight.png",
+      "guides/attack-sheet.png"
+    ],
+    "output": "source-art/attack-eight.png"
+  },
+  "mirroring": false,
+  "mannequin": "Original hero geometry, body and feet unchanged; elbows/wrists and walking legs adjusted for mage.",
+  "sha256": {
+    "source-art/approved-design.png": "fd9acdc04a4fdd1e3d5171f5f585fef56c9f5e67e7953064f906f9eaebe7994a",
+    "source-art/idle-eight.png": "e4f981d86c808598d08b3c4f76d42bab6d0cc7bacd7e3c1be184f018036db67f",
+    "source-art/walk-eight.png": "1db9730977169e7f6bbc852a998e5e1f8f87c15fc43327fbb8873c71531cb119",
+    "source-art/attack-eight.png": "7bf6633a3230583ed0c341c4bc42355ab97575570eb9a394372e81a10072acc6",
+    "guides/walk-sheet.png": "416f79c4dd33619ba9e50e8404e71331457d199a3547447dfd1a5a3a44a03039",
+    "guides/motion-sheet.png": "53aa49e0c3cca0a4a38b67995f03315e16a13991be62fc818f48deec7c0b8ade",
+    "guides/idle-sheet.png": "c4b7f3cd9d8418749ac4f9781302c72d75d86ee6a1d0f7721cb6b5ae35ac438f",
+    "guides/attack-sheet.png": "9a10f2157d09a5a4f38b00cfd480da5b12143329d91ced51bc197e5a40581ede"
+  }
+}

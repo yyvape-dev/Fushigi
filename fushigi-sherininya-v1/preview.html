@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>シェリニーニャ — 8方向の待機・歩行・詠唱</title>
+<link rel="stylesheet" href="preview.css">
+<main>
+  <nav><a href="game-review.html?flash=1">貫通魔法を試す</a><span>／</span><a href="../">本編</a><span>／</span><a href="../fushigi-allies-v1/preview.html">ユズナミキ</a></nav>
+  <header><p class="eyebrow">助っ人 03 · 待機・歩行・詠唱</p><h1>シェリニーニャ</h1><p>薄朱色の目元、淡いクマ。眠たげな黒魔法使い。</p></header>
+  <section aria-labelledby="comparison-title">
+    <h2 id="comparison-title">ラナと同じ床に</h2>
+    <p class="note">本編で採用済みのラナの画像と比較。共通の縮尺と足元で表示します。</p>
+    <div class="controls">
+      <label>向き <select id="direction"><option>S</option><option>SW</option><option>W</option><option>NW</option><option>N</option><option>NE</option><option>E</option><option>SE</option></select></label>
+      <label>動作 <select id="action"><option value="idle">待機</option><option value="walk">歩行</option><option value="attack">黒魔法</option></select></label>
+      <label>表示 <select id="size"><option value="96">実寸 · 1マス64px</option><option value="192" selected>拡大 · 2倍</option></select></label>
+      <label><input type="checkbox" id="guides" checked> 接地点・頭頂線</label>
+      <button id="rotate" type="button" aria-pressed="false">方向を順に見る</button>
+    </div>
+    <div class="stage"><canvas id="comparison" width="720" height="370" aria-label="同じ縮尺で並べたラナとシェリニーニャ"></canvas></div>
+    <p id="status" role="status">画像を読み込み中…</p>
+  </section>
+  <section aria-labelledby="directions-title"><h2 id="directions-title">8方向を確認</h2><p class="note">眠そうな表情とフード、気だるい待機・歩行・詠唱。左右反転は使っていません。</p><div id="views"></div></section>
+  <section class="details"><div><h2>黒魔法</h2><p>8方向の直線2マスへ黒い魔法。敵を貫通して攻撃し、味方にはダメージを与えません。壁では止まります。</p><p class="note">本編に実装済み。主人公が射線の途中にいても、その先の敵だけに当たります。</p></div><a class="design" href="source-art/approved-design.png"><img src="source-art/approved-design.png" alt="承認済みの初期デザイン比較" loading="lazy"><span>承認済みデザインを開く ↗</span></a></section>
+</main>
+<script src="preview.js"></script>
+</html>

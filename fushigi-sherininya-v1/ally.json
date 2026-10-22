@@ -1,0 +1,646 @@
+{
+  "name": "シェリニーニャ",
+  "status": "integrated-companion",
+  "frameSize": [
+    256,
+    256
+  ],
+  "motionFrameSize": [
+    320,
+    256
+  ],
+  "origin": [
+    128,
+    224
+  ],
+  "heightToGround": 192,
+  "renderScale": 1,
+  "mirroring": false,
+  "lanaCrownY": 33,
+  "views": {
+    "S": {
+      "idle": "assets/S.png",
+      "motion": "assets/S-motion.png",
+      "anchors": {
+        "idle": [
+          128.0,
+          224
+        ],
+        "walk": [
+          160.0,
+          224
+        ],
+        "attack": [
+          160.0,
+          224
+        ]
+      }
+    },
+    "SW": {
+      "idle": "assets/SW.png",
+      "motion": "assets/SW-motion.png",
+      "anchors": {
+        "idle": [
+          128.0,
+          224
+        ],
+        "walk": [
+          160.0,
+          224
+        ],
+        "attack": [
+          160.0,
+          224
+        ]
+      }
+    },
+    "W": {
+      "idle": "assets/W.png",
+      "motion": "assets/W-motion.png",
+      "anchors": {
+        "idle": [
+          128.0,
+          224
+        ],
+        "walk": [
+          160.0,
+          224
+        ],
+        "attack": [
+          160.0,
+          224
+        ]
+      }
+    },
+    "NW": {
+      "idle": "assets/NW.png",
+      "motion": "assets/NW-motion.png",
+      "anchors": {
+        "idle": [
+          128.0,
+          224
+        ],
+        "walk": [
+          160.0,
+          224
+        ],
+        "attack": [
+          160.0,
+          224
+        ]
+      }
+    },
+    "N": {
+      "idle": "assets/N.png",
+      "motion": "assets/N-motion.png",
+      "anchors": {
+        "idle": [
+          128.0,
+          224
+        ],
+        "walk": [
+          160.0,
+          224
+        ],
+        "attack": [
+          160.0,
+          224
+        ]
+      }
+    },
+    "NE": {
+      "idle": "assets/NE.png",
+      "motion": "assets/NE-motion.png",
+      "anchors": {
+        "idle": [
+          128.0,
+          224
+        ],
+        "walk": [
+          160.0,
+          224
+        ],
+        "attack": [
+          160.0,
+          224
+        ]
+      }
+    },
+    "E": {
+      "idle": "assets/E.png",
+      "motion": "assets/E-motion.png",
+      "anchors": {
+        "idle": [
+          128.0,
+          224
+        ],
+        "walk": [
+          160.0,
+          224
+        ],
+        "attack": [
+          160.0,
+          224
+        ]
+      }
+    },
+    "SE": {
+      "idle": "assets/SE.png",
+      "motion": "assets/SE-motion.png",
+      "anchors": {
+        "idle": [
+          128.0,
+          224
+        ],
+        "walk": [
+          160.0,
+          224
+        ],
+        "attack": [
+          160.0,
+          224
+        ]
+      }
+    }
+  },
+  "registration": {
+    "idle": {
+      "source": "source-art/idle-eight.png",
+      "sharedScale": 0.4152173913043478,
+      "views": {
+        "S": {
+          "croppedSourceSize": [
+            304,
+            472
+          ],
+          "bootBand": [
+            89,
+            440,
+            214,
+            470
+          ],
+          "contact": [
+            151.5,
+            462
+          ],
+          "crownY": 2,
+          "registeredCrownY": 33.0
+        },
+        "SW": {
+          "croppedSourceSize": [
+            295,
+            471
+          ],
+          "bootBand": [
+            85,
+            439,
+            201,
+            469
+          ],
+          "contact": [
+            143.0,
+            461
+          ],
+          "crownY": 2,
+          "registeredCrownY": 33.41521739130434
+        },
+        "W": {
+          "croppedSourceSize": [
+            268,
+            467
+          ],
+          "bootBand": [
+            76,
+            435,
+            158,
+            465
+          ],
+          "contact": [
+            117.0,
+            457
+          ],
+          "crownY": 2,
+          "registeredCrownY": 35.07608695652175
+        },
+        "NW": {
+          "croppedSourceSize": [
+            268,
+            465
+          ],
+          "bootBand": [
+            62,
+            432,
+            178,
+            462
+          ],
+          "contact": [
+            120.0,
+            454
+          ],
+          "crownY": 2,
+          "registeredCrownY": 36.32173913043479
+        },
+        "N": {
+          "croppedSourceSize": [
+            296,
+            466
+          ],
+          "bootBand": [
+            87,
+            434,
+            215,
+            464
+          ],
+          "contact": [
+            151.0,
+            456
+          ],
+          "crownY": 2,
+          "registeredCrownY": 35.49130434782609
+        },
+        "NE": {
+          "croppedSourceSize": [
+            277,
+            470
+          ],
+          "bootBand": [
+            75,
+            438,
+            220,
+            468
+          ],
+          "contact": [
+            147.5,
+            460
+          ],
+          "crownY": 3,
+          "registeredCrownY": 34.245652173913044
+        },
+        "E": {
+          "croppedSourceSize": [
+            273,
+            474
+          ],
+          "bootBand": [
+            108,
+            441,
+            181,
+            472
+          ],
+          "contact": [
+            144.5,
+            464
+          ],
+          "crownY": 2,
+          "registeredCrownY": 32.16956521739132
+        },
+        "SE": {
+          "croppedSourceSize": [
+            288,
+            473
+          ],
+          "bootBand": [
+            98,
+            441,
+            226,
+            471
+          ],
+          "contact": [
+            162.0,
+            463
+          ],
+          "crownY": 2,
+          "registeredCrownY": 32.58478260869566
+        }
+      }
+    },
+    "walk": {
+      "source": "source-art/walk-eight.png",
+      "sharedScale": 0.410752688172043,
+      "views": {
+        "S": {
+          "croppedSourceSize": [
+            296,
+            478
+          ],
+          "bootBand": [
+            111,
+            445,
+            160,
+            476
+          ],
+          "contact": [
+            135.5,
+            467
+          ],
+          "crownY": 2,
+          "registeredCrownY": 33.0
+        },
+        "SW": {
+          "croppedSourceSize": [
+            323,
+            477
+          ],
+          "bootBand": [
+            90,
+            444,
+            159,
+            475
+          ],
+          "contact": [
+            124.5,
+            466
+          ],
+          "crownY": 2,
+          "registeredCrownY": 33.41075268817204
+        },
+        "W": {
+          "croppedSourceSize": [
+            288,
+            480
+          ],
+          "bootBand": [
+            23,
+            447,
+            189,
+            478
+          ],
+          "contact": [
+            106.0,
+            469
+          ],
+          "crownY": 3,
+          "registeredCrownY": 32.58924731182796
+        },
+        "NW": {
+          "croppedSourceSize": [
+            286,
+            485
+          ],
+          "bootBand": [
+            73,
+            451,
+            209,
+            482
+          ],
+          "contact": [
+            141.0,
+            473
+          ],
+          "crownY": 2,
+          "registeredCrownY": 30.535483870967738
+        },
+        "N": {
+          "croppedSourceSize": [
+            296,
+            486
+          ],
+          "bootBand": [
+            112,
+            453,
+            161,
+            484
+          ],
+          "contact": [
+            136.5,
+            475
+          ],
+          "crownY": 3,
+          "registeredCrownY": 30.1247311827957
+        },
+        "NE": {
+          "croppedSourceSize": [
+            294,
+            491
+          ],
+          "bootBand": [
+            75,
+            457,
+            136,
+            489
+          ],
+          "contact": [
+            105.5,
+            480
+          ],
+          "crownY": 3,
+          "registeredCrownY": 28.070967741935476
+        },
+        "E": {
+          "croppedSourceSize": [
+            286,
+            486
+          ],
+          "bootBand": [
+            92,
+            453,
+            275,
+            484
+          ],
+          "contact": [
+            183.5,
+            475
+          ],
+          "crownY": 3,
+          "registeredCrownY": 30.1247311827957
+        },
+        "SE": {
+          "croppedSourceSize": [
+            306,
+            487
+          ],
+          "bootBand": [
+            161,
+            453,
+            236,
+            484
+          ],
+          "contact": [
+            198.5,
+            475
+          ],
+          "crownY": 2,
+          "registeredCrownY": 29.71397849462366
+        }
+      }
+    },
+    "attack": {
+      "source": "source-art/attack-eight.png",
+      "sharedScale": 0.41163793103448276,
+      "views": {
+        "S": {
+          "croppedSourceSize": [
+            301,
+            476
+          ],
+          "bootBand": [
+            62,
+            443,
+            235,
+            474
+          ],
+          "contact": [
+            148.5,
+            466
+          ],
+          "crownY": 2,
+          "registeredCrownY": 33.0
+        },
+        "SW": {
+          "croppedSourceSize": [
+            333,
+            476
+          ],
+          "bootBand": [
+            207,
+            442,
+            263,
+            473
+          ],
+          "contact": [
+            235.0,
+            465
+          ],
+          "crownY": 2,
+          "registeredCrownY": 33.41163793103448
+        },
+        "W": {
+          "croppedSourceSize": [
+            332,
+            471
+          ],
+          "bootBand": [
+            125,
+            438,
+            208,
+            468
+          ],
+          "contact": [
+            166.5,
+            460
+          ],
+          "crownY": 3,
+          "registeredCrownY": 35.88146551724137
+        },
+        "NW": {
+          "croppedSourceSize": [
+            318,
+            448
+          ],
+          "bootBand": [
+            61,
+            417,
+            235,
+            446
+          ],
+          "contact": [
+            148.0,
+            438
+          ],
+          "crownY": 2,
+          "registeredCrownY": 44.52586206896552
+        },
+        "N": {
+          "croppedSourceSize": [
+            306,
+            457
+          ],
+          "bootBand": [
+            68,
+            426,
+            231,
+            455
+          ],
+          "contact": [
+            149.5,
+            447
+          ],
+          "crownY": 2,
+          "registeredCrownY": 40.821120689655174
+        },
+        "NE": {
+          "croppedSourceSize": [
+            329,
+            439
+          ],
+          "bootBand": [
+            84,
+            409,
+            280,
+            437
+          ],
+          "contact": [
+            182.0,
+            429
+          ],
+          "crownY": 3,
+          "registeredCrownY": 48.64224137931035
+        },
+        "E": {
+          "croppedSourceSize": [
+            336,
+            455
+          ],
+          "bootBand": [
+            110,
+            424,
+            183,
+            453
+          ],
+          "contact": [
+            146.5,
+            445
+          ],
+          "crownY": 3,
+          "registeredCrownY": 42.056034482758605
+        },
+        "SE": {
+          "croppedSourceSize": [
+            309,
+            465
+          ],
+          "bootBand": [
+            51,
+            433,
+            232,
+            463
+          ],
+          "contact": [
+            141.5,
+            455
+          ],
+          "crownY": 2,
+          "registeredCrownY": 37.5280172413793
+        }
+      }
+    }
+  },
+  "sha256": {
+    "source-art/idle-eight.png": "e4f981d86c808598d08b3c4f76d42bab6d0cc7bacd7e3c1be184f018036db67f",
+    "source-art/walk-eight.png": "1db9730977169e7f6bbc852a998e5e1f8f87c15fc43327fbb8873c71531cb119",
+    "source-art/attack-eight.png": "7bf6633a3230583ed0c341c4bc42355ab97575570eb9a394372e81a10072acc6",
+    "assets/E-motion.png": "5f2f547ca47c5d4695c0cd83cb0521b3d13b7a60f5be5a1cee96c90157fa6062",
+    "assets/E.png": "3492e1a40fe3d9d70dbd62f7ebdecb76d40c862d272aadef6188d5d72b96ae98",
+    "assets/N-motion.png": "efe43f37f2c63f2ec55ff27abfc8c296462ee4a15ab95630b76d98c8b7b12fe2",
+    "assets/N.png": "1204a95e3903f960c5a3de5519502af67e5bc5165b0a465eb4b097e15cbd0142",
+    "assets/NE-motion.png": "5ccf3ab1d41d4a9d12682479e05efd9ef4d8772c8b33909dfdb6899d5933f935",
+    "assets/NE.png": "436c00b018160167af646bf4879d4bdb5dbf0be8fc5398bc1a621018a048cdf0",
+    "assets/NW-motion.png": "a2b0d9a68804ba9ccb7d03545beb5ad1204bd84fa4f47f25057f9f4471ba8ddb",
+    "assets/NW.png": "30fa66883838910ae0f10daa3f85b1f6c8f28aae7a7ca3f944ac01429b103ea9",
+    "assets/S-motion.png": "851cc0a9aad789fd0908946f1ca3995968890858778c3d628f811073ec1a4840",
+    "assets/S.png": "4915131571cf047780981366508b1fecdb9e337f893246be9f8f358047f2c266",
+    "assets/SE-motion.png": "1e4d2f3d8760bc59f77abf2f6d608e4539781dd03aa58dc2b412d728678a17fc",
+    "assets/SE.png": "13f422eb1e19cbfccc1f9faa55ac974df572071aac01da296903be4d569f967b",
+    "assets/SW-motion.png": "f33e8b344d355beec55ddad92a118bf1f62f5d11063c3d13bd5b0697c9a652ad",
+    "assets/SW.png": "c5e70ee6f09078ae3a747feb649d928963ef725c758ff6be147b174793cda1c7",
+    "assets/W-motion.png": "fd8030bb29de73952e90e22a678d77d9a22fb1f111f544f8d9b7d2521af486c1",
+    "assets/W.png": "da80a8addb5caaafcab939e8cfd093a30a18750c3ff800bd07998e30dc998bcc"
+  },
+  "ability": {
+    "name": "黒魔法",
+    "range": 2,
+    "enemyPiercing": true,
+    "friendlyFire": false,
+    "wallsBlock": true
+  }
+}
