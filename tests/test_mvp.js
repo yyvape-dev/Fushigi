@@ -351,7 +351,7 @@
   // ===== 追加：敵の種類・装備と強化値・5階建て =====
   ok('5F: dungeon has 5 floors by default', (DUNGEONS.first.floors = 5) === 5);
   { const seen1 = new Set(), seen5 = new Set(); for (let i = 0; i < 400; i++) { seen1.add(rollEnemy(1)); seen5.add(rollEnemy(5)); }
-    ok('enemies: floor1 only slime/goblin', [...seen1].sort().join() === 'goblin,slime');
+    ok('enemies: floor1 table is slime/goblin/bat only', [...seen1].sort().join() === 'bat,goblin,slime');
     ok('enemies: floor5 includes every eligible base and upper rank', seen5.size === Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= 5 && 5 <= (ENEMIES[k].to || 99)).length && Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= 5 && 5 <= (ENEMIES[k].to || 99)).every(k => seen5.has(k)));
     ok('enemies: every kind has stats', Object.keys(ENEMIES).every(k => ENEMIES[k].hp(5) > 0 && ENEMIES[k].atk(5)[1] >= ENEMIES[k].atk(5)[0] && DEFAULT[k])); }
   { toTown(false); wh = []; inv = [mkItem('sword', 2), mkItem('sword', 0), mkItem('woodshield', 1), mkItem('scroll'), mkItem('potion')];
@@ -593,7 +593,7 @@
       ok('icons: bag rows show the picture when art exists, a glyph otherwise', rowHtml({ key: 'x', type: 'herb', items: [mkItem('herb')] }, false, '').includes('<img src="data:image/png') && !rowHtml({ key: 'y', type: 'scroll', items: [mkItem('scroll')] }, false, '').includes('<img'));
       ok('icons: floor drawing works with shared art', (() => { let t = null; try { scene = 'dungeon'; floorNo = 3; newFloor(); floorItems = [{ x: player.x + 1, y: player.y, item: mkItem('herb') }]; map[player.y][player.x + 1] = FLOOR; draw(); } catch (e) { t = e; } return !t; })());
       if (was.h) SPRITES.icon_herb = was.h; else delete SPRITES.icon_herb; if (was.s) SPRITES.icon_sword = was.s; else delete SPRITES.icon_sword; iconCache.clear();
-      ok('icons: asset list has the shared icons, hand art for weapons/shields, and no per-herb files', Object.values(ICON_BY_CAT).every(k => ASSET_KEYS.includes(k)) && ASSET_KEYS.includes('katana') && ASSET_KEYS.includes('tekkoshield') && ASSET_KEYS.includes('potion') && !ASSET_KEYS.includes('herb') && !ASSET_KEYS.includes('ring_regen') && ASSET_KEYS.length < 70); }
+      ok('icons: asset list has the shared icons, hand art for weapons/shields, and no per-herb files', Object.values(ICON_BY_CAT).every(k => ASSET_KEYS.includes(k)) && ASSET_KEYS.includes('katana') && ASSET_KEYS.includes('tekkoshield') && ASSET_KEYS.includes('potion') && !ASSET_KEYS.includes('herb') && !ASSET_KEYS.includes('ring_regen') && ASSET_KEYS.length < 80); }
     // 合成シート：マゼンタ背景に、色の四角を1マスに1個。位置は少しズラし、2マスは空にする
     const W = 800, H = 800, cv = mkCanvas(W, H), g = cv.getContext('2d'); g.fillStyle = '#FF00FF'; g.fillRect(0, 0, W, H);
     const cols = 4, rows = 4, cw = W / cols, ch = H / rows, colors = [];
@@ -643,11 +643,11 @@
     setup(); { const e = mk('goblin', 1, 0, 1); inv = [mkItem('annihilatescroll')]; useType('annihilatescroll'); ok('annihilate scroll: no exp', player.exp === 0); void e; }
     setup(); { player.lv = 5; player.exp = 3; player.maxhp = 36; toTown(false); ok('toTown: level/exp/max HP reset', player.lv === 1 && player.exp === 0 && player.maxhp === BASE_HP); }
     // 敵の表
-    ok('enemies: 60 ordinary kinds, each has exp/def/hp/atk', Object.values(ENEMIES).filter(T => !T.security).length === 60 && Object.values(ENEMIES).filter(T => !T.security).every(T => T.exp > 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
+    ok('enemies: 84 table kinds + the dungeon boss, each has exp/def/hp/atk', Object.values(ENEMIES).filter(T => !T.security).length === 85 && Object.values(ENEMIES).filter(T => !T.security).every(T => T.exp > 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
     ok('enemies: two theft-only pursuers, excluded from ordinary drops and experience', Object.values(ENEMIES).filter(T => T.security).length === 2 && Object.values(ENEMIES).filter(T => T.security).every(T => T.w === 0 && T.exp === 0 && T.def >= 0 && T.hp(1) > 0 && T.atk(1).length === 2));
     ok('enemies: borrowed-art kinds name an existing art key', Object.values(ENEMIES).filter(T => T.art).every(T => ENEMIES[T.art]));
     ok('enemies: base slime is replaced by upper ranks before 7F', (() => { for (let i = 0; i < 300; i++) if (rollEnemy(7) === 'slime') return false; return true; })());
-    ok('enemies: deep kinds only appear deep', (() => { for (let i = 0; i < 300; i++) if (['minotaur', 'dragon'].includes(rollEnemy(5))) return false; const s = new Set(); for (let i = 0; i < 600; i++) s.add(rollEnemy(10)); return s.has('minotaur') && s.has('dragon'); })());
+    ok('enemies: deep families only appear deep (per-floor appearance table)', (() => { const fam = k => ENEMIES[k].family || k; for (let i = 0; i < 300; i++) if (['minotaur', 'dragon', 'caster', 'cannon'].includes(fam(rollEnemy(5)))) return false; const s = new Set(); for (let i = 0; i < 1500; i++) s.add(fam(rollEnemy(24))); return ['minotaur', 'dragon', 'caster', 'cannon'].every(f => s.has(f)); })());
     // 個性
     setup(); clearAround(); { const e = mk('archer', 4, 0); const hp0 = player.hp; enemyTurn(); ok('archer: shoots from 4 tiles in a straight line', player.hp < hp0 && e.x === player.x + 4); }
     setup(); clearAround(); { const e = mk('archer', 4, 1); const hp0 = player.hp; enemyTurn(); ok('archer: needs a straight line (4,1) -> no shot', player.hp === hp0); void e; }

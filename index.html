@@ -155,6 +155,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/allies.js?v=neutral-walk-v1"></script>
 <script src="assets/monster-roster.js?v=families-v2"></script>
 <script src="assets/monster-families.js?v=families-v2"></script>
+<script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
 <script src="assets/run-save.js?v=run-save-v1"></script>
@@ -179,8 +180,10 @@ const SAVE_KEY = 'fushigi_core_save_v1';
 const MAXBELLY = 100, HUNGER_TURNS = [10, 2];
 
 // ダンジョン定義：floors を増やせば多階層になる（最終階の階段 = 踏破）
-const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 5 }, second: { name: 'ふかい洞窟', floors: 12, need: 1 } };   // need=この回数踏破すると行ける
-const unlocked = id => clears >= (DUNGEONS[id].need || 0);
+// need=踏破の合計回数／req=そのダンジョンを踏破すると行ける／stageK=敵の出現表の「段階」＝階×この値（assets/enemy-table.js）／boss=最終階に主がいる
+const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 5, stageK: 1 }, second: { name: 'ふかい洞窟', floors: 12, need: 1, stageK: 1.25 }, third: { name: 'そこなしの洞窟', floors: 30, req: 'second', stageK: 1, boss: true } };
+let dClears = {};                                               // ダンジョンごとの踏破回数
+const unlocked = id => DUNGEONS[id].req ? (dClears[DUNGEONS[id].req] | 0) >= 1 : clears >= (DUNGEONS[id].need || 0);
 
 // 草の回復：HPが満タンなら、回復のかわりに最大HPが上がる（本家と同じ）。cure: 0=なし 1=混乱だけ 2=悪い状態すべて
 function healHerb(label, heal, up, cure) {
@@ -552,8 +555,20 @@ const ENEMIES = {
   ghost: { name: 'ゴースト', from: 6, w: 2, hp: f => 8 + f, atk: f => [2, 3 + Math.floor(f / 3)], def: 0, exp: 14, ai: 'ghost', art: 'skeleton', hue: 200, col: '#a0d8ff' },
   minotaur: { name: 'ミノタウロス', from: 8, w: 2, hp: f => 25 + f * 2, atk: f => [6, 9 + Math.floor(f / 2)], def: 3, exp: 40, art: 'ogre', hue: 20, col: '#d08040' },
   dragon: { name: 'ドラゴン', from: 9, w: 1, hp: f => 40 + f * 2, atk: f => [5, 8 + Math.floor(f / 2)], breath: f => [4, 7 + Math.floor(f / 3)], def: 4, exp: 70, ai: 'breath', art: 'ogre', hue: 140, col: '#ff5030' },
+  // ---- 深層の敵（本家の味噌：数字の強さより「能力」で苦しめる）。出る階は assets/enemy-table.js の表が決める ----
+  //   ninja=素早く手裏剣（射程4〜）／caster=魔弾（ランクで効果が違う：転移→混乱→くちなし→レベルダウン）／mimic=アイテムに化けて近づくと襲う
+  //   summoner=鈴を鳴らして仲間を呼ぶ／charged=殴ると同じ部屋に雷（反撃）／cannon=動かず遠くから大砲（2ターンに1発）
+  ninja: { name: 'ニンジャ', from: 14, w: 3, hp: f => 10 + f, atk: f => [3, 5 + Math.floor(f / 3)], def: 1, exp: 30, ai: 'archer', range: 4, verb: '手裏剣', spd: 'fast', col: '#4d5a73' },
+  caster: { name: 'まじゅつ師', from: 14, w: 3, hp: f => 12 + f, atk: f => [2, 3 + Math.floor(f / 4)], def: 0, exp: 34, ai: 'caster', range: 5, verb: '魔弾', casts: ['warp', 'confuse', 'mute', 'drain'], col: '#8d6ad0' },
+  mimic: { name: 'ミミック', from: 15, w: 2, hp: f => 20 + f * 2, atk: f => [5, 7 + Math.floor(f / 2)], def: 3, exp: 40, disguise: true, col: '#b98b4a' },
+  summoner: { name: 'すず坊主', from: 16, w: 2, hp: f => 16 + f, atk: f => [2, 4], def: 1, exp: 45, ai: 'summon', summon: 1, spd: 'slow', col: '#d8b24a' },
+  charged: { name: 'いかずち岩', from: 18, w: 2, hp: f => 30 + f * 2, atk: f => [4, 6 + Math.floor(f / 3)], zap: f => [6, 8 + Math.floor(f / 2)], def: 6, exp: 50, ai: 'charged', spd: 'slow', col: '#8aa0c8' },
+  cannon: { name: 'おおづつ兵', from: 20, w: 2, hp: f => 18 + f, atk: f => [10, 14 + Math.floor(f / 2)], def: 2, exp: 45, ai: 'archer', range: 8, verb: '砲撃', cool: 2, spd: 'still', col: '#7a8068' },
+  // ダンジョンの主（最終階に1体。出現表には載らない）
+  lord: { name: 'アビスロード', from: 99, to: 99, w: 0, hp: () => 320, atk: f => [14, 22], breath: f => [10, 16], range: 5, def: 6, exp: 400, ai: 'breath', boss: true, art: 'dragon', hue: 0, col: '#9471b4' },
 };
 if(typeof MonsterRoster!=='undefined')MonsterRoster.install(ENEMIES);
+if(typeof EnemyTable!=='undefined')EnemyTable.apply(ENEMIES);   // 出る階（段階）は出現表が決める
 ShopSecurity.install(ENEMIES);
 const eT = e => e.isShopkeeper ? {name:'店主',def:ShopSystem.tiers[floorShop.tier].def} : ENEMIES[e.kind] || ENEMIES.goblin;
 // 杖・巻物の共通処理：向いている方向の最初の敵（射程8）／ダメージを与える
@@ -571,7 +586,7 @@ function lineTarget() {                                         // 向いてい�
 function zapTarget() { const t = lineTarget();if (!t) say('しかし、何も起こらなかった。'); return t; }
 function zapHit(e, dmg, label) {
   if(e.isShopkeeper){ShopSystem.hit(dmg,e);return;}
-  e.hp -= dmg; e.aware = true; e.flash = now() + 130; if (e.st) e.st.sleep = 0; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
+  e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
   if (e.hp <= 0) { say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); killEnemy(e); }
   else { say(`${label}で${eT(e).name}に${dmg}ダメージ。`); afterDamage(e); }
 }
@@ -613,10 +628,25 @@ function killEnemy(e, noExp) {
   const i = enemies.indexOf(e); if (i >= 0) enemies.splice(i, 1);
   if (e.loot) { dropAt(e.x, e.y, e.loot); say(`盗まれた${itemName(e.loot)}を取り返した！`); e.loot = null; }
   if (!noExp && Math.random() < 0.25) dropAt(e.x, e.y, mkItem('gold', rnd(5, 15) + floorNo * 3));
-  if (!noExp && !ShopSecurity.isSecurity(e)) { const xp=Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)))); gainExp(xp); AllySystem.gainExp(xp); }
+  if (!noExp && !ShopSecurity.isSecurity(e)) { const xp=Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)) / (e.sum ? 2 : 1))); gainExp(xp); AllySystem.gainExp(xp); }
+  if (eT(e).boss) {                                             // ダンジョンの主：良い品とギタンを落とす。倒すと階段が使える
+    for (let i = 0; i < 3; i++) dropAt(e.x, e.y, mkItem(rollType()));
+    dropAt(e.x, e.y, mkItem('gold', 400 + floorNo * 20));
+    say(`${eT(e).name}を倒した！ 奥の階段が使えるようになった。`); vfxShake(8, 500);
+  }
 }
+const bossAlive = () => enemies.some(e => ENEMIES[e.kind]?.boss);
 // ダメージを受けて生き残った後：ブヨブヨは分裂する（3回まで。子は経験値が半分ずつ）
 function afterDamage(e) {
+  if (eT(e).ai === 'charged' && e.hp > 0) {                      // いかずち岩：殴られると、同じ部屋にいる相手へ雷（反撃）
+    const re = roomGrid[e.y][e.x];
+    if (re >= 0 && re === roomGrid[player.y][player.x]) {
+      const [lo, hi] = eT(e).zap(floorNo), dmg = Math.max(1, rnd(lo, hi) - Math.floor(defBonus() / 2));
+      fxText(player.x, player.y, '雷', '#ffe65a'); vfxShake(5, 250); say(`${eT(e).name}から雷が走った！ ${dmg}ダメージ。`);
+      hurtPlayer(dmg, `雷に打たれて力尽きた…（${floorNo}階）`);
+    }
+    return;
+  }
   if ((eT(e).ai !== 'split') || e.hp < 2 || (e.gen || 0) >= 3 || enemies.length >= 30) return;
   for (const [dx, dy] of DIRS8) {
     const nx = e.x + dx, ny = e.y + dy;
@@ -706,9 +736,10 @@ function freeNear(n) {
   }
   return out;
 }
-function spawnEnemy(x, y, aware) {
-  const kind = rollEnemy(floorNo), hp = ENEMIES[kind].hp(floorNo);
+function spawnEnemy(x, y, aware, forceKind) {
+  const kind = forceKind || rollEnemy(floorNo), hp = ENEMIES[kind].hp(floorNo);
   const e = { kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: !!aware, lost: 0, flash: 0, bump: null, fl: false, st: {} };
+  if (ENEMIES[kind].disguise && !aware) { e.mim = true; e.disg = mkItem(rollType()).type; }   // ミミック：アイテムに化けている
   enemies.push(e); return e;
 }
 function warpPlayer() {                                         // この階のどこかの部屋へ
@@ -748,8 +779,13 @@ function spawnTick() {
     if (map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x, y) && !ShopSystem.at(x, y) && !vis[y][x] && Math.max(Math.abs(x - player.x), Math.abs(y - player.y)) > 4) { spawnEnemy(x, y, false); return; }
   }
 }
-function rollEnemy(f) {
-  const ks = Object.keys(ENEMIES).filter(k => ENEMIES[k].from <= f && f <= (ENEMIES[k].to || 99));
+// その階に出る敵の一覧（シレン6と同じ「階ごとの出現表」）から重みつきで1種。summoned=呼ばれた敵（呼ぶ敵・化ける敵は呼ばれない）
+function floorKinds(f) {
+  const dg = DUNGEONS[dungeonId] || DUNGEONS.first;
+  return EnemyTable.kinds(EnemyTable.stageOf(f, dg.stageK || 1)).filter(k => ENEMIES[k]);
+}
+function rollEnemy(f, summoned) {
+  const ks = floorKinds(f).filter(k => !summoned || (!ENEMIES[k].summon && !ENEMIES[k].disguise));
   let r = Math.random() * ks.reduce((a, k) => a + ENEMIES[k].w, 0);
   for (const k of ks) { r -= ENEMIES[k].w; if (r < 0) return k; }
   return ks[0];
@@ -1014,7 +1050,7 @@ function saveGame(departure) {
     // 冒険中は、持ち物・装備・所持金を出発時のまま残す（途中の物は RunSave が持つ）。再読み込みで拾った物を町へ持ち帰れる抜け道をふさぐ
     const prev = scene === 'dungeon' && !departure ? JSON.parse(localStorage.getItem(SAVE_KEY) || 'null') : null, keep = !!(prev && prev.v === 1);
     const carried=inv.filter(it=>!ShopSystem.unpaid(it));
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: keep ? prev.bag : carried.map(encItem), eq: keep ? prev.eq : [carried.indexOf(eqWeapon), carried.indexOf(eqShield)], rings: keep ? prev.rings : eqRings.map(r => carried.indexOf(r)), gift, quick, clears, deaths, gold: keep ? prev.gold : gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref, vfxPref }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: keep ? prev.bag : carried.map(encItem), eq: keep ? prev.eq : [carried.indexOf(eqWeapon), carried.indexOf(eqShield)], rings: keep ? prev.rings : eqRings.map(r => carried.indexOf(r)), gift, quick, clears, dClears, deaths, gold: keep ? prev.gold : gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, logPos, rigPref, vfxPref }));
   } catch (_) {}
 }
 function loadGame() {
@@ -1029,7 +1065,7 @@ function loadGame() {
     if (Array.isArray(s.rings)) s.rings.slice(0, 2).forEach((ix, i) => { const r = inv[ix]; if (r && ITEMS[r.type].equip === 'ring') eqRings[i] = r; });
     gift = !!s.gift;
     quick = s.quick === null || (ITEMS[s.quick] && !ITEMS[s.quick].equip && !ITEMS[s.quick].charges) ? s.quick : 'potion';
-    clears = s.clears | 0; deaths = s.deaths | 0; autoPick = !!s.autoPick;
+    clears = s.clears | 0; dClears = (s.dClears && typeof s.dClears === 'object') ? { ...s.dClears } : (clears > 0 ? { first: clears } : {}); deaths = s.deaths | 0; autoPick = !!s.autoPick;
     gold = Math.max(0, s.gold | 0); bank = Math.max(0, s.bank | 0); shopStock = (s.shop || []).map(decItem).filter(Boolean); dungeonId = DUNGEONS[s.dungeonId] ? s.dungeonId : 'first';
     inv = mergeStacks(inv); wh = mergeStacks(wh);
     mapMode = [0, 1, 2].includes(s.mapMode) ? s.mapMode : 1;
@@ -1135,6 +1171,7 @@ function newFloor() {
     floorItems.push({ x, y, item: mkItem('gold', Math.round((12 + rnd(0, 18)) * (1 + floorNo * 0.35))) }); i--;
   }
   traps = [];
+  placeBoss(far);
   placeHouse(far);
   placeTraps(far);
   seen = Array.from({ length: MH }, () => new Array(MW).fill(false));
@@ -1144,6 +1181,17 @@ function newFloor() {
   snapVis();
   updateVis();
   RunSave.save();                                               // 階に入るたびに冒険を保存
+}
+// 最終階：階段の部屋に主と取り巻き（その階に出る敵）を置く。倒すまで階段は使えない
+function placeBoss(stairsRoom) {
+  const dg = DUNGEONS[dungeonId];
+  if (!dg.boss || floorNo < dg.floors) return;
+  const cells = [];
+  for (let y = stairsRoom.y; y < stairsRoom.y + stairsRoom.h; y++) for (let x = stairsRoom.x; x < stairsRoom.x + stairsRoom.w; x++) if (map[y][x] === FLOOR && !enemyAt(x, y) && !itemAt(x, y)) cells.push([x, y]);
+  cells.sort((a, b) => Math.hypot(a[0] - stairsRoom.cx, a[1] - stairsRoom.cy) - Math.hypot(b[0] - stairsRoom.cx, b[1] - stairsRoom.cy));
+  if (!cells.length) return;
+  const [bx, by] = cells.shift(); spawnEnemy(bx, by, false, 'lord');
+  for (let i = 0; i < 3 && cells.length; i++) { const [x, y] = cells.splice(rnd(0, cells.length - 1), 1)[0]; spawnEnemy(x, y, false, rollEnemy(floorNo, true)); }
 }
 function atDungeonShop() { return scene === 'dungeon' && floorShop && playerRoom() === floorShop.room; }
 function activeShopStock() { return atDungeonShop() ? floorShop.stock : shopStock; }
@@ -1239,7 +1287,7 @@ function enterDungeon() {
   startFade(); render();
 }
 function clearDungeon() {
-  clears++;
+  clears++; dClears[dungeonId] = (dClears[dungeonId] | 0) + 1;
   toTown(true);
   say(`${DUNGEONS[dungeonId].name}を踏破した！（${clears}回目）`);
   say('持ち物は持ち帰れた。');
@@ -1255,7 +1303,7 @@ function afterDeath() {                                         // 死亡：持�
 function boot() {
   player = { x: 0, y: 0, vx: 0, vy: 0, hp: BASE_HP, maxhp: BASE_HP, lv: 1, exp: 0, face: [0, 1], bump: null, flash: 0, fl: false, st: newStatus() };
   dead = false; floorNo = 1; turn = 0;
-  if (!loadGame()) { wh = [mkItem('potion'), mkItem('potion'), mkItem('potion'), mkItem('bread'), mkItem('bread')]; inv = []; quick = 'potion'; clears = 0; deaths = 0; }
+  if (!loadGame()) { wh = [mkItem('potion'), mkItem('potion'), mkItem('potion'), mkItem('bread'), mkItem('bread')]; inv = []; quick = 'potion'; clears = 0; dClears = {}; deaths = 0; }
   if (!shopStock.length) rollShop();
   const giftMsg = !gift;
   if (!gift) { for (const t of ['stick', 'sword', 'axe', 'woodshield', 'ironshield']) wh.push(mkItem(t, 0)); gift = true; }   // 動作確認用：武器と盾を倉庫へ（1回だけ）
@@ -1463,7 +1511,7 @@ function strikeOne(e, again) {
   let dmg = calcDamage(e), crit = false;
   if (Math.random() < 0.2 * ringN('moroha') + (wSeal() === 'crit' ? 0.25 : 0)) { dmg *= 2; crit = true; }
   if (wSeal() === 'bat' && (eT(e).flying || e.kind === 'bat')) dmg *= 2;
-  e.hp -= dmg; e.aware = true; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
+  e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
   fxText(e.x, e.y, '-' + dmg, crit ? '#ffe28a' : '#ffffff');
   vfxHit(e.x, e.y, e.x - player.x, e.y - player.y, '#ffe9a0', e.hp <= 0 || crit);
   vfxShake(e.hp <= 0 ? 4 : crit ? 3 : 2, e.hp <= 0 ? 200 : 110);
@@ -1540,6 +1588,7 @@ function chooseStairs(down) {
   const valid=stairsOpen&&scene==='dungeon'&&!dead&&map[player.y][player.x]===STAIRS;
   closeStairs();if(!valid){render();return;}
   if(!down){say('階段の上にとどまった。');render();return;}
+  if(bossAlive()){say('ダンジョンの主がいる限り、先へは進めない…');render();return;}
   if(floorNo>=DUNGEONS[dungeonId].floors){clearDungeon();return;}
   floorNo++;say(`${floorNo}階へ降りた。`);newFloor();startFade();render();
 }
@@ -1643,6 +1692,28 @@ function enemyStrike(e, T, range, verb) {
   if (player.hp <= 0 && sSeal() === 'guts' && Math.random() < 0.5) { player.hp = 1; say('根性で踏みとどまった！'); }
   return { dead: checkDeath(`力尽きた…（${floorNo}階）`), hit: true, dmg };
 }
+// まじゅつ師の魔弾の効果（ランクで変わる：転移→混乱→くちなし→レベルダウン）
+function castFx(T) {
+  if (T.fx === 'warp') { warpPlayer(); say('魔弾で遠くへ飛ばされた！'); }
+  else if (T.fx === 'confuse') { if (addStatus('confuse', T.statusTurns || 8)) say('魔弾で混乱した！'); }
+  else if (T.fx === 'mute') { if (addStatus('mute', T.statusTurns || 10)) say('魔弾で声が出なくなった！（草も巻物も使えない）'); }
+  else if (T.fx === 'drain' && player.st.invinc <= 0 && player.lv > 1) {
+    player.lv--; player.exp = 0; player.maxhp = Math.max(BASE_HP, player.maxhp - 4); player.hp = Math.min(player.hp, player.maxhp);
+    fxText(player.x, player.y, 'Lv' + player.lv, '#c070ff'); say(`魔弾でレベルが${player.lv}に下がった！`);
+  }
+}
+// すず坊主の鈴：近くの床に、その階に出る敵を呼ぶ（呼ばれた敵は経験値が半分。呼ぶ敵・化ける敵は呼ばれない）
+function summonAround(e, T) {
+  if (enemies.filter(o => !ENEMIES[o.kind]?.security).length >= SPAWN.cap + 6) return;
+  const cells = [];
+  for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) {
+    const x = e.x + dx, y = e.y + dy;
+    if ((dx || dy) && inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x, y) && !ShopSystem.at(x, y) && !(x === player.x && y === player.y) && los(e.x, e.y, x, y)) cells.push([x, y]);
+  }
+  let n = 0;
+  for (let i = 0; i < (T.summon || 1) && cells.length; i++) { const [x, y] = cells.splice(rnd(0, cells.length - 1), 1)[0]; spawnEnemy(x, y, true, rollEnemy(floorNo, true)).sum = true; n++; }
+  if (n) { fxText(e.x, e.y, '♪', '#ffd070'); say(`${T.name}が鈴を鳴らした！ 仲間が${n}体現れた！`); }
+}
 function enemyTurn() {
   const d = distMap();
   for (const e of [...enemies]) {
@@ -1650,6 +1721,12 @@ function enemyTurn() {
     if(ShopSecurity.isSecurity(e)){if(e.spawnTurn===turn)continue;e.aware=true;e.lost=0;}
     if (e.mh) continue;                                           // 魔物部屋で眠っている敵（部屋に入ると目覚める）
     if (S.sleep > 0) { S.sleep--; continue; }                     // 眠っている敵は動かない（殴られると起きる）
+    if (e.mim) {                                                  // ミミック：近づかれるまで動かない。隣に来たら正体を現す
+      if (Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)) > 1) continue;
+      e.mim = false; e.aware = true; e.lost = 0; fxText(e.x, e.y, 'ミミック！', '#ff6a9a'); vfxShake(4, 220); say('アイテムだと思ったら、ミミックだった！'); continue;
+    }
+    if (S.cool > 0) S.cool--;
+    if (S.bell > 0) S.bell--;
     const confused = S.confuse > 0; if (confused) S.confuse--;
     if (S.boost > 0) S.boost--;
     for (let step = 0; step < (T.spd === 'fast' || S.boost > 0 ? 2 : 1); step++) {
@@ -1669,10 +1746,15 @@ function enemyTurn() {
         if (best) { e.x += best[0]; e.y += best[1]; if (best[0]) e.fl = best[0] < 0; }
         continue;
       }
+      if (ai === 'summon' && !confused && e.aware && !(S.bell > 0) && dist <= 7 && los(e.x, e.y, player.x, player.y)) {   // 鈴を鳴らして仲間を呼ぶ
+        S.bell = 12; summonAround(e, T); break;
+      }
       const range = T.range || (ai === 'archer' ? 6 : ai === 'breath' ? 4 : 0);   // 遠距離攻撃：直線上で、間に何も無いとき
-      if (!confused && range && e.aware && dist > 1 && dist <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e)) {
-        const r = enemyStrike(e, T, ai === 'breath' ? T.breath(floorNo) : T.atk(floorNo), ai === 'breath' ? '炎' : '矢');
+      if (!confused && range && e.aware && !(S.cool > 0) && dist > 1 && dist <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e)) {
+        const r = enemyStrike(e, T, ai === 'breath' ? T.breath(floorNo) : T.atk(floorNo), ai === 'breath' ? '炎' : (T.verb || '矢'));
         if (r.dead) return;
+        if (T.cool) S.cool = T.cool;
+        if (ai === 'caster' && r.hit && r.dmg > 0) castFx(T);
         break;
       }
       const adj = dist === 1 && (ai === 'ghost' || geomOK(e.x, e.y, player.x - e.x, player.y - e.y));
@@ -2056,7 +2138,7 @@ function giftAll() {
 }
 function renderCfg() {
   const rows = [
-    `<div class="set"><span class="lab">行き先<br><small>ふかい洞窟は、はじまりの洞窟を1回踏破すると行ける（12階）</small></span><button class="sm" data-cfg="dungeon">${DUNGEONS[dungeonId].name}（${DUNGEONS[dungeonId].floors}階）</button></div>`,
+    `<div class="set"><span class="lab">行き先<br><small>ふかい洞窟（12階）は、はじまりの洞窟を1回踏破すると行ける。そこなしの洞窟（30階・主がいる）は、ふかい洞窟を踏破すると行ける</small></span><button class="sm" data-cfg="dungeon">${DUNGEONS[dungeonId].name}（${DUNGEONS[dungeonId].floors}階）</button></div>`,
     `<div class="set"><span class="lab">自動拾い<br><small>踏んだだけで拾う</small></span><button class="sm" data-cfg="auto">${autoPick ? 'ON' : 'OFF'}</button></div>`,
     `<div class="set"><span class="lab">表示サイズ<br><small>絵が細かいほど「中」「大」が映える</small></span><button class="sm" data-cfg="zoom">${ZOOM_LABEL[zoomPref]}</button></div>`,
     `<div class="set"><span class="lab">キャラの大きさ<br><small>1マスより大きく描く（頭が上にはみ出す）</small></span><button class="sm" data-cfg="char">×${CHAR_K[charPref]}</button></div>`,
@@ -2330,7 +2412,7 @@ function drawMinimap() {
     ctx.fillRect(bx + x * sc, by + y * sc, sc, sc);
   }
   for (const f of floorItems) if (seen[f.y][f.x] || senseItems()) { ctx.fillStyle = '#409cff'; ctx.fillRect(bx + f.x * sc, by + f.y * sc, sc, sc); }
-  for (const e of enemies) if (vis[e.y][e.x] || senseEnemies()) { ctx.fillStyle = '#ff4d4d'; ctx.fillRect(bx + e.x * sc, by + e.y * sc, sc, sc); }
+  for (const e of enemies) if (!e.mim && (vis[e.y][e.x] || senseEnemies())) { ctx.fillStyle = '#ff4d4d'; ctx.fillRect(bx + e.x * sc, by + e.y * sc, sc, sc); }
   ctx.fillStyle = '#000'; ctx.fillRect(bx + player.x * sc - 2, by + player.y * sc - 2, sc + 4, sc + 4);
   ctx.fillStyle = '#fff'; ctx.fillRect(bx + player.x * sc - 1, by + player.y * sc - 1, sc + 2, sc + 2);
 }
@@ -2423,6 +2505,7 @@ function draw() {
     if(e.isShopkeeper){ShopSystem.draw(ctx,e,t,camX,camY);continue;}
     if(ShopSecurity.isSecurity(e)){const [px,py]=ShopSecurity.draw(ctx,e,t,camX,camY);ctx.fillStyle='#211b22';ctx.fillRect(px,py+tilePitchY()-3,TS,3);ctx.fillStyle='#e46267';ctx.fillRect(px,py+tilePitchY()-3,TS*e.hp/e.maxhp,3);continue;}
     if(e.isAlly){AllySystem.draw(ctx,e,t,camX,camY);continue;}
+    if(e.mim){blit(iconOf(e.disg),camX + e.x * TS, camY + e.y * tilePitchY() + tilePitchY() - TS);continue;}   // 化けているミミックはアイテムの絵
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
     ctx.fillStyle = '#000'; ctx.fillRect(px, py + tilePitchY() - 3, TS, 3);
     ctx.fillStyle = '#e55'; ctx.fillRect(px, py + tilePitchY() - 3, TS * e.hp / e.maxhp, 3);

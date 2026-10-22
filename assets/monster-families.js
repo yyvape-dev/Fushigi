@@ -4,7 +4,7 @@
  const script=typeof document!=='undefined'&&document.currentScript?.src,R=script?new URL('../fushigi-monsters-v2/',script).href:'fushigi-monsters-v2/';
  const state={ready:false,error:null,meta:null,images:{},tints:new Map(),direction:old.direction,pose:old.pose};
  const resolve=k=>root.MonsterRoster?.resolve(k)||{family:k,tier:1};
- state.has=k=>!!root.MonsterRoster?.names[resolve(k).family];
+ state.has=k=>{const f=resolve(k).family;return !!root.MonsterRoster?.names[f]&&!root.MonsterRoster?.noArt?.has(f);};
  state.load=async function(redraw=()=>{}){try{
   const r=await fetch(R+'monsters.json');if(!r.ok)throw Error('monster catalog '+r.status);state.meta=await r.json();
   const image=p=>new Promise((resolve,reject)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>resolve(im);im.onerror=()=>reject(Error(p));im.src=R+p;});
