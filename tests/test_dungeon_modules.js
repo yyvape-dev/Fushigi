@@ -5,7 +5,9 @@
  scene='dungeon';dungeonId='second';
  for(let n=0;n<200;n++){
   floorNo=n%12+1;newFloor();layouts.add(floorPlan.style);themes.add(floorPlan.theme.id);
-  const dist=distMap();
+  // 敵AI用の distMap() は90歩で打ち切るため、広い階の到達確認には使えない。上限なしの幅優先探索で確認する
+  const dist=Array.from({length:MH},()=>new Array(MW).fill(-1)),queue=[[player.x,player.y]];dist[player.y][player.x]=0;
+  for(let i=0;i<queue.length;i++){const [x,y]=queue[i];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){if(!dx&&!dy)continue;if(!geomOK(x,y,dx,dy))continue;const nx=x+dx,ny=y+dy;if(dist[ny][nx]>=0)continue;dist[ny][nx]=dist[y][x]+1;queue.push([nx,ny]);}}
   for(const r of rooms)assert(dist[r.cy][r.cx]>=0,'unreachable room');
   for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(map[y][x]===STAIRS)assert(dist[y][x]>=0,'unreachable stairs');
   for(const o of [...enemies,...floorItems,...traps])assert(map[o.y]?.[o.x]===FLOOR,'content on solid/stairs');
