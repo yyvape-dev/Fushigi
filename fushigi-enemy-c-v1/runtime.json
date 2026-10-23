@@ -1,0 +1,292 @@
+{
+  "frameSize": 256,
+  "origin": [
+    128,
+    224
+  ],
+  "directions": [
+    "S",
+    "SW",
+    "W",
+    "NW",
+    "N",
+    "NE",
+    "E",
+    "SE"
+  ],
+  "monsters": {
+    "ninja": {
+      "motion": true,
+      "scale": 0.5083514887436457,
+      "motionSourceScale": 1.44,
+      "views": {
+        "S": {
+          "idle": "runtime/ninja/S.png",
+          "motion": "runtime/ninja/S-motion.png"
+        },
+        "SW": {
+          "idle": "runtime/ninja/SW.png",
+          "motion": "runtime/ninja/SW-motion.png"
+        },
+        "W": {
+          "idle": "runtime/ninja/W.png",
+          "motion": "runtime/ninja/W-motion.png"
+        },
+        "NW": {
+          "idle": "runtime/ninja/NW.png",
+          "motion": "runtime/ninja/NW-motion.png"
+        },
+        "N": {
+          "idle": "runtime/ninja/N.png",
+          "motion": "runtime/ninja/N-motion.png"
+        },
+        "NE": {
+          "idle": "runtime/ninja/NE.png",
+          "motion": "runtime/ninja/NE-motion.png"
+        },
+        "E": {
+          "idle": "runtime/ninja/E.png",
+          "motion": "runtime/ninja/E-motion.png"
+        },
+        "SE": {
+          "idle": "runtime/ninja/SE.png",
+          "motion": "runtime/ninja/SE-motion.png"
+        }
+      }
+    },
+    "caster": {
+      "motion": true,
+      "scale": 0.5007254445456693,
+      "motionSourceScale": 1.3433962264150943,
+      "views": {
+        "S": {
+          "idle": "runtime/caster/S.png",
+          "motion": "runtime/caster/S-motion.png"
+        },
+        "SW": {
+          "idle": "runtime/caster/SW.png",
+          "motion": "runtime/caster/SW-motion.png"
+        },
+        "W": {
+          "idle": "runtime/caster/W.png",
+          "motion": "runtime/caster/W-motion.png"
+        },
+        "NW": {
+          "idle": "runtime/caster/NW.png",
+          "motion": "runtime/caster/NW-motion.png"
+        },
+        "N": {
+          "idle": "runtime/caster/N.png",
+          "motion": "runtime/caster/N-motion.png"
+        },
+        "NE": {
+          "idle": "runtime/caster/NE.png",
+          "motion": "runtime/caster/NE-motion.png"
+        },
+        "E": {
+          "idle": "runtime/caster/E.png",
+          "motion": "runtime/caster/E-motion.png"
+        },
+        "SE": {
+          "idle": "runtime/caster/SE.png",
+          "motion": "runtime/caster/SE-motion.png"
+        }
+      }
+    },
+    "mimic": {
+      "motion": true,
+      "scale": 0.4094488188976378,
+      "motionSourceScale": 1.6212765957446809,
+      "views": {
+        "S": {
+          "idle": "runtime/mimic/S.png",
+          "motion": "runtime/mimic/S-motion.png"
+        },
+        "SW": {
+          "idle": "runtime/mimic/SW.png",
+          "motion": "runtime/mimic/SW-motion.png"
+        },
+        "W": {
+          "idle": "runtime/mimic/W.png",
+          "motion": "runtime/mimic/W-motion.png"
+        },
+        "NW": {
+          "idle": "runtime/mimic/NW.png",
+          "motion": "runtime/mimic/NW-motion.png"
+        },
+        "N": {
+          "idle": "runtime/mimic/N.png",
+          "motion": "runtime/mimic/N-motion.png"
+        },
+        "NE": {
+          "idle": "runtime/mimic/NE.png",
+          "motion": "runtime/mimic/NE-motion.png"
+        },
+        "E": {
+          "idle": "runtime/mimic/E.png",
+          "motion": "runtime/mimic/E-motion.png"
+        },
+        "SE": {
+          "idle": "runtime/mimic/SE.png",
+          "motion": "runtime/mimic/SE-motion.png"
+        }
+      }
+    },
+    "summoner": {
+      "motion": true,
+      "scale": 0.5068870523415978,
+      "motionSourceScale": 1.5512820512820513,
+      "views": {
+        "S": {
+          "idle": "runtime/summoner/S.png",
+          "motion": "runtime/summoner/S-motion.png"
+        },
+        "SW": {
+          "idle": "runtime/summoner/SW.png",
+          "motion": "runtime/summoner/SW-motion.png"
+        },
+        "W": {
+          "idle": "runtime/summoner/W.png",
+          "motion": "runtime/summoner/W-motion.png"
+        },
+        "NW": {
+          "idle": "runtime/summoner/NW.png",
+          "motion": "runtime/summoner/NW-motion.png"
+        },
+        "N": {
+          "idle": "runtime/summoner/N.png",
+          "motion": "runtime/summoner/N-motion.png"
+        },
+        "NE": {
+          "idle": "runtime/summoner/NE.png",
+          "motion": "runtime/summoner/NE-motion.png"
+        },
+        "E": {
+          "idle": "runtime/summoner/E.png",
+          "motion": "runtime/summoner/E-motion.png"
+        },
+        "SE": {
+          "idle": "runtime/summoner/SE.png",
+          "motion": "runtime/summoner/SE-motion.png"
+        }
+      }
+    },
+    "charged": {
+      "motion": true,
+      "scale": 0.5029940119760479,
+      "motionSourceScale": 1.3098039215686275,
+      "views": {
+        "S": {
+          "idle": "runtime/charged/S.png",
+          "motion": "runtime/charged/S-motion.png"
+        },
+        "SW": {
+          "idle": "runtime/charged/SW.png",
+          "motion": "runtime/charged/SW-motion.png"
+        },
+        "W": {
+          "idle": "runtime/charged/W.png",
+          "motion": "runtime/charged/W-motion.png"
+        },
+        "NW": {
+          "idle": "runtime/charged/NW.png",
+          "motion": "runtime/charged/NW-motion.png"
+        },
+        "N": {
+          "idle": "runtime/charged/N.png",
+          "motion": "runtime/charged/N-motion.png"
+        },
+        "NE": {
+          "idle": "runtime/charged/NE.png",
+          "motion": "runtime/charged/NE-motion.png"
+        },
+        "E": {
+          "idle": "runtime/charged/E.png",
+          "motion": "runtime/charged/E-motion.png"
+        },
+        "SE": {
+          "idle": "runtime/charged/SE.png",
+          "motion": "runtime/charged/SE-motion.png"
+        }
+      }
+    },
+    "cannon": {
+      "motion": true,
+      "scale": 0.5054945054945055,
+      "motionSourceScale": 1.4444444444444444,
+      "views": {
+        "S": {
+          "idle": "runtime/cannon/S.png",
+          "motion": "runtime/cannon/S-motion.png"
+        },
+        "SW": {
+          "idle": "runtime/cannon/SW.png",
+          "motion": "runtime/cannon/SW-motion.png"
+        },
+        "W": {
+          "idle": "runtime/cannon/W.png",
+          "motion": "runtime/cannon/W-motion.png"
+        },
+        "NW": {
+          "idle": "runtime/cannon/NW.png",
+          "motion": "runtime/cannon/NW-motion.png"
+        },
+        "N": {
+          "idle": "runtime/cannon/N.png",
+          "motion": "runtime/cannon/N-motion.png"
+        },
+        "NE": {
+          "idle": "runtime/cannon/NE.png",
+          "motion": "runtime/cannon/NE-motion.png"
+        },
+        "E": {
+          "idle": "runtime/cannon/E.png",
+          "motion": "runtime/cannon/E-motion.png"
+        },
+        "SE": {
+          "idle": "runtime/cannon/SE.png",
+          "motion": "runtime/cannon/SE-motion.png"
+        }
+      }
+    },
+    "lord": {
+      "motion": true,
+      "scale": 0.5002405002405003,
+      "motionSourceScale": 1.4538461538461538,
+      "views": {
+        "S": {
+          "idle": "runtime/lord/S.png",
+          "motion": "runtime/lord/S-motion.png"
+        },
+        "SW": {
+          "idle": "runtime/lord/SW.png",
+          "motion": "runtime/lord/SW-motion.png"
+        },
+        "W": {
+          "idle": "runtime/lord/W.png",
+          "motion": "runtime/lord/W-motion.png"
+        },
+        "NW": {
+          "idle": "runtime/lord/NW.png",
+          "motion": "runtime/lord/NW-motion.png"
+        },
+        "N": {
+          "idle": "runtime/lord/N.png",
+          "motion": "runtime/lord/N-motion.png"
+        },
+        "NE": {
+          "idle": "runtime/lord/NE.png",
+          "motion": "runtime/lord/NE-motion.png"
+        },
+        "E": {
+          "idle": "runtime/lord/E.png",
+          "motion": "runtime/lord/E-motion.png"
+        },
+        "SE": {
+          "idle": "runtime/lord/SE.png",
+          "motion": "runtime/lord/SE-motion.png"
+        }
+      }
+    }
+  }
+}

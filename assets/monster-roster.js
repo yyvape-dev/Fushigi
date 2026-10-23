@@ -4,8 +4,8 @@
   ninja:['#4d5a73','#b0524f','#4c82a8','#7a5aa8'],caster:['#8d6ad0','#cf6a8a','#5aa6c6','#d6b54c'],mimic:['#b98b4a','#c9684f','#5a98b4','#b89a3c'],summoner:['#d8b24a','#cf7a4f','#5aa07e','#a070c0'],charged:['#8aa0c8','#d09a4a','#6ac0c0','#c070b0'],cannon:['#7a8068','#b0624a','#5a7ea8','#8a6aa0']};
  const names={slime:['スライム','ライムスライム','ルビースライム','アメジストスライム'],goblin:['ゴブリン','あかゴブリン','あおゴブリン','ゴブリンロード'],bat:['コウモリ','あかコウモリ','こんじきコウモリ','やみコウモリ'],blob:['ブヨブヨ','あおブヨブヨ','だいだいブヨブヨ','くろブヨブヨ'],skeleton:['スケルトン','こはくスケルトン','ひすいスケルトン','スケルトンロード'],archer:['ゆみこぞう','あかゆみこぞう','あおゆみこぞう','ゆみの達人'],thief:['どろぼうタヌキ','あかぬすみタヌキ','あおぬすみタヌキ','おおどろぼうタヌキ'],sleepy:['ねむりダケ','あかねむりダケ','あおねむりダケ','まどろみ大王ダケ'],bomb:['ばくだん虫','あかばくだん虫','あおばくだん虫','くろがねばくだん虫'],ogre:['オーガ','あおオーガ','みどりオーガ','オーガタイラント'],dazzle:['めまいガエル','あおめまいガエル','きいろめまいガエル','まぼろしガエル'],venom:['どくバチ','あかどくバチ','あおどくバチ','どくバチクイーン'],ghost:['ゴースト','ひすいゴースト','あかゴースト','ナイトメアゴースト'],minotaur:['ミノタウロス','あおミノタウロス','あかミノタウロス','ミノタウロスキング'],dragon:['ドラゴン','あおドラゴン','みどりドラゴン','アビスドラゴン'],
   ninja:['ニンジャ','あかニンジャ','あおニンジャ','ジョウニン'],caster:['まじゅつ師','あかまじゅつ師','あおまじゅつ師','だいまじゅつ師'],mimic:['ミミック','あかミミック','あおミミック','キングミミック'],summoner:['すず坊主','あかすず坊主','あおすず坊主','すず大僧正'],charged:['いかずち岩','あかいかずち岩','あおいかずち岩','らいてい岩'],cannon:['おおづつ兵','あかおおづつ兵','あおおおづつ兵','おおづつ将軍']};
- // 専用の絵がまだ無い系統（絵ができるまでゴブリンの色違いで描く。fushigi-monsters-v2 に絵を足したら外す）
- const noArt=new Set(['ninja','caster','mimic','summoner','charged','cannon']);
+ // All families now have dedicated directional sprites, including the deep six.
+ const noArt=new Set();
  const starts={1:[1,4,7,10],2:[2,5,8,11],3:[3,6,9,12],4:[4,7,10,12],5:[5,8,10,12],6:[6,8,10,12],8:[8,9,11,12],9:[9,10,11,12]};
  const roster={};
  root.MonsterRoster={roster,colors,names,noArt,resolve(kind){return roster[kind]||null;},install(enemies){
@@ -19,7 +19,7 @@
     enemies[kind]=row;roster[kind]={kind,family,tier,color:colors[family][i],from:row.from,to};
    }
   }
-  // 最深部の主：ドラゴン系の最強ランクの絵を借りる（専用の絵ができたら差し替え）
-  if(enemies.lord){enemies.lord.family='dragon';enemies.lord.tier=4;enemies.lord.col=colors.dragon[3];roster.lord={kind:'lord',family:'dragon',tier:4,color:colors.dragon[3],from:99,to:99};}
+  // The boss keeps its own approved crown/wing design, without a dragon tint.
+  if(enemies.lord){enemies.lord.family='lord';enemies.lord.tier=1;enemies.lord.col=colors.dragon[3];roster.lord={kind:'lord',family:'lord',tier:1,color:colors.dragon[3],from:99,to:99};}
  }};
 })(typeof window==='undefined'?globalThis:window);

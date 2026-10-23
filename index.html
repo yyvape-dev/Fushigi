@@ -153,8 +153,8 @@ canvas{display:block;touch-action:none}
 <script src="assets/dungeon-shop.js?v=entrances-v2"></script>
 <script src="assets/shop-security.js?v=security-v1"></script>
 <script src="assets/allies.js?v=event-vfx-v1"></script>
-<script src="assets/monster-roster.js?v=families-v2"></script>
-<script src="assets/monster-families.js?v=families-v2"></script>
+<script src="assets/monster-roster.js?v=enemy-c-v1"></script>
+<script src="assets/monster-families.js?v=enemy-c-v1"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
@@ -646,6 +646,7 @@ function afterDamage(e) {
   if (eT(e).ai === 'charged' && e.hp > 0) {                      // いかずち岩：殴られると、同じ部屋にいる相手へ雷（反撃）
     const re = roomGrid[e.y][e.x];
     if (re >= 0 && re === roomGrid[player.y][player.x]) {
+      enemyAttackPose(e);
       const [lo, hi] = eT(e).zap(floorNo), dmg = Math.max(1, rnd(lo, hi) - Math.floor(defBonus() / 2));
       fxText(player.x, player.y, '雷', '#ffe65a'); vfxShake(5, 250); say(`${eT(e).name}から雷が走った！ ${dmg}ダメージ。`);
       hurtPlayer(dmg, `雷に打たれて力尽きた…（${floorNo}階）`);
@@ -1702,10 +1703,13 @@ function clearShot(e) {                                          // 敵→プレ
 // 敵の攻撃力の調整（バランス計測 tests/tools/balance_sim.js で決めた値。深い階ほど少し弱める）
 const ENEMY_BAL = { atk: 1, deepFrom: 7, deepAtk: 1 };
 const enemyAtkK = () => ENEMY_BAL.atk * (floorNo >= ENEMY_BAL.deepFrom ? ENEMY_BAL.deepAtk : 1);
-function enemyStrike(e, T, range, verb) {
-  const [lo, hi] = range;
+function enemyAttackPose(e) {
   e.monsterFace = [Math.sign(player.x-e.x), Math.sign(player.y-e.y)];
   e.monsterAttackFace = e.monsterFace.slice(); e.monsterAttackStart = now();
+}
+function enemyStrike(e, T, range, verb) {
+  const [lo, hi] = range;
+  enemyAttackPose(e);
   bumpToward(e, player.x, player.y);
   if (e.x !== player.x) e.fl = player.x < e.x;
   if (Math.random() >= ACC.e) { say(`${T.name}の${verb}！ はずれた。`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
@@ -1778,7 +1782,7 @@ function enemyTurn() {
         continue;
       }
       if (ai === 'summon' && !confused && e.aware && !(S.bell > 0) && dist <= 7 && los(e.x, e.y, player.x, player.y)) {   // 鈴を鳴らして仲間を呼ぶ
-        S.bell = 12; summonAround(e, T); break;
+        enemyAttackPose(e); S.bell = 12; summonAround(e, T); break;
       }
       const range = T.range || (ai === 'archer' ? 6 : ai === 'breath' ? 4 : 0);   // 遠距離攻撃：直線上で、間に何も無いとき
       if (!confused && range && e.aware && !(S.cool > 0) && dist > 1 && dist <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e)) {
