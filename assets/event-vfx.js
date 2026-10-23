@@ -70,7 +70,7 @@
  }
  function drawWorld(g,t,camX,camY,size,pitch,layer){
   for(const e of state.events){
-   if(t<e.start||t>=e.start+e.duration)continue;
+   if(e.screenOnly||t<e.start||t>=e.start+e.duration)continue;
    const p=progress(e,t),ent=e.kind==='warp'?null:e.entity,x=camX+((ent?ent.vx:e.x)+.5)*size,y=camY+((ent?ent.vy:e.y)+.88)*pitch;
    const fade=Math.sin(Math.PI*p),strong=e.up===3?1.25:1;
    g.save();

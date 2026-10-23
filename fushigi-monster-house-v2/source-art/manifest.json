@@ -1,0 +1,34 @@
+{
+  "generated": "2026-10-23",
+  "tool": "image_gen",
+  "transparent_background": true,
+  "sources": [
+    {
+      "file": "source-art/title-first.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "a48f9cdc06bd102305e63ee7a06870c0e42fdff16a32d02da1cc52dd193bcff8"
+    },
+    {
+      "file": "source-art/title-crimson.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "mode": "RGBA",
+      "sha256": "5faa5f4d8e6716c25d157facdb97e53a8d5ba2afa1fe34cbae4cc4ce6d467709"
+    },
+    {
+      "file": "source-art/mist-eight-frames.png",
+      "size": [
+        2124,
+        740
+      ],
+      "mode": "RGBA",
+      "sha256": "32bb7ebde92f79e0888743b82ce5392591c3ad708c764d2783f7779066c752e5"
+    }
+  ]
+}

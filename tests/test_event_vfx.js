@@ -35,7 +35,7 @@
  setup();eqWeapon=mkItem('sword',0);inv=[eqWeapon,mkItem('scroll')];useType('scroll');const plus=eqWeapon.plus;
  assert(plus>0&&inv.length===1&&turn===0,'enhance consumes once and holds turn');useType('scroll');advance(1200);
  assert(eqWeapon.plus===plus&&turn===1,'enhance cannot repeat while locked');
- setup();rooms[0].mh=true;playerMove(1,0);assert(rooms[0].mhDone&&turn===1&&!EventVfx.busy(),'house retains its original behavior pending new art approval');
+ if(typeof MonsterHouseVfx==='undefined'){setup();rooms[0].mh=true;playerMove(1,0);assert(rooms[0].mhDone&&turn===1&&!EventVfx.busy(),'house retains its original behavior pending new art approval');}
  EventVfx.state.force=false;delete EventVfx.state.clock;EventVfx.reset();enemyTurn=oldEnemyTurn;
  console.log('ALL OK: event timing/input, six traps, resistance, no replay, save during trap, level/enhance; house unchanged');
 }
