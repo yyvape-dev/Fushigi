@@ -8,7 +8,7 @@
   await Promise.all(['shop','coin',...['pit','mine','gas','hungry','warp','summon'].map(k=>'trap-'+k),...ids.flatMap(k=>['stairs-'+k,'ceiling-'+k])].map(k=>new Promise((resolve,reject)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{state.images[k]=im;resolve();};im.onerror=()=>reject(Error(k));im.src=R+k+((/^(stairs|ceiling)-/.test(k))?'.webp':'.png');})));
   state.ready=true;redraw();
  }catch(e){state.error=e.message;console.error('ダンジョン素材読込失敗',e);redraw();}};
- state.stairs=function(g,x,y,size,pitch,id){const im=state.images['stairs-'+id];if(!im)return false;g.imageSmoothingEnabled=true;g.drawImage(im,x,y,size,pitch);return true;};
+ state.stairs=function(g,x,y,size,pitch,id){const im=state.images['stairs-'+(id==='overgrown-garden'?'ruins':id)];if(!im)return false;g.imageSmoothingEnabled=true;g.drawImage(im,x,y,size,pitch);return true;};
  state.trap=function(g,kind,x,y,size,pitch){const im=state.images['trap-'+kind];if(!im)return false;g.imageSmoothingEnabled=true;g.drawImage(im,x+size*.03,y-pitch*.10,size*.94,pitch*1.04);return true;};
  state.shop=function(g,x,y,size,pitch){const im=state.images.shop;if(!im)return false;g.imageSmoothingEnabled=true;g.drawImage(im,x-size*.10,y-pitch*.65,size*1.2,size*1.2);return true;};
  function layer(name,w,h){let c=state.layers[name];if(!c)c=state.layers[name]=document.createElement('canvas');if(c.width!==w||c.height!==h){c.width=w;c.height=h;}const g=c.getContext('2d');g.clearRect(0,0,w,h);g.globalCompositeOperation='source-over';g.globalAlpha=1;g.filter='none';return [c,g];}
@@ -34,7 +34,7 @@
   if(state.fogKey===cacheKey){g.drawImage(state.layers.ceiling,0,0);g.drawImage(state.layers.shade,0,0);return;}
   state.fogKey=cacheKey;
   const [ceiling,cg]=layer('ceiling',width,height),[light,lg]=layer('light',width,height),[reveal,rg]=layer('reveal',width,height),[shade,sg]=layer('shade',width,height);
-  const id=ids.includes(theme)?theme:'limestone',im=state.images['ceiling-'+id];
+  const id=theme==='overgrown-garden'?'ruins':ids.includes(theme)?theme:'limestone',im=state.images['ceiling-'+id];
   const x0=Math.floor(-camX/size)-1,x1=Math.ceil((width-camX)/size)+1,y0=Math.floor(-camY/pitch)-1,y1=Math.ceil((height-camY)/pitch)+1;
   cg.fillStyle={forest:'#494436',limestone:'#49453f',ruins:'#4e473a',ice:'#293c50',volcano:'#43302e'}[id];cg.fillRect(0,0,width,height);
   if(im){

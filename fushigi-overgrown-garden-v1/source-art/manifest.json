@@ -1,0 +1,32 @@
+{
+  "source": "image_gen.imagegen; original generated output copied unchanged",
+  "atlas_grid": [
+    2,
+    2
+  ],
+  "cell_size": [
+    627,
+    627
+  ],
+  "files": [
+    {
+      "file": "garden-materials.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "sha256": "31edac3deea28caf6e3851213b6393a83d77ab743ccc1fa8db328c61068f1e82",
+      "alpha_extrema": null
+    },
+    {
+      "file": "garden-decals.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "sha256": "dfc48b97cfd8c2f2cc349922911a839ddbc9c5e326784db13d6716ff31409b2f",
+      "alpha_extrema": [
+        0,
+        255
+      ]
+    }
+  ]
+}

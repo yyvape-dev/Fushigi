@@ -1,0 +1,33 @@
+{
+  "status": "passed",
+  "normalFloorSixAndReload": true,
+  "wallConnections": {
+    "topologies": 256,
+    "opaque": true,
+    "periodicMaterials": 3
+  },
+  "generatedArt": true,
+  "motifs": [
+    {
+      "kind": "roots",
+      "room": 2,
+      "decoratedCells": 12
+    },
+    {
+      "kind": "moss",
+      "room": 3,
+      "decoratedCells": 9
+    },
+    {
+      "kind": "rubble",
+      "room": 0,
+      "decoratedCells": 15
+    }
+  ],
+  "portrait": true,
+  "appearanceTogglePreservesGameplay": true,
+  "saveRestore": true,
+  "liveWallChangeRendered": true,
+  "realStorageUnchanged": true,
+  "jsErrors": []
+}
