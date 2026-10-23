@@ -3,7 +3,7 @@
 <style>
 body{margin:0;background:#141b18;color:#e5dfcd;font:14px system-ui,sans-serif;display:flex;flex-direction:column;height:100dvh}header{padding:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex-shrink:0}h1{font-size:17px;margin:0 10px 0 0}button,select{font:inherit;color:inherit;background:#29382e;border:1px solid #6d7d65;border-radius:6px;padding:6px 10px}p{margin:0;padding:0 10px 8px;font-size:12px;color:#c0c8b6;flex-shrink:0}iframe{display:block;width:100%;flex:1;min-height:180px;border:0}#status{color:#e1cb91}button:disabled{opacity:.4}
 </style></head><body>
-<header><h1>根絡みの古庭</h1><select id="look" aria-label="景観"><option value="overgrown-garden">新しい古庭</option><option value="ruins">従来の遺跡と比較</option></select><select id="height" aria-label="壁の高さ"><option value="low">公開中の低い壁</option><option value="tall">全体を高くする</option><option value="cutaway">奥を高く・手前を低く</option></select><select id="angle" aria-label="見下ろし方"><option value="0.82">現在の見下ろし方</option><option value="0.72">少し横から見る</option><option value="0.9">少し真上から見る</option></select><button id="next" disabled>別の階</button><button id="room" disabled>別の部屋</button><button id="grid" disabled>マス境界</button></header>
+<header><h1>根絡みの古庭</h1><select id="look" aria-label="景観"><option value="overgrown-garden">新しい古庭</option><option value="ruins">従来の遺跡と比較</option></select><select id="height" aria-label="壁の高さ"><option value="low">公開中の低い壁</option><option value="tall">全体を高くする</option><option value="cutaway">奥を高く・手前を低く</option><option value="ridge" selected>新案：立ち上がる石積み</option></select><select id="angle" aria-label="見下ろし方"><option value="0.82">現在の見下ろし方</option><option value="0.72">少し横から見る</option><option value="0.9">少し真上から見る</option><option value="0.94" selected>新案：真上寄り</option></select><button id="next" disabled>別の階</button><button id="room" disabled>別の部屋</button><button id="grid" disabled>マス境界</button></header>
 <p>同じ地形・キャラ位置で壁の高さと見下ろし方を比較。奥と手前の高低差は角でもつながるよう調整しています。専用生成素材・本編と独立した保存を使用します。</p>
 <p id="status" role="status">読み込み中…</p><p>確認用の独立セーブ。本編の冒険・持ち物には影響しません。画面内でそのまま操作できます。</p>
 <iframe id="game" title="古庭のプレイ確認"></iframe>
@@ -17,11 +17,12 @@ frame.onload=async()=>{
  if(!frame.srcdoc)return;
  try{
   await frame.contentWindow.OvergrownGarden.load();
+  await frame.contentWindow.OvergrownGarden.loadRidge();
   const begin=Date.now();while(!run('CaveTerrain.ready && ApprovedHero.ready && DungeonExperience.ready')){if(Date.now()-begin>30000)throw Error('素材の読み込みが完了しません');await new Promise(r=>setTimeout(r,100));}
   run(`window.gardenSeed=${seed};window.gardenRoom=0;const gardenGenerate=DungeonGenerator.generate;DungeonGenerator.generate=function(w,h,s,d){const p=gardenGenerate(w,h,window.gardenSeed,d);p.theme=OvergrownGarden.theme;return p;};enterDungeon();player.hp=player.maxhp=200;`);
   // Draw grid after the game only on request; no gameplay/visibility changes.
   run(`window.gardenGrid=false;const gardenDraw=draw;draw=function(){gardenDraw();if(!window.gardenGrid||scene!=='dungeon')return;const cx=Math.round(innerWidth/2-(player.vx+.5)*TS),cy=Math.round(focusY()-(player.vy+.5)*tilePitchY());ctx.save();ctx.strokeStyle='#c3e9c84a';ctx.lineWidth=1;for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(vis[y]?.[x])ctx.strokeRect(cx+x*TS,cy+y*tilePitchY(),TS,tilePitchY());ctx.restore();};`);
-  for(const id of ['next','room','grid'])$(id).disabled=false;apply();
+  for(const id of ['next','room','grid'])$(id).disabled=false;view();apply();
  }catch(e){$('status').textContent=e.message;}
 };
 $('look').onchange=apply;

@@ -1,4 +1,4 @@
-"""Reproducible wall-height study. Official reference access is still pending."""
+"""Reproducible study informed by the user's five Shiren 6 screenshots."""
 import json
 from pathlib import Path
 from playwright.sync_api import sync_playwright
@@ -26,13 +26,13 @@ with sync_playwright() as p:
     before = frame.evaluate('JSON.stringify({map,rooms,roomGrid,player,enemies,floorItems,traps})')
     page.wait_for_timeout(1000)
     captures = []
-    for mode in ['low', 'tall', 'cutaway']:
+    for mode in ['low', 'tall', 'cutaway', 'ridge']:
         page.select_option('#height', mode)
-        page.select_option('#angle', '0.82')
+        page.select_option('#angle', '0.94' if mode == 'ridge' else '0.82')
         page.wait_for_timeout(100)
         frame.locator('body').screenshot(path=str(OUT / f'study-{mode}.jpg'), type='jpeg', quality=90)
-        captures.append({'mode': mode, 'pitch': .82, 'file': f'study-{mode}.jpg'})
-    for pitch in [.72, .82, .9]:
+        captures.append({'mode': mode, 'pitch': .94 if mode == 'ridge' else .82, 'file': f'study-{mode}.jpg'})
+    for pitch in [.72, .82, .9, .94]:
         page.select_option('#angle', str(pitch))
         page.wait_for_timeout(100)
         frame.locator('body').screenshot(path=str(OUT / f'study-angle-{round(pitch*100):03}.jpg'), type='jpeg', quality=90)
@@ -40,7 +40,7 @@ with sync_playwright() as p:
     frame.evaluate('''() => {
       const c=document.createElement('canvas');c.width=210;c.height=210;const g=c.getContext('2d');
       const offsets=[[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]],size=32;
-      for(const mode of ['low','tall','cutaway'])for(const pitch of [.72,.82,.9]){
+      for(const mode of ['low','tall','cutaway','ridge'])for(const pitch of [.72,.82,.9,.94]){
         OvergrownGarden.configureView({mode,pitch});
         for(let mask=0;mask<256;mask++){
           const m=Array.from({length:5},()=>Array(5).fill(0));offsets.forEach(([x,y],i)=>m[2+y][2+x]=(mask>>i)&1);
@@ -52,27 +52,29 @@ with sync_playwright() as p:
       }
     }''')
     assert before == frame.evaluate('JSON.stringify({map,rooms,roomGrid,player,enemies,floorItems,traps})'), 'view changed gameplay'
-    page.select_option('#height', 'cutaway')
-    page.select_option('#angle', '0.82')
+    page.select_option('#height', 'ridge')
+    page.select_option('#angle', '0.94')
     for name, x, y in [('back', 7, 3), ('front', 7, 7), ('door', 10, 5)]:
         frame.evaluate(f'player.x=player.vx={x};player.y=player.vy={y};updateVis();render()')
         frame.locator('body').screenshot(path=str(OUT / f'study-near-{name}.jpg'), type='jpeg', quality=90)
     page.set_viewport_size({'width': 390, 'height': 844})
-    frame.locator('body').screenshot(path=str(OUT / 'study-cutaway-portrait.jpg'), type='jpeg', quality=90)
+    frame.locator('body').screenshot(path=str(OUT / 'study-ridge-portrait.jpg'), type='jpeg', quality=90)
     assert not errors, errors
     # A browser-rendered comparison sheet preserves the actual game captures.
     page.set_viewport_size({'width': 1500, 'height': 650})
     for name, files in [
         ('height-comparison', [('公開中の低い壁', 'study-low.jpg'), ('全体を高くする', 'study-tall.jpg'), ('奥を高く・手前を低く', 'study-cutaway.jpg')]),
         ('angle-comparison', [('少し横から', 'study-angle-072.jpg'), ('現在の見下ろし方', 'study-angle-082.jpg'), ('少し真上から', 'study-angle-090.jpg')]),
+        ('ridge-comparison', [('公開版の高さ・角度', 'study-low.jpg'), ('高さだけ変えた案', 'study-tall.jpg'), ('真上寄り＋立ち上がる石積み', 'study-ridge.jpg')]),
+        ('ridge-angle-comparison', [('従来の床の角度', 'study-angle-082.jpg'), ('少し真上寄り', 'study-angle-090.jpg'), ('新案の真上寄り', 'study-angle-094.jpg')]),
     ]:
         page.goto('http://127.0.0.1:8000/fushigi-overgrown-garden-v1/')
         page.set_content('<html lang="ja"><style>body{margin:0;background:#18201b;color:#eee;font:20px sans-serif}main{display:flex}figure{margin:10px;width:480px}img{width:480px;display:block}figcaption{padding:10px}</style><main>'+''.join(f'<figure><figcaption>{label}</figcaption><img src="http://127.0.0.1:8000/fushigi-overgrown-garden-v1/{file}"></figure>' for label,file in files)+'</main></html>')
         page.wait_for_function('Array.from(document.images).every(i=>i.complete&&i.naturalWidth>0)')
         page.locator('main').screenshot(path=str(OUT / f'{name}.jpg'), type='jpeg', quality=90)
-    result = {'status': 'passed', 'views': 9, 'topologiesPerView': 256, 'gapChecks': 2304,
+    result = {'status': 'passed', 'views': 16, 'topologiesPerView': 256, 'gapChecks': 4096,
               'gameplayUnchanged': True, 'nearWallAndDoor': True, 'portrait': True,
-              'officialReferenceReview': 'pending: outbound HTTP policy blocks official sources', 'captures': captures}
+              'referenceReview': 'five user-supplied Shiren 6 screenshots observed directly; exact camera angle and internal renderer are not established', 'captures': captures}
     (OUT / 'height-study-validation.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
     print(json.dumps(result, ensure_ascii=False))
     browser.close()

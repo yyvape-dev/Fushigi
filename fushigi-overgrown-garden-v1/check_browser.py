@@ -15,6 +15,8 @@ with sync_playwright() as p:
     saved = page.evaluate('Object.fromEntries(Object.entries(localStorage))')
     page.goto('http://127.0.0.1:8000/fushigi-overgrown-garden-v1/')
     page.wait_for_function("!document.getElementById('next').disabled", timeout=45000)
+    page.select_option('#height', 'low')
+    page.select_option('#angle', '0.82')
     game = page.frames[1]
     page.wait_for_timeout(1000)
     assert game.evaluate("floorPlan.theme.id==='overgrown-garden' && scene==='dungeon'")

@@ -4,10 +4,10 @@
  const theme=DungeonGenerator.themes.find(t=>t.id==='overgrown-garden');
  // Published view remains the default; study modes are selected in review only.
  const view={mode:'low',pitch:.82};
- const profiles={low:{back:.24,front:.24},tall:{back:.48,front:.48},cutaway:{back:.56,front:.16}};
+ const profiles={low:{back:.24,front:.24},tall:{back:.48,front:.48},cutaway:{back:.56,front:.16},ridge:{back:.86,front:.40}};
  function configureView(patch){
   if(patch.mode!==undefined){if(!profiles[patch.mode])throw Error('unknown wall view');view.mode=patch.mode;}
-  if(patch.pitch!==undefined){if(![.72,.82,.9].includes(patch.pitch))throw Error('unknown ground projection');view.pitch=patch.pitch;}
+  if(patch.pitch!==undefined){if(![.72,.82,.9,.94].includes(patch.pitch))throw Error('unknown ground projection');view.pitch=patch.pitch;}
  }
  function vertexHeight(map,x,y){
   const p=profiles[view.mode],floor=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;
@@ -24,10 +24,18 @@
   }))).then(()=>{art.ready=true;}).catch(error=>{art.error=error.message;throw error;});
   return art.promise;
  }
+ function loadRidge(){
+  if(art.ridgePromise)return art.ridgePromise;
+  art.ridgePromise=new Promise((resolve,reject)=>{
+   const image=new Image();image.onload=()=>{art.images.ridge=image;resolve();};image.onerror=()=>reject(Error('古庭の石積み画像を取得できません'));
+   image.src='fushigi-overgrown-garden-v1/source-art/garden-ridge.png';
+  });
+  return art.ridgePromise;
+ }
  // Blend only opposing texture edges, retaining the generated painted interior.
  function texture(key){
   if(art.textures[key])return art.textures[key];
-  const tile={soil:[0,0],top:[1,0],face:[0,1],mossSoil:[1,1]}[key],image=art.images.materials,half=image.width/2;
+  const tile={soil:[0,0],top:[1,0],face:[0,1],mossSoil:[1,1],ridgeTop:[1,0],ridgeFace:[0,0],ridgeInterior:[0,1],ridgeCap:[1,1]}[key],image=key.startsWith('ridge')?art.images.ridge:art.images.materials,half=image.width/2;
   const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');
   g.drawImage(image,tile[0]*half,tile[1]*half,half,half,0,0,256,256);
   const src=g.getImageData(0,0,256,256),out=g.createImageData(256,256),data=src.data;
@@ -123,23 +131,46 @@
   g.restore();
  }
  function wall(g,px,py,size,h,{map,x,y}){
+  const ridge=view.mode==='ridge'&&art.images.ridge;
   const f=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;
+  const groundCorner=(vx,vy)=>{
+   let ix=0,iy=0;
+   if(ridge){
+    // Narrow recesses belong to the wall cell. Shared corner positions keep
+    // their outlines joined; the front rim no longer sits under the hero's feet.
+    if(f(vx-1,vy-1)||f(vx,vy-1))iy+=.25;
+    if(f(vx-1,vy)||f(vx,vy))iy-=.08;
+    if(f(vx-1,vy-1)||f(vx-1,vy))ix+=.12;
+    if(f(vx,vy-1)||f(vx,vy))ix-=.12;
+   }
+   return [px+(vx-x+ix)*size,py+(vy-y+iy)*h];
+  };
+  const ground=[groundCorner(x,y),groundCorner(x+1,y),groundCorner(x+1,y+1),groundCorner(x,y+1)];
   const rises=[vertexHeight(map,x,y),vertexHeight(map,x+1,y),vertexHeight(map,x+1,y+1),vertexHeight(map,x,y+1)].map(v=>v*size*verticalProjection());
-  const top=[[px,py-rises[0]],[px+size,py-rises[1]],[px+size,py+h-rises[2]],[px,py+h-rises[3]]];
+  const top=ground.map(([xx,yy],i)=>[xx,yy-rises[i]]);
   g.save();
   g.imageSmoothingEnabled=true;
   // Fill the short vertical band under the cap too: it must stay opaque when
   // adjoining a room corner or a freshly blasted opening.
-  surface(g,'top',x,y,px,py,size,h,4);
+  const nearFloor=ridge&&[-1,0,1].some(dy=>[-1,0,1].some(dx=>f(x+dx,y+dy)));
+  surface(g,ridge?(nearFloor?'soil':'ridgeInterior'):'top',x,y,px,py,size,h,ridge&&nearFloor?3:4);
   if(f(x,y+1)){
-   const face=texture('face'),part=face.width/4;
-   const side=[top[3],top[2],[px+size,py+h],[px,py+h]];
-   quad(g,face,(x%4)*part,32,part,64,side);
+   const face=texture(ridge?'ridgeFace':'face'),span=ridge?2:4,part=face.width/span;
+   const side=[top[3],top[2],ground[2],ground[3]];
+   // Preserve material proportions instead of squeezing an entire tall block
+   // into a thin horizontal strip.
+   quad(g,face,(x%span)*part,ridge?64:32,part,64,side);
    const shade=g.createLinearGradient(0,py+h-Math.max(rises[2],rises[3]),0,py+h);shade.addColorStop(0,'#18221835');shade.addColorStop(1,'#10180e95');
    g.fillStyle=shade;g.beginPath();g.moveTo(...side[0]);for(const pt of side.slice(1))g.lineTo(...pt);g.closePath();g.fill();
   }
-  const tile=texture('top'),part=tile.width/4;
+  const tile=texture(ridge?'ridgeTop':'top'),part=tile.width/4;
   quad(g,tile,(x%4)*part,(y%4)*part,part,part,top);
+  if(ridge&&f(x,y+1)){
+   // A shallow crown distinguishes the standing edge from the wall's rocky
+   // interior. Adjacent cells share the same world-space band and vertices.
+   const cap=texture('ridgeCap'),depth=h*.2;
+   quad(g,cap,(x%2)*128,0,128,24,[[top[3][0],top[3][1]-depth],[top[2][0],top[2][1]-depth],top[2],top[3]]);
+  }
   // Restrict edge accents to actual exposed boundaries, never tile seams.
   g.lineWidth=Math.max(1,size*.018);g.strokeStyle='#c4b99890';g.beginPath();
   if(f(x,y-1)){g.moveTo(...top[0]);g.lineTo(...top[1]);}
@@ -154,6 +185,7 @@
   options={...options,x:options.x??0,y:options.y??0};
   if(!CaveTerrain.ready)return false;
   if(!art.ready){if(!art.promise)load().then(()=>root.render?.()).catch(()=>{});return false;}
+  if(view.mode==='ridge'&&!art.images.ridge&&!art.ridgePromise){loadRidge().then(()=>root.render?.()).catch(()=>{});}
   const h=size*view.pitch;
   if(key==='wallF'||key==='wallT')return wall(g,px,py,size,h,options);
   let ok=true;
@@ -170,5 +202,5 @@
  };
  // Both the normal floor rotation and review catalog include the garden.
  DungeonGenerator.locations=DungeonGenerator.themes;
- root.OvergrownGarden={theme,plan,cell,art,load,texture,view,profiles,configureView,vertexHeight};
+ root.OvergrownGarden={theme,plan,cell,art,load,loadRidge,texture,view,profiles,configureView,vertexHeight};
 })(typeof window==='undefined'?globalThis:window);

@@ -1,12 +1,12 @@
 {
   "status": "passed",
-  "views": 9,
+  "views": 16,
   "topologiesPerView": 256,
-  "gapChecks": 2304,
+  "gapChecks": 4096,
   "gameplayUnchanged": true,
   "nearWallAndDoor": true,
   "portrait": true,
-  "officialReferenceReview": "pending: outbound HTTP policy blocks official sources",
+  "referenceReview": "five user-supplied Shiren 6 screenshots observed directly; exact camera angle and internal renderer are not established",
   "captures": [
     {
       "mode": "low",
@@ -22,6 +22,11 @@
       "mode": "cutaway",
       "pitch": 0.82,
       "file": "study-cutaway.jpg"
+    },
+    {
+      "mode": "ridge",
+      "pitch": 0.94,
+      "file": "study-ridge.jpg"
     }
   ]
 }

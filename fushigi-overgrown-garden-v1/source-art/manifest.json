@@ -27,6 +27,14 @@
         0,
         255
       ]
+    },
+    {
+      "file": "garden-ridge.png",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGB",
+      "sha256": "d7d94f81f5e5d235cc70c8575a3d33288749f0e9584d836d6d6da84c9557330e",
+      "alpha_extrema": null
     }
   ]
 }
