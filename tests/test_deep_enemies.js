@@ -31,7 +31,7 @@
 
  // --- 4. ニンジャ：素早く、離れた直線から手裏剣
  { const r=setup(20);const e=put('ninja_3',player.x+3,player.y);for(const [x,y] of [[1,0],[2,0],[3,0]])map[player.y][player.x+x]=FLOOR;
-   const hp=player.hp;enemyTurn();ok(player.hp<hp,'ninja throws shuriken from 3 tiles');void r;void e;
+   const hp=player.hp,Mr=Math.random;Math.random=()=>.5;try{enemyTurn();}finally{Math.random=Mr;}ok(player.hp<hp,'ninja throws shuriken from 3 tiles');void r;void e;
    ok(ENEMIES.ninja.spd==='fast'&&ENEMIES.ninja_4.range>ENEMIES.ninja.range,'ninja is fast, upper ranks reach farther'); }
 
  // --- 5. まじゅつ師：魔弾の効果がランクで変わる
@@ -73,7 +73,7 @@
    ok(ENEMIES.charged.def>=6&&ENEMIES.charged.zap(20)[1]>0,'charged rock is tough and has a zap'); }
 
  // --- 9. おおづつ兵：動かず遠くから、2ターンに1発
- { setup(25);for(let i=0;i<10;i++)map[player.y][player.x+i]=FLOOR;
+ { setup(25);player.x=player.vx=Math.min(player.x,MW-12);for(let i=0;i<10;i++)map[player.y][player.x+i]=FLOOR;
    const e=put('cannon_2',player.x+7,player.y);const Mr=Math.random;Math.random=()=>0;
    try{ const hp0=player.hp;enemyTurn();const h1=player.hp;ok(h1<hp0,'cannon fires from 7 tiles');enemyTurn();ok(player.hp===h1,'cannon reloads for a turn');enemyTurn();ok(player.hp<h1,'cannon fires again');ok(e.x===player.x+7,'cannon never moves'); }finally{Math.random=Mr;} }
 

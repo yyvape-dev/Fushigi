@@ -1,0 +1,105 @@
+{
+  "cases": {
+    "ninja": {
+      "types": [
+        "enemy-shuriken"
+      ],
+      "visiblePixels": 310,
+      "turn": 0,
+      "locked": false
+    },
+    "warp": {
+      "types": [
+        "enemy-magic",
+        "enemy-vanish",
+        "enemy-arrival"
+      ],
+      "visiblePixels": 4926,
+      "turn": 0,
+      "locked": false
+    },
+    "confuse": {
+      "types": [
+        "enemy-magic",
+        "enemy-curse"
+      ],
+      "visiblePixels": 1727,
+      "turn": 0,
+      "locked": false
+    },
+    "mute": {
+      "types": [
+        "enemy-magic",
+        "enemy-curse"
+      ],
+      "visiblePixels": 1689,
+      "turn": 0,
+      "locked": false
+    },
+    "drain": {
+      "types": [
+        "enemy-magic",
+        "enemy-curse"
+      ],
+      "visiblePixels": 1829,
+      "turn": 0,
+      "locked": false
+    },
+    "mimic": {
+      "types": [
+        "enemy-reveal"
+      ],
+      "visiblePixels": 1847,
+      "turn": 0,
+      "locked": false
+    },
+    "bell": {
+      "types": [
+        "enemy-arrival",
+        "enemy-arrival",
+        "enemy-arrival",
+        "enemy-bell"
+      ],
+      "visiblePixels": 12179,
+      "turn": 0,
+      "locked": false
+    },
+    "lightning": {
+      "types": [
+        "enemy-lightning"
+      ],
+      "visiblePixels": 5137,
+      "turn": 0,
+      "locked": false
+    },
+    "cannon": {
+      "types": [
+        "enemy-cannon"
+      ],
+      "visiblePixels": 248,
+      "turn": 0,
+      "locked": false
+    },
+    "abyss": {
+      "types": [
+        "enemy-abyss"
+      ],
+      "visiblePixels": 3616,
+      "turn": 0,
+      "locked": false
+    },
+    "bite": {
+      "types": [
+        "enemy-bite"
+      ],
+      "visiblePixels": 1138,
+      "turn": 0,
+      "locked": false
+    }
+  },
+  "allyTarget": true,
+  "saveUnchanged": true,
+  "reducedMotion": true,
+  "javascriptErrors": [],
+  "failedVfxAssets": []
+}
