@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>根絡みの古庭 — ロケーション試作</title>
 <style>
-body{margin:0;background:#141b18;color:#e5dfcd;font:14px system-ui,sans-serif}header{padding:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}h1{font-size:17px;margin:0 10px 0 0}button,select{font:inherit;color:inherit;background:#29382e;border:1px solid #6d7d65;border-radius:6px;padding:6px 10px}p{margin:0;padding:0 10px 8px;font-size:12px;color:#c0c8b6}iframe{display:block;width:100%;height:calc(100dvh - 145px);min-height:300px;border:0}#status{color:#e1cb91}button:disabled{opacity:.4}
+body{margin:0;background:#141b18;color:#e5dfcd;font:14px system-ui,sans-serif;display:flex;flex-direction:column;height:100dvh}header{padding:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;flex-shrink:0}h1{font-size:17px;margin:0 10px 0 0}button,select{font:inherit;color:inherit;background:#29382e;border:1px solid #6d7d65;border-radius:6px;padding:6px 10px}p{margin:0;padding:0 10px 8px;font-size:12px;color:#c0c8b6;flex-shrink:0}iframe{display:block;width:100%;flex:1;min-height:180px;border:0}#status{color:#e1cb91}button:disabled{opacity:.4}
 </style></head><body>
-<header><h1>根絡みの古庭</h1><select id="look" aria-label="景観"><option value="overgrown-garden">新しい古庭</option><option value="ruins">従来の遺跡と比較</option></select><button id="next" disabled>別の階</button><button id="room" disabled>別の部屋</button><button id="grid" disabled>マス境界</button></header>
-<p>専用の生成素材を使用。壁を途切れずにつなぎ、根・苔・崩れ石は壁際へ。中央と出入口を空け、従来の遺跡と同じ地形で比較できます。</p>
+<header><h1>根絡みの古庭</h1><select id="look" aria-label="景観"><option value="overgrown-garden">新しい古庭</option><option value="ruins">従来の遺跡と比較</option></select><select id="height" aria-label="壁の高さ"><option value="low">公開中の低い壁</option><option value="tall">全体を高くする</option><option value="cutaway">奥を高く・手前を低く</option></select><select id="angle" aria-label="見下ろし方"><option value="0.82">現在の見下ろし方</option><option value="0.72">少し横から見る</option><option value="0.9">少し真上から見る</option></select><button id="next" disabled>別の階</button><button id="room" disabled>別の部屋</button><button id="grid" disabled>マス境界</button></header>
+<p>同じ地形・キャラ位置で壁の高さと見下ろし方を比較。奥と手前の高低差は角でもつながるよう調整しています。専用生成素材・本編と独立した保存を使用します。</p>
 <p id="status" role="status">読み込み中…</p><p>確認用の独立セーブ。本編の冒険・持ち物には影響しません。画面内でそのまま操作できます。</p>
 <iframe id="game" title="古庭のプレイ確認"></iframe>
 <script>
@@ -12,6 +12,7 @@ const $=id=>document.getElementById(id),frame=$('game');let seed=55433,roomIndex
 const run=code=>frame.contentWindow.eval(code);
 function status(){const d=run('({style:floorPlan.style,rooms:rooms.length,kind:OvergrownGarden.plan(rooms[window.gardenRoom||0],floorPlan.artSeed).kind})');$('status').textContent=`地形 ${seed} ／ ${d.style} ／ ${d.rooms}部屋 ／ この部屋：${{moss:'苔のたまり',roots:'壁際の根',rubble:'崩れ石'}[d.kind]}`;}
 function apply(){run('floorPlan.theme='+($('look').value==='overgrown-garden'?'OvergrownGarden.theme':"DungeonGenerator.themes.find(t=>t.id==='ruins')")+'; visibilityRevision++;render()');status();}
+function view(){run('OvergrownGarden.configureView('+JSON.stringify({mode:$('height').value,pitch:Number($('angle').value)})+');visibilityRevision++;render()');}
 frame.onload=async()=>{
  if(!frame.srcdoc)return;
  try{
@@ -24,6 +25,7 @@ frame.onload=async()=>{
  }catch(e){$('status').textContent=e.message;}
 };
 $('look').onchange=apply;
+$('height').onchange=view;$('angle').onchange=view;
 $('next').onclick=()=>{seed+=7919;roomIndex=0;run(`window.gardenSeed=${seed};window.gardenRoom=0;newFloor();player.hp=player.maxhp=200;`);apply();};
 $('room').onclick=()=>{roomIndex=(roomIndex+1)%run('rooms.length');run(`(()=>{window.gardenRoom=${roomIndex};const r=rooms[${roomIndex}];player.x=player.vx=r.cx;player.y=player.vy=r.cy;updateVis();render();})()`);status();};
 $('grid').onclick=()=>run('window.gardenGrid=!window.gardenGrid;render()');

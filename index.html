@@ -2296,7 +2296,7 @@ const cv = $('c'), ctx = cv.getContext('2d');
 let raf = 0, lastT = 0;
 const tmp = mkCanvas(64, 64);
 const isLand = () => innerWidth > innerHeight;
-const tilePitchY = () => scene === 'dungeon' ? TS * .82 : TS;
+const tilePitchY = () => scene === 'dungeon' ? TS * (floorPlan?.theme?.id==='overgrown-garden'&&typeof OvergrownGarden!=='undefined'?OvergrownGarden.view.pitch:.82) : TS;
 const focusY = () => innerHeight * (isLand() ? 0.5 : 0.4);   // 自キャラの縦位置（縦持ちは下のボタンを避けて上寄り）
 function resize() {
   DPR = window.devicePixelRatio || 1;

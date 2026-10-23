@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "views": 9,
+  "topologiesPerView": 256,
+  "gapChecks": 2304,
+  "gameplayUnchanged": true,
+  "nearWallAndDoor": true,
+  "portrait": true,
+  "officialReferenceReview": "pending: outbound HTTP policy blocks official sources",
+  "captures": [
+    {
+      "mode": "low",
+      "pitch": 0.82,
+      "file": "study-low.jpg"
+    },
+    {
+      "mode": "tall",
+      "pitch": 0.82,
+      "file": "study-tall.jpg"
+    },
+    {
+      "mode": "cutaway",
+      "pitch": 0.82,
+      "file": "study-cutaway.jpg"
+    }
+  ]
+}
