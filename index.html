@@ -2660,12 +2660,10 @@ function draw() {
   const drawEnt = e => {
     if (!vis[e.y][e.x]) return;
     if(e.isShopkeeper){ShopSystem.draw(ctx,e,t,camX,camY);return;}
-    if(ShopSecurity.isSecurity(e)){const [px,py]=ShopSecurity.draw(ctx,e,t,camX,camY);ctx.fillStyle='#211b22';ctx.fillRect(px,py+tilePitchY()-3,TS,3);ctx.fillStyle='#e46267';ctx.fillRect(px,py+tilePitchY()-3,TS*e.hp/e.maxhp,3);return;}
+    if(ShopSecurity.isSecurity(e)){ShopSecurity.draw(ctx,e,t,camX,camY);return;}
     if(e.isAlly){AllySystem.draw(ctx,e,t,camX,camY);return;}
     if(e.mim){blit(iconOf(e.disg),camX + e.x * TS, camY + e.y * tilePitchY() + tilePitchY() - TS);return;}   // 化けているミミックはアイテムの絵
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
-    ctx.fillStyle = '#000'; ctx.fillRect(px, py + tilePitchY() - 3, TS, 3);
-    ctx.fillStyle = '#e55'; ctx.fillRect(px, py + tilePitchY() - 3, TS * e.hp / e.maxhp, 3);
     const S = e.st;                                                                // 敵の状態：眠り・混乱の目印
     if (e.mh || (S && (S.sleep > 0 || S.confuse > 0 || S.boost > 0))) {
       ctx.font = 'bold ' + Math.round(TS * 0.3) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom';
