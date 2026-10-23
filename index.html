@@ -208,7 +208,7 @@ function healHerb(label, heal, up, cure) {
 // =====================================================================
 //  アイテム定義：新アイテムはここに1項目足すだけ
 //  cat:タブ分類 / ch,fg:絵が無いときの仮表示 / w:床に出る重み / from:出始める階 / use():効果があれば true（消費してターン経過）、無効なら false
-//  equip:'weapon'|'shield'|'ring' / seal:武器・盾の印（効果は wSeal()/sSeal() の判定側に書く）
+//  equip:'weapon'|'shield'|'ring' / seal:武器・盾の印（効果は wHas()/sHas() の判定側（合成で増えた印は it.seals）に書く）
 //  絵：assets/<キー>.png を置く（または ITEM_ART にドット絵を足す）
 // =====================================================================
 const ITEMS = {
@@ -501,6 +501,7 @@ for (const d of Object.values(ITEMS)) d.unid = UNID_CATS.includes(d.cat);
 ITEMS.weed.unid = false;                                          // 雑草は見れば分かる
 // 壺：中身を持つ入れ物。plus=容量（2〜6のランダム。名前の後に（数字））、pot=中身の配列。壺の中に壺は入れない。使う処理は useType の先頭で持ち物欄の「入れる／出す」に回す
 const POT_CAP = [2, 6];
+ITEMS.fusepot = { name: '合成の壺', cat: '壺', ch: '壺', fg: '#c070e0', w: 2, from: 3, pot: true, fuse: true, use: () => false, desc: '武器どうし、または盾どうしを入れる壺。名前の（）の数だけ入る。一度入れた物は取り出せない。投げて割ると、中身が1つに合成されて（強化値の合計・印をすべて引き継ぐ。土台は最初に入れた物）近くに落ちる。装備中の物・足元の物・未精算の物も入れられる。売るときは壺と中身それぞれの値段になる。' };
 ITEMS.savepot = { name: '保存の壺', cat: '壺', ch: '壺', fg: '#c8a070', w: 2, from: 2, pot: true, use: () => false, desc: '物をしまっておける壺。名前の（）の数だけ入る。装備中の物・足元の物・店の未精算の物も入れられる（装備は外れ、未精算は精算か持ち出しまで未精算のまま）。入れる・出すと1ターンかかる。投げると割れて、中身が近くに散らばる。売るときは壺と中身それぞれの値段になる。' };
 const ALIAS_POOL = {
   巻物: { suffix: 'の巻物', words: ['ネコ', 'イヌ', 'ウサギ', 'キツネ', 'タヌキ', 'クマ', 'シカ', 'サル', 'トラ', 'ライオン', 'ゾウ', 'ウマ', 'ヒツジ', 'ヤギ', 'イタチ', 'リス', 'ネズミ', 'カエル', 'ヘビ', 'ワシ', 'フクロウ', 'カラス'] },
@@ -612,7 +613,7 @@ const curStr = () => Math.max(1, 8 + atkUp + 2 * ringN('strength') + (player.st.
 const weaponPow = () => eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0;
 // 攻撃力＝レベル分＋武器×(0.75＋ちから/32)＋(ちから−8)。ダメージ＝(攻撃力−守備力＋1)×87.5〜112.5%
 function playerAtk() {
-  return levelAtk(player.lv) + weaponPow() * (0.75 + curStr() / 32) + (curStr() - 8) + (wSeal() === 'hungry' && belly <= 30 ? 3 : 0);
+  return levelAtk(player.lv) + weaponPow() * (0.75 + curStr() / 32) + (curStr() - 8) + (wHas('hungry') && belly <= 30 ? 3 : 0);
 }
 function calcDamage(e) {
   return Math.max(1, Math.round((playerAtk() - (eT(e).def || 0) + 1) * (0.875 + Math.random() * 0.25)));
@@ -680,8 +681,9 @@ const ST_BAD = ['confuse', 'sleep', 'blind', 'mute', 'weak'];
 const newStatus = () => ({ confuse: 0, sleep: 0, blind: 0, mute: 0, weak: 0, haste: 0, power: 0, invinc: 0, seeing: 0 });
 const statusText = () => Object.keys(player.st).filter(k => player.st[k] > 0).map(k => `${ST_LABEL[k]}${player.st[k]}`).join(' ');
 const ringN = name => eqRings.filter(r => r && r.type === 'ring_' + name).length;       // 装備中のその腕輪の数（2つで効果2倍）
-const wSeal = () => eqWeapon ? ITEMS[eqWeapon.type].seal || '' : '';
-const sSeal = () => eqShield ? ITEMS[eqShield.type].seal || '' : '';
+const SEAL_NAMES = { crit: '会心の一撃', double: '連続攻撃', tri: '三方向攻撃', drain: '回復', hungry: 'ハングリー', knock: '突き飛ばし', bat: '浮遊特攻', fire: '炎飛ばし', counter: 'カウンター', dodge: '見切り', guts: '根性', fullhalf: '満タン防御', belly: 'ハラモチ', hungryDef: 'ハングリー', critguard: '痛恨耐性' };
+const sealsOf = it => { const r = []; if (!it) return r; const t = ITEMS[it.type].seal; if (t) r.push(t); for (const x of it.seals || []) if (!r.includes(x)) r.push(x); return r; };   // 印＝種類の印＋合成で増えた印（1つの装備が複数持てる）
+const wHas = k => sealsOf(eqWeapon).includes(k), sHas = k => sealsOf(eqShield).includes(k);
 const maxBelly = () => Math.max(25, MAXBELLY + bellyBonus + 25 * ringN('bellyup') - 25 * ringN('bellydown'));
 const senseEnemies = () => floorLight || ringN('seeall') > 0 || ringN('senseE') > 0 || player.st.seeing > 0;   // 地図に敵が映るか
 const senseItems = () => floorLight || ringN('seeall') > 0 || ringN('senseI') > 0;                              // 地図に道具が映るか
@@ -1035,22 +1037,23 @@ const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
 function rollPlus() { const r = Math.random(); return r < 0.55 ? 0 : r < 0.75 ? 1 : r < 0.88 ? 2 : r < 0.95 ? -1 : 3; }
 const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip && ITEMS[type].equip !== 'ring') it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].pot) { it.plus = plus === undefined ? rnd(...POT_CAP) : plus; it.pot = []; } else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; else if (ITEMS[type].stack) it.plus = plus === undefined ? rnd(...ITEMS[type].stack) : plus; else if (type === 'gold') it.plus = plus === undefined ? 10 : plus; return it; };
 const isEq = it => it === eqWeapon || it === eqShield || eqRings.includes(it);
-const ikey = it => it.type + (it.plus !== undefined && !ITEMS[it.type].stack ? ':' + it.plus : '') + (isEq(it) ? 'E' : '') + (it.pot ? ':p' + it.id : '') + (it.shopLot ? ':shop'+it.shopLot : '');   // 持ち物のまとめ表示・操作のキー（壺は1つずつ別）
-const itemName = it => (ShopSystem.unpaid(it) ? '【未精算】' : '') + (it.type === 'gold' ? `${it.plus}ギタン` : dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].stack ? `×${it.plus}` : ITEMS[it.type].pot ? `（${it.plus}）` : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus));
-const atkBonus = () => (eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0) + atkUp + 2 * ringN('strength') + (player.st.power > 0 ? 3 : 0) - (player.st.weak > 0 ? 2 : 0) + (wSeal() === 'hungry' && belly <= 30 ? 3 : 0);
-const defBonus = () => (eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0) + (sSeal() === 'hungryDef' && belly <= 30 ? 2 : 0);
+const ikey = it => it.type + (it.plus !== undefined && !ITEMS[it.type].stack ? ':' + it.plus : '') + (isEq(it) ? 'E' : '') + (it.pot ? ':p' + it.id : '') + (it.seals && it.seals.length ? ':s' + it.seals.join('+') : '') + (it.shopLot ? ':shop'+it.shopLot : '');   // 持ち物のまとめ表示・操作のキー（壺は1つずつ別）
+const itemName = it => (ShopSystem.unpaid(it) ? '【未精算】' : '') + (it.type === 'gold' ? `${it.plus}ギタン` : dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].stack ? `×${it.plus}` : ITEMS[it.type].pot ? `（${it.plus}）` : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus) + (it.seals && it.seals.length ? '✦' + it.seals.length : ''));
+const atkBonus = () => (eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0) + atkUp + 2 * ringN('strength') + (player.st.power > 0 ? 3 : 0) - (player.st.weak > 0 ? 2 : 0) + (wHas('hungry') && belly <= 30 ? 3 : 0);
+const defBonus = () => (eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0) + (sHas('hungryDef') && belly <= 30 ? 2 : 0);
 function mergeStacks(list) {                                     // 矢などの「たば」は1つにまとめる
   const out = [];
   for (const it of list) { const ex = ITEMS[it.type].stack && out.find(o => o.type === it.type && o.shopLot === it.shopLot); if (ex) ex.plus += it.plus; else out.push(it); }
   return out;
 }
 const invCount = type => ITEMS[type].stack ? inv.filter(i => i.type === type).reduce((a, i) => a + i.plus, 0) : inv.filter(i => i.type === type).length;
-const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (it.pot && it.pot.length ? '~' + it.pot.map(encItem).join(',') : '');   // 壺は「壺:容量~中身,中身」
+const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (it.seals && it.seals.length ? '^' + it.seals.join('+') : '') + (it.pot && it.pot.length ? '~' + it.pot.map(encItem).join(',') : '');   // 壺は「壺:容量~中身,中身」
 const RENAMED = { onigiri: 'bread' };                            // 名前を変えたアイテム（古いセーブの読み替え）
 const decItem = t => {
-  const str = String(t), cut = str.indexOf('~'); let [ty, pl] = (cut < 0 ? str : str.slice(0, cut)).split(':'); ty = RENAMED[ty] || ty;
+  const str = String(t), cut = str.indexOf('~'); const head = (cut < 0 ? str : str.slice(0, cut)).split('^'); let [ty, pl] = head[0].split(':'); ty = RENAMED[ty] || ty;
   if (!ITEMS[ty]) return null;
   const it = mkItem(ty, pl === undefined ? undefined : (+pl | 0));
+  if (head[1] && ITEMS[ty].equip && ITEMS[ty].equip !== 'ring') { const sl = head[1].split('+').filter(k => SEAL_NAMES[k] && k !== ITEMS[ty].seal); if (sl.length) it.seals = sl; }
   if (cut >= 0 && it.pot) it.pot = str.slice(cut + 1).split(',').map(decItem).filter(i => i && !i.pot).slice(0, it.plus);
   return it;
 };
@@ -1495,7 +1498,7 @@ function guardDead() {
 const bellyStage = () => belly <= 0 ? 0 : belly <= 10 ? 10 : belly <= 20 ? 20 : 99;
 function hungerIv() {                                          // 満腹度が1%減るまでのターン数（回復の腕輪で短く、ハラモチの盾で長く）
   let iv = HUNGER_TURNS[hungerPref] / (1 + 0.5 * ringN('regen'));
-  if (sSeal() === 'belly') iv *= 1.5;
+  if (sHas('belly')) iv *= 1.5;
   return Math.max(1, Math.round(iv));
 }
 function hungerTick() {
@@ -1534,7 +1537,7 @@ function hitEnemy(e) {
   if (e.x !== player.x) player.fl = e.x < player.x;
   bumpToward(player, e.x, e.y);
   const targets = [e];
-  if (wSeal() === 'tri') {                                      // 三方向攻撃：正面の左右斜めの敵も
+  if (wHas('tri')) {                                      // 三方向攻撃：正面の左右斜めの敵も
     const i = DIRS8.findIndex(d => d[0] === Math.sign(e.x - player.x) && d[1] === Math.sign(e.y - player.y));
     for (const j of [i - 1, i + 1]) {
       const d = DIRS8[(j + 8) % 8];
@@ -1551,8 +1554,8 @@ function strikeOne(e, again) {
     e.aware = true; fxText(e.x, e.y, 'MISS', '#cfd8e8'); say(`${eT(e).name}への攻撃ははずれた。`); return;
   }
   let dmg = calcDamage(e), crit = false;
-  if (Math.random() < 0.2 * ringN('moroha') + (wSeal() === 'crit' ? 0.25 : 0)) { dmg *= 2; crit = true; }
-  if (wSeal() === 'bat' && (eT(e).flying || e.kind === 'bat')) dmg *= 2;
+  if (Math.random() < 0.2 * ringN('moroha') + (wHas('crit') ? 0.25 : 0)) { dmg *= 2; crit = true; }
+  if (wHas('bat') && (eT(e).flying || e.kind === 'bat')) dmg *= 2;
   if(e.mim)EnemyVfx.emit('reveal',e);
   e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
   fxText(e.x, e.y, '-' + dmg, crit ? '#ffe28a' : '#ffffff');
@@ -1561,14 +1564,14 @@ function strikeOne(e, again) {
   const pre = crit ? '会心の一撃！ ' : '';
   if (e.hp <= 0) { say(`${pre}${eT(e).name}に${dmg}ダメージ。倒した！`); killEnemy(e); }
   else { say(`${pre}${eT(e).name}に${dmg}ダメージ。`); afterDamage(e); }
-  if (wSeal() === 'drain' && player.hp < player.maxhp) {
+  if (wHas('drain') && player.hp < player.maxhp) {
     const b = player.hp; player.hp = Math.min(player.maxhp, player.hp + Math.max(1, Math.floor(dmg / 3))); fxText(player.x, player.y, '+' + (player.hp - b), '#7bff9a');
   }
-  if (e.hp > 0 && wSeal() === 'knock' && Math.random() < 0.3) {
+  if (e.hp > 0 && wHas('knock') && Math.random() < 0.3) {
     const dx = Math.sign(e.x - player.x), dy = Math.sign(e.y - player.y);
     if (geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy) && !AllySystem.at(e.x+dx,e.y+dy) && !ShopSystem.at(e.x+dx,e.y+dy)) { e.x += dx; e.y += dy; say('突き飛ばした！'); }
   }
-  if (e.hp > 0 && !again && wSeal() === 'double' && Math.random() < 0.25) { say('連続攻撃！'); strikeOne(e, true); }
+  if (e.hp > 0 && !again && wHas('double') && Math.random() < 0.25) { say('連続攻撃！'); strikeOne(e, true); }
 }
 // 床のアイテムを持ち物へ。入らなければ false
 function takeFloor(f) {
@@ -1692,7 +1695,7 @@ function playerAttack() {
     }
   }
   if(!t&&AllySystem.nearby()&&!AllySystem.nearby().following){AllySystem.talk();return;}
-  if (!t && wSeal() === 'fire' && player.hp >= player.maxhp) {  // 炎飛ばし：HPが満タンなら、離れた敵に炎
+  if (!t && wHas('fire') && player.hp >= player.maxhp) {  // 炎飛ばし：HPが満タンなら、離れた敵に炎
     const z = lineTarget();
     if (z) { player.swing = now(); player.attackFace = player.face.slice(); kick(); zapHit(z.e, 8, '炎'); endTurn(); return; }
   }
@@ -1730,10 +1733,10 @@ function enemyStrike(e, T, range, verb) {
   bumpToward(e, player.x, player.y);
   if (e.x !== player.x) e.fl = player.x < e.x;
   if (Math.random() >= ACC.e) { EnemyVfx.attack(e,T,player,false,verb!=='攻撃'); say(`${T.name}の${verb}！ はずれた。`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
-  if (sSeal() === 'dodge' && Math.random() < 0.25) { EnemyVfx.attack(e,T,player,false,verb!=='攻撃'); say(`${T.name}の${verb}！ ひらりとかわした！`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
+  if (sHas('dodge') && Math.random() < 0.25) { EnemyVfx.attack(e,T,player,false,verb!=='攻撃'); say(`${T.name}の${verb}！ ひらりとかわした！`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
   let dmg = Math.max(1, Math.round(rnd(lo, hi) * enemyAtkK()) - defBonus()), crit = false;
-  if (Math.random() < 0.1 * ringN('moroha') + 0.15 * ringN('tsukon')) { crit = true; if (sSeal() !== 'critguard') dmg *= 2; }
-  if (sSeal() === 'fullhalf' && player.hp >= player.maxhp) dmg = Math.max(1, Math.ceil(dmg / 2));
+  if (Math.random() < 0.1 * ringN('moroha') + 0.15 * ringN('tsukon')) { crit = true; if (!sHas('critguard')) dmg *= 2; }
+  if (sHas('fullhalf') && player.hp >= player.maxhp) dmg = Math.max(1, Math.ceil(dmg / 2));
   if (player.st.invinc > 0) dmg = 0;
   EnemyVfx.attack(e,T,player,true,verb!=='攻撃');
   player.hp -= dmg;
@@ -1741,8 +1744,8 @@ function enemyStrike(e, T, range, verb) {
   fxText(player.x, player.y, '-' + dmg, crit ? '#ffe28a' : '#ff6b6b');
   vfxHit(player.x, player.y, player.x - e.x, player.y - e.y, '#ff6a4d', crit);
   say(`${crit ? '痛恨の一撃！ ' : ''}${T.name}の${verb}！ ${dmg}ダメージ。`);
-  if (sSeal() === 'counter' && dmg > 0 && e.hp > 0) zapHit(e, Math.max(1, Math.ceil(dmg / 2)), 'カウンター');
-  if (player.hp <= 0 && sSeal() === 'guts' && Math.random() < 0.5) { player.hp = 1; say('根性で踏みとどまった！'); }
+  if (sHas('counter') && dmg > 0 && e.hp > 0) zapHit(e, Math.max(1, Math.ceil(dmg / 2)), 'カウンター');
+  if (player.hp <= 0 && sHas('guts') && Math.random() < 0.5) { player.hp = 1; say('根性で踏みとどまった！'); }
   return { dead: checkDeath(`力尽きた…（${floorNo}階）`), hit: true, dmg };
 }
 // まじゅつ師の魔弾の効果（ランクで変わる：転移→混乱→くちなし→レベルダウン）
@@ -1878,6 +1881,7 @@ function priceOf(it) {                                          // 売値（買�
   if (d.stack) return Math.max(10, p * it.plus);
   p *= d.w >= 6 ? 1 : d.w >= 3 ? 1.3 : d.w >= 2 ? 1.8 : 2.5;
   if (d.equip && d.equip !== 'ring' && it.plus) p += 60 * it.plus;
+  if (it.seals && it.seals.length) p += 150 * it.seals.length;
   if (d.charges) p += 40 * it.plus;
   return Math.max(10, Math.round(p / 10) * 10);
 }
@@ -1916,8 +1920,18 @@ function bankMove(toBank) {
 // =====================================================================
 ACC.t = 0.84;
 // 壺が割れる：壺は消え、中身は着地点の近くの空き床に散らばる（置けない分は失われる）。店の商品の壺は壺だけ請求、中身は店の中なら返品扱い・外なら持ち出し扱い
+const fuseKind = it => ITEMS[it.type].equip === 'weapon' || ITEMS[it.type].equip === 'shield' ? ITEMS[it.type].equip : null;
+const fusable = (pot, it) => !it.pot && (!ITEMS[pot.type].fuse || (!!fuseKind(it) && (!pot.pot.length || fuseKind(pot.pot[0]) === fuseKind(it))));   // 合成の壺：武器と盾は混ぜない
+function fuseItems(items) {                                      // 土台＝最初に入れた物。強化値は合計、印は全部（重複なし）。土台以外は消える
+  const base = items[0], seals = sealsOf(base);
+  for (const c of items.slice(1)) { base.plus += c.plus; for (const k of sealsOf(c)) if (!seals.includes(k)) seals.push(k); ShopSystem.consume(c); }
+  const own = ITEMS[base.type].seal; const extra = seals.filter(k => k !== own);
+  if (extra.length) base.seals = extra; else delete base.seals;
+  return base;
+}
 function breakPot(pot, x, y) {
-  const items = pot.pot.splice(0);
+  let items = pot.pot.splice(0);
+  if (ITEMS[pot.type].fuse && items.length > 1) { const names = items.map(itemName).join('＋'); items = [fuseItems(items)]; say(`${names}が合成された！ → ${itemName(items[0])}`); }
   ShopSystem.consume(pot, true);
   say(`${dispName(pot.type)}が割れた！${items.length ? ' 中身が散らばった。' : ''}`);
   for (const c of items) if (!dropAt(x, y, c)) { ShopSystem.consume(c); say(`${itemName(c)}は置き場がなく失われた。`); }
@@ -2043,12 +2057,12 @@ const whEl = $('wh'), whListEl = $('whList'), whSegEl = $('whSeg');
 function openBag() { if(EventVfx.busy())return; if (dead) { guardDead(); return; } if (whOpen||stairsOpen) return; holdStop(); bagOpen = true;bagActionMode=false;bagActionIndex=0;bagEl.hidden = false;document.body?.classList?.add('bag-visible'); renderBag(); render(); }
 function closeBag() { bagOpen = false; bagSel = null;potMode = null;bagActionMode=false;bagEl.hidden = true;document.body?.classList?.remove('bag-visible'); }
 function toggleBag() { if (bagOpen) { closeBag(); render(); } else openBag(); }
-const potCandidates = pot => inv.filter(i => !i.pot);   // 壺に入れられる物：壺以外の持ち物（装備中・未精算も可。装備は外れ、未精算は精算か盗難まで未精算のまま）
-const potFloorEntry = () => scene === 'dungeon' ? floorItems.find(f => f.x === player.x && f.y === player.y && f.item.type !== 'gold' && !f.item.pot) : null;   // 足元の物
+const potCandidates = pot => inv.filter(i => fusable(pot, i));   // 壺に入れられる物：壺以外の持ち物（装備中・未精算も可。装備は外れ、未精算は精算か盗難まで未精算のまま）
+const potFloorEntry = pot => scene === 'dungeon' ? floorItems.find(f => f.x === player.x && f.y === player.y && f.item.type !== 'gold' && !f.item.pot && (!pot || fusable(pot, f.item))) : null;   // 足元の物
 const bagGroups = () => {
   if (!potMode) return groups(inv);
   if (potMode.kind === 'take') return groups(potMode.pot.pot);
-  const gs = groups(potCandidates(potMode.pot)), f = potFloorEntry();
+  const gs = groups(potCandidates(potMode.pot)), f = potFloorEntry(potMode.pot);
   if (f) gs.push({ key: 'floor:' + ikey(f.item), type: f.item.type, items: [f.item], floor: true });
   return gs;
 };
@@ -2086,13 +2100,13 @@ function renderBag() {
   const selected=shown.find(g=>g.key===bagSel),detail=$('bagDetail');
   if(selected){
     const d=ITEMS[selected.type],acts=bagActions(selected);bagActionIndex=Math.min(bagActionIndex,acts.length-1);
-    detail.innerHTML=`<h2>${itemName(selected.items[0])}</h2><div class="ds">${isKnown(selected.type)?d.desc||'':'効果はわからない。使うか身につけると分かる。'}${selected.items[0].pot&&!potMode?`<br>中身 ${selected.items[0].pot.length}/${selected.items[0].plus}：${selected.items[0].pot.length?selected.items[0].pot.map(itemName).join('、'):'空'}`:''}</div><div class="acts">`+acts.map((a,i)=>`<button data-act="${a.act}" data-type="${a.type}" class="${bagActionMode&&i===bagActionIndex?'chosen':''}">${a.label}</button>`).join('')+`</div><div class="bag-help">${bagActionMode?'← → 操作を選ぶ ／ 決定で実行 ／ Escで一覧':'↑ ↓ 選ぶ ／ 決定で操作を選ぶ ／ Escで戻る'}</div>`;
+    detail.innerHTML=`<h2>${itemName(selected.items[0])}</h2><div class="ds">${isKnown(selected.type)?d.desc||'':'効果はわからない。使うか身につけると分かる。'}${selected.items[0].pot&&!potMode?`<br>中身 ${selected.items[0].pot.length}/${selected.items[0].plus}：${selected.items[0].pot.length?selected.items[0].pot.map(itemName).join('、'):'空'}${ITEMS[selected.type].fuse?(selected.items[0].pot.length>1?'<br>割ると合成：'+itemName(Object.assign({},selected.items[0].pot[0],{plus:selected.items[0].pot.reduce((a,c)=>a+c.plus,0),seals:[...new Set(selected.items[0].pot.flatMap(sealsOf))].filter(k=>k!==ITEMS[selected.items[0].pot[0].type].seal)})):''):''}`:''}${selected.items[0].seals&&selected.items[0].seals.length?'<br>合成の印：'+selected.items[0].seals.map(k=>SEAL_NAMES[k]).join('、'):''}</div><div class="acts">`+acts.map((a,i)=>`<button data-act="${a.act}" data-type="${a.type}" class="${bagActionMode&&i===bagActionIndex?'chosen':''}">${a.label}</button>`).join('')+`</div><div class="bag-help">${bagActionMode?'← → 操作を選ぶ ／ 決定で実行 ／ Escで一覧':'↑ ↓ 選ぶ ／ 決定で操作を選ぶ ／ Escで戻る'}</div>`;
   }else if(potMode)detail.innerHTML=`<h2>${potMode.kind==='put'?'壺に入れる':'壺から出す'}</h2><div class="ds">${potMode.kind==='put'?'入れられる物がない。':'壺は空だ。'}</div><div class="acts"><button data-act="potback" data-type="">戻る</button></div>`;
   else detail.innerHTML='<h2>持ち物</h2><div class="ds">道具を拾うと、ここで使ったり装備したりできます。</div>';
 }
 function bagActions(g){const d=ITEMS[g.type];
   if(potMode)return [{act:'potgo',type:g.key,label:potMode.kind==='put'?'入れる':'出す'},{act:'potback',type:g.key,label:'戻る'}];
-  if(d.pot)return [{act:'potput',type:g.key,label:'入れる'},{act:'pottake',type:g.key,label:'出す'},{act:'drop',type:g.key,label:'置く'},{act:'throw',type:g.key,label:'投げて割る'}];
+  if(d.pot)return [{act:'potput',type:g.key,label:'入れる'},...(d.fuse?[]:[{act:'pottake',type:g.key,label:'出す'}]),{act:'drop',type:g.key,label:'置く'},{act:'throw',type:g.key,label:'投げて割る'}];
   return [
   {act:'use',type:g.key,label:d.equip?(isEq(g.items[0])?'外す':'装備'):d.throwOnly?'投げる':'使う'},
   {act:'drop',type:g.key,label:'置く'},
@@ -2101,6 +2115,7 @@ function bagActions(g){const d=ITEMS[g.type];
 ];}
 // 壺：入れる／出す物を選ぶ → 決定で1つ移して1ターン経過（町ではターンなし）
 function potOpen(pot, kind) {
+  if (kind === 'take' && ITEMS[pot.type].fuse) { say('合成の壺は割らないと取り出せない。'); renderBag(); return; }
   if (kind === 'take' && !pot.pot.length) { say('壺は空だ。'); renderBag(); return; }
   potMode = { pot, kind }; bagActionMode = false; bagActionIndex = 0; bagSel = null; if (!bagOpen) openBag(); else renderBag();
 }
@@ -2108,7 +2123,7 @@ function potGo(key) {
   if (!potMode) return;
   const pot = potMode.pot, kind = potMode.kind;
   if (kind === 'put') {
-    const fe = key.startsWith('floor:') ? potFloorEntry() : null;
+    const fe = key.startsWith('floor:') ? potFloorEntry(pot) : null;
     const it = fe ? (('floor:' + ikey(fe.item)) === key ? fe.item : null) : potCandidates(pot).find(i => ikey(i) === key); if (!it) return;
     if (pot.pot.length >= pot.plus) { say('壺はいっぱいだ。'); renderBag(); return; }
     if (fe) { floorItems.splice(floorItems.indexOf(fe), 1); ShopSystem.pickup(it); }
