@@ -36,7 +36,7 @@
  }
  function nearby(){const a=state.actor;return scene==='dungeon'&&a&&distance(a,player)<=1&&geomOK(player.x,player.y,a.x-player.x,a.y-player.y)?a:null;}
  function recruit(){const a=nearby();if(!a||a.following)return false;a.following=true;state.used=true;say(config(a).name+'「'+config(a).join+'」');hide();render();return true;}
- function infoHTML(){const a=state.actor;if(!a||!a.following)return '<p>同行している助っ人はいない。</p>';const s=stats(a),c=config(a),ability=a.kind==='sherininya'?'黒魔法：8方向の直線2マス。敵と味方を貫通し、敵だけに攻撃。壁では止まる。':a.kind==='avenius'?'剣：隣接1マス<br>一閃：見える4マス以内の敵へ瞬間移動・必中の先制攻撃後に帰還。同じ敵につき1回。':'クナイ：8方向の直線2マス・障害物越し<br>狐火の襲：本人のみ4ターン2回行動'+(a.boost?'（残り'+a.boost+'）':'');return '<h3>'+c.name+'　Lv'+a.lv+'</h3><p>HP '+a.hp+'/'+a.maxhp+'　EXP '+a.exp+'/'+expNeed(a.lv)+'</p><p>攻撃 '+s.attack+'　守備 '+s.defense+'<br>装備固定：'+c.equipment+'<br>'+ability+'</p>';}
+ function infoHTML(){const a=state.actor;if(!a||!a.following)return '<p>同行している助っ人はいない。</p>';const s=stats(a),c=config(a),ability=a.kind==='sherininya'?'黒魔法：8方向の直線2マス。敵と味方を貫通し、敵だけに攻撃。壁の角をはさむ斜めも通る。まっすぐ壁があると止まる。':a.kind==='avenius'?'剣：隣接1マス<br>一閃：見える4マス以内の敵へ瞬間移動・必中の先制攻撃後に帰還。同じ敵につき1回。':'クナイ：8方向の直線2マス（隣接も含む）・障害物越し<br>常に敵を狙って動く（ラナから離れすぎると戻る）<br>狐火の襲：本人のみ4ターン2回行動'+(a.boost?'（残り'+a.boost+'）':'');return '<h3>'+c.name+'　Lv'+a.lv+'</h3><p>HP '+a.hp+'/'+a.maxhp+'　EXP '+a.exp+'/'+expNeed(a.lv)+'</p><p>攻撃 '+s.attack+'　守備 '+s.defense+'<br>装備固定：'+c.equipment+'<br>'+ability+'</p>';}
  function talk(){
   const a=nearby();if(!a||uiBlocked())return;holdStop();state.returnFocus=document.activeElement;state.open=true;
   document.body?.classList?.add('ally-dialog-open');const el=document.getElementById('allyPrompt');if(!el)return;el.hidden=false;
@@ -59,13 +59,25 @@
   try{a.x=landing.x;a.y=landing.y;strike(a,e,true);fxText(e.x,e.y,'一閃','#98f7ff');}finally{a.x=origin.x;a.y=origin.y;a.vx=a.x;a.vy=a.y;}return true;
  }
  function move(a,x,y){a.face=[Math.sign(x-a.x),Math.sign(y-a.y)];a.x=x;a.y=y;a.walkStart=now();a.walkEnd=now()+220;}
- function magicRay(a,face){let x=a.x,y=a.y;const targets=[],cells=[];for(let n=0;n<2;n++){if(!geomOK(x,y,face[0],face[1]))break;x+=face[0];y+=face[1];cells.push({x,y});const e=enemyAt(x,y);if(e&&!e.mh)targets.push(e);}return {face:face.slice(),targets,cells};}
+ const rayOK=(x,y,dx,dy)=>inb(x+dx,y+dy)&&!solid(map[y+dy][x+dx]);   // 魔法は壁の角をはさむ斜めも通る（行き先のマスが壁でなければ）
+ function magicRay(a,face){let x=a.x,y=a.y;const targets=[],cells=[];for(let n=0;n<2;n++){if(!rayOK(x,y,face[0],face[1]))break;x+=face[0];y+=face[1];cells.push({x,y});const e=enemyAt(x,y);if(e&&!e.mh)targets.push(e);}return {face:face.slice(),targets,cells};}
  function castMagic(a){const ray=DIRS8.map(face=>magicRay(a,face)).filter(r=>r.targets.length).sort((x,y)=>y.targets.length-x.targets.length||distance(a,x.targets[0])-distance(a,y.targets[0]))[0];if(!ray)return false;
   // Snapshot enemy identities before damage can split/move enemies. A new
   // fragment is not struck again by the same cast, and allies are never targets.
   a.face=ray.face.slice();a.attackFace=ray.face.slice();a.attackStart=now();a.walkEnd=0;a.magicBeam={start:now(),from:{x:a.x,y:a.y},cells:ray.cells};
   for(const e of ray.targets)if(enemies.includes(e))strike(a,e);
   a.face=ray.face.slice();a.attackFace=ray.face.slice();kick();return true;
+ }
+ const HUNT_LEASH=6,HUNT_SEEK=7;
+ // ユズナミキ：見える敵（7マス以内）の攻撃位置（8方向の直線2マス以内）へ向かって動く。ラナから6歩より離れたら追わずに戻る
+ function hunt(a){
+  const d=distMap(),here=d[a.y][a.x];if(here<0||here>HUNT_LEASH)return false;
+  const foes=enemies.filter(e=>!e.mh&&distance(a,e)<=HUNT_SEEK&&los(a.x,a.y,e.x,e.y));if(!foes.length)return false;
+  const score=(x,y)=>foes.some(e=>Math.max(Math.abs(e.x-x),Math.abs(e.y-y))<=2&&aligned(x,y,e.x,e.y))?0:1+Math.min(...foes.map(e=>Math.max(Math.abs(e.x-x),Math.abs(e.y-y))));
+  const cur=score(a.x,a.y);
+  const best=DIRS8.map(([dx,dy])=>({x:a.x+dx,y:a.y+dy,dx,dy})).filter(c=>geomOK(a.x,a.y,c.dx,c.dy)&&free(c.x,c.y)&&d[c.y][c.x]>=0&&d[c.y][c.x]<=HUNT_LEASH).map(c=>({...c,s:score(c.x,c.y)})).filter(c=>c.s<cur).sort((x,y)=>x.s-y.s||d[x.y][x.x]-d[y.y][y.x])[0];
+  if(best)move(a,best.x,best.y);
+  return true;   // 敵が見えている間は、ラナのそばに戻らずその場で待つ（攻撃位置にいればこの前に殴っている）
  }
  function tick(){if(scene!=='dungeon'||dead||!state.actor||state.actor.hp<=0)return;const a=state.actor;
   if(!a.following){
@@ -88,6 +100,7 @@
    if(a.kind==='sherininya'&&castMagic(a))continue;
    const target=a.kind==='sherininya'?null:enemies.filter(e=>!e.mh&&(a.kind==='avenius'?distance(a,e)===1&&geomOK(a.x,a.y,e.x-a.x,e.y-a.y):distance(a,e)<=2&&aligned(a.x,a.y,e.x,e.y))).sort((x,y)=>distance(a,x)-distance(a,y))[0];
    if(target){strike(a,target);continue;}
+   if(a.kind==='yuzunamiki'&&hunt(a))continue;
    const d=distMap(),current=d[a.y][a.x];if(current<=1)break;
    const choices=DIRS8.map(([dx,dy])=>({x:a.x+dx,y:a.y+dy,dx,dy})).filter(c=>geomOK(a.x,a.y,c.dx,c.dy)&&d[c.y][c.x]>=1&&d[c.y][c.x]<current&&!enemyAt(c.x,c.y)&&!merchantAt(c.x,c.y)).sort((x,y)=>d[x.y][x.x]-d[y.y][y.x]);
    if(choices.length)move(a,choices[0].x,choices[0].y);
