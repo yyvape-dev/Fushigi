@@ -40,7 +40,7 @@ const SHEETS = [
   { id: 'bread', name: 'パン4種（小さなパン・パン・大きなパン・カビの生えたパン）', cols: 2, keys: ['bread_small', 'bread', 'bread_big', 'bread_moldy'], note: 'どれも床に置いた姿。大きさの違いが分かるように、小さなパンはマスの55%、パンは75%、大きなパンは95%、カビの生えたパンは75%の大きさにする。' },
   { id: 'enemyA', name: '敵（前半8種）', foot: true, keys: ['slime', 'goblin', 'bat', 'blob', 'skeleton', 'archer', 'thief', 'sleepy'], note: ENEMY_NOTE },
   { id: 'enemyB', name: '敵（後半7種）', foot: true, keys: ['bomb', 'ogre', 'dazzle', 'venom', 'ghost', 'minotaur', 'dragon'], note: ENEMY_NOTE },
-  { id: 'enemyC', name: '敵（深層6種＋主）', foot: true, keys: ['ninja', 'caster', 'mimic', 'summoner', 'charged', 'cannon', 'lord'], note: ENEMY_NOTE },
+  { id: 'enemyC', name: '敵（深層6種＋主）', foot: true, keys: ['ninja', 'caster', 'mimic', 'summoner', 'charged', 'cannon', 'lord'], note: '全員、右向きで斜め前から見た全身。足元が下で、マスの高さいっぱいに描く。丸みのあるデフォルメだが、敵モンスターと一目で分かる険しく邪悪な顔つき。細く鋭い目、小さい瞳、険しい眉、狡猾な薄笑い、帽子や兜の奥の暗い顔。ニンジャは鋭いにらみ、まじゅつ師はうつろで不気味な目、すず坊主は邪悪な妖怪僧、おおづつ兵は兜の奥でにらむ目。大きく丸い味方風の瞳・長いまつ毛・頬の赤み・無邪気な笑顔は描かない。流血や生々しいホラーは不要。' },
 ];
 const sheetCols = sh => sh.cols || 4;
 const sheetRows = sh => Math.ceil(sh.keys.length / sheetCols(sh));

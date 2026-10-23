@@ -5,13 +5,13 @@
     "ninja": {
       "width": 256,
       "height": 256,
-      "visiblePixels": 18038,
+      "visiblePixels": 18108,
       "edgePixels": 0
     },
     "caster": {
       "width": 256,
       "height": 256,
-      "visiblePixels": 17329,
+      "visiblePixels": 17197,
       "edgePixels": 0
     },
     "mimic": {
@@ -23,7 +23,7 @@
     "summoner": {
       "width": 256,
       "height": 256,
-      "visiblePixels": 17386,
+      "visiblePixels": 17622,
       "edgePixels": 0
     },
     "charged": {
@@ -35,7 +35,7 @@
     "cannon": {
       "width": 256,
       "height": 256,
-      "visiblePixels": 20472,
+      "visiblePixels": 21147,
       "edgePixels": 0
     },
     "lord": {

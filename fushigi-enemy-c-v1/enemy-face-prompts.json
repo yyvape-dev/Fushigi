@@ -1,0 +1,14 @@
+{
+  "ninja": {
+    "reference": "source-art/face-reference-ninja.png"
+  },
+  "caster": {
+    "reference": "source-art/face-reference-caster.png"
+  },
+  "summoner": {
+    "reference": "source-art/face-reference-summoner.png"
+  },
+  "cannon": {
+    "reference": "source-art/face-reference-cannon.png"
+  }
+}

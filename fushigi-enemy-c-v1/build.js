@@ -27,8 +27,8 @@ function removeBackground(c){
  const full=createCanvas(original.width,original.height);full.getContext('2d').drawImage(original,0,0);removeBackground(full);
  const cc=components(full),major=cc.out.filter(o=>o.count>5000),records=[];
  for(let i=0;i<keys.length;i++){
-  const key=keys[i];let c;
-  if(i<5){
+  const key=keys[i],corrected=['ninja','caster','summoner','cannon'].includes(key),source=corrected?'source-art/'+key+'-enemy.png':i<5?'source-art/enemyC-original.png':'source-art/'+key+'.png';let c;
+  if(i<5&&!corrected){
    const [x,y,w,h]=boxes[i],chosen=major.find(o=>o.box[0]>=x&&o.box[0]<x+w&&o.box[1]>=y&&o.box[1]<y+h);
    if(!chosen)throw Error('Missing '+key);
    const keep=new Set([chosen.id]);
@@ -36,17 +36,17 @@ function removeBackground(c){
    c=createCanvas(w,h);const g=c.getContext('2d'),d=g.createImageData(w,h);
    for(let yy=0;yy<h;yy++)for(let xx=0;xx<w;xx++){const from=(y+yy)*full.width+x+xx,to=yy*w+xx;if(keep.has(cc.labels[from]))d.data.set(cc.p.subarray(from*4,from*4+4),to*4);}
    g.putImageData(d,0,0);
-  }else{const im=await loadImage(path.join(root,'source-art',key+'.png'));c=createCanvas(im.width,im.height);c.getContext('2d').drawImage(im,0,0);}
+  }else{const im=await loadImage(path.join(root,source));c=createCanvas(im.width,im.height);c.getContext('2d').drawImage(im,0,0);}
   const cs=components(c),visible=cs.out.filter(o=>o.count>=4);let x0=c.width,y0=c.height,x1=0,y1=0;
   for(const {box:b} of visible){x0=Math.min(x0,b[0]);y0=Math.min(y0,b[1]);x1=Math.max(x1,b[2]);y1=Math.max(y1,b[3]);}
   const w=x1-x0+1,h=y1-y0+1,s=Math.min(224/w,192/h),out=createCanvas(256,256),g=out.getContext('2d');
   g.imageSmoothingQuality='high';g.drawImage(c,x0,y0,w,h,128-w*s/2,224-h*s,w*s,h*s);
   const file='art/'+key+'.png',buf=out.toBuffer('image/png');fs.writeFileSync(path.join(root,file),buf);
-  records.push({key,file,width:256,height:256,anchor:[128,224],view:'SE/right-facing three-quarter',source:i<5?'source-art/enemyC-original.png':'source-art/'+key+'.png',sourceBounds:[x0,y0,w,h],scale:s,sha256:crypto.createHash('sha256').update(buf).digest('hex')});
+  records.push({key,file,width:256,height:256,anchor:[128,224],view:'SE/right-facing three-quarter',source,sourceBounds:[x0,y0,w,h],scale:s,sha256:crypto.createHash('sha256').update(buf).digest('hex')});
  }
  const hashes={};for(const f of fs.readdirSync(path.join(root,'source-art')))hashes[f]=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'source-art',f))).digest('hex');
  const ref='../fushigi-equipment-v3/assets/hero-base/SE.png';
- fs.writeFileSync(path.join(root,'manifest.json'),JSON.stringify({generator:'OpenAI image_gen',promptFile:'prompts.json',styleReference:ref,referenceSha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(root,ref))).digest('hex'),sourceHashes:hashes,frames:records},null,2)+'\n');
+ fs.writeFileSync(path.join(root,'manifest.json'),JSON.stringify({generator:'OpenAI image_gen',promptFile:'prompts.json',initialPromptFile:'initial-prompt.txt',correctionPromptFile:'enemy-face-prompts.json',styleReference:ref,referenceSha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(root,ref))).digest('hex'),sourceHashes:hashes,frames:records},null,2)+'\n');
  const sheet=createCanvas(1024,512),g=sheet.getContext('2d');for(let i=0;i<keys.length;i++){const im=await loadImage(path.join(root,'art',keys[i]+'.png'));g.drawImage(im,i%4*256,Math.floor(i/4)*256);}
  fs.writeFileSync(path.join(root,'enemyC.png'),sheet.toBuffer('image/png'));
  console.log('Exported 7 RGBA base sprites and enemyC sheet; anchor (128,224).');
