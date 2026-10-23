@@ -1,0 +1,136 @@
+{
+  "cases": {
+    "splash": {
+      "damage": 20,
+      "impact": {
+        "x": 14,
+        "y": 10
+      },
+      "walls": 0,
+      "kinds": [
+        "cannon",
+        "cannon",
+        "cannon",
+        "cannon",
+        "cannon",
+        "cannon",
+        "cannon",
+        "cannon",
+        "cannon",
+        "cannon"
+      ],
+      "ally": false,
+      "types": [
+        "enemy-cannon"
+      ],
+      "visiblePixels": 31866,
+      "locked": false,
+      "turn": 0
+    },
+    "wall": {
+      "damage": 20,
+      "impact": {
+        "x": 14,
+        "y": 10
+      },
+      "walls": 5,
+      "kinds": [
+        "cannon"
+      ],
+      "ally": false,
+      "types": [
+        "enemy-cannon",
+        "enemy-rubble"
+      ],
+      "visiblePixels": 31866,
+      "locked": false,
+      "turn": 0
+    },
+    "intercept": {
+      "damage": 0,
+      "impact": {
+        "x": 13,
+        "y": 10
+      },
+      "walls": 0,
+      "kinds": [
+        "cannon",
+        "goblin"
+      ],
+      "ally": false,
+      "types": [
+        "enemy-cannon"
+      ],
+      "visiblePixels": 31866,
+      "locked": false,
+      "turn": 0
+    },
+    "evolve": {
+      "damage": 20,
+      "impact": {
+        "x": 15,
+        "y": 10
+      },
+      "walls": 0,
+      "kinds": [
+        "cannon_4"
+      ],
+      "ally": false,
+      "types": [
+        "enemy-cannon",
+        "enemy-evolve",
+        "enemy-evolve",
+        "enemy-evolve"
+      ],
+      "visiblePixels": 35187,
+      "locked": false,
+      "turn": 0
+    },
+    "ally": {
+      "damage": 0,
+      "impact": {
+        "x": 15,
+        "y": 10
+      },
+      "walls": 0,
+      "kinds": [
+        "cannon_2"
+      ],
+      "ally": false,
+      "types": [
+        "enemy-cannon",
+        "enemy-evolve"
+      ],
+      "visiblePixels": 35188,
+      "locked": false,
+      "turn": 0
+    },
+    "self": {
+      "damage": 20,
+      "impact": {
+        "x": 15,
+        "y": 10
+      },
+      "walls": 0,
+      "kinds": [],
+      "ally": false,
+      "types": [
+        "enemy-cannon"
+      ],
+      "visiblePixels": 31866,
+      "locked": false,
+      "turn": 0
+    }
+  },
+  "saveResume": {
+    "equal": true,
+    "events": 0
+  },
+  "reload": {
+    "waited": true,
+    "second": 20
+  },
+  "reducedMotion": true,
+  "javascriptErrors": [],
+  "failedAssets": []
+}

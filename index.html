@@ -152,14 +152,15 @@ canvas{display:block;touch-action:none}
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
 <script src="assets/dungeon-shop.js?v=entrances-v2"></script>
 <script src="assets/shop-security.js?v=security-v1"></script>
-<script src="assets/allies.js?v=deep-enemy-vfx-v1"></script>
+<script src="assets/allies.js?v=blast-evolution-v1"></script>
 <script src="assets/monster-roster.js?v=enemy-c-v1"></script>
 <script src="assets/monster-families.js?v=enemy-c-v1"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
 <script src="assets/event-vfx.js?v=deep-enemy-vfx-v1"></script>
-<script src="assets/enemy-vfx.js?v=deep-enemy-vfx-v1"></script>
+<script src="assets/enemy-vfx.js?v=blast-evolution-v1"></script>
+<script src="assets/monster-combat.js?v=blast-evolution-v1"></script>
 <script src="fushigi-monster-house-v2/monster-house-vfx.js?v=generated-v2"></script>
 <script src="assets/run-save.js?v=event-vfx-v1"></script>
 <script>
@@ -568,7 +569,7 @@ const ENEMIES = {
   mimic: { name: 'ミミック', from: 15, w: 2, hp: f => 20 + f * 2, atk: f => [5, 7 + Math.floor(f / 2)], def: 3, exp: 40, disguise: true, col: '#b98b4a' },
   summoner: { name: 'すず坊主', from: 16, w: 2, hp: f => 16 + f, atk: f => [2, 4], def: 1, exp: 45, ai: 'summon', summon: 1, spd: 'slow', col: '#d8b24a' },
   charged: { name: 'いかずち岩', from: 18, w: 2, hp: f => 30 + f * 2, atk: f => [4, 6 + Math.floor(f / 3)], zap: f => [6, 8 + Math.floor(f / 2)], def: 6, exp: 50, ai: 'charged', spd: 'slow', col: '#8aa0c8' },
-  cannon: { name: 'おおづつ兵', from: 20, w: 2, hp: f => 18 + f, atk: f => [10, 14 + Math.floor(f / 2)], def: 2, exp: 45, ai: 'archer', range: 8, verb: '砲撃', cool: 2, spd: 'still', col: '#7a8068' },
+  cannon: { name: 'おおづつ兵', from: 20, w: 2, hp: f => 18 + f, atk: f => [10, 14 + Math.floor(f / 2)], blastDamage:[20,30,40,50], def: 2, exp: 45, ai: 'archer', range: 8, verb: '砲撃', cool: 2, spd: 'still', col: '#7a8068' },
   // ダンジョンの主（最終階に1体。出現表には載らない）
   lord: { name: 'アビスロード', from: 99, to: 99, w: 0, hp: () => 320, atk: f => [14, 22], breath: f => [10, 16], range: 5, def: 6, exp: 400, ai: 'breath', boss: true, art: 'dragon', hue: 0, col: '#9471b4' },
 };
@@ -631,16 +632,17 @@ function dropAt(x, y, it) {                                     // 盗まれた�
   return false;
 }
 // 敵を倒した：消す・経験値・盗んだ物を落とす。noExp=消滅の巻物など
-function killEnemy(e, noExp) {
-  const i = enemies.indexOf(e); if (i >= 0) enemies.splice(i, 1);
+function killEnemy(e, noExp, killer=null) {
+  const i = enemies.indexOf(e); if (i < 0) return false;enemies.splice(i, 1);
   if (e.loot) { dropAt(e.x, e.y, e.loot); say(`盗まれた${itemName(e.loot)}を取り返した！`); e.loot = null; }
   if (!noExp && Math.random() < 0.25) dropAt(e.x, e.y, mkItem('gold', rnd(5, 15) + floorNo * 3));
-  if (!noExp && !ShopSecurity.isSecurity(e)) { const xp=Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)) / (e.sum ? 2 : 1))); gainExp(xp); AllySystem.gainExp(xp); }
+  if (!noExp && !killer && !ShopSecurity.isSecurity(e)) { const xp=Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)) / (e.sum ? 2 : 1))); gainExp(xp); AllySystem.gainExp(xp); }
   if (eT(e).boss) {                                             // ダンジョンの主：良い品とギタンを落とす。倒すと階段が使える
     for (let i = 0; i < 3; i++) dropAt(e.x, e.y, mkItem(rollType()));
     dropAt(e.x, e.y, mkItem('gold', 400 + floorNo * 20));
     say(`${eT(e).name}を倒した！ 奥の階段が使えるようになった。`); vfxShake(8, 500);
   }
+  if(killer&&!noExp)MonsterCombat.evolve(killer);return true;
 }
 const bossAlive = () => enemies.some(e => ENEMIES[e.kind]?.boss);
 // ダメージを受けて生き残った後：ブヨブヨは分裂する（3回まで。子は経験値が半分ずつ）
@@ -1712,6 +1714,7 @@ function enemyAttackPose(e) {
   e.monsterAttackFace = e.monsterFace.slice(); e.monsterAttackStart = now();
 }
 function enemyStrike(e, T, range, verb) {
+  if(MonsterCombat.isCannon(T)&&verb!=='攻撃')return MonsterCombat.fire(e,player);
   const [lo, hi] = range;
   enemyAttackPose(e);
   bumpToward(e, player.x, player.y);
@@ -1790,7 +1793,8 @@ function enemyTurn() {
         enemyAttackPose(e); S.bell = 12; summonAround(e, T); break;
       }
       const range = T.range || (ai === 'archer' ? 6 : ai === 'breath' ? 4 : 0);   // 遠距離攻撃：直線上で、間に何も無いとき
-      if (!confused && range && e.aware && !(S.cool > 0) && dist > 1 && dist <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e)) {
+      if (!confused && MonsterCombat.isCannon(T) && e.aware && !(S.cool > 0) && dist > 1) {const impact=MonsterCombat.plan(e,player);if(impact){const r=MonsterCombat.fire(e,player,impact);if(r.dead)return;break;}}
+      if (!MonsterCombat.isCannon(T) && !confused && range && e.aware && !(S.cool > 0) && dist > 1 && dist <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e)) {
         const r = enemyStrike(e, T, ai === 'breath' ? T.breath(floorNo) : T.atk(floorNo), ai === 'breath' ? '炎' : (T.verb || '矢'));
         if (r.dead) return;
         if (T.cool) S.cool = T.cool;

@@ -9,7 +9,7 @@
    const outcomes=[];
    for(const enabled of [false,true]){const e=setup(kind),T=eT(e);EventVfx.state.force=enabled;let calls=0;Math.random=()=>{calls++;return miss?.999:.25;};
     const result=enemyStrike(e,T,T.atk(24),T.boss?'炎':T.verb||'手裏剣');outcomes.push(JSON.stringify({result,hp:player.hp,turn,calls,enemyHP:e.hp,enemy:[e.x,e.y]}));
-    if(enabled){const event=EventVfx.state.events.find(e=>e.kind==='enemy-'+type);ok(event&&event.hit===!miss,'projectile/hit flag '+kind);ok(event.from.x===14&&event.to.x===10,'fixed projectile endpoints '+kind);player.x=11;ok(event.to.x===10,'target movement cannot redirect an old projectile');ok(!EventVfx.busy(),'enemy visual adds no lock');}
+    if(enabled){const event=EventVfx.state.events.find(e=>e.kind==='enemy-'+type);ok(event&&event.hit===(kind==='cannon'||!miss),'projectile/hit flag '+kind);ok(event.from.x===14&&event.to.x===10,'fixed projectile endpoints '+kind);player.x=11;ok(event.to.x===10,'target movement cannot redirect an old projectile');ok(!EventVfx.busy(),'enemy visual adds no lock');}
    }ok(outcomes[0]===outcomes[1],'VFX changes no RNG, damage, enemy health or turns: '+kind+miss);
   }
   Math.random=()=>0;EventVfx.state.force=true;
