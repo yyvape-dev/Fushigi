@@ -4,11 +4,12 @@
  const theme=DungeonGenerator.themes.find(t=>t.id==='overgrown-garden');
  // Published view remains the default; study modes are selected in review only.
  const view={mode:'low',pitch:.82,occlusion:'natural'};
- const profiles={low:{back:.24,front:.24},tall:{back:.48,front:.48},cutaway:{back:.56,front:.16},ridge:{back:.86,front:.40}};
+ const profiles={low:{back:.24,front:.24},tall:{back:.48,front:.48},cutaway:{back:.56,front:.16},ridge:{back:.86,front:.40},kit:{back:0,front:0}};
  function configureView(patch){
   if(patch.mode!==undefined){if(!profiles[patch.mode])throw Error('unknown wall view');view.mode=patch.mode;}
   if(patch.pitch!==undefined){if(![.72,.82,.9,.94].includes(patch.pitch))throw Error('unknown ground projection');view.pitch=patch.pitch;}
   if(patch.occlusion!==undefined){if(!['natural','fade','off'].includes(patch.occlusion))throw Error('unknown wall occlusion');view.occlusion=patch.occlusion;}
+  if(view.mode==='kit')view.pitch=.94; // Baked geometry has one fixed camera.
  }
  function vertexHeight(map,x,y){
   const p=profiles[view.mode],floor=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;
@@ -132,6 +133,7 @@
   g.restore();
  }
  function wall(g,px,py,size,h,{map,x,y,seed=0,foreground=false}){
+  if(view.mode==='kit'&&root.WallKit?.ready)return root.WallKit.draw(g,px,py,size,{map,x,y,foreground});
   const ridge=view.mode==='ridge'&&art.images.ridge;
   const f=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;
   if(ridge){
@@ -179,7 +181,7 @@
   g.stroke();
   g.restore();return true;
  }
- const foregroundEnabled=()=>view.mode==='ridge'&&view.occlusion!=='off'&&!!art.images.rim;
+ const foregroundEnabled=()=>view.occlusion!=='off'&&((view.mode==='ridge'&&!!art.images.rim)||(view.mode==='kit'&&root.WallKit?.ready));
  function foregroundTiles({map,x0,x1,y0,y1,subjects}){
   if(!foregroundEnabled())return [];
   const tiles=[];

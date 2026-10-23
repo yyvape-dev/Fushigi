@@ -1,0 +1,5 @@
+{
+  "actualMeshBorderComparisons": 2048,
+  "maxCoordinateError": 0,
+  "topAndSidesShareEndpoints": true
+}
