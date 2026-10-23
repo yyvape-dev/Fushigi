@@ -3,7 +3,7 @@
 // 隣り合う区画を、部屋の壁に開けた出入口どうしで結ぶ。部屋が全体に散らばり、通路が他の部屋を貫かない。
 // 戻り値の形（map / rooms[{x,y,w,h,cx,cy,role}] / links / style / theme / artSeed / depth）は従来のまま。
 (function(root){
- const THEMES=[{"id": "forest", "name": "苔むす樹林", "filter": "none"}, {"id": "limestone", "name": "鍾乳洞", "filter": "none"}, {"id": "ruins", "name": "風化遺跡", "filter": "none"}, {"id": "ice", "name": "氷晶洞", "filter": "none"}, {"id": "volcano", "name": "火山洞", "filter": "none"}];
+ const THEMES=[{"id": "forest", "name": "苔むす樹林", "filter": "none"}, {"id": "limestone", "name": "鍾乳洞", "filter": "none"}, {"id": "ruins", "name": "風化遺跡", "filter": "none"}, {"id": "ice", "name": "氷晶洞", "filter": "none"}, {"id": "volcano", "name": "火山洞", "filter": "none"}, {"id": "overgrown-garden", "name": "根絡みの古庭", "filter": "none"}];
  const D4=[[1,0],[-1,0],[0,1],[0,-1]];
  const STYLES=['chain','branch','loop'];
  function random(seed){let s=seed>>>0;return ()=>{s+=0x6D2B79F5;let t=s;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return ((t^t>>>14)>>>0)/4294967296;};}

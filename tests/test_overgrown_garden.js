@@ -1,8 +1,10 @@
 {
  const assert=(v,m)=>{if(!v)throw Error(m);};
  const G=OvergrownGarden,types=new Set(),sides=new Set();
- assert(DungeonGenerator.themes.length===5,'existing location rotation preserved');
- assert(DungeonGenerator.locations.at(-1).id===G.theme.id,'new location registered separately');
+ assert(DungeonGenerator.themes.length===6,'six-location rotation enabled');
+ assert(DungeonGenerator.generate(56,32,7919,6).theme.id===G.theme.id,'garden appears on floor 6');
+ assert(DungeonGenerator.generate(56,32,7919,7).theme.id==='forest','rotation returns to forest');
+ assert(DungeonGenerator.locations.at(-1).id===G.theme.id,'garden available in review catalog');
  for(let seed=1;seed<=100;seed++){
   const p=DungeonGenerator.generate(56,32,seed*7919),before=JSON.stringify(p),rng=Math.random;
   Math.random=()=>{throw Error('decoration consumed gameplay RNG');};

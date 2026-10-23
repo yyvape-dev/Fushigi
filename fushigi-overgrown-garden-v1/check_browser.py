@@ -18,8 +18,21 @@ with sync_playwright() as p:
     game = page.frames[1]
     page.wait_for_timeout(1000)
     assert game.evaluate("floorPlan.theme.id==='overgrown-garden' && scene==='dungeon'")
-    assert game.evaluate("DungeonGenerator.themes.length===5 && DungeonGenerator.locations.length===6")
+    assert game.evaluate("DungeonGenerator.themes.length===6 && DungeonGenerator.locations.length===6")
     assert game.evaluate('OvergrownGarden.art.ready')
+    # Verify the real game's floor rotation and reload, without the review's
+    # forced theme/generator. Use an independent browser context for its save.
+    normal = browser.new_page(viewport={'width': 844, 'height': 390})
+    normal.on('pageerror', lambda error: errors.append(str(error)))
+    normal.goto('http://127.0.0.1:8000/')
+    normal.wait_for_function('ApprovedHero.ready && CaveTerrain.ready')
+    normal.evaluate('enterDungeon();floorNo=6;newFloor();render()')
+    normal.wait_for_function('OvergrownGarden.art.ready', timeout=45000)
+    assert normal.evaluate("floorNo===6 && floorPlan.theme.id==='overgrown-garden'")
+    normal.reload()
+    normal.wait_for_function('OvergrownGarden.art.ready', timeout=45000)
+    assert normal.evaluate("scene==='dungeon' && floorNo===6 && floorPlan.theme.id==='overgrown-garden'")
+    normal.close()
     connections = game.evaluate('''() => {
       const size=40,pitch=size*CaveTerrain.pitch,neighbors=[[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
       const c=document.createElement('canvas');c.width=size*5;c.height=Math.ceil(pitch*5);const g=c.getContext('2d');
@@ -112,7 +125,7 @@ with sync_playwright() as p:
     assert game.evaluate("floorPlan.theme.id==='overgrown-garden'")
     assert page.evaluate('Object.fromEntries(Object.entries(localStorage))') == saved, 'real save changed'
     assert not errors, errors
-    result = {'status': 'passed', 'wallConnections': connections, 'generatedArt': True, 'motifs': reports, 'portrait': True,
+    result = {'status': 'passed', 'normalFloorSixAndReload': True, 'wallConnections': connections, 'generatedArt': True, 'motifs': reports, 'portrait': True,
               'appearanceTogglePreservesGameplay': True, 'saveRestore': True,
               'liveWallChangeRendered': True, 'realStorageUnchanged': True, 'jsErrors': errors}
     (OUT / 'validation.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')

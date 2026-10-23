@@ -1,7 +1,7 @@
 // Opt-in generated garden art on connected geometry; no gameplay RNG.
 (function(root){
  'use strict';
- const theme={id:'overgrown-garden',name:'根絡みの古庭',filter:'none'};
+ const theme=DungeonGenerator.themes.find(t=>t.id==='overgrown-garden');
  const art={ready:false,error:null,images:{},textures:{},promise:null};
  function load(){
   if(art.promise)return art.promise;
@@ -141,7 +141,7 @@
   if(key.startsWith('floor'))decorate(g,px,py,size,h,options);
   return ok;
  };
- // Existing five-location rotation stays intact; review can explicitly select it.
- DungeonGenerator.locations=[...DungeonGenerator.themes,theme];
+ // Both the normal floor rotation and review catalog include the garden.
+ DungeonGenerator.locations=DungeonGenerator.themes;
  root.OvergrownGarden={theme,plan,cell,art,load,texture};
 })(typeof window==='undefined'?globalThis:window);

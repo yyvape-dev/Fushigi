@@ -1,5 +1,6 @@
 {
   "status": "passed",
+  "normalFloorSixAndReload": true,
   "wallConnections": {
     "topologies": 256,
     "opaque": true,
