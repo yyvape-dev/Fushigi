@@ -2626,7 +2626,12 @@ function stepVis(dt) {
       }
     }
     if (d > 2.5) { e.vx = e.x; e.vy = e.y; continue; }
-    const s = dt / 100;                                                            // 1マス/100ms
+    // 1マスにかける時間：連続して動くときは「前の一歩との間隔」に合わせる（固定100msだと、押しっぱなし120ms・ダッシュ110msの間に止まりが入り、カクついて見えた）。単発は100ms。
+    if (e.x !== e._stx || e.y !== e._sty) {
+      const tn = now(), gap = tn - (e._stt || -1e9), raw = gap < 260 ? Math.max(90, Math.min(150, gap * 1.08)) : 100;
+      e._stm = e._stm && gap < 260 ? e._stm * .5 + raw * .5 : raw; e._stx = e.x; e._sty = e.y; e._stt = tn;
+    }
+    const s = dt / (e._stm || 100) * Math.max(1, d);                               // 遅れているときは追いつく速さ
     if (d <= s) { e.vx = e.x; e.vy = e.y; } else { e.vx += dx / d * s; e.vy += dy / d * s; }
   }
 }
