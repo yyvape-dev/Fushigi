@@ -220,7 +220,7 @@
    surface(g,'soil',options.x,options.y,px,py,size,h);
    // Ground contact is derived from live collision geometry, never baked into
    // a sprite outline; explosions immediately reveal clean floor.
-   if(options.map[options.y-1]?.[options.x]===0){const shade=g.createLinearGradient(0,py,0,py+h*.22);shade.addColorStop(0,'#1c241d60');shade.addColorStop(1,'#1c241d00');g.fillStyle=shade;g.fillRect(px,py,size,h*.22);}
+   if(options.map[options.y-1]?.[options.x]===0&&!(view.mode==='kit'&&root.WallBoundary?.active)){const shade=g.createLinearGradient(0,py,0,py+h*.22);shade.addColorStop(0,'#1c241d60');shade.addColorStop(1,'#1c241d00');g.fillStyle=shade;g.fillRect(px,py,size,h*.22);}
    g.restore();
   }else ok=original(g,key,px,py,size,{...options,theme:{id:'ruins'}});
   if(key.startsWith('floor'))decorate(g,px,py,size,h,options);

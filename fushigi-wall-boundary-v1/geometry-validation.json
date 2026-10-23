@@ -1,0 +1,8 @@
+{
+  "actualMeshSampleConnections": 30720,
+  "maxCoordinateError": 2.9802322387695312e-08,
+  "neighborTopologies": 256,
+  "worldPhases": 4,
+  "quarterMeshes": 32,
+  "minimumPlanarJacobian": 0.04086064190900303
+}
