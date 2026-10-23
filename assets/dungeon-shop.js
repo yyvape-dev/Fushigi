@@ -12,12 +12,15 @@
  const lot=it=>it&&state.lots.get(it.shopLot);
  const unpaid=it=>!!lot(it)&&!floorShop?.hostile;
  function tag(it,price=priceOf(it)){const id=++state.serial;it.shopLot=id;state.lots.set(id,{item:it,price,used:false,claimed:false});return it;}
- function pickup(it){const l=lot(it);if(l)l.claimed=true;}
+ // 壺の中身も商品として数える（壺ごと持ち運んでも、未精算のまま・盗難の判定も同じ）
+ const members=it=>it?[it,...(it.pot||[])]:[];
+ function owns(it){return members(it).some(m=>!!lot(m));}
+ function pickup(it){for(const m of members(it)){const l=lot(m);if(l)l.claimed=true;}}
  function debt(){if(!floorShop||floorShop.hostile)return 0;let n=0;for(const l of state.lots.values())if(l.claimed||l.used)n+=l.price;return n;}
- function consume(it){const l=lot(it);if(!l)return null;const old={used:l.used,claimed:l.claimed};l.used=true;l.claimed=true;return [l,old];}
- function rollback(token){if(token)Object.assign(token[0],token[1]);}
+ function consume(it,selfOnly){const tokens=[];for(const m of selfOnly?[it]:members(it)){const l=lot(m);if(!l)continue;tokens.push([l,{used:l.used,claimed:l.claimed}]);l.used=true;l.claimed=true;}return tokens.length?(tokens.length===1?tokens[0]:{multi:tokens}):null;}
+ function rollback(token){if(!token)return;if(token.multi){for(const t of token.multi)rollback(t);return;}Object.assign(token[0],token[1]);}
  function split(it,one){const l=lot(it);if(!l)return;const q=it.plus+1,part=Math.floor(l.price/q);l.price-=part;tag(one,part);const c=lot(one);c.claimed=l.claimed;c.used=l.used;}
- function landed(it,x,y){const l=lot(it);if(!l)return;if(inside(x,y)){if(!l.used)l.claimed=false;}else if(l.claimed||l.used)steal('商品が店の外へ持ち出された！');}
+ function landed(it,x,y){for(const m of members(it)){const l=lot(m);if(!l)continue;if(inside(x,y)){if(!l.used)l.claimed=false;}else if(l.claimed||l.used){steal('商品が店の外へ持ち出された！');return;}}}
  function close(){state.open=false;const el=document.getElementById('shopPrompt');if(el)el.hidden=true;document.body?.classList?.remove('shop-dialog-open');state.focus?.focus?.({preventScroll:true});state.focus=null;}
  function clearTags(){for(const l of state.lots.values())delete l.item.shopLot;state.lots.clear();inv=mergeStacks(inv);}
  function leaveFloor(){if(debt())steal('代金を払わず、店のある階を離れた！');clearTags();close();state.wanted=false;ShopSecurity.reset();}
@@ -59,12 +62,12 @@
  function pay(){const cost=Math.ceil(debt());if(!cost){talk('お勘定は済んでいる。');return false;}if(gold<cost){talk('お金が足りない。商品を床に戻すこともできる。');return false;}
   gold-=cost;for(const [id,l]of state.lots)if(l.claimed||l.used){delete l.item.shopLot;state.lots.delete(id);}inv=mergeStacks(inv);say(cost+'Gを支払った。');for(const k of keepers())if(k.hp>0)moveKeeper(k,k.home,false);saveGame();talk('確かに受け取った。また寄ってくれ。');return true;}
  function offers(){return floorItems.filter(f=>inside(f.x,f.y)&&!lot(f.item)&&f.item.type!=='gold');}
- function sell(id){if(!floorShop||floorShop.hostile||!inside(player.x,player.y))return false;const f=offers().find(f=>f.item.id===id);if(!f)return false;const price=sellPrice(f.item);gold+=price;tag(f.item);say(itemName(f.item)+'を'+price+'Gで売った。');saveGame();talk('買い取った。ほかにもあるか？');return true;}
+ function sell(id){if(!floorShop||floorShop.hostile||!inside(player.x,player.y))return false;const f=offers().find(f=>f.item.id===id);if(!f)return false;const price=sellFull(f.item);gold+=price;tag(f.item);for(const c of f.item.pot||[])if(!lot(c))tag(c);say(itemName(f.item)+'を'+price+'Gで売った。');saveGame();talk('買い取った。ほかにもあるか？');return true;}
  function talk(message){if(!floorShop||!keepers().some(k=>k.hp>0)||floorShop.hostile)return;if(!inside(player.x,player.y)&&!nearby())return;holdStop();closeBag();state.focus=document.activeElement;state.open=true;const el=document.getElementById('shopPrompt');if(!el)return;el.hidden=false;document.body?.classList?.add('shop-dialog-open');const cfg=tiers[floorShop.tier];
   document.getElementById('shopPortrait').src=base+'assets/'+cfg.id+'/S.png';document.getElementById('shopTitle').textContent=cfg.name+'の店主';
   document.getElementById('shopText').textContent=message||'商品は床から拾って選んでくれ。帰る前に精算だ。売りたい物は店の床へ置くといい。';
   document.getElementById('shopBill').textContent='所持金 '+gold+'G ／ 未精算 '+Math.ceil(debt())+'G';
-  const actions=document.getElementById('shopActions');actions.innerHTML='<button data-shop="pay">精算する</button>'+offers().map(f=>'<button data-shop="sell" data-id="'+f.item.id+'">'+itemName(f.item)+'を売る '+sellPrice(f.item)+'G</button>').join('')+(debt()?'<button data-shop="steal">払わず持ち出す</button>':'')+'<button data-shop="close">戻る</button>';actions.querySelector?.('button')?.focus?.();render();}
+  const actions=document.getElementById('shopActions');actions.innerHTML='<button data-shop="pay">精算する</button>'+offers().map(f=>'<button data-shop="sell" data-id="'+f.item.id+'">'+itemName(f.item)+'を売る '+sellFull(f.item)+'G</button>').join('')+(debt()?'<button data-shop="steal">払わず持ち出す</button>':'')+'<button data-shop="close">戻る</button>';actions.querySelector?.('button')?.focus?.();render();}
  function beforeMove(nx,ny){const k=at(nx,ny);if(!k)return true;if(floorShop.hostile){hit(undefined,k);endTurn();}else talk(debt()?'まだ代金を受け取っていない。精算か返品を頼む。':undefined);return false;}
  function boundary(){if(debt()&&!inside(player.x,player.y))steal('未精算の商品を持って店から離れた！');}
  function hit(damage,actor){const k=actor||nearby()||floorShop?.keeper;if(!k||k.hp<=0)return;steal('店主を攻撃した！');k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];const dmg=damage??Math.max(1,playerAtk()-tiers[floorShop.tier].def);k.hp-=dmg;k.flash=now()+150;player.swing=now();player.attackFace=player.face.slice();fxText(k.x,k.y,'-'+dmg,'#ffe1af');if(k.hp<=0)say('店主を倒した。');}
@@ -87,5 +90,5 @@
   document.getElementById('shopActions')?.addEventListener('click',ev=>{const b=ev.target.closest('[data-shop]');if(!b)return;const action=b.dataset.shop;if(action==='pay')pay();else if(action==='sell')sell(+b.dataset.id);else if(action==='steal'){steal('代金を払わず持ち出そうとした！');render();}else{close();render();}});
   document.addEventListener('keydown',ev=>{if(!state.open)return;ev.stopImmediatePropagation();if(ev.key==='Escape'){ev.preventDefault();close();render();return;}const buttons=[...document.getElementById('shopActions').querySelectorAll('button')],i=buttons.indexOf(document.activeElement);if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Tab'].includes(ev.key)){ev.preventDefault();const n=ev.key==='ArrowUp'||ev.key==='ArrowLeft'||ev.shiftKey?-1:1;buttons[(i+n+buttons.length)%buttons.length]?.focus();}else if(['Enter',' ','z','x'].includes(ev.key)){ev.preventDefault();document.activeElement?.click();}},true);
  }
- root.ShopSystem={state,tiers,inside,keepers,nearby,at,entrances,lot,unpaid,pickup,debt,consume,rollback,split,landed,close,leaveFloor,reset,steal,setup,pay,offers,sell,talk,beforeMove,boundary,hit,tick,draw,floorArt,prices,init};
+ root.ShopSystem={state,tiers,inside,keepers,nearby,at,entrances,lot,owns,unpaid,pickup,debt,consume,rollback,split,landed,close,leaveFloor,reset,steal,setup,pay,offers,sell,talk,beforeMove,boundary,hit,tick,draw,floorArt,prices,init};
 })(typeof window!=='undefined'?window:globalThis);
