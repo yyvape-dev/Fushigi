@@ -29,9 +29,27 @@
   sg.putImageData(pixels,0,0);g.save();g.imageSmoothingEnabled=true;g.drawImage(small,0,0,width,height);g.restore();
  }
  // Terrain remains visible under ambient shadow outside the soft local light.
- state.fog=function(g,{width,height,size,pitch,camX,camY,player,rooms,roomIndex,roomGrid,map,seen,theme,terrain,revision=0,seed=0}){
-  const cacheKey=[width,height,size,pitch,camX,camY,player.vx,player.vy,roomIndex,player.st?.blind>0,theme,state.ready,revision,seed].join(':');
-  if(state.fogKey===cacheKey){g.drawImage(state.layers.ceiling,0,0);g.drawImage(state.layers.shade,0,0);return;}
+ // Mood levels: 0 = original look, 1 = standard, 2 = dark. Room light < 1 leaves the
+ // room slightly dim so the pool of light around the player reads as the source.
+ const MOOD=[
+  {room:1,ambient:.52,vignette:0,glow:2.05,warm:0},
+  {room:.50,ambient:.70,vignette:.46,glow:2.55,warm:.12},
+  {room:.34,ambient:.80,vignette:.62,glow:2.85,warm:.18}
+ ];
+ // Ambient shade colour per location; deeper floors get a little darker.
+ const SHADE={forest:[3,10,6],limestone:[6,7,14],ruins:[12,8,3],ice:[3,10,26],volcano:[26,6,2]};
+ const WARM={forest:'255,205,120',limestone:'255,200,130',ruins:'255,190,100',ice:'200,225,255',volcano:'255,140,60'};
+ state.fog=function(g,{width,height,size,pitch,camX,camY,player,rooms,roomIndex,roomGrid,map,seen,theme,terrain,revision=0,seed=0,mood=0,depth=1}){
+  const m=MOOD[mood]||MOOD[0],tid=theme==='overgrown-garden'?'ruins':ids.includes(theme)?theme:'limestone';
+  const warm=()=>{
+   if(!m.warm||player.st?.blind>0)return;
+   const t=(typeof performance!=='undefined'?performance.now():Date.now()),flick=1+.07*Math.sin(t/130)+.04*Math.sin(t/47+1.3);
+   const wx=camX+(player.vx+.5)*size,wy=camY+(player.vy+.55)*pitch,r=size*(m.glow+.6)*(1+.02*flick);
+   const wg=g.createRadialGradient(wx,wy,size*.2,wx,wy,r);wg.addColorStop(0,'rgba('+WARM[tid]+','+(m.warm*flick).toFixed(3)+')');wg.addColorStop(1,'rgba('+WARM[tid]+',0)');
+   g.save();g.globalCompositeOperation='lighter';g.fillStyle=wg;g.fillRect(wx-r,wy-r,r*2,r*2);g.restore();
+  };
+  const cacheKey=[width,height,size,pitch,camX,camY,player.vx,player.vy,roomIndex,player.st?.blind>0,theme,state.ready,revision,seed,mood,depth].join(':');
+  if(state.fogKey===cacheKey){g.drawImage(state.layers.ceiling,0,0);g.drawImage(state.layers.shade,0,0);warm();return;}
   state.fogKey=cacheKey;
   const [ceiling,cg]=layer('ceiling',width,height),[light,lg]=layer('light',width,height),[reveal,rg]=layer('reveal',width,height),[shade,sg]=layer('shade',width,height);
   const id=theme==='overgrown-garden'?'ruins':ids.includes(theme)?theme:'limestone',im=state.images['ceiling-'+id];
@@ -59,12 +77,15 @@
    // Include the surrounding tile ring: tall sprites at the room edge
    // (especially shopkeepers) extend above their floor tile into this area.
    for(let y=r.y;y<r.y+r.h;y++)for(let x=r.x;x<r.x+r.w;x++)if(map[y]?.[x]!==0&&roomGrid[y]?.[x]===roomIndex)rg.fillRect(camX+(x-1)*size,camY+(y-1)*pitch,size*3,pitch*3);
-   feather(reveal,lg,width,height,Math.max(12,size*.75));
+   lg.globalAlpha=m.room;feather(reveal,lg,width,height,Math.max(12,size*.75));lg.globalAlpha=1;
   }
-  const px=camX+(player.vx+.5)*size,py=camY+(player.vy+.6)*pitch,radius=size*(blind?.70:2.05);
+  const px=camX+(player.vx+.5)*size,py=camY+(player.vy+.6)*pitch,radius=size*(blind?.70:m.glow);
   const glow=lg.createRadialGradient(px,py,size*.30,px,py,radius);glow.addColorStop(0,'#fff');glow.addColorStop(.40,'rgba(255,255,255,.95)');glow.addColorStop(.72,'rgba(255,255,255,.5)');glow.addColorStop(1,'rgba(255,255,255,0)');lg.fillStyle=glow;lg.fillRect(0,0,width,height);
   g.drawImage(ceiling,0,0);
-  sg.fillStyle='rgba(2,5,12,.52)';sg.fillRect(0,0,width,height);sg.globalCompositeOperation='destination-out';sg.drawImage(light,0,0);sg.globalCompositeOperation='source-over';g.drawImage(shade,0,0);
+  const sc=mood?SHADE[tid]:[2,5,12],ambient=Math.min(.86,m.ambient+(mood?Math.min(.10,(depth-1)*.004):0));
+  sg.fillStyle='rgba('+sc.join(',')+','+ambient.toFixed(3)+')';sg.fillRect(0,0,width,height);sg.globalCompositeOperation='destination-out';sg.drawImage(light,0,0);sg.globalCompositeOperation='source-over';
+  if(m.vignette){const vr=Math.hypot(width,height)*.5,vg=sg.createRadialGradient(px,py,vr*.34,px,py,vr);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba('+sc.map(v=>Math.round(v*.3)).join(',')+','+m.vignette+')');sg.fillStyle=vg;sg.fillRect(0,0,width,height);}
+  g.drawImage(shade,0,0);warm();
  };
  root.DungeonExperience=state;
 })(typeof window==='undefined'?globalThis:window);
