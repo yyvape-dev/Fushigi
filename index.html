@@ -2549,11 +2549,15 @@ function draw() {
     ctx.fillStyle = TRAPS[tr.kind].col; ctx.font = 'bold ' + Math.round(TS * 0.34) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('!', cx, cy + 1);
   }
   for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
-  for (const e of [...enemies,...(AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):[])].sort((a,b)=>a.vy-b.vy)) if (vis[e.y][e.x]) {
-    if(e.isShopkeeper){ShopSystem.draw(ctx,e,t,camX,camY);continue;}
-    if(ShopSecurity.isSecurity(e)){const [px,py]=ShopSecurity.draw(ctx,e,t,camX,camY);ctx.fillStyle='#211b22';ctx.fillRect(px,py+tilePitchY()-3,TS,3);ctx.fillStyle='#e46267';ctx.fillRect(px,py+tilePitchY()-3,TS*e.hp/e.maxhp,3);continue;}
-    if(e.isAlly){AllySystem.draw(ctx,e,t,camX,camY);continue;}
-    if(e.mim){blit(iconOf(e.disg),camX + e.x * TS, camY + e.y * tilePitchY() + tilePitchY() - TS);continue;}   // 化けているミミックはアイテムの絵
+  // 描画順：奥（上）から手前（下）へ。主人公より手前（下）にいる敵・味方・店主は、主人公の後に描く（主人公が手前の味方を踏んで見えないように）
+  const worldEnts = [...enemies,...(AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):[])].sort((a,b)=>a.vy-b.vy);
+  const inFront = e => e.vy > player.vy && e.vy - player.vy < 1.2 && Math.abs(e.vx - player.vx) < 1.2;
+  const drawEnt = e => {
+    if (!vis[e.y][e.x]) return;
+    if(e.isShopkeeper){ShopSystem.draw(ctx,e,t,camX,camY);return;}
+    if(ShopSecurity.isSecurity(e)){const [px,py]=ShopSecurity.draw(ctx,e,t,camX,camY);ctx.fillStyle='#211b22';ctx.fillRect(px,py+tilePitchY()-3,TS,3);ctx.fillStyle='#e46267';ctx.fillRect(px,py+tilePitchY()-3,TS*e.hp/e.maxhp,3);return;}
+    if(e.isAlly){AllySystem.draw(ctx,e,t,camX,camY);return;}
+    if(e.mim){blit(iconOf(e.disg),camX + e.x * TS, camY + e.y * tilePitchY() + tilePitchY() - TS);return;}   // 化けているミミックはアイテムの絵
     const [px, py] = drawEntity(e.kind || 'goblin', e, t, camX, camY);
     ctx.fillStyle = '#000'; ctx.fillRect(px, py + tilePitchY() - 3, TS, 3);
     ctx.fillStyle = '#e55'; ctx.fillRect(px, py + tilePitchY() - 3, TS * e.hp / e.maxhp, 3);
@@ -2563,7 +2567,8 @@ function draw() {
       const mk = e.mh || S.sleep > 0 ? ['Zzz', '#9ab0ff'] : S.confuse > 0 ? ['?', '#ff9be8'] : ['≫', '#ffb060'];
       ctx.fillStyle = '#000'; ctx.fillText(mk[0], px + TS / 2 + 1, py - TS * 0.45 + 1); ctx.fillStyle = mk[1]; ctx.fillText(mk[0], px + TS / 2, py - TS * 0.45);
     }
-  }
+  };
+  for (const e of worldEnts) if (!inFront(e)) drawEnt(e);
   if(dungeon)DungeonExperience.fog(ctx,{width:innerWidth,height:innerHeight,size:TS,pitch:tilePitchY(),camX,camY,player,rooms,roomIndex:playerRoom(),roomGrid,map,seen,theme:floorPlan?.theme?.id,terrain:CaveTerrain,revision:visibilityRevision,seed:floorPlan?.artSeed});
   if(dungeon)ShopSystem.prices(ctx,camX,camY);
   EventVfx.drawWorld(ctx,t,camX,camY,TS,tilePitchY(),'floor');
@@ -2572,6 +2577,7 @@ function draw() {
   ctx.fillStyle = '#ffd54a';                                                       // 向きの目印（Attackの狙い先）
   ctx.beginPath(); ctx.arc(ppx + TS / 2 + player.face[0] * TS * 0.42, ppy + tilePitchY() / 2 + player.face[1] * tilePitchY() * 0.42, Math.max(2, TS * 0.07), 0, Math.PI * 2); ctx.fill();
   ctx.restore();
+  for (const e of worldEnts) if (inFront(e)) drawEnt(e);                          // 主人公より手前にいる者は、主人公の上に描く
   const under = dungeon ? itemAt(player.x, player.y) : null;                       // 足元のアイテム名
   if (under) {
     ctx.font = '12px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
