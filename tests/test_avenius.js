@@ -5,7 +5,7 @@
  function enemy(x,y,hp=1000,kind='skeleton'){const e={kind,x,y,vx:x,vy:y,hp,maxhp:hp,aware:true,lost:0,st:{}};enemies.push(e);return e;}
  try{
   let a=setup(),e=enemy(5,10);const origin=[a.x,a.y];AllySystem.tick();verify(e.hp<1000,'four-tile enemy is hit');verify(a.x===origin[0]&&a.y===origin[1]&&a.vx===a.x&&a.vy===a.y,'returns to exact logical and visual origin');verify(a.issenUsed.has(e)&&a.dash.duration===360,'enemy identity and dash animation recorded');verify(a.dash.to.x===6&&a.dash.to.y===10,'lands on nearest legal adjacent tile');verify(!AllySystem.at(6,10)&&AllySystem.at(9,10)===a,'no stale teleport occupancy');
-  let hp=e.hp;for(let n=0;n<5;n++)AllySystem.tick();verify(e.hp===hp,'one special attack per enemy across turns');e.x=6;AllySystem.tick();verify(e.hp===hp,'moving the same enemy does not reset its use');
+  const st0=a.dash.start;for(let n=0;n<5;n++)AllySystem.tick();verify(a.dash.start===st0&&a.issenUsed.has(e),'one special attack per enemy across turns (ordinary sword may follow now that allies hunt)');e.x=6;AllySystem.tick();verify(a.dash.start===st0&&a.issenUsed.has(e),'moving the same enemy does not reset its use');
   enemies=[];e=enemy(5,10);AllySystem.tick();verify(e.hp<1000,'new enemy at same coordinates is eligible');
   a=setup();e=enemy(5,8);AllySystem.tick();verify(e.hp<1000,'off-axis target within four tiles can be flashed');
   a=setup();e=enemy(5,6);AllySystem.tick();verify(e.hp<1000,'four diagonal tiles are in range');
