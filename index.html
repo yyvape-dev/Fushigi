@@ -2589,6 +2589,7 @@ function draw() {
   const x0 = Math.max(0, Math.floor(-camX / TS)), x1 = Math.min(MW - 1, Math.ceil((innerWidth - camX) / TS));
   const y0 = Math.max(0, Math.floor(-camY / tilePitchY()) - 1), y1 = Math.min(MH - 1, Math.ceil((innerHeight - camY) / tilePitchY()) + 1);
   const dungeon = scene === 'dungeon', m = SHADE_K[shadePref];
+  const gardenDepth=dungeon&&floorPlan?.theme?.id==='overgrown-garden'&&typeof OvergrownGarden!=='undefined'&&OvergrownGarden.foregroundEnabled();
   const townArt = scene === 'town' && SPRITES.town;
   if (townArt) drawTownArt(camX, camY);                                          // 町は一枚絵（判定は内部の格子のまま）
   for (let y = y0; y <= y1 && !townArt; y++) for (let x = x0; x <= x1; x++) {
@@ -2611,7 +2612,8 @@ function draw() {
     ctx.strokeStyle = TRAPS[tr.kind].col; ctx.lineWidth = Math.max(2, TS * 0.07); ctx.stroke();
     ctx.fillStyle = TRAPS[tr.kind].col; ctx.font = 'bold ' + Math.round(TS * 0.34) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('!', cx, cy + 1);
   }
-  for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
+  const drawFloorItem=f=>blit(iconOf(f.item.type),camX+f.x*TS,camY+f.y*tilePitchY()+tilePitchY()-TS);
+  for (const f of floorItems) if (seen[f.y][f.x]&&(!gardenDepth||!vis[f.y][f.x])) drawFloorItem(f);
   // 描画順：奥（上）から手前（下）へ。主人公より手前（下）にいる敵・味方・店主は、主人公の後に描く（主人公が手前の味方を踏んで見えないように）
   const worldEnts = [...enemies,...(AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):[])].sort((a,b)=>a.vy-b.vy);
   const inFront = e => e.vy > player.vy && e.vy - player.vy < 1.2 && Math.abs(e.vx - player.vx) < 1.2;
@@ -2631,16 +2633,28 @@ function draw() {
       ctx.fillStyle = '#000'; ctx.fillText(mk[0], px + TS / 2 + 1, py - TS * 0.45 + 1); ctx.fillStyle = mk[1]; ctx.fillText(mk[0], px + TS / 2, py - TS * 0.45);
     }
   };
-  for (const e of worldEnts) if (!inFront(e)) drawEnt(e);
+  for (const e of worldEnts) if (!gardenDepth&&!inFront(e)) drawEnt(e);
   if(dungeon)DungeonExperience.fog(ctx,{width:innerWidth,height:innerHeight,size:TS,pitch:tilePitchY(),camX,camY,player,rooms,roomIndex:playerRoom(),roomGrid,map,seen,theme:floorPlan?.theme?.id,terrain:CaveTerrain,revision:visibilityRevision,seed:floorPlan?.artSeed});
   if(dungeon)ShopSystem.prices(ctx,camX,camY);
   EventVfx.drawWorld(ctx,t,camX,camY,TS,tilePitchY(),'floor');
-  const [ppx, ppy] = drawEntity('player', player, t, camX, camY);
+  let ppx,ppy;
+  const drawPlayer=()=>{
+  [ppx,ppy] = drawEntity('player', player, t, camX, camY);
   ctx.save();ctx.globalAlpha=EventVfx.pose(player,t).alpha;
   ctx.fillStyle = '#ffd54a';                                                       // 向きの目印（Attackの狙い先）
   ctx.beginPath(); ctx.arc(ppx + TS / 2 + player.face[0] * TS * 0.42, ppy + tilePitchY() / 2 + player.face[1] * tilePitchY() * 0.42, Math.max(2, TS * 0.07), 0, Math.PI * 2); ctx.fill();
   ctx.restore();
-  for (const e of worldEnts) if (inFront(e)) drawEnt(e);                          // 主人公より手前にいる者は、主人公の上に描く
+  };
+  if(gardenDepth){
+    const visibleActors=worldEnts.filter(e=>vis[e.y]?.[e.x]),visibleItems=floorItems.filter(f=>seen[f.y]?.[f.x]&&vis[f.y]?.[f.x]);
+    const subjects=[player,...visibleActors,...visibleItems];
+    const queue=[{depth:player.vy+.9,draw:drawPlayer},...visibleActors.map(e=>({depth:e.vy+.9,draw:()=>drawEnt(e)})),...visibleItems.map(f=>({depth:f.y+.9,draw:()=>drawFloorItem(f)}))];
+    for(const tile of OvergrownGarden.foregroundTiles({map,x0,x1,y0,y1,subjects}))queue.push({depth:tile.depth,draw:()=>OvergrownGarden.drawForeground(ctx,{map,...tile,size:TS,camX,camY,seed:floorPlan.artSeed,observer:player})});
+    queue.sort((a,b)=>a.depth-b.depth);for(const entry of queue)entry.draw();
+  }else{
+    drawPlayer();
+    for (const e of worldEnts) if (inFront(e)) drawEnt(e);                        // 主人公より手前にいる者は、主人公の上に描く
+  }
   const under = dungeon ? itemAt(player.x, player.y) : null;                       // 足元のアイテム名
   if (under) {
     ctx.font = '12px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';

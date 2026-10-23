@@ -4,10 +4,6 @@
     2,
     2
   ],
-  "cell_size": [
-    627,
-    627
-  ],
   "files": [
     {
       "file": "garden-materials.png",
@@ -33,8 +29,27 @@
       "width": 1254,
       "height": 1254,
       "mode": "RGB",
-      "sha256": "d7d94f81f5e5d235cc70c8575a3d33288749f0e9584d836d6d6da84c9557330e",
-      "alpha_extrema": null
+      "sha256": "a0395375f1b2c1b38071482e9e60eb8b8fa12a1afbefa540706369aee7dceddb",
+      "alpha_extrema": null,
+      "cell_size": [
+        627,
+        627
+      ]
+    },
+    {
+      "file": "garden-rim.png",
+      "width": 1536,
+      "height": 1024,
+      "mode": "RGBA",
+      "sha256": "d15b7e1b93ee16091fe46c579b559f346429b97501a93bff7fc3dcff3b36e44a",
+      "alpha_extrema": [
+        0,
+        254
+      ],
+      "cell_size": [
+        768,
+        512
+      ]
     }
   ]
 }

@@ -6,7 +6,12 @@
   "gameplayUnchanged": true,
   "nearWallAndDoor": true,
   "portrait": true,
-  "referenceReview": "five user-supplied Shiren 6 screenshots observed directly; exact camera angle and internal renderer are not established",
+  "foregroundOcclusion": {
+    "baselinePixels": 8187,
+    "naturalVisiblePixels": 7242,
+    "fadeVisiblePixels": 7960
+  },
+  "referenceReview": "user-supplied Shiren 6 screenshots including neutral gray cliff reference observed directly; exact camera angle and internal renderer are not established",
   "captures": [
     {
       "mode": "low",

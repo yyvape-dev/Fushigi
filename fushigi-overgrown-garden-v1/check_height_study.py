@@ -57,6 +57,26 @@ with sync_playwright() as p:
     for name, x, y in [('back', 7, 3), ('front', 7, 7), ('door', 10, 5)]:
         frame.evaluate(f'player.x=player.vx={x};player.y=player.vy={y};updateVis();render()')
         frame.locator('body').screenshot(path=str(OUT / f'study-near-{name}.jpg'), type='jpeg', quality=90)
+    frame.evaluate('player.x=player.vx=7;player.y=player.vy=7;updateVis();render()')
+    overlap = frame.evaluate('''() => {
+      const hero=ApprovedHero.draw;
+      const image=()=>new Uint8ClampedArray(ctx.getImageData(0,0,innerWidth,innerHeight).data);
+      const pair=mode=>{
+        OvergrownGarden.configureView({occlusion:mode});draw();const yes=image();
+        try{ApprovedHero.draw=()=>{};draw();return [yes,image()];}finally{ApprovedHero.draw=hero;}
+      };
+      const delta=(a,b,i)=>Math.abs(a[i]-b[i])+Math.abs(a[i+1]-b[i+1])+Math.abs(a[i+2]-b[i+2]);
+      const [a,b]=pair('off'),[c,d]=pair('natural'),[e,f]=pair('fade');
+      let baseline=0,natural=0,fade=0;
+      for(let i=0;i<a.length;i+=4)if(delta(a,b,i)>25){baseline++;if(delta(c,d,i)>25)natural++;if(delta(e,f,i)>25)fade++;}
+      if(!(baseline>100&&natural<baseline*.95&&natural>baseline*.1&&fade>natural))throw Error('foreground wall did not partially occlude hero correctly: '+[baseline,natural,fade]);
+      OvergrownGarden.configureView({occlusion:'natural'});draw();
+      return {baselinePixels:baseline,naturalVisiblePixels:natural,fadeVisiblePixels:fade};
+    }''')
+    for mode in ['off', 'natural', 'fade']:
+        page.select_option('#overlap', mode)
+        frame.locator('body').screenshot(path=str(OUT / f'study-overlap-{mode}.jpg'), type='jpeg', quality=90)
+    page.select_option('#overlap', 'natural')
     page.set_viewport_size({'width': 390, 'height': 844})
     frame.locator('body').screenshot(path=str(OUT / 'study-ridge-portrait.jpg'), type='jpeg', quality=90)
     assert not errors, errors
@@ -67,14 +87,15 @@ with sync_playwright() as p:
         ('angle-comparison', [('少し横から', 'study-angle-072.jpg'), ('現在の見下ろし方', 'study-angle-082.jpg'), ('少し真上から', 'study-angle-090.jpg')]),
         ('ridge-comparison', [('公開版の高さ・角度', 'study-low.jpg'), ('高さだけ変えた案', 'study-tall.jpg'), ('真上寄り＋立ち上がる石積み', 'study-ridge.jpg')]),
         ('ridge-angle-comparison', [('従来の床の角度', 'study-angle-082.jpg'), ('少し真上寄り', 'study-angle-090.jpg'), ('新案の真上寄り', 'study-angle-094.jpg')]),
+        ('occlusion-comparison', [('比較：キャラを常に前へ', 'study-overlap-off.jpg'), ('輪郭で自然に隠れる', 'study-overlap-natural.jpg'), ('隠れる部分を薄くする案', 'study-overlap-fade.jpg')]),
     ]:
         page.goto('http://127.0.0.1:8000/fushigi-overgrown-garden-v1/')
         page.set_content('<html lang="ja"><style>body{margin:0;background:#18201b;color:#eee;font:20px sans-serif}main{display:flex}figure{margin:10px;width:480px}img{width:480px;display:block}figcaption{padding:10px}</style><main>'+''.join(f'<figure><figcaption>{label}</figcaption><img src="http://127.0.0.1:8000/fushigi-overgrown-garden-v1/{file}"></figure>' for label,file in files)+'</main></html>')
         page.wait_for_function('Array.from(document.images).every(i=>i.complete&&i.naturalWidth>0)')
         page.locator('main').screenshot(path=str(OUT / f'{name}.jpg'), type='jpeg', quality=90)
     result = {'status': 'passed', 'views': 16, 'topologiesPerView': 256, 'gapChecks': 4096,
-              'gameplayUnchanged': True, 'nearWallAndDoor': True, 'portrait': True,
-              'referenceReview': 'five user-supplied Shiren 6 screenshots observed directly; exact camera angle and internal renderer are not established', 'captures': captures}
+              'gameplayUnchanged': True, 'nearWallAndDoor': True, 'portrait': True, 'foregroundOcclusion': overlap,
+              'referenceReview': 'user-supplied Shiren 6 screenshots including neutral gray cliff reference observed directly; exact camera angle and internal renderer are not established', 'captures': captures}
     (OUT / 'height-study-validation.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')
     print(json.dumps(result, ensure_ascii=False))
     browser.close()
