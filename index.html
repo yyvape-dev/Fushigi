@@ -1040,7 +1040,7 @@ let zoomPref = 0;                 // 表示サイズ：0=自動 1=小(32) 2=中(
 let charPref = 2;                 // キャラの大きさ：マスの何倍で描くか（マスから上と左右にはみ出す。マス自体は大きくならない）
 const CHAR_K = [1, 1.3, 1.5, 1.8, 2.1];
 let showGrid = false;             // 町の当たり判定の表示（絵とのズレ確認用）
-let moodPref = 1;                 // 光の雰囲気：0=従来 1=標準（暗さ・ビネット・松明のゆらぎ） 2=濃い
+let moodPref = 0;                 // 光の雰囲気：0=従来 1=標準（暗さ・ビネット・松明のゆらぎ） 2=濃い
 let shadePref = 1;                // 陰影（立体感）：0=なし 1=標準 2=強
 const SHADE_K = [0, 1, 1.6];
 let vfxPref = 1;                  // 戦闘の演出（斬撃・火花・画面の揺れ）：0=なし 1=標準 2=強
@@ -1115,7 +1115,7 @@ function loadGame() {
     hungerPref = [0, 1].includes(s.hungerPref) ? s.hungerPref : 0;
     rigPref = [0, 1].includes(s.rigPref) ? s.rigPref : 0;
     shadePref = [0, 1, 2].includes(s.shadePref) ? s.shadePref : 1;
-    moodPref = [0, 1, 2].includes(s.moodPref) ? s.moodPref : 1;
+    moodPref = [0, 1, 2].includes(s.moodPref) ? s.moodPref : 0;
     vfxPref = [0, 1, 2].includes(s.vfxPref) ? s.vfxPref : 1;
     logPos = [0, 1].includes(s.logPos) ? s.logPos : 1;
     return true;
