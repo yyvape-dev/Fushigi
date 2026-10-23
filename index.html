@@ -498,6 +498,9 @@ const ITEMS = {
 const UNID_CATS = ['草', '種', '巻物', '腕輪', '杖'];
 for (const d of Object.values(ITEMS)) d.unid = UNID_CATS.includes(d.cat);
 ITEMS.weed.unid = false;                                          // 雑草は見れば分かる
+// 壺：中身を持つ入れ物。plus=容量（2〜6のランダム。名前の後に（数字））、pot=中身の配列。壺の中に壺は入れない。使う処理は useType の先頭で持ち物欄の「入れる／出す」に回す
+const POT_CAP = [2, 6];
+ITEMS.savepot = { name: '保存の壺', cat: '壺', ch: '壺', fg: '#c8a070', w: 2, from: 2, pot: true, use: () => false, desc: '物をしまっておける壺。名前の（）の数だけ入る。入れる・出すと1ターンかかる。壺の中の物は、壺ごと置いても持ち帰れる。' };
 const ALIAS_POOL = {
   巻物: { suffix: 'の巻物', words: ['ネコ', 'イヌ', 'ウサギ', 'キツネ', 'タヌキ', 'クマ', 'シカ', 'サル', 'トラ', 'ライオン', 'ゾウ', 'ウマ', 'ヒツジ', 'ヤギ', 'イタチ', 'リス', 'ネズミ', 'カエル', 'ヘビ', 'ワシ', 'フクロウ', 'カラス'] },
   草: { suffix: '草', words: ['赤', '青', '黄', '緑', '白', '黒', '紫', '橙', '桃', '水色', '茶', '灰', '金', '銀', '藍', '朱', '紺', '空色', '薄紅', '黄緑', '深緑', '桜色', '栗色', '紅', '萌黄', '鼠'] },
@@ -536,7 +539,7 @@ const TRAPS = {
 };
 const trapAt = (x, y) => traps.find(t => t.x === x && t.y === y);
 const MH_RATE = { v: 0.2 };                                       // 魔物部屋になる確率（2階から）
-const ICON_BY_CAT = { 草: 'icon_herb', 種: 'icon_seed', 巻物: 'icon_scroll', 腕輪: 'icon_ring', 杖: 'icon_staff', 武器: 'icon_sword', 盾: 'icon_shield' };
+const ICON_BY_CAT = { 草: 'icon_herb', 種: 'icon_seed', 巻物: 'icon_scroll', 腕輪: 'icon_ring', 杖: 'icon_staff', 武器: 'icon_sword', 盾: 'icon_shield', 壺: 'icon_pot' };
 for (const d of Object.values(ITEMS)) if (!d.icon && ICON_BY_CAT[d.cat]) d.icon = ICON_BY_CAT[d.cat];
 
 // =====================================================================
@@ -1005,7 +1008,7 @@ let eqWeapon = null, eqShield = null;   // 装備中の武器・盾（持ち物�
 let eqRings = [null, null];       // 装備中の腕輪（2枠。持ち物の中の1個を指す）
 let autoPick = false;             // 自動拾い（既定OFF：踏んでも拾わず、足元に載るだけ）
 let uid = 0;
-let bagOpen = false, bagTab = '全部', bagSel = null;
+let bagOpen = false, bagTab = '全部', bagSel = null, potMode = null;   // potMode={pot,kind:'put'|'take'}：壺に入れる／出す物を選んでいる間
 let bagActionMode = false, bagActionIndex = 0, stairsOpen = false, stairsChoice = 0;
 let whOpen = false, whSide = 'bag', whSel = null, whMsg = '';
 let cfgOpen = false, menuOpen=false, DPR = 1;
@@ -1029,10 +1032,10 @@ const inb = (x, y) => x >= 0 && y >= 0 && x < MW && y < MH;
 const enemyAt = (x, y) => enemies.find(e => e.x === x && e.y === y);
 const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
 function rollPlus() { const r = Math.random(); return r < 0.55 ? 0 : r < 0.75 ? 1 : r < 0.88 ? 2 : r < 0.95 ? -1 : 3; }
-const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip && ITEMS[type].equip !== 'ring') it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; else if (ITEMS[type].stack) it.plus = plus === undefined ? rnd(...ITEMS[type].stack) : plus; else if (type === 'gold') it.plus = plus === undefined ? 10 : plus; return it; };
+const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip && ITEMS[type].equip !== 'ring') it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].pot) { it.plus = plus === undefined ? rnd(...POT_CAP) : plus; it.pot = []; } else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; else if (ITEMS[type].stack) it.plus = plus === undefined ? rnd(...ITEMS[type].stack) : plus; else if (type === 'gold') it.plus = plus === undefined ? 10 : plus; return it; };
 const isEq = it => it === eqWeapon || it === eqShield || eqRings.includes(it);
-const ikey = it => it.type + (it.plus !== undefined && !ITEMS[it.type].stack ? ':' + it.plus : '') + (isEq(it) ? 'E' : '') + (it.shopLot ? ':shop'+it.shopLot : '');   // 持ち物のまとめ表示・操作のキー
-const itemName = it => (ShopSystem.unpaid(it) ? '【未精算】' : '') + (it.type === 'gold' ? `${it.plus}ギタン` : dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].stack ? `×${it.plus}` : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus));
+const ikey = it => it.type + (it.plus !== undefined && !ITEMS[it.type].stack ? ':' + it.plus : '') + (isEq(it) ? 'E' : '') + (it.pot ? ':p' + it.id : '') + (it.shopLot ? ':shop'+it.shopLot : '');   // 持ち物のまとめ表示・操作のキー（壺は1つずつ別）
+const itemName = it => (ShopSystem.unpaid(it) ? '【未精算】' : '') + (it.type === 'gold' ? `${it.plus}ギタン` : dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].stack ? `×${it.plus}` : ITEMS[it.type].pot ? `（${it.plus}）` : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus));
 const atkBonus = () => (eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0) + atkUp + 2 * ringN('strength') + (player.st.power > 0 ? 3 : 0) - (player.st.weak > 0 ? 2 : 0) + (wSeal() === 'hungry' && belly <= 30 ? 3 : 0);
 const defBonus = () => (eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0) + (sSeal() === 'hungryDef' && belly <= 30 ? 2 : 0);
 function mergeStacks(list) {                                     // 矢などの「たば」は1つにまとめる
@@ -1041,9 +1044,15 @@ function mergeStacks(list) {                                     // 矢などの
   return out;
 }
 const invCount = type => ITEMS[type].stack ? inv.filter(i => i.type === type).reduce((a, i) => a + i.plus, 0) : inv.filter(i => i.type === type).length;
-const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '');
+const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (it.pot && it.pot.length ? '~' + it.pot.map(encItem).join(',') : '');   // 壺は「壺:容量~中身,中身」
 const RENAMED = { onigiri: 'bread' };                            // 名前を変えたアイテム（古いセーブの読み替え）
-const decItem = t => { let [ty, pl] = String(t).split(':'); ty = RENAMED[ty] || ty; return ITEMS[ty] ? mkItem(ty, pl === undefined ? undefined : (+pl | 0)) : null; };
+const decItem = t => {
+  const str = String(t), cut = str.indexOf('~'); let [ty, pl] = (cut < 0 ? str : str.slice(0, cut)).split(':'); ty = RENAMED[ty] || ty;
+  if (!ITEMS[ty]) return null;
+  const it = mkItem(ty, pl === undefined ? undefined : (+pl | 0));
+  if (cut >= 0 && it.pot) it.pot = str.slice(cut + 1).split(',').map(decItem).filter(i => i && !i.pot).slice(0, it.plus);
+  return it;
+};
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
@@ -1862,7 +1871,7 @@ function enemyTurn() {
 // =====================================================================
 //  店（町。倉庫の窓口に仮置き。店の建物の絵ができたら入口を分ける）・預金
 // =====================================================================
-const PRICE_BASE = { 薬: 60, 食: 40, 草: 100, 種: 180, 巻物: 150, 杖: 350, 腕輪: 500, 武器: 250, 盾: 250, 矢: 6 };
+const PRICE_BASE = { 壺: 300, 薬: 60, 食: 40, 草: 100, 種: 180, 巻物: 150, 杖: 350, 腕輪: 500, 武器: 250, 盾: 250, 矢: 6 };
 function priceOf(it) {                                          // 売値（買うとき）。仮の値。珍しい物ほど高く、強化値・杖の回数で上がる
   const d = ITEMS[it.type]; let p = PRICE_BASE[d.cat] || 100;
   if (d.stack) return Math.max(10, p * it.plus);
@@ -1891,6 +1900,7 @@ function shopBuy(key) {
 function shopSell(key) {
   if(scene!=='town')return;
   const it = inv.find(i => ikey(i) === key && !isEq(i)); if (!it) { whMsg = '装備中の物は売れない。外してから。'; renderWh(); return; }
+  if (it.pot && it.pot.length) { whMsg = '壺の中身を出してから売ろう。'; renderWh(); return; }
   const p = sellPrice(it); gold += p; inv.splice(inv.indexOf(it), 1); whMsg = `${itemName(it)}を${p}Gで売った。`;
   saveGame(); renderWh(); render();
 }
@@ -1968,6 +1978,7 @@ function useType(key, floorEntry=null) {
   if (guardDead()) return;
   const it = floorEntry?floorEntry.item:firstOf(key);
   if (!it) { say(`${ITEMS[key] ? dispName(key) : 'それ'}を持っていない。`); render(); return; }
+  if (ITEMS[it.type].pot) { if (floorEntry) { say('壺は拾ってから使おう。'); render(); return; } potOpen(it, 'put'); return; }
   if (ITEMS[it.type].equip) {
     if(floorEntry){
       if(ITEMS[it.type].equip==='ring'&&!eqRings.includes(null)){say('腕輪は2つまでしか付けられない。先に外そう。');render();return;}
@@ -2021,8 +2032,10 @@ const $ = id => document.getElementById(id);
 const bagEl = $('bag'), listEl = $('bagList'), tabsEl = $('bagTabs');
 const whEl = $('wh'), whListEl = $('whList'), whSegEl = $('whSeg');
 function openBag() { if(EventVfx.busy())return; if (dead) { guardDead(); return; } if (whOpen||stairsOpen) return; holdStop(); bagOpen = true;bagActionMode=false;bagActionIndex=0;bagEl.hidden = false;document.body?.classList?.add('bag-visible'); renderBag(); render(); }
-function closeBag() { bagOpen = false; bagSel = null;bagActionMode=false;bagEl.hidden = true;document.body?.classList?.remove('bag-visible'); }
+function closeBag() { bagOpen = false; bagSel = null;potMode = null;bagActionMode=false;bagEl.hidden = true;document.body?.classList?.remove('bag-visible'); }
 function toggleBag() { if (bagOpen) { closeBag(); render(); } else openBag(); }
+const potCandidates = pot => inv.filter(i => !i.pot && !isEq(i) && !ShopSystem.unpaid(i));   // 壺に入れられる物：壺・装備中・未精算以外
+const bagGroups = () => potMode ? groups(potMode.kind === 'put' ? potCandidates(potMode.pot) : potMode.pot.pot) : groups(inv);
 function groups(list) {
   const m = new Map();
   for (const it of list) { const k = ikey(it); if (!m.has(k)) m.set(k, []); m.get(k).push(it); }
@@ -2042,9 +2055,9 @@ function rowHtml(g, sel, actsHtml) {
     (sel ? `<div class="acts">${actsHtml}</div><div class="ds">${isKnown(g.type) ? (d.desc || '') : '効果はわからない。使うか身につけると分かる。'}</div>` : '') + `</div>`;
 }
 function renderBag() {
-  $('bagTitle').textContent = `持ち物 ${inv.length}/${MAXBAG}`;
+  $('bagTitle').textContent = potMode ? `${potMode.kind === 'put' ? '入れる物を選ぶ' : '出す物を選ぶ'}　${itemName(potMode.pot)} ${potMode.pot.pot.length}/${potMode.pot.plus}` : `持ち物 ${inv.length}/${MAXBAG}`;
   $('autoBtn').textContent = `自動拾い ${autoPick ? 'ON' : 'OFF'}`;
-  const gs = groups(inv);
+  const gs = bagGroups();
   const cats = ['全部'];
   for (const g of gs) { const c = ITEMS[g.type].cat; if (!cats.includes(c)) cats.push(c); }
   if (!cats.includes(bagTab)) bagTab = '全部';
@@ -2052,21 +2065,49 @@ function renderBag() {
   const shown = gs.filter(g => bagTab === '全部' || ITEMS[g.type].cat === bagTab);
   if (!shown.some(g => g.key === bagSel)) bagSel = shown[0]?.key || null;
   const st = listEl.scrollTop;
-  listEl.innerHTML = shown.length ? shown.map(g => rowHtml(g,false,'').replace('class="row"',`class="row${g.key===bagSel?' sel':''}"`)).join('') : '<div class="empty">何も持っていない</div>';
+  listEl.innerHTML = shown.length ? shown.map(g => rowHtml(g,false,'').replace('class="row"',`class="row${g.key===bagSel?' sel':''}"`)).join('') : (potMode ? `<div class="empty">${potMode.kind === 'put' ? '入れられる物がない' : '壺は空だ'}</div>` : '<div class="empty">何も持っていない</div>');
   listEl.scrollTop = st;
   const selected=shown.find(g=>g.key===bagSel),detail=$('bagDetail');
   if(selected){
     const d=ITEMS[selected.type],acts=bagActions(selected);bagActionIndex=Math.min(bagActionIndex,acts.length-1);
-    detail.innerHTML=`<h2>${itemName(selected.items[0])}</h2><div class="ds">${isKnown(selected.type)?d.desc||'':'効果はわからない。使うか身につけると分かる。'}</div><div class="acts">`+acts.map((a,i)=>`<button data-act="${a.act}" data-type="${a.type}" class="${bagActionMode&&i===bagActionIndex?'chosen':''}">${a.label}</button>`).join('')+`</div><div class="bag-help">${bagActionMode?'← → 操作を選ぶ ／ 決定で実行 ／ Escで一覧':'↑ ↓ 選ぶ ／ 決定で操作を選ぶ ／ Escで戻る'}</div>`;
-  }else detail.innerHTML='<h2>持ち物</h2><div class="ds">道具を拾うと、ここで使ったり装備したりできます。</div>';
+    detail.innerHTML=`<h2>${itemName(selected.items[0])}</h2><div class="ds">${isKnown(selected.type)?d.desc||'':'効果はわからない。使うか身につけると分かる。'}${selected.items[0].pot&&!potMode?`<br>中身 ${selected.items[0].pot.length}/${selected.items[0].plus}：${selected.items[0].pot.length?selected.items[0].pot.map(itemName).join('、'):'空'}`:''}</div><div class="acts">`+acts.map((a,i)=>`<button data-act="${a.act}" data-type="${a.type}" class="${bagActionMode&&i===bagActionIndex?'chosen':''}">${a.label}</button>`).join('')+`</div><div class="bag-help">${bagActionMode?'← → 操作を選ぶ ／ 決定で実行 ／ Escで一覧':'↑ ↓ 選ぶ ／ 決定で操作を選ぶ ／ Escで戻る'}</div>`;
+  }else if(potMode)detail.innerHTML=`<h2>${potMode.kind==='put'?'壺に入れる':'壺から出す'}</h2><div class="ds">${potMode.kind==='put'?'入れられる物がない。':'壺は空だ。'}</div><div class="acts"><button data-act="potback" data-type="">戻る</button></div>`;
+  else detail.innerHTML='<h2>持ち物</h2><div class="ds">道具を拾うと、ここで使ったり装備したりできます。</div>';
 }
-function bagActions(g){const d=ITEMS[g.type];return [
+function bagActions(g){const d=ITEMS[g.type];
+  if(potMode)return [{act:'potgo',type:g.key,label:potMode.kind==='put'?'入れる':'出す'},{act:'potback',type:g.key,label:'戻る'}];
+  if(d.pot)return [{act:'potput',type:g.key,label:'入れる'},{act:'pottake',type:g.key,label:'出す'},{act:'drop',type:g.key,label:'置く'}];
+  return [
   {act:'use',type:g.key,label:d.equip?(isEq(g.items[0])?'外す':'装備'):d.throwOnly?'投げる':'使う'},
   {act:'drop',type:g.key,label:'置く'},
   ...(!d.throwOnly?[{act:'throw',type:g.key,label:'投げる'}]:[]),
   ...(!d.equip&&!d.charges?[{act:'quick',type:g.type,label:quick===g.type?'★解除':'★クイック'}]:[])
 ];}
+// 壺：入れる／出す物を選ぶ → 決定で1つ移して1ターン経過（町ではターンなし）
+function potOpen(pot, kind) {
+  if (kind === 'take' && !pot.pot.length) { say('壺は空だ。'); renderBag(); return; }
+  potMode = { pot, kind }; bagActionMode = false; bagActionIndex = 0; bagSel = null; if (!bagOpen) openBag(); else renderBag();
+}
+function potGo(key) {
+  if (!potMode) return;
+  const pot = potMode.pot, kind = potMode.kind;
+  if (kind === 'put') {
+    const it = potCandidates(pot).find(i => ikey(i) === key); if (!it) return;
+    if (pot.pot.length >= pot.plus) { say('壺はいっぱいだ。'); renderBag(); return; }
+    pot.pot.push(it); inv.splice(inv.indexOf(it), 1);
+    say(`${itemName(it)}を${itemName(pot)}に入れた。`);
+  } else {
+    const it = pot.pot.find(i => ikey(i) === key); if (!it) return;
+    if (inv.length >= MAXBAG && !(ITEMS[it.type].stack && inv.some(i => i.type === it.type))) { say('持ち物がいっぱいで出せない。'); renderBag(); return; }
+    pot.pot.splice(pot.pot.indexOf(it), 1); inv.push(it); inv = mergeStacks(inv);
+    say(`${itemName(pot)}から${itemName(it)}を出した。`);
+  }
+  potMode = null; saveGame(); closeBag(); if (scene === 'dungeon') endTurn(); else render();
+}
 function bagAction(act,type){
+  if(act==='potput'||act==='pottake'){const pot=firstOf(type);if(pot)potOpen(pot,act==='potput'?'put':'take');return;}
+  if(act==='potgo'){potGo(type);return;}
+  if(act==='potback'){potMode=null;bagActionMode=false;bagActionIndex=0;bagSel=null;renderBag();return;}
   if(act==='use')useType(type);else if(act==='drop')dropType(type);else if(act==='throw')throwType(type);else if(act==='quick'){quick=quick===type?null:type;saveGame();renderBag();render();}
 }
 function bagClick(ev){
@@ -2081,8 +2122,8 @@ function bagClick(ev){
 listEl.addEventListener('click',bagClick);$('bagDetail').addEventListener('click',bagClick);
 tabsEl.addEventListener('click', ev => { const t = ev.target.closest('[data-tab]'); if (t) { bagTab = t.dataset.tab;bagActionMode=false;bagActionIndex=0; renderBag(); } });
 function bagKey(k){
-  if(k==='Escape'){if(bagActionMode){bagActionMode=false;renderBag();}else{closeBag();render();}return;}
-  const shown=groups(inv).filter(g=>bagTab==='全部'||ITEMS[g.type].cat===bagTab),i=shown.findIndex(g=>g.key===bagSel),g=shown[i];
+  if(k==='Escape'){if(bagActionMode){bagActionMode=false;renderBag();}else if(potMode){potMode=null;bagSel=null;renderBag();}else{closeBag();render();}return;}
+  const shown=bagGroups().filter(g=>bagTab==='全部'||ITEMS[g.type].cat===bagTab),i=shown.findIndex(g=>g.key===bagSel),g=shown[i];
   if(!g)return;
   if(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(k)){
     const step=k==='ArrowDown'||k==='ArrowRight'?1:-1;
