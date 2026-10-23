@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "renderedAssets": 48,
+  "topologyChecks": 2048,
+  "materialSwitchPreservesState": true,
+  "foregroundPixels": {
+    "off": 8125,
+    "natural": 7295,
+    "fade": 7850
+  },
+  "liveWallDestruction": true,
+  "walkedBentCorridor": true,
+  "portrait": true,
+  "realStorageUnchanged": true,
+  "jsErrors": []
+}
