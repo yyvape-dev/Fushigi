@@ -145,8 +145,9 @@ canvas{display:block;touch-action:none}
 <script src="fushigi-equipment-v3/hero-attack-renderer.js"></script>
 <script src="assets/approved-hero.js?v=legacy-scale-v2"></script>
 <script src="assets/hero-actions.js?v=bread-art-v1"></script>
-<script src="assets/dungeon-generator.js?v=locations-v1"></script>
+<script src="assets/dungeon-generator.js?v=garden-release-v1"></script>
 <script src="assets/cave-terrain.js?v=wall-relief-v1"></script>
+<script src="assets/overgrown-garden.js?v=garden-release-v1"></script>
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
 <link rel="stylesheet" href="assets/allies.css?v=dialog-v4">
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
@@ -156,7 +157,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/monster-roster.js?v=enemy-c-v1"></script>
 <script src="assets/monster-families.js?v=enemy-c-v1"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
-<script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
+<script src="assets/dungeon-experience.js?v=garden-v1"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
 <script src="assets/event-vfx.js?v=deep-enemy-vfx-v1"></script>
 <script src="assets/enemy-vfx.js?v=blast-evolution-v1"></script>
@@ -2289,7 +2290,7 @@ function setMsg(t, ng) { artMsgEl.hidden = !t; artMsgEl.textContent = t || ''; i
 // =====================================================================
 function loadDungeonArt() { CaveTerrain.load(render); }
 function drawDungeonArt(key, px, py, g, x, y) {
-  return CaveTerrain.draw(g,key,px,py,TS,{map,x,y,seed:floorPlan?.artSeed || 0,theme:floorPlan?.theme || DungeonGenerator.themes[0]});
+  return CaveTerrain.draw(g,key,px,py,TS,{map,rooms,roomGrid,x,y,seed:floorPlan?.artSeed || 0,theme:floorPlan?.theme || DungeonGenerator.themes[0]});
 }
 const cv = $('c'), ctx = cv.getContext('2d');
 let raf = 0, lastT = 0;

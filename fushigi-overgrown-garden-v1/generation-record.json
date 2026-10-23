@@ -1,0 +1,24 @@
+{
+  "date": "2026-10-23",
+  "tool": "image_gen.imagegen",
+  "sources": [
+    {
+      "key": "garden_materials",
+      "args": {
+        "transparent_background": false,
+        "prompt": "Create production-ready texture atlas for a polished Japanese fantasy roguelike game, abandoned mossy garden ruins. Exact 2 by 2 grid of four equally sized square material swatches, no borders, no gutters, no lettering, no objects or diorama, no perspective. Entire image opaque and edge-to-edge. TOP LEFT: calm walkable compacted warm taupe soil with tiny fine gravel and occasional faint worn flat limestone, very low contrast, no large stones, no cracks resembling tile boundaries. TOP RIGHT: continuous solid limestone WALL TOP surface, weathered olive gray beige, fine moss growing in crevices, subtle irregular small stone joins, coherent solid surface without dark gaps, no isolated rocks, no cutout edges. BOTTOM LEFT: straight continuous vertical stone WALL SIDE material, horizontal limestone courses, subdued warm gray green shadows, little moss, completely solid with no missing blocks or outline, no ledges or perspective, lighting soft top left, no baked cast shadow outside stones. BOTTOM RIGHT: second calm soil material, slightly mossier than top left, similar values, no large focal objects. Every quadrant exactly fills its square. Each material should tile naturally on opposite edges and has no vignette. Hand painted detailed 2.5D fantasy game art with soft natural texture, warm subdued palette, readability for small bright characters. NOT photorealistic, NOT pixel art. Do not draw wall shapes, corners, silhouettes, architecture, pillars, paths, bushes or roots; these are continuous raw surface textures to be mapped to code-defined connected walls. Large seamless material regions, no black voids. The top-right texture must remain uniformly solid to its four edges."
+      }
+    },
+    {
+      "key": "garden_details",
+      "args": {
+        "transparent_background": true,
+        "prompt": "Create a production-ready transparent RGBA environment decal sprite atlas for a detailed hand-painted Japanese fantasy roguelike, ancient overgrown limestone garden. One square image with exact 2 columns by 2 rows equally sized cells, no visible grid, no labels, no text, generous empty transparent margin in each cell, every sprite fully contained within its own quadrant with no crossing the centre lines. TOP LEFT: a beautiful low lying cluster of thick gnarled old tree roots, viewed orthographically from directly above, main root base at top centre of its cell branching downward into delicate tapering roots, scattered tiny olive moss, warm weathered brown bark, organic irregular asymmetric branching, roots lie flat on invisible ground, soft small contact shadow only. TOP RIGHT: a different spread of thinner tangled weathered roots, base at top centre branching down and slightly sideways, same palette, lying flat, no leaves. BOTTOM LEFT: an irregular natural moss colony, several connected velvety clumps in subdued olive/sage greens, ragged feathered perimeter, tiny sparse fern sprouts, flat top-down ground decal, no dirt rectangle or ground backdrop. BOTTOM RIGHT: a sparse small cluster of 5 to 8 worn limestone rubble fragments with tiny gravel, warm beige olive gray, low profile and softly rounded, flat top down, fragments separated by transparent air, no boulder or solid ground. Style: richly painted game environment art, delicate surface detail readable at small sizes, subdued saturation. A cohesive matched set. All backgrounds completely transparent, no checkerboard painted in, no white background, no square ground patch, no decorative border. Root sprites must be organic painted wood, not simple tubes or lines, no isometric view or vertical tree trunks. Each quadrant contains ONE decal composition centred inside its cell with ample transparent margin."
+      }
+    }
+  ],
+  "materials": "source-art/garden-materials.png",
+  "decals": "source-art/garden-decals.png",
+  "layout": "Both images are 1254x1254; four 627x627 cells. Materials: soil, wall top, wall face, mossy soil. Decals: roots A, roots B, moss, rubble. Originals copied unchanged from generated_images. No third-party wall artwork.",
+  "integration": "Runtime samples atlas cells, makes surface edges periodic, maps textures to connected geometry and places generated decals. Code does not draw replacement roots, moss or rubble."
+}
