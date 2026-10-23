@@ -3,6 +3,7 @@
   "promptFile": "prompts.json",
   "initialPromptFile": "initial-prompt.txt",
   "correctionPromptFile": "enemy-face-prompts.json",
+  "summonerMonsterPromptFile": "summoner-monster-prompt.json",
   "styleReference": "../fushigi-equipment-v3/assets/hero-base/SE.png",
   "referenceSha256": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d",
   "sourceHashes": {
@@ -17,7 +18,9 @@
     "face-reference-summoner.png": "d2411a7a777221d83b78cc3d15df74722266dd24cdc75ef4d28e6a5ab0fffab8",
     "lord.png": "d4b9b964f737ca28fed3a77ca375e4125bca478f84ab488f14b2979f09c508f9",
     "ninja-enemy.png": "8410984133982f0f18fa600a6bb271d478a7368ea8b39ba78c6bfa7822223806",
-    "summoner-enemy.png": "511813be852b334876d0e4f22589ed2ffcdd4b2560f4169849157a214d00dc3e"
+    "summoner-enemy.png": "019eb44e0075c6eeb69f0ae35b3ae7ea4f75e9267debd91d6b5d006a56b9f8d6",
+    "summoner-human-superseded.png": "511813be852b334876d0e4f22589ed2ffcdd4b2560f4169849157a214d00dc3e",
+    "summoner-monster-reference.png": "12968e59e3b73e428ed9ed76ad03fc384722542ea24ce87c1d54dfd4505a6613"
   },
   "frames": [
     {
@@ -92,13 +95,13 @@
       "view": "SE/right-facing three-quarter",
       "source": "source-art/summoner-enemy.png",
       "sourceBounds": [
-        263,
-        122,
-        827,
-        1030
+        253,
+        145,
+        883,
+        973
       ],
-      "scale": 0.18640776699029127,
-      "sha256": "12968e59e3b73e428ed9ed76ad03fc384722542ea24ce87c1d54dfd4505a6613"
+      "scale": 0.197327852004111,
+      "sha256": "c8000e23e52e8e4e7210f7a2d3fb5ed1eb396d3c2df8b9d5424eaedfc25d122c"
     },
     {
       "key": "charged",

@@ -1,4 +1,4 @@
-import json
+import json, os
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -8,7 +8,7 @@ with sync_playwright() as p:
     page = browser.new_page(viewport={'width':1120, 'height':1000}, device_scale_factor=1)
     errors=[]
     page.on('pageerror', lambda e: errors.append(str(e)))
-    page.goto('http://127.0.0.1:8011/fushigi-enemy-c-v1/preview.html')
+    page.goto(os.environ.get('FUSHIGI_REVIEW_ORIGIN','http://127.0.0.1:8011')+'/fushigi-enemy-c-v1/preview.html')
     page.wait_for_function('Array.from(document.images).every(i=>i.complete&&i.naturalWidth)')
     page.screenshot(path=str(ROOT/'preview-desktop.png'), full_page=True)
     results={'images':page.locator('img').count(),'errors':errors,'sizes':{}}

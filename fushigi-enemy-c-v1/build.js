@@ -46,7 +46,7 @@ function removeBackground(c){
  }
  const hashes={};for(const f of fs.readdirSync(path.join(root,'source-art')))hashes[f]=crypto.createHash('sha256').update(fs.readFileSync(path.join(root,'source-art',f))).digest('hex');
  const ref='../fushigi-equipment-v3/assets/hero-base/SE.png';
- fs.writeFileSync(path.join(root,'manifest.json'),JSON.stringify({generator:'OpenAI image_gen',promptFile:'prompts.json',initialPromptFile:'initial-prompt.txt',correctionPromptFile:'enemy-face-prompts.json',styleReference:ref,referenceSha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(root,ref))).digest('hex'),sourceHashes:hashes,frames:records},null,2)+'\n');
+ fs.writeFileSync(path.join(root,'manifest.json'),JSON.stringify({generator:'OpenAI image_gen',promptFile:'prompts.json',initialPromptFile:'initial-prompt.txt',correctionPromptFile:'enemy-face-prompts.json',summonerMonsterPromptFile:'summoner-monster-prompt.json',styleReference:ref,referenceSha256:crypto.createHash('sha256').update(fs.readFileSync(path.join(root,ref))).digest('hex'),sourceHashes:hashes,frames:records},null,2)+'\n');
  const sheet=createCanvas(1024,512),g=sheet.getContext('2d');for(let i=0;i<keys.length;i++){const im=await loadImage(path.join(root,'art',keys[i]+'.png'));g.drawImage(im,i%4*256,Math.floor(i/4)*256);}
  fs.writeFileSync(path.join(root,'enemyC.png'),sheet.toBuffer('image/png'));
  console.log('Exported 7 RGBA base sprites and enemyC sheet; anchor (128,224).');
