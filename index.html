@@ -2673,9 +2673,10 @@ document.querySelectorAll('.dp').forEach(b => {
     const wasDead = dead;
     controlsMove(dx, dy);
     if (wasDead || !repeat || controlMode==='dash' || EventVfx.busy()) return;
-    holdT = setTimeout(() => {
-      holdI = setInterval(() => { if (dead || uiBlocked() || controlMode==='dash') { holdStop(); return; } controlsMove(dx, dy); }, 120);
-    }, 280);
+    const holdTick = () => { if (dead || uiBlocked() || controlMode==='dash') { holdStop(); return false; } controlsMove(dx, dy); return true; };
+    holdT = setTimeout(() => {                                     // キーボードと同じ：KEY_HOLD_DELAY後に1歩、以降 KEY_HOLD_MS 間隔（assets/controls-ui.js）
+      if (holdTick()) holdI = setInterval(holdTick, KEY_HOLD_MS);
+    }, KEY_HOLD_DELAY);
   });
   const up = () => { b.classList.remove('on'); holdStop(); };
   b.addEventListener('pointerup', up);

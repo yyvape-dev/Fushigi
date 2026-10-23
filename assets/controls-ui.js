@@ -1,7 +1,26 @@
 // Shared exploration controls and an in-world menu. Shops retain their existing flow.
 let controlMode='walk',runTimer=0,keyMoveTimer=0,runActive=false,dashBlocked=false,menuIndex=0,menuTrail=false,pressedDirections=new Set();
+// キーボードの移動：1歩目は斜めの同時押しをまとめる分だけ待ち（KEY_FIRST_MS）、押しっぱなしはOSのキーリピート待ちを使わず、KEY_HOLD_DELAY後からKEY_HOLD_MS間隔で一定に歩く。
+const KEY_FIRST_MS=10,KEY_HOLD_DELAY=150,KEY_HOLD_MS=110;
+let keyHoldT=0,keyHoldI=0,heldKey='';
+function stopKeyHold(){clearTimeout(keyHoldT);clearInterval(keyHoldI);keyHoldT=keyHoldI=0;heldKey='';}
+function startKeyHold(id,dirOf,mode){
+ clearTimeout(keyHoldT);clearInterval(keyHoldI);heldKey=id;
+ const tick=()=>{
+  if(dead||uiBlocked()){stopKeyHold();return;}
+  if(typeof EventVfx!=='undefined'&&EventVfx.busy())return;
+  const d=dirOf();if(!d){stopKeyHold();return;}
+  if(d[0]||d[1])controlsMove(d[0],d[1],mode);
+ };
+ keyHoldT=setTimeout(()=>{tick();if(heldKey===id)keyHoldI=setInterval(tick,KEY_HOLD_MS);},KEY_HOLD_DELAY);
+}
+function controlsKeyUp(ev){
+ pressedDirections.delete(ev.key);
+ if(heldKey==='arrows'?!pressedDirections.size:heldKey===String(ev.key).toLowerCase())stopKeyHold();
+ if(ev.key==='Shift'||ev.key in KEYS){clearTimeout(runTimer);runActive=false;dashBlocked=false;}
+}
 let groundMenuItem=null,groundMenuIndex=0,groundMenuDirect=false;
-function stopRun(){if(runActive)dashBlocked=true;clearTimeout(runTimer);clearTimeout(keyMoveTimer);runTimer=keyMoveTimer=0;runActive=false;pressedDirections.clear();}
+function stopRun(){if(runActive)dashBlocked=true;clearTimeout(runTimer);clearTimeout(keyMoveTimer);runTimer=keyMoveTimer=0;runActive=false;pressedDirections.clear();stopKeyHold();}
 function setControlMode(mode){holdStop();controlMode=controlMode===mode?'walk':mode;document.querySelectorAll('[data-mode]').forEach(b=>{b.setAttribute('aria-pressed',String(b.dataset.mode===controlMode));});const center=document.querySelector?.('.dp.wait');if(center)center.textContent=controlMode==='turn'?'向く':'待';$('controlHint').textContent={walk:'移動',turn:'向きだけ変更',diagonal:'斜めだけ移動',dash:'ダッシュ・離すと停止'}[controlMode];}
 function faceOnly(dx,dy){if(uiBlocked()||dead||(!dx&&!dy))return;player.face=[dx,dy];if(dx)player.fl=dx<0;render();}
 function faceNearest(){if(uiBlocked()||dead)return;const target=enemies.filter(e=>vis[e.y]?.[e.x]).sort((a,b)=>Math.max(Math.abs(a.x-player.x),Math.abs(a.y-player.y))-Math.max(Math.abs(b.x-player.x),Math.abs(b.y-player.y)))[0];if(target)faceOnly(Math.sign(target.x-player.x),Math.sign(target.y-player.y));}
@@ -100,7 +119,17 @@ function controlsKey(ev){
  const d=KEYS[k]||KEYS[k.toLowerCase()];if(!d){if(!['Shift','Control','Alt'].includes(k))holdStop();return false;}
  const mode=ev.ctrlKey?'turn':ev.altKey?'diagonal':ev.shiftKey?'dash':controlMode;
  ev.preventDefault();if(runActive)return true;
- if(k.startsWith('Arrow')){pressedDirections.add(k);clearTimeout(keyMoveTimer);const dx=Number(pressedDirections.has('ArrowRight'))-Number(pressedDirections.has('ArrowLeft')),dy=Number(pressedDirections.has('ArrowDown'))-Number(pressedDirections.has('ArrowUp'));keyMoveTimer=setTimeout(()=>controlsMove(dx,dy,mode==='dash'&&!pressedDirections.size?'walk':mode),30);}else controlsMove(d[0],d[1],mode);
+ const moves=!!(d[0]||d[1]),holdable=moves&&(mode==='walk'||mode==='diagonal'),isArrow=k.startsWith('Arrow');
+ if(ev.repeat&&holdable&&heldKey===(isArrow?'arrows':k.toLowerCase()))return true;      // 押しっぱなしの繰り返しはゲーム側で行う（OSのリピートは無視）
+ if(isArrow){
+  pressedDirections.add(k);clearTimeout(keyMoveTimer);stopKeyHold();
+  const dirOf=()=>pressedDirections.size?[Number(pressedDirections.has('ArrowRight'))-Number(pressedDirections.has('ArrowLeft')),Number(pressedDirections.has('ArrowDown'))-Number(pressedDirections.has('ArrowUp'))]:null;
+  const [dx,dy]=dirOf();
+  keyMoveTimer=setTimeout(()=>{controlsMove(dx,dy,mode==='dash'&&!pressedDirections.size?'walk':mode);if(holdable&&pressedDirections.size)startKeyHold('arrows',dirOf,mode);},KEY_FIRST_MS);
+ }else{
+  controlsMove(d[0],d[1],mode);
+  if(holdable){stopKeyHold();startKeyHold(k.toLowerCase(),()=>d,mode);}
+ }
  return true;
 }
 if(typeof document!=='undefined'&&document.body){
@@ -108,6 +137,6 @@ if(typeof document!=='undefined'&&document.body){
  $('menuList').onclick=ev=>{const b=ev.target.closest('[data-menu]');if(b)selectMenu(Number(b.dataset.menu));};
  document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>setControlMode(b.dataset.mode));
  for(const id of ['bagClose','histClose','cfgClose'])$(id).addEventListener('click',()=>{if(menuTrail){menuTrail=false;openGameMenu();}});
- addEventListener('keyup',ev=>{pressedDirections.delete(ev.key);if(ev.key==='Shift'||ev.key in KEYS) {clearTimeout(runTimer);runActive=false;dashBlocked=false;}});
+ addEventListener('keyup',controlsKeyUp);
  addEventListener('blur',()=>{holdStop();pressedDirections.clear();});document.addEventListener('visibilitychange',()=>{if(document.hidden)holdStop();});
 }
