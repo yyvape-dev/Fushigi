@@ -158,7 +158,8 @@ canvas{display:block;touch-action:none}
 <script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
-<script src="assets/event-vfx.js?v=events-v1"></script>
+<script src="assets/event-vfx.js?v=generated-house-v2"></script>
+<script src="fushigi-monster-house-v2/monster-house-vfx.js?v=generated-v2"></script>
 <script src="assets/run-save.js?v=event-vfx-v1"></script>
 <script>
 'use strict';
@@ -1246,6 +1247,7 @@ function checkHouse() {                                           // 魔物部�
   rooms[ri].mhDone = true;
   for (const e of enemies) if (e.mh) { e.mh = false; e.aware = true; }
   say('魔物部屋だ！ 眠っていた敵が一斉に襲いかかってきた！'); fxText(player.x, player.y, '魔物部屋！', '#ff6b6b'); vfxShake(6, 400);
+  MonsterHouseVfx.play(player.x,player.y);
 }
 function animateTrap(tr,skipPickup) {
   tr.seen=true;player.swing=0;player.action=null;updateVis();
@@ -2588,6 +2590,7 @@ function draw() {
   }
   const fa = 1 - (t - fadeT) / 350;                                                // シーン切替のフェード
   if (fa > 0) { ctx.fillStyle = `rgba(0,0,0,${Math.min(1, fa).toFixed(3)})`; ctx.fillRect(0, 0, innerWidth, innerHeight); }
+  MonsterHouseVfx.draw(ctx,t,innerWidth,innerHeight,focusY());
 }
 // アニメーション：動いている間だけ rAF を回す
 function stepVis(dt) {
@@ -2723,7 +2726,7 @@ resize();
 loadExternalAssets();
 loadRig();
 boot();
-if (typeof Image !== 'undefined') { EventVfx.load(render); ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
+if (typeof Image !== 'undefined') { MonsterHouseVfx.load(render); EventVfx.load(render); ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
 </script>
 <script src="assets/controls-ui.js?v=event-vfx-v1"></script>
 <script src="assets/ergonomic-ui.js?v=ground-v2"></script>
