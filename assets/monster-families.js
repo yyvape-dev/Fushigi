@@ -4,9 +4,11 @@
  const script=typeof document!=='undefined'&&document.currentScript?.src,R=script?new URL('../fushigi-monsters-v2/',script).href:'fushigi-monsters-v2/';
  const state={ready:false,error:null,meta:null,images:{},tints:new Map(),direction:old.direction,pose:old.pose};
  const resolve=k=>root.MonsterRoster?.resolve(k)||{family:k,tier:1};
- state.has=k=>{const f=resolve(k).family;return !!root.MonsterRoster?.names[f]&&!root.MonsterRoster?.noArt?.has(f);};
+ state.has=k=>{const f=resolve(k).family;return f==='lord'||!!root.MonsterRoster?.names[f]&&!root.MonsterRoster?.noArt?.has(f);};
  state.load=async function(redraw=()=>{}){try{
-  const r=await fetch(R+'monsters.json');if(!r.ok)throw Error('monster catalog '+r.status);state.meta=await r.json();
+  const catalogs=await Promise.all(['monsters.json','../fushigi-enemy-c-v1/runtime.json'].map(async p=>{const r=await fetch(R+p);if(!r.ok)throw Error(p+': '+r.status);return r.json();}));
+  state.meta=catalogs[0];
+  for(const [family,c]of Object.entries(catalogs[1].monsters))state.meta.monsters[family]={...c,views:Object.fromEntries(Object.entries(c.views).map(([d,v])=>[d,Object.fromEntries(Object.entries(v).map(([slot,p])=>[slot,'../fushigi-enemy-c-v1/'+p]))]))};
   const image=p=>new Promise((resolve,reject)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>resolve(im);im.onerror=()=>reject(Error(p));im.src=R+p;});
   await Promise.all([old.load(redraw),...Object.entries(state.meta.monsters).flatMap(([family,c])=>D.flatMap(d=>Object.entries(c.views[d]).filter(([k])=>k==='idle'||k==='motion').map(async([k,p])=>{state.images[family+':'+d+':'+k]=await image(p);}))) ]);
   if(old.error)throw Error(old.error);state.ready=true;redraw();

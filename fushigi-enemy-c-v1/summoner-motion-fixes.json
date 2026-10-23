@@ -1,0 +1,15 @@
+[
+  {
+    "references": [
+      "source-art/summoner-idle-reference.png",
+      "guides/summoner-motion-sheet.png"
+    ],
+    "source": "source-art/summoner-motion.png"
+  },
+  {
+    "references": [
+      "source-art/summoner-S-attack-reference.png"
+    ],
+    "source": "source-art/summoner-attack-S-fixed.png"
+  }
+]

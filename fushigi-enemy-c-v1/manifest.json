@@ -1,0 +1,167 @@
+{
+  "generator": "OpenAI image_gen",
+  "promptFile": "prompts.json",
+  "initialPromptFile": "initial-prompt.txt",
+  "correctionPromptFile": "enemy-face-prompts.json",
+  "summonerMonsterPromptFile": "summoner-monster-prompt.json",
+  "styleReference": "../fushigi-equipment-v3/assets/hero-base/SE.png",
+  "referenceSha256": "c595eba511f4cb39fc6824d319c675f4ff8e0257d8021d66487394386e00aa1d",
+  "sourceHashes": {
+    "cannon-enemy.png": "9796ccb834df7abfdaa7caa4812cfb3dabf0761cbb8411fff4db2c25cadfcd5a",
+    "cannon.png": "63a17c789dad50157031e9bd6f8746482ba41ea368c6d2f2885fadbd777f66a3",
+    "caster-enemy.png": "424d8662f8877500c585fb17672c8ef1844d313c681ee035301d13e4a6872e2e",
+    "enemyC-original.png": "d99abd57d5543caf474ee9c46c926258feed7d92b9550ce9192d34abba20285a",
+    "enemyC-transparency-draft.png": "4aa5737cc07a9fabc66c1c71cac58dee0108d87bd7242e9d0b8332f878efccef",
+    "face-reference-cannon.png": "ce714118b2fc9d3d67a27b4d9c4349fc7001138616f376d44d109476abe797c7",
+    "face-reference-caster.png": "7725d2aaed858f58e8d19d3f0aac0d9f3de09732b7ec9b51ebaa29346806d566",
+    "face-reference-ninja.png": "0d1a5faf8e7a30565c63857fcd3bf0993af4823fa80c738c189cae45eca5f603",
+    "face-reference-summoner.png": "d2411a7a777221d83b78cc3d15df74722266dd24cdc75ef4d28e6a5ab0fffab8",
+    "lord.png": "d4b9b964f737ca28fed3a77ca375e4125bca478f84ab488f14b2979f09c508f9",
+    "ninja-enemy.png": "8410984133982f0f18fa600a6bb271d478a7368ea8b39ba78c6bfa7822223806",
+    "summoner-enemy.png": "019eb44e0075c6eeb69f0ae35b3ae7ea4f75e9267debd91d6b5d006a56b9f8d6",
+    "summoner-human-superseded.png": "511813be852b334876d0e4f22589ed2ffcdd4b2560f4169849157a214d00dc3e",
+    "summoner-monster-reference.png": "12968e59e3b73e428ed9ed76ad03fc384722542ea24ce87c1d54dfd4505a6613"
+  },
+  "frames": [
+    {
+      "key": "ninja",
+      "file": "art/ninja.png",
+      "width": 256,
+      "height": 256,
+      "anchor": [
+        128,
+        224
+      ],
+      "view": "SE/right-facing three-quarter",
+      "source": "source-art/ninja-enemy.png",
+      "sourceBounds": [
+        257,
+        171,
+        793,
+        956
+      ],
+      "scale": 0.200836820083682,
+      "sha256": "02dff238ac0447de5b27ffa428a0ac0ce1bc063af7710314603a05c547f08720"
+    },
+    {
+      "key": "caster",
+      "file": "art/caster.png",
+      "width": 256,
+      "height": 256,
+      "anchor": [
+        128,
+        224
+      ],
+      "view": "SE/right-facing three-quarter",
+      "source": "source-art/caster-enemy.png",
+      "sourceBounds": [
+        253,
+        110,
+        825,
+        1048
+      ],
+      "scale": 0.183206106870229,
+      "sha256": "7b669298943afc4c9eb5f9a2332daa3b6f5ff0402f43427ae135f45e1d885c5e"
+    },
+    {
+      "key": "mimic",
+      "file": "art/mimic.png",
+      "width": 256,
+      "height": 256,
+      "anchor": [
+        128,
+        224
+      ],
+      "view": "SE/right-facing three-quarter",
+      "source": "source-art/enemyC-original.png",
+      "sourceBounds": [
+        3,
+        26,
+        295,
+        357
+      ],
+      "scale": 0.5378151260504201,
+      "sha256": "c20dc58c351c64b4fe36ef55f969bac1b0a9898c976a30ea07d036104ca8d372"
+    },
+    {
+      "key": "summoner",
+      "file": "art/summoner.png",
+      "width": 256,
+      "height": 256,
+      "anchor": [
+        128,
+        224
+      ],
+      "view": "SE/right-facing three-quarter",
+      "source": "source-art/summoner-enemy.png",
+      "sourceBounds": [
+        253,
+        145,
+        883,
+        973
+      ],
+      "scale": 0.197327852004111,
+      "sha256": "c8000e23e52e8e4e7210f7a2d3fb5ed1eb396d3c2df8b9d5424eaedfc25d122c"
+    },
+    {
+      "key": "charged",
+      "file": "art/charged.png",
+      "width": 256,
+      "height": 256,
+      "anchor": [
+        128,
+        224
+      ],
+      "view": "SE/right-facing three-quarter",
+      "source": "source-art/enemyC-original.png",
+      "sourceBounds": [
+        15,
+        20,
+        314,
+        392
+      ],
+      "scale": 0.4897959183673469,
+      "sha256": "3eef3004dc32f602e4497bfb954c066804dd0caea894c00cca39a24b0087a433"
+    },
+    {
+      "key": "cannon",
+      "file": "art/cannon.png",
+      "width": 256,
+      "height": 256,
+      "anchor": [
+        128,
+        224
+      ],
+      "view": "SE/right-facing three-quarter",
+      "source": "source-art/cannon-enemy.png",
+      "sourceBounds": [
+        230,
+        148,
+        863,
+        1011
+      ],
+      "scale": 0.18991097922848665,
+      "sha256": "cbbd7d7ec02dfc1fe33bd30a19cdff9e3abc5e58116f2031f2ba467bc82e75d8"
+    },
+    {
+      "key": "lord",
+      "file": "art/lord.png",
+      "width": 256,
+      "height": 256,
+      "anchor": [
+        128,
+        224
+      ],
+      "view": "SE/right-facing three-quarter",
+      "source": "source-art/lord.png",
+      "sourceBounds": [
+        130,
+        118,
+        1015,
+        1032
+      ],
+      "scale": 0.18604651162790697,
+      "sha256": "cb933c8114b000507b04f70265cd5b940c430867b22741f974263094d2511484"
+    }
+  ]
+}

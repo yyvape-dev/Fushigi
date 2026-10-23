@@ -58,6 +58,7 @@
  { setup(26);for(let i=0;i<8;i++)map[player.y][player.x+i]=FLOOR;
    ok([1,2,3,4].every((n,i)=>ENEMIES[['summoner','summoner_2','summoner_3','summoner_4'][i]].summon===[1,2,2,3][i]),'bell summons 1/2/2/3 by rank');
    const s=put('summoner_4',player.x+4,player.y);enemyTurn();ok(enemies.length>=3&&enemies.some(e=>e.sum),'a bell call brings allies: '+enemies.length);
+   ok(Number.isFinite(s.monsterAttackStart)&&s.monsterAttackFace[0]===-1&&s.monsterAttackFace[1]===0,'the summoning bell plays its directional attack animation');
    ok(enemies.filter(e=>e.sum).every(e=>!ENEMIES[e.kind].summon&&!ENEMIES[e.kind].disguise),'called monsters are never bell-ringers or mimics');
    const n=enemies.length;enemyTurn();ok(enemies.length===n,'bell has a cooldown');
    for(let i=0;i<300;i++)ok(!ENEMIES[rollEnemy(28,true)].summon,'rollEnemy(summoned) excludes summoners');
@@ -68,6 +69,7 @@
    const same=roomGrid[e.y][e.x]===roomGrid[player.y][player.x];const hp=player.hp;
    const Mr=Math.random;Math.random=()=>0;try{strikeOne(e,false);}finally{Math.random=Mr;}
    ok(same?player.hp<hp:player.hp===hp,'charged rock zaps the player in the same room when struck');
+   if(same)ok(Number.isFinite(e.monsterAttackStart)&&e.monsterAttackFace.length===2,'the rock retaliation plays its directional attack animation');
    ok(ENEMIES.charged.def>=6&&ENEMIES.charged.zap(20)[1]>0,'charged rock is tough and has a zap'); }
 
  // --- 9. おおづつ兵：動かず遠くから、2ターンに1発
@@ -84,10 +86,10 @@
    player.x=stairs[0];player.y=stairs[1];stairsOpen=true;const s0=scene;chooseStairs(true);ok(scene===s0&&scene==='dungeon'&&dungeonId==='third','stairs are sealed while the boss lives');
    const gold0=floorItems.length;killEnemy(boss);ok(!bossAlive()&&floorItems.length>=gold0+4,'killing the boss drops loot');
    stairsOpen=true;player.x=stairs[0];player.y=stairs[1];dClears={second:1};chooseStairs(true);ok(scene==='town'&&dClears.third===1,'stairs clear the dungeon after the boss falls');
-   ok(MonsterSprites.has('lord')&&MonsterRoster.resolve('lord').family==='dragon','the boss borrows the top dragon art');
+   ok(MonsterSprites.has('lord')&&MonsterRoster.resolve('lord').family==='lord'&&MonsterRoster.resolve('lord').tier===1,'the boss uses its dedicated untinted art');
    setup(5,'first',true);ok(!enemies.some(e=>ENEMIES[e.kind].boss),'no boss in other dungeons'); }
 
- // --- 11. 絵がまだ無い新敵も描ける（ゴブリンの色違い）。ほかの階・冒険の保存に影響しない
+ // --- 11. 専用絵の新敵も描ける。ほかの階・冒険の保存に影響しない
  { setup(26);enemies=['ninja_4','caster_4','mimic_4','summoner_4','charged_4','cannon_4','lord'].map((k,i)=>put(k,player.x+1+(i%3),player.y+1+Math.floor(i/3)));
    let err=null;try{for(let i=0;i<3;i++)endTurn();draw();RunSave.save();}catch(e){err=e;}ok(!err,'new enemies draw, act and save without errors: '+(err&&err.stack)); }
 

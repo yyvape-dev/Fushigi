@@ -1,0 +1,48 @@
+{
+  "images": 21,
+  "errors": [],
+  "sizes": {
+    "ninja": {
+      "width": 256,
+      "height": 256,
+      "visiblePixels": 18108,
+      "edgePixels": 0
+    },
+    "caster": {
+      "width": 256,
+      "height": 256,
+      "visiblePixels": 17197,
+      "edgePixels": 0
+    },
+    "mimic": {
+      "width": 256,
+      "height": 256,
+      "visiblePixels": 22768,
+      "edgePixels": 0
+    },
+    "summoner": {
+      "width": 256,
+      "height": 256,
+      "visiblePixels": 19670,
+      "edgePixels": 0
+    },
+    "charged": {
+      "width": 256,
+      "height": 256,
+      "visiblePixels": 20854,
+      "edgePixels": 0
+    },
+    "cannon": {
+      "width": 256,
+      "height": 256,
+      "visiblePixels": 21147,
+      "edgePixels": 0
+    },
+    "lord": {
+      "width": 256,
+      "height": 256,
+      "visiblePixels": 24210,
+      "edgePixels": 0
+    }
+  }
+}
