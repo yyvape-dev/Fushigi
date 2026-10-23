@@ -47,6 +47,7 @@
    history:msgHistory.slice(-80)};
  }
  function save(){
+  if(typeof EventVfx!=='undefined')EventVfx.flush();
   if(scene!=='dungeon')return false;
   try{
    const body=dead?{v:V,dead:true,dungeonId,floorNo}:{v:V,at:Date.now(),state:encode(snapshot())};

@@ -152,13 +152,14 @@ canvas{display:block;touch-action:none}
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
 <script src="assets/dungeon-shop.js?v=entrances-v2"></script>
 <script src="assets/shop-security.js?v=security-v1"></script>
-<script src="assets/allies.js?v=neutral-walk-v1"></script>
+<script src="assets/allies.js?v=event-vfx-v1"></script>
 <script src="assets/monster-roster.js?v=families-v2"></script>
 <script src="assets/monster-families.js?v=families-v2"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
-<script src="assets/run-save.js?v=run-save-v1"></script>
+<script src="assets/event-vfx.js?v=events-v1"></script>
+<script src="assets/run-save.js?v=event-vfx-v1"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -305,6 +306,7 @@ const ITEMS = {
       const t = eqWeapon;
       if (!t) { say('武器を装備していないので効果がなかった。'); return false; }
       const up = Math.random() < 0.1 ? 3 : 1; t.plus += up; fxText(player.x, player.y, '+' + up, '#ffe28a');
+      EventVfx.play('weapon',player.x,player.y,{entity:player,up,item:t.type,delay:180,duration:900});
       say(`${itemName(t)}が光った！ 強化値+${up}`); if(typeof GameAudio!=='undefined')GameAudio.effect('enhance'); return true;
     },
   },
@@ -314,6 +316,7 @@ const ITEMS = {
       const t = eqShield;
       if (!t) { say('盾を装備していないので効果がなかった。'); return false; }
       const up = Math.random() < 0.1 ? 3 : 1; t.plus += up; fxText(player.x, player.y, '+' + up, '#ffe28a');
+      EventVfx.play('shield',player.x,player.y,{entity:player,up,item:t.type,delay:180,duration:900});
       say(`${itemName(t)}が光った！ 強化値+${up}`); if(typeof GameAudio!=='undefined')GameAudio.effect('enhance'); return true;
     },
   },
@@ -612,6 +615,7 @@ function gainExp(n) {
   while (player.lv < MAX_LV && player.exp >= expNeed(player.lv)) {
     player.exp -= expNeed(player.lv); player.lv++;
     player.maxhp += 4; player.hp = Math.min(player.maxhp, player.hp + 4);
+    EventVfx.play('level',player.x,player.y,{entity:player,duration:850});
     fxText(player.x, player.y, 'Lv' + player.lv, '#ffe28a'); vfxShake(3, 180); say(`レベルが${player.lv}に上がった！ 最大HP+4`);
     if(typeof GameAudio!=='undefined')GameAudio.effect('levelup');
   }
@@ -1036,7 +1040,7 @@ const decItem = t => { let [ty, pl] = String(t).split(':'); ty = RENAMED[ty] || 
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
-const uiBlocked = () => bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen || AllySystem.state.open || ShopSystem.state.open;
+const uiBlocked = () => EventVfx.busy() || bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen || AllySystem.state.open || ShopSystem.state.open;
 function rollType() {
   const ks = Object.keys(ITEMS).filter(k => (ITEMS[k].from || 1) <= floorNo);
   let r = Math.random() * ks.reduce((a, k) => a + ITEMS[k].w, 0);
@@ -1131,6 +1135,7 @@ function pathDist(sx, sy) {
   return d;
 }
 function newFloor() {
+  EventVfx.reset();
   ShopSystem.leaveFloor();
   closeStairs();
   player.action=null;player.walkEnd=0;
@@ -1242,9 +1247,25 @@ function checkHouse() {                                           // 魔物部�
   for (const e of enemies) if (e.mh) { e.mh = false; e.aware = true; }
   say('魔物部屋だ！ 眠っていた敵が一斉に襲いかかってきた！'); fxText(player.x, player.y, '魔物部屋！', '#ff6b6b'); vfxShake(6, 400);
 }
-function triggerTrap(tr) {                                        // 罠を踏んだ。落とし穴で階が変わったら true
+function animateTrap(tr,skipPickup) {
+  tr.seen=true;player.swing=0;player.action=null;updateVis();
+  say(`${TRAPS[tr.kind].name}を踏んだ！`);fxText(tr.x,tr.y,TRAPS[tr.kind].name,TRAPS[tr.kind].col);
+  const kind=tr.kind,duration=kind==='pit'?950:kind==='warp'?900:850;
+  EventVfx.play(kind,tr.x,tr.y,{entity:player,delay:120,duration,
+    blocked:kind==='gas'&&(player.st.invinc>0||ringN('nosleep')>0),
+    resultAt:kind==='pit'?950:kind==='warp'?540:kind==='mine'?300:500,
+    apply(){
+      const before=new Set(enemies);
+      if(triggerTrap(tr,true))return;
+      if(kind==='warp')EventVfx.emit('arrival',player.x,player.y,{duration:480});
+      if(kind==='summon')for(const e of enemies)if(!before.has(e))EventVfx.emit('summon',e.x,e.y,{duration:550});
+      finishPlayerMove(skipPickup);
+    }});
+  render();
+}
+function triggerTrap(tr,announced=false) {                        // 罠を踏んだ。落とし穴で階が変わったら true
   tr.seen = true; const T = TRAPS[tr.kind];
-  say(`${T.name}を踏んだ！`); fxText(player.x, player.y, T.name, T.col);
+  if(!announced){say(`${T.name}を踏んだ！`); fxText(player.x, player.y, T.name, T.col);}
   if (tr.kind === 'pit') { floorNo++; say(`${floorNo}階へ落ちた！`); newFloor(); startFade(); render(); return true; }
   if (tr.kind === 'mine') { traps.splice(traps.indexOf(tr), 1); hurtPlayer(Math.max(3, Math.floor(player.maxhp * 0.35)), `地雷で力尽きた…（${floorNo}階）`); vfxShake(7, 300); }
   else if (tr.kind === 'gas') { if (addStatus('sleep', 4)) say('眠ってしまった…'); }
@@ -1259,6 +1280,7 @@ function triggerTrap(tr) {                                        // 罠を踏�
 // =====================================================================
 function snapVis() { for (const e of [player, ...enemies,...ShopSystem.keepers().filter(k=>k.hp>0)]) { e.vx = e.x; e.vy = e.y; e.bump = null; } }
 function toTown(fromDungeon) {
+  EventVfx.reset();
   RunSave.clear();                                              // 冒険が終わったので途中保存は消す
   closeStairs();
   if(menuOpen&&typeof closeGameMenu==='function')closeGameMenu();
@@ -1442,7 +1464,7 @@ function msgClass(m) {
   return /おなか|ふらふら|ひもじ|倒れそう/.test(m) ? 'hunger' : /の攻撃！|の矢！|の炎！|爆発|力尽き/.test(m) ? 'dmg' : /拾った|置いた|交換|持ち物|外した|ギタン|盗まれた/.test(m) ? 'item' : /倒した|踏破|回復|満腹度\+|食べた|強化値|装備した|最大HP|地図/.test(m) ? 'good' : '';
 }
 const logHtml = arr => arr.map(l => `<div class="${msgClass(l)}">${l}</div>`).join('');
-function openHist() { if (dead) { guardDead(); return; } if (bagOpen || whOpen || cfgOpen) return; holdStop(); histOpen = true; $('hist').hidden = false; $('histList').innerHTML = logHtml(msgHistory) || '<div>まだメッセージはありません。</div>'; const l = $('histList'); l.scrollTop = l.scrollHeight; render(); }
+function openHist() { if(EventVfx.busy())return; if (dead) { guardDead(); return; } if (bagOpen || whOpen || cfgOpen) return; holdStop(); histOpen = true; $('hist').hidden = false; $('histList').innerHTML = logHtml(msgHistory) || '<div>まだメッセージはありません。</div>'; const l = $('histList'); l.scrollTop = l.scrollHeight; render(); }
 function closeHist() { histOpen = false; $('hist').hidden = true; render(); }
 const toggleHist = () => (histOpen ? closeHist() : openHist());
 
@@ -1480,8 +1502,10 @@ function turnCore() {
   if (!dead) tickStatus();
 }
 function endTurn() {
+  if(EventVfx.defer(endTurn))return;
   ShopSystem.boundary();
   checkHouse();
+  if(EventVfx.defer(endTurn))return;
   turnCore();
   for (let g = 0; g < 12 && !dead && scene === 'dungeon' && player.st.sleep > 0; g++) turnCore();   // 眠っている間は、敵だけが動く
   updateVis();
@@ -1565,17 +1589,22 @@ function playerMove(dx, dy, {skipPickup=false}={}) {
         return;
       }
       const tr = trapAt(nx, ny);
+      if(tr&&EventVfx.live()){animateTrap(tr,skipPickup);return;}
       if (tr && triggerTrap(tr)) return;
-      checkHouse();
-      const f = itemAt(player.x, player.y);
-      if (f && !skipPickup && f.item.type === 'gold') { gold += f.item.plus; floorItems.splice(floorItems.indexOf(f), 1); fxText(player.x, player.y, '+' + f.item.plus + 'G', '#ffd54a'); say(`${f.item.plus}ギタンを拾った。（所持金 ${gold}G）`); }
-      else if (f) { if (autoPick && !skipPickup && !ShopSystem.unpaid(f.item)) takeFloor(f); else say(`足元に${itemName(f.item)}がある。`); }
+      finishPlayerMove(skipPickup);return;
     }
   }
   endTurn();
-  // Complete the movement turn before pausing on a shop item's choices.
-  const under=scene==='dungeon'&&!dead&&!e?itemAt(player.x,player.y):null;
-  if(under&&ShopSystem.unpaid(under.item)&&!uiBlocked())openGroundMenu();
+}
+function finishPlayerMove(skipPickup=false){
+  if(dead||scene!=='dungeon'){render();return;}
+  checkHouse();
+  const f=itemAt(player.x,player.y);
+  if(f&&!skipPickup&&f.item.type==='gold'){gold+=f.item.plus;floorItems.splice(floorItems.indexOf(f),1);fxText(player.x,player.y,'+'+f.item.plus+'G','#ffd54a');say(`${f.item.plus}ギタンを拾った。（所持金 ${gold}G）`);}
+  else if(f){if(autoPick&&!skipPickup&&!ShopSystem.unpaid(f.item))takeFloor(f);else say(`足元に${itemName(f.item)}がある。`);}
+  endTurn();
+  const openUnder=()=>{const under=scene==='dungeon'&&!dead?itemAt(player.x,player.y):null;if(under&&ShopSystem.unpaid(under.item)&&!uiBlocked())openGroundMenu();};
+  if(!EventVfx.defer(openUnder))openUnder();
 }
 
 function closeStairs() { stairsOpen=false;const el=document.getElementById('stairsPrompt');if(el)el.hidden=true; }
@@ -1920,6 +1949,7 @@ function toggleEquip(it) {                                      // 着脱でき�
 }
 function playUseMotion(kind,prop) { player.action = {kind,prop,t0:now(),face:player.face.slice(),duration:kind==='scroll'?560:kind==='staff'?380:520}; player.swing=0;player.walkEnd=0;kick(); }
 function useType(key, floorEntry=null) {
+  if(EventVfx.busy())return;
   if (guardDead()) return;
   const it = floorEntry?floorEntry.item:firstOf(key);
   if (!it) { say(`${ITEMS[key] ? dispName(key) : 'それ'}を持っていない。`); render(); return; }
@@ -1975,7 +2005,7 @@ function dropType(key) {
 const $ = id => document.getElementById(id);
 const bagEl = $('bag'), listEl = $('bagList'), tabsEl = $('bagTabs');
 const whEl = $('wh'), whListEl = $('whList'), whSegEl = $('whSeg');
-function openBag() { if (dead) { guardDead(); return; } if (whOpen||stairsOpen) return; holdStop(); bagOpen = true;bagActionMode=false;bagActionIndex=0;bagEl.hidden = false;document.body?.classList?.add('bag-visible'); renderBag(); render(); }
+function openBag() { if(EventVfx.busy())return; if (dead) { guardDead(); return; } if (whOpen||stairsOpen) return; holdStop(); bagOpen = true;bagActionMode=false;bagActionIndex=0;bagEl.hidden = false;document.body?.classList?.add('bag-visible'); renderBag(); render(); }
 function closeBag() { bagOpen = false; bagSel = null;bagActionMode=false;bagEl.hidden = true;document.body?.classList?.remove('bag-visible'); }
 function toggleBag() { if (bagOpen) { closeBag(); render(); } else openBag(); }
 function groups(list) {
@@ -2123,7 +2153,7 @@ $('histClose').addEventListener('click', closeHist);
 // =====================================================================
 const cfgEl = $('cfg'), cfgListEl = $('cfgList');
 const ZOOM_LABEL = ['自動', '小', '中', '大', '特大', '最大'], MAP_LABEL = ['OFF', '小', '大'];
-function openCfg() { holdStop(); cfgOpen = true; cfgEl.hidden = false; renderCfg(); }
+function openCfg() { if(EventVfx.busy())return; holdStop(); cfgOpen = true; cfgEl.hidden = false; renderCfg(); }
 function closeCfg() { cfgOpen = false; cfgEl.hidden = true; setMsg(''); }
 // 確認用：倉庫と持ち物にまだ無い種類を1個ずつ、倉庫に入れる（強化値は+0）。入れた種類数を返す
 function giftAll() {
@@ -2151,7 +2181,7 @@ function renderCfg() {
     `<div class="set"><span class="lab">地図<br><small>画面の地図をタップで 小⇔大</small></span><button class="sm" data-cfg="map">${MAP_LABEL[mapMode]}</button></div>`,
     `<div class="set"><span class="lab">お試しアイテム<br><small>倉庫に、まだ無い種類のアイテムを1個ずつ入れる（確認用。倉庫がいっぱいになるまで。何度でも押せる）</small></span><button class="sm" data-cfg="giftall">配る</button></div>`
   ];
-  cfgListEl.innerHTML = rows.join('');
+  cfgListEl.innerHTML = rows.join('')+'<div class="set"><span class="lab">クレジット<br><small>VFX: Kenney / Martin Jelinek / Soluna Software（CC0）。</small></span><a href="fushigi-vfx-v1/credits.html" target="_blank" rel="noopener">出典</a></div>';
   if(typeof GameAudio!=='undefined')cfgListEl.insertAdjacentHTML('beforeend',GameAudio.rows());
 }
 cfgListEl.addEventListener('click', ev => {
@@ -2375,6 +2405,8 @@ function drawEntity(key, e, t, camX, camY) {
   if (e.kind && ENEMIES[e.kind] && !SPRITES[e.kind] && !DEFAULT[e.kind]) { hue = ENEMIES[e.kind].hue || 0; key = ENEMIES[e.kind].art || 'goblin'; }   // 専用の絵が無い敵：借りた絵を色違いで
   const [ox, oy] = entityOffset(e, t);
   const px = Math.round(camX + (e.vx + ox) * TS), py = Math.round(camY + (e.vy + oy) * tilePitchY());
+  const pose=EventVfx.pose(e,t),footX=px+TS/2,footY=py+tilePitchY()*.9;
+  ctx.save();ctx.globalAlpha*=pose.alpha;ctx.translate(footX,footY+pose.drop*TS);ctx.rotate(pose.angle);ctx.scale(pose.scale,pose.scale);ctx.translate(-footX,-footY);
   const d = Math.hypot(e.x - e.vx, e.y - e.vy);
   const newMonster = typeof MonsterSprites !== 'undefined' && MonsterSprites.ready && MonsterSprites.has(e.kind);
   const hop = key !== 'player' && !newMonster && d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 新敵は描いた歩行コマを使用
@@ -2393,6 +2425,7 @@ function drawEntity(key, e, t, camX, camY) {
     g.globalCompositeOperation = 'source-atop'; g.fillStyle = '#fff'; g.fillRect(0, 0, TS * 3, TS * 3); g.globalCompositeOperation = 'source-over';
     ctx.globalAlpha = 0.75; ctx.drawImage(tmp, -TS, -TS * 2, TS * 3, TS * 3); ctx.globalAlpha = 1;
   }
+  ctx.restore();
   ctx.restore();
   return [px, py];
 }
@@ -2518,9 +2551,12 @@ function draw() {
   }
   if(dungeon)DungeonExperience.fog(ctx,{width:innerWidth,height:innerHeight,size:TS,pitch:tilePitchY(),camX,camY,player,rooms,roomIndex:playerRoom(),roomGrid,map,seen,theme:floorPlan?.theme?.id,terrain:CaveTerrain,revision:visibilityRevision,seed:floorPlan?.artSeed});
   if(dungeon)ShopSystem.prices(ctx,camX,camY);
+  EventVfx.drawWorld(ctx,t,camX,camY,TS,tilePitchY(),'floor');
   const [ppx, ppy] = drawEntity('player', player, t, camX, camY);
+  ctx.save();ctx.globalAlpha=EventVfx.pose(player,t).alpha;
   ctx.fillStyle = '#ffd54a';                                                       // 向きの目印（Attackの狙い先）
   ctx.beginPath(); ctx.arc(ppx + TS / 2 + player.face[0] * TS * 0.42, ppy + tilePitchY() / 2 + player.face[1] * tilePitchY() * 0.42, Math.max(2, TS * 0.07), 0, Math.PI * 2); ctx.fill();
+  ctx.restore();
   const under = dungeon ? itemAt(player.x, player.y) : null;                       // 足元のアイテム名
   if (under) {
     ctx.font = '12px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
@@ -2528,6 +2564,7 @@ function draw() {
     ctx.fillStyle = '#ffd54a'; ctx.fillText(itemName(under.item), ppx + TS / 2, ppy + TS + 2);
   }
   drawVfx(t, camX, camY);                                                          // 斬撃の弧・火花
+  EventVfx.drawWorld(ctx,t,camX,camY,TS,tilePitchY(),'front');
   fx.splice(0, fx.length, ...fx.filter(f => t - f.t0 < 700));                      // 浮かぶ数字
   for (const f of fx) {
     const k = (t - f.t0) / 700;
@@ -2571,6 +2608,7 @@ function stepVis(dt) {
   }
 }
 function animating(t) {
+  if(EventVfx.animating(t))return true;
   if(AllySystem.animating(t))return true;
   if(ShopSystem.keepers().some(k=>k.walkEnd>t||t-k.attackStart<300))return true;
   if (t - fadeT < 350 || (hurtT && t - hurtT < 260) || fx.length || vfx.length || (shakeAmp && t - shakeT0 < shakeLife)) return true;
@@ -2584,8 +2622,9 @@ function animating(t) {
 function frame() {
   raf = 0;
   const t = now(), dt = Math.min(50, t - lastT || 16); lastT = t;
+  EventVfx.update(t);
   stepVis(dt); draw();
-  if (animating(t)) raf = requestAnimationFrame(frame);
+  if (animating(t)&&!raf) raf = requestAnimationFrame(frame);
 }
 function kick() { if (!raf && typeof requestAnimationFrame === 'function') { lastT = now(); raf = requestAnimationFrame(frame); } }
 function render() { draw(); kick(); }
@@ -2605,7 +2644,7 @@ document.querySelectorAll('.dp').forEach(b => {
     dashBlocked=false;
     const wasDead = dead;
     controlsMove(dx, dy);
-    if (wasDead || !repeat || controlMode==='dash') return;
+    if (wasDead || !repeat || controlMode==='dash' || EventVfx.busy()) return;
     holdT = setTimeout(() => {
       holdI = setInterval(() => { if (dead || uiBlocked() || controlMode==='dash') { holdStop(); return; } controlsMove(dx, dy); }, 120);
     }, 280);
@@ -2684,9 +2723,9 @@ resize();
 loadExternalAssets();
 loadRig();
 boot();
-if (typeof Image !== 'undefined') { ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
+if (typeof Image !== 'undefined') { EventVfx.load(render); ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
 </script>
-<script src="assets/controls-ui.js?v=ground-v2"></script>
+<script src="assets/controls-ui.js?v=event-vfx-v1"></script>
 <script src="assets/ergonomic-ui.js?v=ground-v2"></script>
 <script>AllySystem.init();ShopSystem.init();</script>
 </body>
