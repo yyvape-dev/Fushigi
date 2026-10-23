@@ -22,5 +22,12 @@
  // シェリ：壁の角をはさむ斜めも撃てる／行き先が壁なら止まる
  a=setup();a.kind='sherininya';e=enemy(8,9);map[9][9]=WALL;map[10][8]=WALL;AllySystem.tick();verify(e.hp<1000,'sheri hits diagonal past closed corners');
  a=setup();a.kind='sherininya';e=enemy(8,9);map[9][8]=WALL;AllySystem.tick();verify(e.hp===1000,'sheri blocked when the target cell is wall');
+ // シェリ：直線から外れた敵へは、魔法の通る位置へ動いてから撃つ
+ a=setup();a.kind='sherininya';e=enemy(11,11);AllySystem.tick();verify((a.x!==9||a.y!==10)&&e.hp===1000,'sheri moves to a firing line');
+ for(let i=0;i<4&&e.hp===1000;i++)AllySystem.tick();verify(e.hp<1000,'sheri then fires');
+ a=setup();a.kind='sherininya';player.x=20;player.y=10;a.x=a.vx=9;e=enemy(4,10);const sp0=distMap()[a.y][a.x];AllySystem.tick();verify(distMap()[a.y][a.x]<sp0,'sheri too far: returns');
+ // アヴェニウス：離れた敵（一閃の届かない5マス先）へ近づいて斬る
+ a=setup();a.kind='avenius';a.issenUsed=new Set();player.x=9;player.y=11;e=enemy(14,12);const av0=Math.max(Math.abs(e.x-a.x),Math.abs(e.y-a.y));AllySystem.tick();verify(Math.max(Math.abs(e.x-a.x),Math.abs(e.y-a.y))<av0,'avenius approaches visible foe');
+ for(let i=0;i<8&&e.hp===1000;i++)AllySystem.tick();verify(e.hp<1000,'avenius eventually cuts');
  render=originalRender;console.log('ALL OK');
 }
