@@ -94,14 +94,16 @@
   }
   if(a.boost>0)a.boost--;if(turn%10===0&&a.hp<a.maxhp)a.hp++;
  }
- function hurt(n){const a=state.actor;if(!a)return;a.hp-=n;a.flash=now()+130;fxText(a.x,a.y,'-'+n,'#ffb6e8');if(a.hp<=0){say(config(a).name+'「'+config(a).retreat+'」');state.actor=null;hide();}}
+ function hurt(n,killer=null){const a=state.actor;if(!a||a.hp<=0)return false;a.hp-=n;a.flash=now()+130;fxText(a.x,a.y,'-'+n,'#ffb6e8');if(a.hp<=0){say(config(a).name+'「'+config(a).retreat+'」');state.actor=null;state.used=true;hide();if(killer&&root.MonsterCombat)root.MonsterCombat.evolve(killer);return true;}return false;}
  function clearRay(e,a){let x=e.x,y=e.y;const dx=Math.sign(a.x-x),dy=Math.sign(a.y-y);while(x!==a.x||y!==a.y){if(!geomOK(x,y,dx,dy))return false;x+=dx;y+=dy;if((x!==a.x||y!==a.y)&&(enemyAt(x,y)||(player.x===x&&player.y===y)))return false;}return true;}
- function enemyAction(e,T){if(!live()||e.loot)return false;const a=state.actor,dist=distance(e,a);if(dist>=distance(e,player)||dist>SIGHT||!los(e.x,e.y,a.x,a.y))return false;e.aware=true;
+ function enemyAction(e,T){if(!live()||e.loot)return false;const a=state.actor,dist=distance(e,a);if(dist>=distance(e,player)||dist>SIGHT)return false;
+  if(root.MonsterCombat?.isCannon(T)&&dist>1){if(e.st?.cool>0||!e.aware&&!los(e.x,e.y,a.x,a.y))return false;const impact=root.MonsterCombat.plan(e,a);if(!impact)return false;e.aware=true;root.MonsterCombat.fire(e,a,impact);return true;}
+  if(!los(e.x,e.y,a.x,a.y))return false;e.aware=true;
   const ranged=T.range&&dist>1&&dist<=T.range&&aligned(e.x,e.y,a.x,a.y)&&clearRay(e,a),adj=dist===1&&(T.ai==='ghost'||geomOK(e.x,e.y,a.x-e.x,a.y-e.y));
   if(ranged||adj){e.monsterFace=[Math.sign(a.x-e.x),Math.sign(a.y-e.y)];e.monsterAttackFace=e.monsterFace.slice();e.monsterAttackStart=now();
-   if(T.ai==='bomb'){enemies.splice(enemies.indexOf(e),1);hurt(Math.max(1,Math.ceil((5+Math.floor(floorNo*.8))*(T.bombScale||1))-Math.floor(stats(a).defense/2)));say(T.name+'が'+config(a).name+'のそばで爆発した！');if(distance(e,player)<=1)hurtPlayer(Math.max(1,5+floorNo-defBonus()),'爆風で力尽きた…');return true;}
+   if(T.ai==='bomb'){enemies.splice(enemies.indexOf(e),1);hurt(Math.max(1,Math.ceil((5+Math.floor(floorNo*.8))*(T.bombScale||1))-Math.floor(stats(a).defense/2)),e);say(T.name+'が'+config(a).name+'のそばで爆発した！');if(distance(e,player)<=1)hurtPlayer(Math.max(1,5+floorNo-defBonus()),'爆風で力尽きた…');return true;}
    if(Math.random()>=ACC.e){if(typeof EnemyVfx!=='undefined')EnemyVfx.attack(e,T,a,false,ranged);fxText(a.x,a.y,'MISS','#c7dfff');return true;}
-   const range=ranged&&T.ai==='breath'?T.breath(floorNo):T.atk(floorNo),damage=Math.max(1,rnd(...range)-stats(a).defense);if(typeof EnemyVfx!=='undefined')EnemyVfx.attack(e,T,a,true,ranged);hurt(damage);say(T.name+'の攻撃！ '+config(a).name+'に'+damage+'ダメージ。');
+   const range=ranged&&T.ai==='breath'?T.breath(floorNo):T.atk(floorNo),damage=Math.max(1,rnd(...range)-stats(a).defense);if(typeof EnemyVfx!=='undefined')EnemyVfx.attack(e,T,a,true,ranged);hurt(damage,e);say(T.name+'の攻撃！ '+config(a).name+'に'+damage+'ダメージ。');
    if(state.actor){if(T.ai==='sleepy')a.st.sleep=T.statusTurns||5;if(T.ai==='dazzle')a.st.confuse=T.statusTurns||8;if(T.ai==='venom')a.poison=Math.min(4,(a.poison||0)+1);}return true;
   }
   if(T.spd==='still'||T.spd==='slow'&&turn%2===1)return true;
@@ -139,5 +141,5 @@
  function ui(){updateParty(live()?[state.actor]:[]);}
 
  function init(){if(!document.body)return;const el=document.createElement('section');el.id='allyPrompt';el.hidden=true;el.setAttribute('role','dialog');el.setAttribute('aria-modal','true');el.setAttribute('aria-labelledby','allyName');el.innerHTML='<div class="ally-dialog"><div class="ally-portrait" id="allyPortrait">'+portrait()+'</div><div class="ally-speech"><h2 id="allyName">ユズナミキ</h2><div id="allyContent" aria-live="polite"></div></div><div class="ally-choices"><button id="allyJoin">一緒に行く</button><button id="allyStay">そのまま</button></div></div>';document.body.append(el);document.getElementById('allyJoin').onclick=()=>recruit();document.getElementById('allyStay').onclick=()=>{hide();render();};document.addEventListener('keydown',e=>{if(!state.open)return;if(e.key==='Tab'){e.preventDefault();const join=document.getElementById('allyJoin'),stay=document.getElementById('allyStay');(document.activeElement===join?stay:join.hidden?stay:join).focus();return;}e.preventDefault();e.stopImmediatePropagation();if(e.key==='Escape'){hide();render();}else if(['Enter','z','x',' '].includes(e.key)){document.activeElement?.click();}else if(e.key.startsWith('Arrow')){const join=document.getElementById('allyJoin'),stay=document.getElementById('allyStay');(document.activeElement===join?stay:join.hidden?stay:join).focus();}},true);}
- root.AllySystem={state,at,stats,reset,newFloor,nearby,recruit,talk,gainExp,tick,enemyAction,load,draw,animate,animating,ui,updateParty,init,infoHTML,hide,make};
+ root.AllySystem={state,at,stats,reset,newFloor,nearby,recruit,talk,gainExp,tick,enemyAction,load,draw,animate,animating,ui,updateParty,init,infoHTML,hide,make,hurt};
 })(typeof window==='undefined'?globalThis:window);
