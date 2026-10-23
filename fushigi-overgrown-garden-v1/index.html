@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>根絡みの古庭 — ロケーション試作</title>
+<style>
+body{margin:0;background:#141b18;color:#e5dfcd;font:14px system-ui,sans-serif}header{padding:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}h1{font-size:17px;margin:0 10px 0 0}button,select{font:inherit;color:inherit;background:#29382e;border:1px solid #6d7d65;border-radius:6px;padding:6px 10px}p{margin:0;padding:0 10px 8px;font-size:12px;color:#c0c8b6}iframe{display:block;width:100%;height:calc(100dvh - 145px);min-height:300px;border:0}#status{color:#e1cb91}button:disabled{opacity:.4}
+</style></head><body>
+<header><h1>根絡みの古庭</h1><select id="look" aria-label="景観"><option value="overgrown-garden">新しい古庭</option><option value="ruins">従来の遺跡と比較</option></select><button id="next" disabled>別の階</button><button id="room" disabled>別の部屋</button><button id="grid" disabled>マス境界</button></header>
+<p>壁際に根・苔・崩れ石がまとまり、中央と出入口は空ける。壁は高さと縁を整理。従来の遺跡と同じ地形で比較できます。</p>
+<p id="status" role="status">読み込み中…</p><p>確認用の独立セーブ。本編の冒険・持ち物には影響しません。画面内でそのまま操作できます。</p>
+<iframe id="game" title="古庭のプレイ確認"></iframe>
+<script>
+const $=id=>document.getElementById(id),frame=$('game');let seed=55433,roomIndex=0;
+const run=code=>frame.contentWindow.eval(code);
+function status(){const d=run('({style:floorPlan.style,rooms:rooms.length,kind:OvergrownGarden.plan(rooms[window.gardenRoom||0],floorPlan.artSeed).kind})');$('status').textContent=`地形 ${seed} ／ ${d.style} ／ ${d.rooms}部屋 ／ この部屋：${{moss:'苔のたまり',roots:'壁際の根',rubble:'崩れ石'}[d.kind]}`;}
+function apply(){run('floorPlan.theme='+($('look').value==='overgrown-garden'?'OvergrownGarden.theme':"DungeonGenerator.themes.find(t=>t.id==='ruins')")+'; visibilityRevision++;render()');status();}
+frame.onload=async()=>{
+ if(!frame.srcdoc)return;
+ try{
+  const begin=Date.now();while(!run('CaveTerrain.ready && ApprovedHero.ready && DungeonExperience.ready')){if(Date.now()-begin>30000)throw Error('素材の読み込みが完了しません');await new Promise(r=>setTimeout(r,100));}
+  run(`window.gardenSeed=${seed};window.gardenRoom=0;const gardenGenerate=DungeonGenerator.generate;DungeonGenerator.generate=function(w,h,s,d){const p=gardenGenerate(w,h,window.gardenSeed,d);p.theme=OvergrownGarden.theme;return p;};enterDungeon();player.hp=player.maxhp=200;`);
+  // Draw grid after the game only on request; no gameplay/visibility changes.
+  run(`window.gardenGrid=false;const gardenDraw=draw;draw=function(){gardenDraw();if(!window.gardenGrid||scene!=='dungeon')return;const cx=Math.round(innerWidth/2-(player.vx+.5)*TS),cy=Math.round(focusY()-(player.vy+.5)*tilePitchY());ctx.save();ctx.strokeStyle='#c3e9c84a';ctx.lineWidth=1;for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(vis[y]?.[x])ctx.strokeRect(cx+x*TS,cy+y*tilePitchY(),TS,tilePitchY());ctx.restore();};`);
+  for(const id of ['next','room','grid'])$(id).disabled=false;apply();
+ }catch(e){$('status').textContent=e.message;}
+};
+$('look').onchange=apply;
+$('next').onclick=()=>{seed+=7919;roomIndex=0;run(`window.gardenSeed=${seed};window.gardenRoom=0;newFloor();player.hp=player.maxhp=200;`);apply();};
+$('room').onclick=()=>{roomIndex=(roomIndex+1)%run('rooms.length');run(`(()=>{window.gardenRoom=${roomIndex};const r=rooms[${roomIndex}];player.x=player.vx=r.cx;player.y=player.vy=r.cy;updateVis();render();})()`);status();};
+$('grid').onclick=()=>run('window.gardenGrid=!window.gardenGrid;render()');
+(async()=>{
+ const response=await fetch('../index.html',{cache:'no-store'});if(!response.ok)throw Error('本編を取得できません');
+ let html=await response.text();
+ // Isolate all storage, including run-save, settings and pagehide handlers.
+ const isolation=`<base href="${new URL('../',location.href).href}"><script>const gardenStorage=new Map();Object.defineProperty(window,'localStorage',{value:{getItem:k=>gardenStorage.get(k)??null,setItem:(k,v)=>gardenStorage.set(k,String(v)),removeItem:k=>gardenStorage.delete(k),clear:()=>gardenStorage.clear()}});<\/script>`;
+ frame.srcdoc=html.replace('<head>','<head>'+isolation);
+})().catch(e=>$('status').textContent=e.message);
+</script></body></html>
