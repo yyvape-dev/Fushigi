@@ -22,8 +22,44 @@ def height(x,y):
 
 def mat(name,path):
  m=bpy.data.materials.new(name);m.use_nodes=True;n=m.node_tree.nodes;p=n.get('Principled BSDF');p.inputs['Roughness'].default_value=.95
- tex=n.new('ShaderNodeTexImage');tex.image=bpy.data.images.load(str(path),check_existing=True);tex.interpolation='Linear'
- m.node_tree.links.new(tex.outputs['Color'],p.inputs['Base Color']);return m
+ links=m.node_tree.links
+ def mathnode(op,a,b=None):
+  node=n.new('ShaderNodeMath');node.operation=op
+  for i,value in enumerate([a,b] if b is not None else [a]):
+   if isinstance(value,(float,int)):node.inputs[i].default_value=value
+   else:links.new(value,node.inputs[i])
+  return node.outputs[0]
+ attr=n.new('ShaderNodeAttribute');attr.attribute_name='wall_world'
+ xyz=n.new('ShaderNodeSeparateXYZ');links.new(attr.outputs['Vector'],xyz.inputs[0])
+ geo=n.new('ShaderNodeNewGeometry');normal=n.new('ShaderNodeSeparateXYZ');links.new(geo.outputs['Normal'],normal.inputs[0])
+ weights=[mathnode('POWER',mathnode('ABSOLUTE',normal.outputs[i]),4) for i in range(3)]
+ total=mathnode('ADD',mathnode('ADD',weights[0],weights[1]),weights[2])
+ image=bpy.data.images.load(str(path),check_existing=True)
+ colors=[]
+ # All three axes sample the SAME original rock quadrant at the same world
+ # density. Height is measured in units, never normalized separately per strip.
+ for a,b,axis in [(0,1,2),(0,2,1),(1,2,0)]:
+  # Repeat a two-unit patch without mirroring its entire interior: blend
+  # only the opposing edge bands. Mirroring produced visible diamond motifs.
+  u=mathnode('FRACT',mathnode('MULTIPLY',xyz.outputs[a],.5))
+  v=mathnode('FRACT',mathnode('MULTIPLY',xyz.outputs[b],.5))
+  def band(value):
+   edge=mathnode('MINIMUM',value,mathnode('SUBTRACT',1,value))
+   return mathnode('MULTIPLY',mathnode('MAXIMUM',0,mathnode('SUBTRACT',1,mathnode('DIVIDE',edge,.10))),.5)
+  def sample(uu,vv):
+   uv=n.new('ShaderNodeCombineXYZ')
+   links.new(mathnode('ADD',mathnode('MULTIPLY',uu,.46),.52),uv.inputs[0])
+   links.new(mathnode('ADD',mathnode('MULTIPLY',vv,.46),.52),uv.inputs[1])
+   tex=n.new('ShaderNodeTexImage');tex.image=image;tex.interpolation='Linear';links.new(uv.outputs[0],tex.inputs['Vector']);return tex.outputs['Color']
+  def mix(aa,bb,fac):
+   node=n.new('ShaderNodeMixRGB');links.new(fac,node.inputs[0]);links.new(aa,node.inputs[1]);links.new(bb,node.inputs[2]);return node.outputs[0]
+  ru=mathnode('SUBTRACT',1,u);rv=mathnode('SUBTRACT',1,v)
+  color=mix(mix(sample(u,v),sample(ru,v),band(u)),mix(sample(u,rv),sample(ru,rv),band(u)),band(v))
+  mul=n.new('ShaderNodeMixRGB');mul.blend_type='MULTIPLY';mul.inputs[0].default_value=1
+  links.new(color,mul.inputs[1]);links.new(mathnode('DIVIDE',weights[axis],total),mul.inputs[2]);colors.append(mul.outputs[0])
+ def add(a,b):
+  node=n.new('ShaderNodeMixRGB');node.blend_type='ADD';node.inputs[0].default_value=1;links.new(a,node.inputs[1]);links.new(b,node.inputs[2]);return node.outputs[0]
+ links.new(add(add(colors[0],colors[1]),colors[2]),p.inputs['Base Color']);return m
 sources={'slate':ROOT/'fushigi-overgrown-garden-v1/source-art/garden-ridge.png','ruins':ROOT/'fushigi-overgrown-garden-v1/source-art/garden-materials.png'}
 materials={k:mat(k,p) for k,p in sources.items()}
 
@@ -51,6 +87,8 @@ def mesh(mask,phase):
    # Correct exterior normals; top faces already point upward.
    face(points[::-1],uv[::-1])
  me=bpy.data.meshes.new('connected-wall');me.from_pydata(verts,[],faces);me.update();ob=bpy.data.objects.new('wall',me);s.collection.objects.link(ob)
+ world=me.attributes.new('wall_world','FLOAT_VECTOR','POINT')
+ for vertex,value in zip(me.vertices,world.data):value.vector=(vertex.co.x+.5+ox,.5-vertex.co.y+oy,vertex.co.z)
  uv=me.uv_layers.new()
  for poly,coords in zip(me.polygons,uvfaces):
   for li,co in zip(poly.loop_indices,coords):uv.data[li].uv=co
@@ -67,6 +105,6 @@ for phase in range(4):
 # Save a useful inspectable corner model as well as the reproducible script.
 ob=mesh(6,0);ob.data.materials.append(materials['slate'])
 bpy.ops.wm.save_as_mainfile(filepath=str(OUT/'wall-kit.blend'))
-manifest=dict(pitch=pitch,tilePixels=128,imagePixels=384,anchor=[192,192],heightRange=[1.05,1.85],masks='exposed floor N=1 E=2 S=4 W=8',phases='2x2 world-periodic',sources={k:dict(path=str(p.relative_to(ROOT)),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for k,p in sources.items()},files=records)
+manifest=dict(mapping='world-unit triplanar, normal-weight power4, 2-unit repeat with opposing-edge blending, same original top-right quadrant on every face',pitch=pitch,tilePixels=128,imagePixels=384,anchor=[192,192],heightRange=[1.05,1.85],masks='exposed floor N=1 E=2 S=4 W=8',phases='2x2 world-periodic',sources={k:dict(path=str(p.relative_to(ROOT)),sha256=hashlib.sha256(p.read_bytes()).hexdigest()) for k,p in sources.items()},files=records)
 (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
 print('WALL KIT COMPLETE',len(records))

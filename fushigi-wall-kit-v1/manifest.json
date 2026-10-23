@@ -1,4 +1,5 @@
 {
+  "mapping": "world-unit triplanar, normal-weight power4, 2-unit repeat with opposing-edge blending, same original top-right quadrant on every face",
   "pitch": 0.94,
   "tilePixels": 128,
   "imagePixels": 384,
@@ -25,515 +26,515 @@
   "files": [
     {
       "file": "tiles/slate-0-0.png",
-      "sha256": "55ce6aa9f89e42e2aa466f26ab21b34051313b0b6e3fdb2a398f784fb7e20f52"
+      "sha256": "6ecc0dec0382ef26e81e4738d4b3d6be7cd5f03b1a3574cc4967675becac8e1a"
     },
     {
       "file": "tiles/ruins-0-0.png",
-      "sha256": "2d7bf975d62ccdd858a4063e9240d9fa905e340564d540a873e3d1a1443f07ca"
+      "sha256": "470824248d86cec115a2b089e0967ffc8bf1aee1b7c8b039b69d8731f0980337"
     },
     {
       "file": "tiles/slate-0-1.png",
-      "sha256": "07b29ca4a10538b319c027b4bb84770d4bad65aba9734d348362281196d28c82"
+      "sha256": "e979c90e795f5301d12adda806d8f47748818d9fcf0ad883e326591ee3e948a3"
     },
     {
       "file": "tiles/ruins-0-1.png",
-      "sha256": "1f28e632963b60563d38abc86b5c3f683801eabbdf9774cb16f858c547ce6a6d"
+      "sha256": "77257537d1c8f24fa7da09fed35d8b4d5263aa5460146a143cb77ed679bc9980"
     },
     {
       "file": "tiles/slate-0-2.png",
-      "sha256": "85d07e9682f55a123628310e49c4bee5ba48417fe4a6204b572fac112ed3a771"
+      "sha256": "ec04f4f43783d1793f0218ded5f04bf62d5479c5b649b47871ac892f8fc89408"
     },
     {
       "file": "tiles/ruins-0-2.png",
-      "sha256": "f83fd280b79e89b8a8093b522b381bd80dd89cd15e8308535c12a0ea862fd053"
+      "sha256": "48ec8b27524db6a7adace71d8425aee36bf47436c9fb1e170471c43a0561401f"
     },
     {
       "file": "tiles/slate-0-3.png",
-      "sha256": "4de9b7195703e3ca6d42891d85e6d97478998360eb9b6a5b0d9d38d643893172"
+      "sha256": "5d8eeff53291273d1248c7d3acc1212c2ac0c679158e91e28c5afac38e26b942"
     },
     {
       "file": "tiles/ruins-0-3.png",
-      "sha256": "d800685f5baea820352929328c8d46c0be6fe73a210c99013ab98614f695d2f6"
+      "sha256": "d68f928ca039507aa57ae1ed92e179aa6dc81d59115ba49a77e771bb9b36782f"
     },
     {
       "file": "tiles/slate-0-4.png",
-      "sha256": "71dcb22dff12c856afc3a97d811987453dad450d90afe0e777b55bd671215acf"
+      "sha256": "3ac6592341b91d6e335508fbfd742cbcc290fa8eb3bbdef6c97e241cb6518c11"
     },
     {
       "file": "tiles/ruins-0-4.png",
-      "sha256": "51393f18218667350ceb198f5494de31ca8976a757ce02cb86ccb0aa446c1412"
+      "sha256": "4c98afa3cab753da3ea4f8a82057ad1bd4d07757c02ecade3685de4c947e5f14"
     },
     {
       "file": "tiles/slate-0-5.png",
-      "sha256": "c0bfcf0da24ba97d53a3702e4b91b6ed73b34f65b1fbd23f0ee8861ed98d57b6"
+      "sha256": "4a58fb7e9fdb66613b97d34c6c126522a153f56c55c65bedad93e6bb6798cc50"
     },
     {
       "file": "tiles/ruins-0-5.png",
-      "sha256": "044a12a688a8dcdab5e84a4a23432bdf7cf259c52d1c2d21e790433141a63cfa"
+      "sha256": "4c98afa3cab753da3ea4f8a82057ad1bd4d07757c02ecade3685de4c947e5f14"
     },
     {
       "file": "tiles/slate-0-6.png",
-      "sha256": "38911942a578ddb5e6f854ae4cff0c3f947ebfe27b459397a239d55fbf3c14d6"
+      "sha256": "4a58fb7e9fdb66613b97d34c6c126522a153f56c55c65bedad93e6bb6798cc50"
     },
     {
       "file": "tiles/ruins-0-6.png",
-      "sha256": "915c3ca80a95f024c792abaa5c74c1efa4abf441f0b591da971d486b6dd1e79f"
+      "sha256": "33a8d2a5a3ae5394c6a49c4425434aa0f80adf926a6f5655ac818bcbdf2b509b"
     },
     {
       "file": "tiles/slate-0-7.png",
-      "sha256": "f923ebd962bce36695a3f7c4bcc8f4e81591db83e2baabd771e8fa84b7a9f009"
+      "sha256": "ce2148db5365e5403c7cb9e9120caf0ba1adabc5a48f901dfb2c2b60f916af6d"
     },
     {
       "file": "tiles/ruins-0-7.png",
-      "sha256": "aa41d199337b369b999404358235e693ce42288505efac34e4afa0dcc8ed6af5"
+      "sha256": "b6409d735e4a95483b5b410ae6badf4105dfe2671f2b089df196ef5d5ed89606"
     },
     {
       "file": "tiles/slate-0-8.png",
-      "sha256": "3222c0baeb6ed8c8048c94849b361ad9287ea733a013a7a2152ba5bea3079310"
+      "sha256": "5fc61ad113a45c79d39edd7adffc26af4a67d82dca1f926e191e7a7ef6d82df6"
     },
     {
       "file": "tiles/ruins-0-8.png",
-      "sha256": "a311484893b562493d097b823c0325065b3b0af251220936acc4f2ba80bb6e83"
+      "sha256": "38d06d90d01f10d084d4d9a7dcf333dabb5fda97824ec32e2330f7710d256c8d"
     },
     {
       "file": "tiles/slate-0-9.png",
-      "sha256": "8cfab34a3e195a113fb364ebbf8cc497137ec8f82d716af9242edf7fc6a2e4fd"
+      "sha256": "c7afcf2118547c410db99ad9071a4f4b34df860f81a600d75291a013ee962247"
     },
     {
       "file": "tiles/ruins-0-9.png",
-      "sha256": "c9d9724251efb68957968f336b4c6c99abb886f9ea64c3e82260c68835eb2ec4"
+      "sha256": "38d06d90d01f10d084d4d9a7dcf333dabb5fda97824ec32e2330f7710d256c8d"
     },
     {
       "file": "tiles/slate-0-10.png",
-      "sha256": "c2b0d7b1afeac05b135acf6de40ab94a001c17c0d2f79fad46c3b5ec38f70e43"
+      "sha256": "0e8cde7d4e55c5dd2e1ac6c184f9bd4ce6c5fbb29cb491190c544255eb584b39"
     },
     {
       "file": "tiles/ruins-0-10.png",
-      "sha256": "8309ae8db153b39f5689920e5f6d830615f3c7006bc5874fce40a51c69dfda68"
+      "sha256": "98693008b32cb53b78f3b88c5a5e04d6df9eceff8a972a44a23096331c4e4e8d"
     },
     {
       "file": "tiles/slate-0-11.png",
-      "sha256": "910942ebfdef136a0b160e9cd8445fa88695ff9e839f9a864db3b29732baf7aa"
+      "sha256": "b09c77941cbd94f524a62aeaa33539d84abf270cd9454d442a23e43a6f3b355f"
     },
     {
       "file": "tiles/ruins-0-11.png",
-      "sha256": "cd24e3ba41565553a6261a2fee425116d2c4931d6df92b6c3193231c9780a88a"
+      "sha256": "79ff7e07ada0d277fa2857780d9507c9708ad9c23e6300dab3cb60d30f9db3c6"
     },
     {
       "file": "tiles/slate-0-12.png",
-      "sha256": "7776b90133d66af533b68ece836bb70c74f2aea8aea630b56fb6c78b5a7da153"
+      "sha256": "b9dcdd864d71e5c873ce1e45f37c2c974fa4e9fc5f8c126f4977f0fc8722bea3"
     },
     {
       "file": "tiles/ruins-0-12.png",
-      "sha256": "98091801e4faafee4df51158508f41520398693d6f574e2a41d25e68c90eb837"
+      "sha256": "e3c925933ccdfd81d483aab4f4e2b3ce222d9708555aa9a02b5a052d5fd43408"
     },
     {
       "file": "tiles/slate-0-13.png",
-      "sha256": "679572a7c47c1907688719af6417ebf7892231d9282342e20b00fb28de7f5fc5"
+      "sha256": "b9dcdd864d71e5c873ce1e45f37c2c974fa4e9fc5f8c126f4977f0fc8722bea3"
     },
     {
       "file": "tiles/ruins-0-13.png",
-      "sha256": "361a3ffb8ac7ecda0de4565c545546a85b8466437241b82a28848948fa8e70e1"
+      "sha256": "e3c925933ccdfd81d483aab4f4e2b3ce222d9708555aa9a02b5a052d5fd43408"
     },
     {
       "file": "tiles/slate-0-14.png",
-      "sha256": "28c834c4ce15230d0ff21edc75e576309e41af808c409226987af3ebf558338b"
+      "sha256": "9867315fbce74bf0ed631bcd4c21eb8f544cbc0236ee4d2b7cd24fe0caa6654d"
     },
     {
       "file": "tiles/ruins-0-14.png",
-      "sha256": "f642fa2bf770a9e4288eeadf524f5c57e02e0be6ab6c60854e7ef31b432f3ed9"
+      "sha256": "04465ef0fe49d6a67afeed08ed3808325d0760c0afe00ea7bccb816cc3486ff8"
     },
     {
       "file": "tiles/slate-0-15.png",
-      "sha256": "be56b20c8fd416d7820ca9867eac0509bec9a20761750cc07b27692ee7e78009"
+      "sha256": "aa4050ecdcc6d99816d5cbabd2a1fe5e0737fccc566f18e28a3157ffd0811437"
     },
     {
       "file": "tiles/ruins-0-15.png",
-      "sha256": "6e3a45404b8e3a537165ebf6d49019c78dcb99f317b8d002e6252773c0b5d7f9"
+      "sha256": "e27cd08f070e2cf91c2f5f6df93bad3f4981e096cd7c6913c3f93cd6bd5fca36"
     },
     {
       "file": "tiles/slate-1-0.png",
-      "sha256": "508016b5dd56e80577b4cc855100a3cf600e68085398302165e7b57b6c76cdda"
+      "sha256": "9c20f6712ef70e063a5678eee99ca27d752484f0849ded376db9e986d3cb7946"
     },
     {
       "file": "tiles/ruins-1-0.png",
-      "sha256": "be7fcbd5407c93530451936623963038f7db2fcf87945f1c884f47165054f5c2"
+      "sha256": "19049481ca680c44cca18a62bb5bb9ef9604f2d9944382333d1fcfacc3ab0b8a"
     },
     {
       "file": "tiles/slate-1-1.png",
-      "sha256": "1bf3b6ac96607831b58fe590e55e4a7bea145f0a8b05f62ebbe07432a25c40f5"
+      "sha256": "319d523f309b023d51a418ee08d04fbde68b671b4433e7f29da1c45be4f7ca46"
     },
     {
       "file": "tiles/ruins-1-1.png",
-      "sha256": "1798498a6c498ab9177103dccfac11c23e30801eb011193b9e979cfd06216803"
+      "sha256": "f3b60acdcd4944a4377f3f37d12efed6a1c8d8bbea0aebee056f881e05eee46d"
     },
     {
       "file": "tiles/slate-1-2.png",
-      "sha256": "e77594a44af5fca0e97971a695605dc6d21660f9192c5923f34b1bb3bbf3910f"
+      "sha256": "c63997f6ed8efd0a2a9426421818da1ef0b8c06b5fec948c12db8555966c5190"
     },
     {
       "file": "tiles/ruins-1-2.png",
-      "sha256": "40f3f77f12ac28843843b238ff3a25a7b16269c2fa2f61565c106351ecf502c2"
+      "sha256": "df46acd126b38f75d7f4511d81aba6e9ee8ec5252c9e4e29f622c7ad7c4026cc"
     },
     {
       "file": "tiles/slate-1-3.png",
-      "sha256": "6285f0270e8cae81def63dc16c8a0e60e62a7f0f09481132b8996d9157f7055c"
+      "sha256": "6ca652d35ddb470712a6bffec64dedff50ea2651bee39ee54583598a00634bc8"
     },
     {
       "file": "tiles/ruins-1-3.png",
-      "sha256": "7a41ca66e6c5936a16025b9be8c846e674234581e6ee550d7c8db3bc2c33399f"
+      "sha256": "f15c9f0e61edfda2672ded68c139b5699a68de37f05e953d3731fa6ba803fcff"
     },
     {
       "file": "tiles/slate-1-4.png",
-      "sha256": "2f1f44253d67ced806bd9662de6441fe2faeccf45fa75117d9afe040e914a361"
+      "sha256": "ff8cc0d70b78e58d30a28cc592836a09afd28c836483af29b4548aa45d346416"
     },
     {
       "file": "tiles/ruins-1-4.png",
-      "sha256": "72fb3eebbbd040526bd9024e1c945c4733b1e0df8ff2c827c8e63ead4e304afb"
+      "sha256": "740fdf294d6a1bf60342ffe97eab592f4cd18c02cd21fe8dbb16b552b37a7fa1"
     },
     {
       "file": "tiles/slate-1-5.png",
-      "sha256": "bb42940bbd6c6f89635a06958631862405c1fa57b697a0eda58470d5dfd2e792"
+      "sha256": "0a0d4aa2b1007a68ed26b105f68ae3797d6d75dfd74735d0d56992ed798b76c3"
     },
     {
       "file": "tiles/ruins-1-5.png",
-      "sha256": "a73ef7d0903effaf8536de0b7e0842193b2a4f34fc4f50e1e7c6bbda5d2eb74b"
+      "sha256": "79b8ba87a262d9c6835aae25d98e0191f7d1e41e287f37e9503e984708f8a617"
     },
     {
       "file": "tiles/slate-1-6.png",
-      "sha256": "f2f7a515c2094099b28cbbafd5dab1c2b17f3419a0c2a0736c09dc0a79a4608b"
+      "sha256": "b3f19bf1ca72a8d1f0d36bfde693278f272adcc6ab27404228fcb51714fec9e9"
     },
     {
       "file": "tiles/ruins-1-6.png",
-      "sha256": "f50cc59049cd7a2c9fa9f1d2520f9624137486aeba503f4bce6ed1abf0c4e730"
+      "sha256": "2b802da898f544fd05822ec89147670ebd5d7f1f50d426ea3cc4dcdc0ecc59ac"
     },
     {
       "file": "tiles/slate-1-7.png",
-      "sha256": "7d17b262af0cd0226f4bae00f53daf56bb7afad6922e2b049178fc21308c4405"
+      "sha256": "4ae14a8826c41fdb64262b872c59bce94c81984d55e9b1cbf8da7c7540c00fcd"
     },
     {
       "file": "tiles/ruins-1-7.png",
-      "sha256": "bd4c7ece2a4a6580543e63b218f4fcb2efe900e122f0651e249ba88caee213be"
+      "sha256": "42e989143d69c21f090ad1b8967020319c10a7f783829829c31eb67fe4ad9175"
     },
     {
       "file": "tiles/slate-1-8.png",
-      "sha256": "90e58f82434f48115029a82236284e431840b2acec4e5c3b3e40401e25a0b028"
+      "sha256": "3857493b5bf928f25006b7b5806fcd56eafeb45e03358010ae13dc5f4ee19307"
     },
     {
       "file": "tiles/ruins-1-8.png",
-      "sha256": "f418e84e7fe2513243a778a1607a25dd1d574aaec4ba1d8f8535c5295ffc789e"
+      "sha256": "1d1c7df5f2075c336aaf899ba9c01e24812069d36ac01c4d243993182e2d5528"
     },
     {
       "file": "tiles/slate-1-9.png",
-      "sha256": "8c29c97db314bfc2381951decda32800b1a31298de508d73167acf8d6dac092f"
+      "sha256": "74111907b24e926bb39047c64a90434afe92eb7d887fe68a264f3033627aaeb4"
     },
     {
       "file": "tiles/ruins-1-9.png",
-      "sha256": "8b831c3c83527542d01c63b60d7c1772826c1879045a202fabc5d1cfd640fdf1"
+      "sha256": "26c2c04ecca876b7d79e2bd5d96bea55a2f81d897a92369bbcfe3cc017d98289"
     },
     {
       "file": "tiles/slate-1-10.png",
-      "sha256": "7de2eeb0d8104ef6ccc4bcfe25682bd6bedea7562da31fce120cc3882587c010"
+      "sha256": "d33bcfb95207dcd151c644d8e85dfa22cfb0ab70d74f5f3190c56064b2ea3db3"
     },
     {
       "file": "tiles/ruins-1-10.png",
-      "sha256": "f2dd337c74a091169c1735f85782f34574da604113e3c3d6b3118a19d16d24e6"
+      "sha256": "26c2c04ecca876b7d79e2bd5d96bea55a2f81d897a92369bbcfe3cc017d98289"
     },
     {
       "file": "tiles/slate-1-11.png",
-      "sha256": "ab13e2b302ad718b2b71250480dc6946381dfd653556968abcb89fc45edc7673"
+      "sha256": "c52fe101cf6e7817296a918384061f78a530848d925b2ed49022368266a93edf"
     },
     {
       "file": "tiles/ruins-1-11.png",
-      "sha256": "d2a6788708dee76f90bb0810a4065439c333a4d0c43932491736f358b08b2ea7"
+      "sha256": "b4513e7ecf7c6edad7545f44ed2df4687a2b652f59d719e0f505aff6b00525dd"
     },
     {
       "file": "tiles/slate-1-12.png",
-      "sha256": "3a48a2069f19552aec598d16e21d532be2e5d2621f7ab600281d8bd7390ea77d"
+      "sha256": "0e75193ec1c8f1abab6e68da47b85941acf25af9d8abc39cd1ca9fcfb44442a5"
     },
     {
       "file": "tiles/ruins-1-12.png",
-      "sha256": "c5db1bdf270702840ae824811c92e1423b32894efeeafe7a16439aa1d578a5d2"
+      "sha256": "93f1df8d2374fc20b15c7d3bb4875b58977220053d794497b014b0a3521d33f8"
     },
     {
       "file": "tiles/slate-1-13.png",
-      "sha256": "e3969c041dc0710e1af31554cb01694d1fe1c11464472be9a1dc7bcd792749b0"
+      "sha256": "6ac159698b5dc7d1b0f673a9e7129b4d0e3d750ba7974961b7c6cf62419bae73"
     },
     {
       "file": "tiles/ruins-1-13.png",
-      "sha256": "a078340617e2473d9258e5b93fc650e391f7a2e0523b87fd7f484ff6a101f3f6"
+      "sha256": "b8b621847735760001f9fb58915f87206728701ce06ff9f58baa339765290c4f"
     },
     {
       "file": "tiles/slate-1-14.png",
-      "sha256": "2ca47df3a8f66c10de90db7fe00cdb4c41e51de1ce793e9dd06ba10c9b86f473"
+      "sha256": "22cce415687d6ef58ba849b5c90d8db4b91c3b26551a22df1bd6d0bca91ab9a1"
     },
     {
       "file": "tiles/ruins-1-14.png",
-      "sha256": "86d7c87c5075d736dce607f17d699125210f09238e44cd6a4ff02bf3dba4ed50"
+      "sha256": "7e95c225d97045d2a58e31b97cfa8cc9c3782d1216f2adbafe3f7bf1b32cba66"
     },
     {
       "file": "tiles/slate-1-15.png",
-      "sha256": "14255fea9d3fefeecdfbf2c5132651878aa0a60d2374fd29798e11c2613234d5"
+      "sha256": "c2e71f9ca480e6dfe3b63f207e21d211fb1a87ca3f0ddfd53fb80bdf22b2eff0"
     },
     {
       "file": "tiles/ruins-1-15.png",
-      "sha256": "98c4b4d2a1d8a9c42ed4da21815d1165b7bd14122804ec036a95b7e27bd3f2d4"
+      "sha256": "7e95c225d97045d2a58e31b97cfa8cc9c3782d1216f2adbafe3f7bf1b32cba66"
     },
     {
       "file": "tiles/slate-2-0.png",
-      "sha256": "9906ac931c639b9bc189df3a1ce5f6b3f68496cbf43574030b99f75fa1ceceb3"
+      "sha256": "2430d1046f7be1a8902f2aae3de7927c0d472c31cbfc048f1e2e40d62bd64e28"
     },
     {
       "file": "tiles/ruins-2-0.png",
-      "sha256": "b23ded1476acdfadc795b5c5f8d5be7f21b6748ed1f58c5603e160cbf54549ff"
+      "sha256": "f690cd942c69a082ecc0888ad3dba0e42d1f956c54558d31cc85eb1478871c78"
     },
     {
       "file": "tiles/slate-2-1.png",
-      "sha256": "68b7f089b3e2b349e8b2e3d3cf199ed0582f99163f8e12e44573cec0d774eac0"
+      "sha256": "2430d1046f7be1a8902f2aae3de7927c0d472c31cbfc048f1e2e40d62bd64e28"
     },
     {
       "file": "tiles/ruins-2-1.png",
-      "sha256": "e3bdd0e711043efd578d277736ec9e5c07f8307744895b2a8b7ae0b4c80c4733"
+      "sha256": "f690cd942c69a082ecc0888ad3dba0e42d1f956c54558d31cc85eb1478871c78"
     },
     {
       "file": "tiles/slate-2-2.png",
-      "sha256": "0ca4e39299a69393aa9855115e0bd722a5046d0f7e33f3074a72c7222c37e1ce"
+      "sha256": "a5e5b64fa68108bfdb9632016deaa8263288beb1f2e71a858084cef05cd5e2d6"
     },
     {
       "file": "tiles/ruins-2-2.png",
-      "sha256": "bc065dd5f7fab9c98a143a7287336a3e124d7ddd00a261df1a1681c1739f4f7d"
+      "sha256": "1b0f6a1757138f170e713d1dda0d0eb37a968dc0da929e031c21477d2b96484d"
     },
     {
       "file": "tiles/slate-2-3.png",
-      "sha256": "e1c29af187c42453dc6a51016cdb67327b3902cd25fe7cb83186403f0daa5f15"
+      "sha256": "cef72e9f293a8cd70a057669a06591c24a84dc9f46b5b255daaca424edf85ca3"
     },
     {
       "file": "tiles/ruins-2-3.png",
-      "sha256": "b8570b00412eb691f1d6a4e78c62aee419a676da4cd7c69bca3369f578cc11aa"
+      "sha256": "1b0f6a1757138f170e713d1dda0d0eb37a968dc0da929e031c21477d2b96484d"
     },
     {
       "file": "tiles/slate-2-4.png",
-      "sha256": "0126633314b29c586340a0409cfb7ea475827cbf9394de31ce3d1f04c03fd385"
+      "sha256": "5aea75b85648ff4007d3093bbcdceadfb5d8c7f56c061e128823d193e57cdc44"
     },
     {
       "file": "tiles/ruins-2-4.png",
-      "sha256": "3fa2f727279b1a29efeba9039e77a3973f72991d9408b945c65d10dbd5f1f775"
+      "sha256": "015e7daf00c8588620c615c32cf22a0e6eda30f1688a588ff4069420803a13da"
     },
     {
       "file": "tiles/slate-2-5.png",
-      "sha256": "990faee6d88488012c488d78304f315a9f1163ea464378d0d363291951458e3c"
+      "sha256": "5aea75b85648ff4007d3093bbcdceadfb5d8c7f56c061e128823d193e57cdc44"
     },
     {
       "file": "tiles/ruins-2-5.png",
-      "sha256": "95310113add0f917af67acc2e781cce6e6b96cd4436a148118072f26f3b24c22"
+      "sha256": "56729aa68ea0d1ee11cd646ed4ffc77265dab06179ca0ffdbe9eb3253f02dc86"
     },
     {
       "file": "tiles/slate-2-6.png",
-      "sha256": "1a72b6408b6dad77b460f3c2c14ad8d68e86e04aee3a478ec2fabeb1b620751c"
+      "sha256": "a19dbd7323de9e91c2afe961d8acacd383e11f2f9ba3822f5f6e65c41bae8cc9"
     },
     {
       "file": "tiles/ruins-2-6.png",
-      "sha256": "000a54a1bb7ef584fb8de6fa7c43b2da0e7b324077b69df9e75852a22665a214"
+      "sha256": "d8170710df36ec044ce93432c669c3b531f2905c2642fbaf02b0813c4cde976e"
     },
     {
       "file": "tiles/slate-2-7.png",
-      "sha256": "21ae1c2df32f49df7cf94d38c82ea7ea918f6696a7ba41913ad810f55021f143"
+      "sha256": "a19dbd7323de9e91c2afe961d8acacd383e11f2f9ba3822f5f6e65c41bae8cc9"
     },
     {
       "file": "tiles/ruins-2-7.png",
-      "sha256": "8073bf77b73ecc9d10f23d5cff0f73d88e47e863af088fc262df1fa260c26d56"
+      "sha256": "9682f4ec5c7ebcec561a9127d864cbf1deed5752d1889dcd62b36d3b2862f049"
     },
     {
       "file": "tiles/slate-2-8.png",
-      "sha256": "5e199ef4d7e502a731bc390038e78e4acf97ade81e5884a976b1d4a4a4a65695"
+      "sha256": "8544647d3a2069aa98ad0e603228529779552c01a8edf22a2ef38e3e5ac50082"
     },
     {
       "file": "tiles/ruins-2-8.png",
-      "sha256": "d2b779c6618a49939d1ecabcb03aef66bd7aaf3db01c2ece468ac55e8ec88484"
+      "sha256": "bb81ff710321eafa608ec9392c57cdc501cfe3240afbd85acf4164d4135b2e9c"
     },
     {
       "file": "tiles/slate-2-9.png",
-      "sha256": "5e199ef4d7e502a731bc390038e78e4acf97ade81e5884a976b1d4a4a4a65695"
+      "sha256": "1b6a1f09ad9b79eae31ef5107f14cd036b04e6fef4e3073018bbe1ccc9051793"
     },
     {
       "file": "tiles/ruins-2-9.png",
-      "sha256": "c06f4632a609fb420a2a7d54001ebe66f4b008ad41b122d07936c22e112e18bb"
+      "sha256": "a89cd51636b89ff177daf0627e6c5cd9ca7296fa5cebd111541cd69846e0fcc8"
     },
     {
       "file": "tiles/slate-2-10.png",
-      "sha256": "489f1ab781bcc00ef4b995de2efd1504edd5806380f2af9a163b00012de9886f"
+      "sha256": "78d76e366fa595b9c0d7def1b571e2d523fc00ba756cbc44090db87d2ae6885e"
     },
     {
       "file": "tiles/ruins-2-10.png",
-      "sha256": "5b0b44a7ca19fdb61c761348312aa985022beac86e25392cf5bc8081456d7ac3"
+      "sha256": "5d12cf18a3f88715a7b86a584436ae3395057b7215637e5f52333f519a519b50"
     },
     {
       "file": "tiles/slate-2-11.png",
-      "sha256": "f3a44a05138777914aff93f1518941c04a532bf464e5100bffa7cf209b6cc360"
+      "sha256": "78d76e366fa595b9c0d7def1b571e2d523fc00ba756cbc44090db87d2ae6885e"
     },
     {
       "file": "tiles/ruins-2-11.png",
-      "sha256": "4fbd3308b760ec5939e02d290ee88e7d047217b390e5b01487018bfb5247c475"
+      "sha256": "631bc4982575f1417b2fa04d94a9b7bb089eb6972908959c818210e1a933198f"
     },
     {
       "file": "tiles/slate-2-12.png",
-      "sha256": "bd610361111eb7937e22be8b72f9e446f0663f428110cfb29266aa602e9f9996"
+      "sha256": "b6bc69d98c07c3360fcb9258934787ce589ff702250582f08aa83fc30d9b0055"
     },
     {
       "file": "tiles/ruins-2-12.png",
-      "sha256": "8f98fa4da843d1e8e0a947be9f253c445ff768238dce1eaf668a713cc9d8a1b8"
+      "sha256": "1382347ee2dd873f9ac5ea9d6ccdc8d997340ac931a1ba1b2e3604179d4d4b09"
     },
     {
       "file": "tiles/slate-2-13.png",
-      "sha256": "fc7d306703d61f72edf6897b122841c61bbd158393ab2904d31d7ff1e86474ef"
+      "sha256": "4d2ae41ccfe7f69952008cffefca1f48262b9f530e11256146dd074e1bc806d9"
     },
     {
       "file": "tiles/ruins-2-13.png",
-      "sha256": "a7c4cde5033fc8b655681e40c15bcf7705b8bd9e319a1bbb9ffc1d3f3464eb70"
+      "sha256": "341dd43ea7063785d2b14888840d156c49a5f16f02fd4c4edb50431b9cb88f64"
     },
     {
       "file": "tiles/slate-2-14.png",
-      "sha256": "458aad11ed3ba46a9dfc21062f0165f87c7bce4fa6847fb860cb3f34e5987f18"
+      "sha256": "4d2ae41ccfe7f69952008cffefca1f48262b9f530e11256146dd074e1bc806d9"
     },
     {
       "file": "tiles/ruins-2-14.png",
-      "sha256": "5c4e6ea28206ae9ad38e55d8b3086b65ad9657e62c8b6a238a9f0321ed417210"
+      "sha256": "b0675be24ee7b8fc1a90622fd7849486b509749a66ba77595f97c8351e0afd3b"
     },
     {
       "file": "tiles/slate-2-15.png",
-      "sha256": "342e66bf4e2a5ef9f7d9ebde5d97a96a854d7bf682b362b5700b28b9aa8b2f77"
+      "sha256": "54fb10806a0fd6d820e5be51a12e55c3bf203d822e67c09a83802d6f260072ad"
     },
     {
       "file": "tiles/ruins-2-15.png",
-      "sha256": "5c4e6ea28206ae9ad38e55d8b3086b65ad9657e62c8b6a238a9f0321ed417210"
+      "sha256": "0084346fa29a2a13f16fe7ebf8d67e5028cac2983902c810a38bdb7386467ab5"
     },
     {
       "file": "tiles/slate-3-0.png",
-      "sha256": "c7c1fce644dfb1458778bc87daf1de2df30abfa8eb01864928a036ec1f0894a3"
+      "sha256": "1142ca212344311b30d2dfa2742f2a8b62358ad9f768a36a653eaa22eec02d3c"
     },
     {
       "file": "tiles/ruins-3-0.png",
-      "sha256": "34eab9e1455e867e5931151eca1096cbe14397fa852cdfe6887547216c5683c8"
+      "sha256": "caba8312ae9e0aaa60023fc0d70d111c9137e2473e545a3137de18905393ee79"
     },
     {
       "file": "tiles/slate-3-1.png",
-      "sha256": "dfc64ff094a63d791886ddf40d54b8f5511b31aaecd6405a44cd434e362a3716"
+      "sha256": "a81d39cb0fb52741a99447cbfb1f5da19be592534ffa45c014ca880dc85a5951"
     },
     {
       "file": "tiles/ruins-3-1.png",
-      "sha256": "34eab9e1455e867e5931151eca1096cbe14397fa852cdfe6887547216c5683c8"
+      "sha256": "fe145345db986ddef6372c082a74dd87c9003d7607a928beeb90afb933a24976"
     },
     {
       "file": "tiles/slate-3-2.png",
-      "sha256": "dfc64ff094a63d791886ddf40d54b8f5511b31aaecd6405a44cd434e362a3716"
+      "sha256": "a81d39cb0fb52741a99447cbfb1f5da19be592534ffa45c014ca880dc85a5951"
     },
     {
       "file": "tiles/ruins-3-2.png",
-      "sha256": "688a18ec1a7e6afe7d1c3a3ac9ca17b9e8352285b33c43ac7dffb2350da4d7a6"
+      "sha256": "a604ae9a0172ba903bf15a00bbe2cce0464982f3861757ab49367ba470996ceb"
     },
     {
       "file": "tiles/slate-3-3.png",
-      "sha256": "408781e5de668dfddd804c8735f3d5f442edbb4731d73e23a3ad8ea1f50521b8"
+      "sha256": "02bb130c5b9b872a29efae7e4e351700068ffd7f37389c3a83645e259e00f1b1"
     },
     {
       "file": "tiles/ruins-3-3.png",
-      "sha256": "aa28d34e438f9f2a3d8981d8f5a2bceba6d6b779175d40e37fa358dfb0df4b23"
+      "sha256": "64c57c1b78d8e4c60b05948738461fc4a98bc05c20457d541fadd55ad213479c"
     },
     {
       "file": "tiles/slate-3-4.png",
-      "sha256": "76c2d157cebb58a3daf579f26bda299b67502172e6745386e2c461bbe6585db6"
+      "sha256": "5887a54d0c95311d79e2873f5faa3628564e5ebd26e403c5fb4c7ba73301f2cf"
     },
     {
       "file": "tiles/ruins-3-4.png",
-      "sha256": "9d6a68a6a38850560a4328c3fc1ec7bac47cc82186b07f3c00fdb2feedcf8288"
+      "sha256": "76a39b6710901177469527c8d20e41a8482d4eac590756b01c6b7d4693904a16"
     },
     {
       "file": "tiles/slate-3-5.png",
-      "sha256": "81a226bb07417c009d61e095d830cf8e198bcee871f92514c590997b9d247667"
+      "sha256": "5aacfa4e2a2a8e398a29af5929949a6f05f5c0650315902c64a92b6992e6f360"
     },
     {
       "file": "tiles/ruins-3-5.png",
-      "sha256": "136ef614f8efbb776652eec7b69e69f0d9cf965acda3f25e0376c8b9b9838e24"
+      "sha256": "76a39b6710901177469527c8d20e41a8482d4eac590756b01c6b7d4693904a16"
     },
     {
       "file": "tiles/slate-3-6.png",
-      "sha256": "100214b8d3776b26289b5ee7458b13642e62780ef39e421c8f607efe9636d38f"
+      "sha256": "0fd47b6f863d640154ed53ff60f4389ffe9d9912e673e1ff27274e215e3c5535"
     },
     {
       "file": "tiles/ruins-3-6.png",
-      "sha256": "b286a6fc6ab9dded87be5d70a4c32e19040a923a422fd717ec6aa880dc66e4ab"
+      "sha256": "44bb46ce7694f8dcb1ba1a74026e060ff8fe188dd5ab5cc71c46fe6e1a24816e"
     },
     {
       "file": "tiles/slate-3-7.png",
-      "sha256": "0454af4059c2167893f68c09124e5e2e4afa87c93054cd4ce8e7e18b7a7e7ab6"
+      "sha256": "35062a4aa02b5fdefe36868946baec3d6175be65b25386a7de8ea723946b6115"
     },
     {
       "file": "tiles/ruins-3-7.png",
-      "sha256": "b8b9c2e3067360a82bc5bf8ca922fe2fefe0841d46e382ec3721aa247bd34059"
+      "sha256": "caf26d52a85a4626b7cb27414a05727ebb06957239a7cdb95c2732d5f37c3066"
     },
     {
       "file": "tiles/slate-3-8.png",
-      "sha256": "321d527df00b9106c160e973bbc169e2dda05e8d00be9aacf87d0a56faf782f3"
+      "sha256": "af0fb87c800aa53066fa80721c4c7eb4b844432a314c8ca3c318c0985a204bee"
     },
     {
       "file": "tiles/ruins-3-8.png",
-      "sha256": "f8a0593d9332350f926c68e4276c379e60fcb3a3f68c1a2b3b923a3edf24f843"
+      "sha256": "4bc82791e1716936fb95b5836514833c77162764cfdbb26ad571ed3d6b3fa9b6"
     },
     {
       "file": "tiles/slate-3-9.png",
-      "sha256": "6ed88227037ff7695c5c6351fc6de142aab38ee7d07cf8356953e9fc77b87074"
+      "sha256": "5f1683056ceffab09b75f26c77984ae56c97a8805074e2cf0cce62cd032552c3"
     },
     {
       "file": "tiles/ruins-3-9.png",
-      "sha256": "c60ffd0cae11fff493cf5073cdd3d57fffa724f263d4d8348858a147c3abbc36"
+      "sha256": "b8fdf61c0cb69c85d0d1c22212b094326813c659d4cafbbd4ed27ec4481e8c7c"
     },
     {
       "file": "tiles/slate-3-10.png",
-      "sha256": "029db2a3594fb17ffcf8309358066800d877d534d5c13e10e1300103ca37adc3"
+      "sha256": "8db99a0e9ddd0a821b27a833f16cac363a9fdddee6bdc1a9fb66fbd54dd0796c"
     },
     {
       "file": "tiles/ruins-3-10.png",
-      "sha256": "8c89d1417c24eb1c85fdab57c9ff802a8a90dd4c4bfdbb379e4c7df48dbbfb66"
+      "sha256": "cca65a5a193cba9cea841f4881a37b7cfc1e414909fd55216dd8bf039329b004"
     },
     {
       "file": "tiles/slate-3-11.png",
-      "sha256": "6426beba6b4bb33c67f8767d56374bffe46b8649514b1d480ed3b66423316fd7"
+      "sha256": "e63b30ef7a30c62804b07ce818d07746cd2a9053ab3b04d2d4b35bbe342999e8"
     },
     {
       "file": "tiles/ruins-3-11.png",
-      "sha256": "8c89d1417c24eb1c85fdab57c9ff802a8a90dd4c4bfdbb379e4c7df48dbbfb66"
+      "sha256": "a854a618e32792626142a4b95c863833527191d5b066db2a9339110e164f948b"
     },
     {
       "file": "tiles/slate-3-12.png",
-      "sha256": "a65abea5b2543f830b2436add0879bf109b6eebed509312adc9b1f0f392d2fe3"
+      "sha256": "994b2b8eb0cb19fe14b1b4843f27ffa7a860f7e40b2ca7439f6dcf09168c4b5a"
     },
     {
       "file": "tiles/ruins-3-12.png",
-      "sha256": "37f5964895372013f0a0501a1fdadd9beb20f94a7cff686af7eec4509da45913"
+      "sha256": "40bc853a703ddc3ee5dac1a7e89e400ce1eeb40524d7dc2d2a161c81b996db1f"
     },
     {
       "file": "tiles/slate-3-13.png",
-      "sha256": "5bf9ab24573104c51e782ce9250602af4e46db85e000792d48e2c0dc6695eaf0"
+      "sha256": "ecd8cc7b4d292e1c0d7a61666b3ce26c1b3f0fa90d95760a7d818f761eed9e32"
     },
     {
       "file": "tiles/ruins-3-13.png",
-      "sha256": "101289c885e13e9973488895c31b755a8a2ac2483b6ab750cfb10b3b4f00d001"
+      "sha256": "96fe881d6bd8a81a8962bbf7a810176b8e9b9263d01ec3919873267cc0301067"
     },
     {
       "file": "tiles/slate-3-14.png",
-      "sha256": "9f8a71a7b4a8d60ff36b817cd29122d1c7bbbc0c4e652bf98c5ab2c97677d018"
+      "sha256": "85e8c6bfb7c79e4adf07fada6351b9af3a94bbe66345469d4f367500dbedaf16"
     },
     {
       "file": "tiles/ruins-3-14.png",
-      "sha256": "101289c885e13e9973488895c31b755a8a2ac2483b6ab750cfb10b3b4f00d001"
+      "sha256": "5881cc26c6263e415ae9a9517c59e387ed993f47082b54f6cc8c7ba0c0af8234"
     },
     {
       "file": "tiles/slate-3-15.png",
-      "sha256": "de4b29f0cae6cae4f6289b8434b5934b2efc90d8be8abc202fcbdffb104cbc32"
+      "sha256": "6f58a417823d161d03aecc80ecc50f529f293d4426c737730647356977d25eb6"
     },
     {
       "file": "tiles/ruins-3-15.png",
-      "sha256": "033938bf4f603f812c56e293cf09b40c450ab67b47c03de4a949623b85c4788e"
+      "sha256": "c05404f26fdcbc39f2f1172d4edc3a86d4ce1c10b40c29b8b0d40d6ad4649add"
     }
   ]
 }

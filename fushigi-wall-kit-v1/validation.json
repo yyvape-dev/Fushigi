@@ -4,9 +4,9 @@
   "topologyChecks": 2048,
   "materialSwitchPreservesState": true,
   "foregroundPixels": {
-    "off": 8127,
-    "natural": 6786,
-    "fade": 7803
+    "off": 8096,
+    "natural": 6785,
+    "fade": 7792
   },
   "liveWallDestruction": true,
   "walkedBentCorridor": true,

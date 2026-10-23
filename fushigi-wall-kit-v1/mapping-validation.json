@@ -1,0 +1,8 @@
+{
+  "unchangedSilhouettes": 128,
+  "geometryChange": false,
+  "cameraChange": false,
+  "newImageGenerationCalls": 0,
+  "comparisonBase": "230d248",
+  "mapping": "world-unit triplanar, two-unit periodic edge blend"
+}
