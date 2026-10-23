@@ -643,7 +643,7 @@ function killEnemy(e, noExp, killer=null) {
   if (!noExp && Math.random() < 0.25) dropAt(e.x, e.y, mkItem('gold', rnd(5, 15) + floorNo * 3));
   if (!noExp && !killer && !ShopSecurity.isSecurity(e)) { const xp=Math.max(1, Math.floor((eT(e).exp || 3) / (1 << (e.gen || 0)) / (e.sum ? 2 : 1))); gainExp(xp); AllySystem.gainExp(xp); }
   if (eT(e).boss) {                                             // ダンジョンの主：良い品とギタンを落とす。倒すと階段が使える
-    for (let i = 0; i < 3; i++) dropAt(e.x, e.y, mkItem(rollType()));
+    for (let i = 0; i < 3; i++) dropAt(e.x, e.y, mkLoot(rollType()));
     dropAt(e.x, e.y, mkItem('gold', 400 + floorNo * 20));
     say(`${eT(e).name}を倒した！ 奥の階段が使えるようになった。`); vfxShake(8, 500);
   }
@@ -681,8 +681,22 @@ const ST_BAD = ['confuse', 'sleep', 'blind', 'mute', 'weak'];
 const newStatus = () => ({ confuse: 0, sleep: 0, blind: 0, mute: 0, weak: 0, haste: 0, power: 0, invinc: 0, seeing: 0 });
 const statusText = () => Object.keys(player.st).filter(k => player.st[k] > 0).map(k => `${ST_LABEL[k]}${player.st[k]}`).join(' ');
 const ringN = name => eqRings.filter(r => r && r.type === 'ring_' + name).length;       // 装備中のその腕輪の数（2つで効果2倍）
-const SEAL_NAMES = { crit: '会心の一撃', double: '連続攻撃', tri: '三方向攻撃', drain: '回復', hungry: 'ハングリー', knock: '突き飛ばし', bat: '浮遊特攻', fire: '炎飛ばし', counter: 'カウンター', dodge: '見切り', guts: '根性', fullhalf: '満タン防御', belly: 'ハラモチ', hungryDef: 'ハングリー', critguard: '痛恨耐性' };
+const SEAL_NAMES = { crit: '会心の一撃', double: '連続攻撃', tri: '三方向攻撃', drain: '回復', hungry: 'ハングリー', knock: '突き飛ばし', bat: '浮遊特攻', fire: '炎飛ばし', counter: 'カウンター', dodge: '見切り', guts: '根性', fullhalf: '満タン防御', belly: 'ハラモチ', hungryDef: 'ハングリー', critguard: '痛恨耐性', thunder: '雷連撃', ward: '状態異常ガード', mend: '自己治癒' };
 const sealsOf = it => { const r = []; if (!it) return r; const t = ITEMS[it.type].seal; if (t) r.push(t); for (const x of it.seals || []) if (!r.includes(x)) r.push(x); return r; };   // 印＝種類の印＋合成で増えた印（1つの装備が複数持てる）
+const NATURAL = { weapon: ['fire', 'thunder'], shield: ['ward', 'mend'] };   // 天然印：神器にだけ付く。炎飛ばしは既存の印を使う
+const GRADE = { blue: { name: '青の神器', mark: '◇', col: '#58b8ff', plus: [2, 4], seals: [1, 2], nat: 0, rate: 0.04 }, gold: { name: '金の神器', mark: '◆', col: '#ffd24a', plus: [5, 8], seals: [2, 3], nat: 1, rate: 0.01 } };
+function makeRelic(it, g) {                                      // 武器・盾を神器にする：強化値の補正＋印を多めに＋（金は）天然印
+  const kind = ITEMS[it.type].equip, cfg = GRADE[g]; if (kind !== 'weapon' && kind !== 'shield') return it;
+  const own = ITEMS[it.type].seal, pick = list => list.splice(rnd(0, list.length - 1), 1)[0];
+  const normal = [...new Set(Object.values(ITEMS).filter(d => d.equip === kind && d.seal).map(d => d.seal))].filter(k => k !== own && !NATURAL[kind].includes(k));
+  const seals = [];
+  for (let i = rnd(...cfg.seals); i > 0 && normal.length; i--) seals.push(pick(normal));
+  const nat = NATURAL[kind].filter(k => k !== own);
+  for (let i = cfg.nat; i > 0 && nat.length; i--) seals.push(pick(nat));
+  it.grade = g; it.plus = rnd(...cfg.plus); if (seals.length) it.seals = seals;
+  return it;
+}
+const mkLoot = type => { const it = mkItem(type); if (floorNo >= 5 && (ITEMS[type].equip === 'weapon' || ITEMS[type].equip === 'shield')) { const r = Math.random(); if (r < GRADE.gold.rate) makeRelic(it, 'gold'); else if (r < GRADE.gold.rate + GRADE.blue.rate) makeRelic(it, 'blue'); } return it; };   // 床・魔物部屋の装備は確率で神器（5階〜）
 const wHas = k => sealsOf(eqWeapon).includes(k), sHas = k => sealsOf(eqShield).includes(k);
 const maxBelly = () => Math.max(25, MAXBELLY + bellyBonus + 25 * ringN('bellyup') - 25 * ringN('bellydown'));
 const senseEnemies = () => floorLight || ringN('seeall') > 0 || ringN('senseE') > 0 || player.st.seeing > 0;   // 地図に敵が映るか
@@ -691,6 +705,7 @@ function addStatus(k, n) {                                      // 悪い状態�
   const s = player.st;
   if (ST_BAD.includes(k)) {
     if (s.invinc > 0) { say('無敵なので効かなかった。'); return false; }
+    if (sHas('ward') && Math.random() < 0.5) { say('盾の力で防いだ！'); return false; }
     if ((k === 'confuse' && ringN('noconf')) || (k === 'sleep' && ringN('nosleep')) || (k === 'weak' && ringN('antidote'))) { say('腕輪の力で防いだ！'); return false; }
   }
   s[k] = Math.max(s[k], n); return true;
@@ -756,7 +771,7 @@ function freeNear(n) {
 function spawnEnemy(x, y, aware, forceKind) {
   const kind = forceKind || rollEnemy(floorNo), hp = ENEMIES[kind].hp(floorNo);
   const e = { kind, x, y, vx: x, vy: y, hp, maxhp: hp, aware: !!aware, lost: 0, flash: 0, bump: null, fl: false, st: {} };
-  if (ENEMIES[kind].disguise && !aware) { e.mim = true; e.disg = mkItem(rollType()).type; }   // ミミック：アイテムに化けている
+  if (ENEMIES[kind].disguise && !aware) { e.mim = true; e.disg = mkLoot(rollType()).type; }   // ミミック：アイテムに化けている
   enemies.push(e); return e;
 }
 function warpPlayer() {                                         // この階のどこかの部屋へ
@@ -1037,8 +1052,8 @@ const itemAt = (x, y) => floorItems.find(i => i.x === x && i.y === y);
 function rollPlus() { const r = Math.random(); return r < 0.55 ? 0 : r < 0.75 ? 1 : r < 0.88 ? 2 : r < 0.95 ? -1 : 3; }
 const mkItem = (type, plus) => { const it = { id: ++uid, type }; if (ITEMS[type].equip && ITEMS[type].equip !== 'ring') it.plus = plus === undefined ? rollPlus() : plus; else if (ITEMS[type].pot) { it.plus = plus === undefined ? rnd(...POT_CAP) : plus; it.pot = []; } else if (ITEMS[type].charges) it.plus = plus === undefined ? rnd(...ITEMS[type].charges) : plus; else if (ITEMS[type].stack) it.plus = plus === undefined ? rnd(...ITEMS[type].stack) : plus; else if (type === 'gold') it.plus = plus === undefined ? 10 : plus; return it; };
 const isEq = it => it === eqWeapon || it === eqShield || eqRings.includes(it);
-const ikey = it => it.type + (it.plus !== undefined && !ITEMS[it.type].stack ? ':' + it.plus : '') + (isEq(it) ? 'E' : '') + (it.pot ? ':p' + it.id : '') + (it.seals && it.seals.length ? ':s' + it.seals.join('+') : '') + (it.shopLot ? ':shop'+it.shopLot : '');   // 持ち物のまとめ表示・操作のキー（壺は1つずつ別）
-const itemName = it => (ShopSystem.unpaid(it) ? '【未精算】' : '') + (it.type === 'gold' ? `${it.plus}ギタン` : dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].stack ? `×${it.plus}` : ITEMS[it.type].pot ? `（${it.plus}）` : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus) + (it.seals && it.seals.length ? '✦' + it.seals.length : ''));
+const ikey = it => it.type + (it.plus !== undefined && !ITEMS[it.type].stack ? ':' + it.plus : '') + (isEq(it) ? 'E' : '') + (it.pot ? ':p' + it.id : '') + (it.seals && it.seals.length ? ':s' + it.seals.join('+') : '') + (it.grade ? ':' + it.grade : '') + (it.shopLot ? ':shop'+it.shopLot : '');   // 持ち物のまとめ表示・操作のキー（壺は1つずつ別）
+const itemName = it => (ShopSystem.unpaid(it) ? '【未精算】' : '') + (it.grade ? GRADE[it.grade].mark : '') + (it.type === 'gold' ? `${it.plus}ギタン` : dispName(it.type) + (it.plus === undefined ? '' : ITEMS[it.type].stack ? `×${it.plus}` : ITEMS[it.type].pot ? `（${it.plus}）` : ITEMS[it.type].charges ? (isKnown(it.type) ? `[${it.plus}]` : '[?]') : (it.plus >= 0 ? '+' : '') + it.plus) + (it.seals && it.seals.length ? '✦' + it.seals.length : ''));
 const atkBonus = () => (eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeapon.plus) : 0) + atkUp + 2 * ringN('strength') + (player.st.power > 0 ? 3 : 0) - (player.st.weak > 0 ? 2 : 0) + (wHas('hungry') && belly <= 30 ? 3 : 0);
 const defBonus = () => (eqShield ? Math.max(0, ITEMS[eqShield.type].def + eqShield.plus) : 0) + (sHas('hungryDef') && belly <= 30 ? 2 : 0);
 function mergeStacks(list) {                                     // 矢などの「たば」は1つにまとめる
@@ -1047,12 +1062,13 @@ function mergeStacks(list) {                                     // 矢などの
   return out;
 }
 const invCount = type => ITEMS[type].stack ? inv.filter(i => i.type === type).reduce((a, i) => a + i.plus, 0) : inv.filter(i => i.type === type).length;
-const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus : '') + (it.seals && it.seals.length ? '^' + it.seals.join('+') : '') + (it.pot && it.pot.length ? '~' + it.pot.map(encItem).join(',') : '');   // 壺は「壺:容量~中身,中身」
+const encItem = it => it.type + (it.plus !== undefined ? ':' + it.plus + (it.grade ? '!' + it.grade[0] : '') : '') + (it.seals && it.seals.length ? '^' + it.seals.join('+') : '') + (it.pot && it.pot.length ? '~' + it.pot.map(encItem).join(',') : '');   // 壺は「壺:容量~中身,中身」
 const RENAMED = { onigiri: 'bread' };                            // 名前を変えたアイテム（古いセーブの読み替え）
 const decItem = t => {
-  const str = String(t), cut = str.indexOf('~'); const head = (cut < 0 ? str : str.slice(0, cut)).split('^'); let [ty, pl] = head[0].split(':'); ty = RENAMED[ty] || ty;
+  const str = String(t), cut = str.indexOf('~'); const head = (cut < 0 ? str : str.slice(0, cut)).split('^'); let [ty, pl] = head[0].split(':'); ty = RENAMED[ty] || ty; let gr = null; if (pl && pl.includes('!')) { const q = pl.split('!'); pl = q[0]; gr = q[1] === 'g' ? 'gold' : q[1] === 'b' ? 'blue' : null; }
   if (!ITEMS[ty]) return null;
   const it = mkItem(ty, pl === undefined ? undefined : (+pl | 0));
+  if (gr && (ITEMS[ty].equip === 'weapon' || ITEMS[ty].equip === 'shield')) it.grade = gr;
   if (head[1] && ITEMS[ty].equip && ITEMS[ty].equip !== 'ring') { const sl = head[1].split('+').filter(k => SEAL_NAMES[k] && k !== ITEMS[ty].seal); if (sl.length) it.seals = sl; }
   if (cut >= 0 && it.pot) it.pot = str.slice(cut + 1).split(',').map(decItem).filter(i => i && !i.pot).slice(0, it.plus);
   return it;
@@ -1188,7 +1204,7 @@ function newFloor() {
     const r = itemRooms[rnd(0, itemRooms.length - 1)];
     const x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
     if (map[y][x] !== FLOOR || itemAt(x, y) || (x === player.x && y === player.y)) continue;
-    floorItems.push({ x, y, item: mkItem(rollType()) });i++;
+    floorItems.push({ x, y, item: mkLoot(rollType()) });i++;
   }
   for (let i = rnd(1, 3), tries = 0; i > 0 && tries < 30; tries++) {   // お金：1〜3つ（深いほど多い）
     const r = itemRooms[rnd(0, itemRooms.length - 1)], x = rnd(r.x, r.x + r.w - 1), y = rnd(r.y, r.y + r.h - 1);
@@ -1256,7 +1272,7 @@ function placeHouse(stairsRoom) {
   const cells=[];for(let y=R.y;y<R.y+R.h;y++)for(let x=R.x;x<R.x+R.w;x++)if(map[y][x]===FLOOR&&!enemyAt(x,y)&&!itemAt(x,y)&&!trapAt(x,y)&&!corridorAdj(x,y))cells.push([x,y]);
   const free=()=>cells.length?cells.splice(rnd(0,cells.length-1),1)[0]:null;
   // Reserve item cells before populating sleepers so small rooms retain loot.
-  for(let i=0;i<3;i++){const p=free();if(p)floorItems.push({x:p[0],y:p[1],item:mkItem(rollType())});}
+  for(let i=0;i<3;i++){const p=free();if(p)floorItems.push({x:p[0],y:p[1],item:mkLoot(rollType())});}
   for(let i=0,n=rnd(7,10);i<n;i++){const p=free();if(p)spawnEnemy(p[0],p[1],false).mh=true;}
 
 }
@@ -1520,6 +1536,7 @@ function turnCore() {
   if (!free) turn++;
   if (!dead && scene === 'dungeon' && !free) { hungerTick(); ringTick(); spawnTick(); }
   if (!dead && !free && turn % Math.max(2, Math.round(10 / (1 + ringN('regen')))) === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;
+  if (!dead && !free && sHas('mend') && turn % 5 === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;   // 自己治癒：5ターンごとにHP+1
   if (!dead) tickStatus();
 }
 function endTurn() {
@@ -1570,6 +1587,10 @@ function strikeOne(e, again) {
   if (e.hp > 0 && wHas('knock') && Math.random() < 0.3) {
     const dx = Math.sign(e.x - player.x), dy = Math.sign(e.y - player.y);
     if (geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy) && !AllySystem.at(e.x+dx,e.y+dy) && !ShopSystem.at(e.x+dx,e.y+dy)) { e.x += dx; e.y += dy; say('突き飛ばした！'); }
+  }
+  if (wHas('thunder') && !again && Math.random() < 0.3) {          // 雷連撃：雷が落ち、対象と周りの敵（最大3体）にダメージ
+    const hit = [e, ...enemies.filter(o => o !== e && o.hp > 0 && Math.abs(o.x - e.x) <= 1 && Math.abs(o.y - e.y) <= 1)].slice(0, 3);
+    for (const o of hit) if (o.hp > 0) zapHit(o, Math.max(2, Math.ceil(dmg / 2)), '雷');
   }
   if (e.hp > 0 && !again && wHas('double') && Math.random() < 0.25) { say('連続攻撃！'); strikeOne(e, true); }
 }
@@ -1882,6 +1903,7 @@ function priceOf(it) {                                          // 売値（買�
   p *= d.w >= 6 ? 1 : d.w >= 3 ? 1.3 : d.w >= 2 ? 1.8 : 2.5;
   if (d.equip && d.equip !== 'ring' && it.plus) p += 60 * it.plus;
   if (it.seals && it.seals.length) p += 150 * it.seals.length;
+  if (it.grade) p += it.grade === 'gold' ? 1500 : 500;
   if (d.charges) p += 40 * it.plus;
   return Math.max(10, Math.round(p / 10) * 10);
 }
@@ -2100,7 +2122,7 @@ function renderBag() {
   const selected=shown.find(g=>g.key===bagSel),detail=$('bagDetail');
   if(selected){
     const d=ITEMS[selected.type],acts=bagActions(selected);bagActionIndex=Math.min(bagActionIndex,acts.length-1);
-    detail.innerHTML=`<h2>${itemName(selected.items[0])}</h2><div class="ds">${isKnown(selected.type)?d.desc||'':'効果はわからない。使うか身につけると分かる。'}${selected.items[0].pot&&!potMode?`<br>中身 ${selected.items[0].pot.length}/${selected.items[0].plus}：${selected.items[0].pot.length?selected.items[0].pot.map(itemName).join('、'):'空'}${ITEMS[selected.type].fuse?(selected.items[0].pot.length>1?'<br>割ると合成：'+itemName(Object.assign({},selected.items[0].pot[0],{plus:selected.items[0].pot.reduce((a,c)=>a+c.plus,0),seals:[...new Set(selected.items[0].pot.flatMap(sealsOf))].filter(k=>k!==ITEMS[selected.items[0].pot[0].type].seal)})):''):''}`:''}${selected.items[0].seals&&selected.items[0].seals.length?'<br>合成の印：'+selected.items[0].seals.map(k=>SEAL_NAMES[k]).join('、'):''}</div><div class="acts">`+acts.map((a,i)=>`<button data-act="${a.act}" data-type="${a.type}" class="${bagActionMode&&i===bagActionIndex?'chosen':''}">${a.label}</button>`).join('')+`</div><div class="bag-help">${bagActionMode?'← → 操作を選ぶ ／ 決定で実行 ／ Escで一覧':'↑ ↓ 選ぶ ／ 決定で操作を選ぶ ／ Escで戻る'}</div>`;
+    detail.innerHTML=`<h2>${itemName(selected.items[0])}</h2>${selected.items[0].grade?`<div class="ds" style="color:${GRADE[selected.items[0].grade].col}">${GRADE[selected.items[0].grade].name}</div>`:''}<div class="ds">${isKnown(selected.type)?d.desc||'':'効果はわからない。使うか身につけると分かる。'}${selected.items[0].pot&&!potMode?`<br>中身 ${selected.items[0].pot.length}/${selected.items[0].plus}：${selected.items[0].pot.length?selected.items[0].pot.map(itemName).join('、'):'空'}${ITEMS[selected.type].fuse?(selected.items[0].pot.length>1?'<br>割ると合成：'+itemName(Object.assign({},selected.items[0].pot[0],{plus:selected.items[0].pot.reduce((a,c)=>a+c.plus,0),seals:[...new Set(selected.items[0].pot.flatMap(sealsOf))].filter(k=>k!==ITEMS[selected.items[0].pot[0].type].seal)})):''):''}`:''}${selected.items[0].seals&&selected.items[0].seals.length?'<br>付加の印：'+selected.items[0].seals.map(k=>SEAL_NAMES[k]).join('、'):''}</div><div class="acts">`+acts.map((a,i)=>`<button data-act="${a.act}" data-type="${a.type}" class="${bagActionMode&&i===bagActionIndex?'chosen':''}">${a.label}</button>`).join('')+`</div><div class="bag-help">${bagActionMode?'← → 操作を選ぶ ／ 決定で実行 ／ Escで一覧':'↑ ↓ 選ぶ ／ 決定で操作を選ぶ ／ Escで戻る'}</div>`;
   }else if(potMode)detail.innerHTML=`<h2>${potMode.kind==='put'?'壺に入れる':'壺から出す'}</h2><div class="ds">${potMode.kind==='put'?'入れられる物がない。':'壺は空だ。'}</div><div class="acts"><button data-act="potback" data-type="">戻る</button></div>`;
   else detail.innerHTML='<h2>持ち物</h2><div class="ds">道具を拾うと、ここで使ったり装備したりできます。</div>';
 }
@@ -2625,6 +2647,11 @@ function draw() {
     ctx.fillStyle = 'rgba(0,0,0,.45)'; ctx.beginPath(); ctx.moveTo(cx, cy - r); ctx.lineTo(cx + r, cy); ctx.lineTo(cx, cy + r); ctx.lineTo(cx - r, cy); ctx.closePath(); ctx.fill();
     ctx.strokeStyle = TRAPS[tr.kind].col; ctx.lineWidth = Math.max(2, TS * 0.07); ctx.stroke();
     ctx.fillStyle = TRAPS[tr.kind].col; ctx.font = 'bold ' + Math.round(TS * 0.34) + 'px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText('!', cx, cy + 1);
+  }
+  for (const f of floorItems) if (seen[f.y][f.x] && f.item.grade) {   // 神器の光（青／金）
+    const g = GRADE[f.item.grade], cx = camX + f.x * TS + TS / 2, cy = camY + f.y * tilePitchY() + tilePitchY() - TS / 2, pu = 0.65 + 0.35 * Math.sin(now() / 260);
+    const gr = ctx.createRadialGradient(cx, cy, 0, cx, cy, TS * 0.75); gr.addColorStop(0, g.col + 'cc'); gr.addColorStop(1, g.col + '00');
+    ctx.globalAlpha = pu; ctx.fillStyle = gr; ctx.beginPath(); ctx.arc(cx, cy, TS * 0.75, 0, 7); ctx.fill(); ctx.globalAlpha = 1;
   }
   for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
   // 描画順：奥（上）から手前（下）へ。主人公より手前（下）にいる敵・味方・店主は、主人公の後に描く（主人公が手前の味方を踏んで見えないように）
