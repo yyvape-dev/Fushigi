@@ -1,7 +1,41 @@
-// Additional, opt-in location. Reuses original ruins/forest art; no gameplay RNG.
+// Opt-in generated garden art on connected geometry; no gameplay RNG.
 (function(root){
  'use strict';
  const theme={id:'overgrown-garden',name:'根絡みの古庭',filter:'none'};
+ const art={ready:false,error:null,images:{},textures:{},promise:null};
+ function load(){
+  if(art.promise)return art.promise;
+  art.promise=Promise.all(['materials','decals'].map(key=>new Promise((resolve,reject)=>{
+   const image=new Image();image.onload=()=>{art.images[key]=image;resolve();};image.onerror=()=>reject(Error('古庭の画像を取得できません: '+key));
+   image.src='fushigi-overgrown-garden-v1/source-art/garden-'+key+'.png';
+  }))).then(()=>{art.ready=true;}).catch(error=>{art.error=error.message;throw error;});
+  return art.promise;
+ }
+ // Blend only opposing texture edges, retaining the generated painted interior.
+ function texture(key){
+  if(art.textures[key])return art.textures[key];
+  const tile={soil:[0,0],top:[1,0],face:[0,1],mossSoil:[1,1]}[key],image=art.images.materials,half=image.width/2;
+  const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');
+  g.drawImage(image,tile[0]*half,tile[1]*half,half,half,0,0,256,256);
+  const src=g.getImageData(0,0,256,256),out=g.createImageData(256,256),data=src.data;
+  for(let y=0;y<256;y++)for(let x=0;x<256;x++){
+   const wx=Math.max(0,1-Math.min(x,255-x)/16)*.5,wy=Math.max(0,1-Math.min(y,255-y)/16)*.5;
+   for(let ch=0;ch<4;ch++){
+    const sample=(xx,yy)=>data[(yy*256+xx)*4+ch];
+    out.data[(y*256+x)*4+ch]=sample(x,y)*(1-wx)*(1-wy)+sample(255-x,y)*wx*(1-wy)+sample(x,255-y)*(1-wx)*wy+sample(255-x,255-y)*wx*wy;
+   }
+  }
+  g.putImageData(out,0,0);art.textures[key]=c;return c;
+ }
+ function surface(g,key,x,y,px,py,w,h,span=3){
+  const t=texture(key),part=t.width/span,sx=((x%span)+span)%span*part,sy=((y%span)+span)%span*part;
+  g.drawImage(t,sx,sy,part,part,px,py,w,h);
+ }
+ function decal(g,index,x,y,w,h,angle=0){
+  const image=art.images.decals,half=image.width/2;
+  g.save();g.translate(x,y);g.rotate(angle);
+  g.drawImage(image,(index%2)*half,Math.floor(index/2)*half,half,half,-w/2,0,w,h);g.restore();
+ }
  const hash=(x,y,seed)=>{let n=Math.imul(x+31,374761393)^Math.imul(y+17,668265263)^seed;n=Math.imul(n^(n>>>13),1274126177);return (n^(n>>>16))>>>0;};
  const plans=new WeakMap();
  function plan(room,seed){
@@ -24,36 +58,23 @@
   const p=plan(room,seed),distance=Math.hypot((x+.5-p.ax),(y+.5-p.ay));
   return {...p,room,strength:Math.max(0,1-distance/p.radius)};
  }
- const overlays=new WeakMap();
+ const overlays=new WeakMap(),DECAL_UNIT=96;
  function composition(room,p,map,rooms,roomGrid,seed){
-  const signature=seed+':'+room.role+':'+map.slice(Math.max(0,room.y-1),room.y+room.h+1).map(row=>row.slice(Math.max(0,room.x-1),room.x+room.w+1).join(',')).join(';');
+  const signature=seed+':'+room.role+':'+art.ready+':'+map.slice(Math.max(0,room.y-1),room.y+room.h+1).map(row=>row.slice(Math.max(0,room.x-1),room.x+room.w+1).join(',')).join(';');
   const prior=overlays.get(room);if(prior?.signature===signature)return prior.canvas;
-  const canvas=document.createElement('canvas'),unit=40;canvas.width=room.w*unit;canvas.height=room.h*unit;
+  const canvas=document.createElement('canvas'),unit=DECAL_UNIT;canvas.width=room.w*unit;canvas.height=room.h*unit;
   const g=canvas.getContext('2d');g.scale(unit,unit);g.translate(-room.x,-room.y);
-  const stain=g.createRadialGradient(p.ax,p.ay,0,p.ax,p.ay,p.radius);
-  stain.addColorStop(0,p.kind==='rubble'?'#89755b75':'#41613c99');stain.addColorStop(1,'#45633c00');
-  g.fillStyle=stain;g.fillRect(room.x,room.y,room.w,room.h);
   if(p.kind==='roots'){
-   const inward=[Math.PI/2,Math.PI,-Math.PI/2,0][p.side];g.lineCap='round';
-   for(let i=0;i<6;i++){
-    const angle=inward+(i-2.5)*.30,len=p.radius*(.65+(hash(i,room.y,seed)%35)/100);
-    const ex=p.ax+Math.cos(angle)*len,ey=p.ay+Math.sin(angle)*len;
-    const path=()=>{g.beginPath();g.moveTo(p.ax,p.ay);g.bezierCurveTo(p.ax+Math.cos(angle+.45)*len*.4,p.ay+Math.sin(angle+.45)*len*.4,ex-Math.cos(angle-.35)*len*.3,ey-Math.sin(angle-.35)*len*.3,ex,ey);};
-    path();g.strokeStyle='#211e1955';g.lineWidth=.14-i*.013;g.stroke();
-    path();g.strokeStyle='#796448dc';g.lineWidth=.08-i*.009;g.stroke();
-    path();g.strokeStyle='#c1a77580';g.lineWidth=.018;g.stroke();
-   }
+   // Generated root base faces the chosen wall; rotating the decal points its
+   // painted branches into the room, with no procedural replacement strokes.
+   decal(g,hash(room.x,room.y,seed)%2,p.ax,p.ay,p.radius*1.5,p.radius,[0,Math.PI/2,Math.PI,-Math.PI/2][p.side]);
   }else{
-   for(let y=room.y;y<room.y+room.h;y++)for(let x=room.x;x<room.x+room.w;x++)for(let i=0;i<7;i++){
-    const a=hash(x+i,y-i,seed),dx=.08+(a%84)/100,dy=.08+((a>>>8)%84)/100;
-    const strength=Math.max(0,1-Math.hypot(x+dx-p.ax,y+dy-p.ay)/p.radius);if(!strength)continue;
-    g.globalAlpha=strength;
-    if(p.kind==='rubble'){
-     g.fillStyle='#302d2950';g.fillRect(x+dx,y+dy+.035,.13,.075);
-     g.fillStyle=['#95866bc0','#b0a187c0','#7c8069c0'][i%3];g.beginPath();g.moveTo(x+dx,y+dy);g.lineTo(x+dx+.11,y+dy-.035);g.lineTo(x+dx+.15,y+dy+.045);g.lineTo(x+dx+.025,y+dy+.07);g.closePath();g.fill();
-    }else{
-     g.fillStyle='#65845170';g.beginPath();g.ellipse(x+dx,y+dy,.22,.12,(a%9)/10,0,Math.PI*2);g.fill();
-    }
+   for(let i=0;i<5;i++){
+    const a=hash(room.x+i,room.y-i,seed),angle=(a%628)/100,radius=p.radius*(.15+((a>>>8)%50)/100);
+    const x=p.ax+Math.cos(angle)*radius,y=p.ay+Math.sin(angle)*radius;
+    const width=p.kind==='moss'?1.6:1.05;
+    g.globalAlpha=p.kind==='moss'?.85:1;
+    decal(g,p.kind==='moss'?2:3,x,y,width,width,(a%4)*Math.PI/2);
    }
   }
   g.globalAlpha=1;g.setTransform(1,0,0,1,0,0);
@@ -61,6 +82,7 @@
   const blocked=[];for(let y=room.y;y<room.y+room.h;y++)for(let x=room.x;x<room.x+room.w;x++)if(!cell(map,rooms,roomGrid,x,y,seed))blocked.push([x,y]);
   const pixels=g.getImageData(0,0,canvas.width,canvas.height),d=pixels.data;
   for(let yy=0;yy<canvas.height;yy++)for(let xx=0;xx<canvas.width;xx++){
+   if(d[(yy*canvas.width+xx)*4+3]===0)continue;
    const wx=room.x+(xx+.5)/unit,wy=room.y+(yy+.5)/unit;
    let alpha=Math.min(1,Math.max(0,(p.radius-Math.hypot(wx-p.ax,wy-p.ay))/.45));
    for(const [bx,by]of blocked){const distance=Math.hypot(Math.max(bx-wx,0,wx-bx-1),Math.max(by-wy,0,wy-by-1));alpha=Math.min(alpha,distance/.35);}
@@ -71,41 +93,49 @@
  function decorate(g,px,py,size,h,options){
   const {map,rooms,roomGrid,x,y,seed}=options,p=cell(map,rooms,roomGrid,x,y,seed);
   if(!p)return;
-  const atlas=composition(p.room,p,map,rooms,roomGrid,seed),unit=40;
+  const atlas=composition(p.room,p,map,rooms,roomGrid,seed),unit=DECAL_UNIT;
   g.drawImage(atlas,(x-p.room.x)*unit,(y-p.room.y)*unit,unit,unit,px,py,size,h);
  }
- function wall(g,px,py,size,h,{map,x,y,seed}){
+ function wall(g,px,py,size,h,{map,x,y}){
   const f=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;
-  // Same height along each wall run. North-facing cutaways stay low.
-  const rise=size*(f(x,y-1)?.12:.32),n=hash(x>>2,y>>2,seed),variant=n%2;
+  // One elevation for the entire connected surface. Internal tile joins have
+  // neither a facade nor a border; facades exist only above exposed floor.
+  const rise=size*.24;
   g.save();
-  g.fillStyle='#514f40';g.fillRect(px,py-rise,size,h+rise);
-  g.drawImage(CaveTerrain.images['ruins:wallF'+variant],0,0,128,256,px,py-rise+h,size,rise);
-  g.fillStyle='#111a1680';g.fillRect(px,py-rise+h,size,rise);
-  g.drawImage(CaveTerrain.images['ruins:wallT'+variant],(x&1)*128,(y&1)*64,128,128,px,py-rise,size,h);
-  // Quiet moss follows a broad world-space region, not a checkerboard.
-  if((n>>>4)%3===0){g.fillStyle='#45634438';g.fillRect(px,py-rise,size,h);}
+  g.imageSmoothingEnabled=true;
+  // Fill the short vertical band under the cap too: it must stay opaque when
+  // adjoining a room corner or a freshly blasted opening.
+  surface(g,'top',x,y,px,py,size,h,4);
+  if(f(x,y+1)){
+   const face=texture('face'),part=face.width/4;
+   g.drawImage(face,(x%4)*part,32,part,64,px,py+h-rise,size,rise);
+   const shade=g.createLinearGradient(0,py+h-rise,0,py+h);shade.addColorStop(0,'#18221835');shade.addColorStop(1,'#10180e95');
+   g.fillStyle=shade;g.fillRect(px,py+h-rise,size,rise);
+  }
+  surface(g,'top',x,y,px,py-rise,size,h,4);
   // Restrict edge accents to actual exposed boundaries, never tile seams.
   g.lineWidth=Math.max(1,size*.018);g.strokeStyle='#c4b99890';g.beginPath();
   if(f(x,y-1)){g.moveTo(px,py-rise);g.lineTo(px+size,py-rise);}
   if(f(x-1,y)){g.moveTo(px,py-rise);g.lineTo(px,py-rise+h);}
   g.stroke();
-  if(f(x,y+1)){g.fillStyle='#101a1855';g.fillRect(px,py+h-Math.max(1,size*.04),size,Math.max(1,size*.04));}
+  if(f(x,y+1)){g.fillStyle='#c4b99855';g.fillRect(px,py+h-rise,size,Math.max(1,size*.016));}
   g.restore();return true;
  }
  const original=CaveTerrain.draw;
  CaveTerrain.draw=function(g,key,px,py,size,options){
   if(options.theme?.id!==theme.id)return original(g,key,px,py,size,options);
+  options={...options,x:options.x??0,y:options.y??0};
   if(!CaveTerrain.ready)return false;
+  if(!art.ready){if(!art.promise)load().then(()=>root.render?.()).catch(()=>{});return false;}
   const h=size*CaveTerrain.pitch;
   if(key==='wallF'||key==='wallT')return wall(g,px,py,size,h,options);
-  // Reuse the quietest single ruins floor; decoration supplies room-scale variety.
-  let ok;
+  let ok=true;
   if(key.startsWith('floor')){
-   // A three-cell material span removes the old one-cell wallpaper rhythm.
-   // Crop in world coordinates so every shared tile edge remains continuous.
-   g.save();g.beginPath();g.rect(px,py,size,h);g.clip();
-   ok=original(g,key,px-(options.x%3)*size,py-(options.y%3)*h,size*3,{...options,x:0,y:0,seed:1,theme:{id:'ruins'}});
+   g.save();g.imageSmoothingEnabled=true;
+   surface(g,'soil',options.x,options.y,px,py,size,h);
+   // Ground contact is derived from live collision geometry, never baked into
+   // a sprite outline; explosions immediately reveal clean floor.
+   if(options.map[options.y-1]?.[options.x]===0){const shade=g.createLinearGradient(0,py,0,py+h*.22);shade.addColorStop(0,'#1c241d60');shade.addColorStop(1,'#1c241d00');g.fillStyle=shade;g.fillRect(px,py,size,h*.22);}
    g.restore();
   }else ok=original(g,key,px,py,size,{...options,theme:{id:'ruins'}});
   if(key.startsWith('floor'))decorate(g,px,py,size,h,options);
@@ -113,5 +143,5 @@
  };
  // Existing five-location rotation stays intact; review can explicitly select it.
  DungeonGenerator.locations=[...DungeonGenerator.themes,theme];
- root.OvergrownGarden={theme,plan,cell};
+ root.OvergrownGarden={theme,plan,cell,art,load,texture};
 })(typeof window==='undefined'?globalThis:window);

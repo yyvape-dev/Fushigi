@@ -1,5 +1,6 @@
 """Run with the checkout served at 127.0.0.1:8000; write current review captures."""
 import json
+import base64
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
@@ -18,6 +19,40 @@ with sync_playwright() as p:
     page.wait_for_timeout(1000)
     assert game.evaluate("floorPlan.theme.id==='overgrown-garden' && scene==='dungeon'")
     assert game.evaluate("DungeonGenerator.themes.length===5 && DungeonGenerator.locations.length===6")
+    assert game.evaluate('OvergrownGarden.art.ready')
+    connections = game.evaluate('''() => {
+      const size=40,pitch=size*CaveTerrain.pitch,neighbors=[[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
+      const c=document.createElement('canvas');c.width=size*5;c.height=Math.ceil(pitch*5);const g=c.getContext('2d');
+      const render=(m,ctx,ox=0,oy=0,s=size)=>{
+        for(let y=0;y<m.length;y++)for(let x=0;x<m[0].length;x++){
+          CaveTerrain.draw(ctx,m[y][x]?'floor0':'wallT',ox+x*s,oy+y*s*CaveTerrain.pitch,s,{map:m,x,y,seed:17,theme:OvergrownGarden.theme});
+        }
+      };
+      for(let mask=0;mask<256;mask++){
+        const m=Array.from({length:5},()=>Array(5).fill(0));
+        neighbors.forEach(([dx,dy],i)=>{m[2+dy][2+dx]=(mask>>i)&1;});g.clearRect(0,0,c.width,c.height);render(m,g);
+        const pixels=g.getImageData(size,Math.ceil(pitch),size*3,Math.floor(pitch*3)).data;
+        for(let i=3;i<pixels.length;i+=4)if(pixels[i]!==255)throw Error('transparent wall seam at topology '+mask);
+      }
+      for(const key of ['soil','top','face']){
+        const t=OvergrownGarden.texture(key),d=t.getContext('2d').getImageData(0,0,256,256).data;
+        for(let i=0;i<256;i++)for(let ch=0;ch<4;ch++){
+          if(Math.abs(d[(i*256)*4+ch]-d[(i*256+255)*4+ch])>1||Math.abs(d[i*4+ch]-d[(255*256+i)*4+ch])>1)throw Error('material wrap seam '+key);
+        }
+      }
+      const sheet=document.createElement('canvas');sheet.width=840;sheet.height=520;const sg=sheet.getContext('2d');sg.fillStyle='#171e19';sg.fillRect(0,0,sheet.width,sheet.height);
+      const cases=[
+        ['部屋と入口',['######','#....#','#....#','#.....','#....#','######']],
+        ['L字の壁',['......','.###..','.###..','.#####','.#####','......']],
+        ['T字の壁',['......','.####.','..##..','..##..','..##..','......']],
+        ['1マス通路',['######','##.###','##.###','##...#','####.#','####.#']],
+        ['壁の角',['......','..##..','..##..','......','.####.','......']],
+        ['十字通路',['##.###','##.###','......','##.###','##.###','##.###']]
+      ];
+      cases.forEach(([name,rows],i)=>{const x=18+(i%3)*278,y=36+Math.floor(i/3)*252;sg.fillStyle='#e4deca';sg.font='16px sans-serif';sg.fillText(name,x,y-10);render(rows.map(row=>[...row].map(ch=>ch==='#'?0:1)),sg,x,y+8,40);});
+      return {topologies:256,opaque:true,periodicMaterials:3,sheet:sheet.toDataURL('image/png').split(',')[1]};
+    }''')
+    (OUT / 'wall-connections.png').write_bytes(base64.b64decode(connections.pop('sheet')))
     reports = []
     for kind in ['roots', 'moss', 'rubble']:
         result = game.evaluate('''kind => {
@@ -77,7 +112,7 @@ with sync_playwright() as p:
     assert game.evaluate("floorPlan.theme.id==='overgrown-garden'")
     assert page.evaluate('Object.fromEntries(Object.entries(localStorage))') == saved, 'real save changed'
     assert not errors, errors
-    result = {'status': 'passed', 'motifs': reports, 'portrait': True,
+    result = {'status': 'passed', 'wallConnections': connections, 'generatedArt': True, 'motifs': reports, 'portrait': True,
               'appearanceTogglePreservesGameplay': True, 'saveRestore': True,
               'liveWallChangeRendered': True, 'realStorageUnchanged': True, 'jsErrors': errors}
     (OUT / 'validation.json').write_text(json.dumps(result, ensure_ascii=False, indent=2)+'\n')

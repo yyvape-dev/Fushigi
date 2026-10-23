@@ -4,7 +4,7 @@
 body{margin:0;background:#141b18;color:#e5dfcd;font:14px system-ui,sans-serif}header{padding:10px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}h1{font-size:17px;margin:0 10px 0 0}button,select{font:inherit;color:inherit;background:#29382e;border:1px solid #6d7d65;border-radius:6px;padding:6px 10px}p{margin:0;padding:0 10px 8px;font-size:12px;color:#c0c8b6}iframe{display:block;width:100%;height:calc(100dvh - 145px);min-height:300px;border:0}#status{color:#e1cb91}button:disabled{opacity:.4}
 </style></head><body>
 <header><h1>根絡みの古庭</h1><select id="look" aria-label="景観"><option value="overgrown-garden">新しい古庭</option><option value="ruins">従来の遺跡と比較</option></select><button id="next" disabled>別の階</button><button id="room" disabled>別の部屋</button><button id="grid" disabled>マス境界</button></header>
-<p>壁際に根・苔・崩れ石がまとまり、中央と出入口は空ける。壁は高さと縁を整理。従来の遺跡と同じ地形で比較できます。</p>
+<p>専用の生成素材を使用。壁を途切れずにつなぎ、根・苔・崩れ石は壁際へ。中央と出入口を空け、従来の遺跡と同じ地形で比較できます。</p>
 <p id="status" role="status">読み込み中…</p><p>確認用の独立セーブ。本編の冒険・持ち物には影響しません。画面内でそのまま操作できます。</p>
 <iframe id="game" title="古庭のプレイ確認"></iframe>
 <script>
@@ -15,6 +15,7 @@ function apply(){run('floorPlan.theme='+($('look').value==='overgrown-garden'?'O
 frame.onload=async()=>{
  if(!frame.srcdoc)return;
  try{
+  await frame.contentWindow.OvergrownGarden.load();
   const begin=Date.now();while(!run('CaveTerrain.ready && ApprovedHero.ready && DungeonExperience.ready')){if(Date.now()-begin>30000)throw Error('素材の読み込みが完了しません');await new Promise(r=>setTimeout(r,100));}
   run(`window.gardenSeed=${seed};window.gardenRoom=0;const gardenGenerate=DungeonGenerator.generate;DungeonGenerator.generate=function(w,h,s,d){const p=gardenGenerate(w,h,window.gardenSeed,d);p.theme=OvergrownGarden.theme;return p;};enterDungeon();player.hp=player.maxhp=200;`);
   // Draw grid after the game only on request; no gameplay/visibility changes.

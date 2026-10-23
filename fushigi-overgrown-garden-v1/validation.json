@@ -1,5 +1,11 @@
 {
   "status": "passed",
+  "wallConnections": {
+    "topologies": 256,
+    "opaque": true,
+    "periodicMaterials": 3
+  },
+  "generatedArt": true,
   "motifs": [
     {
       "kind": "roots",
