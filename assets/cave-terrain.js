@@ -20,6 +20,8 @@
  // continuous picture, so large slabs run across tiles with no per-tile repeat.
  // The sheet repeats every WORLD_N cells; the stairs keep their own patch.
  const WORLD_N=3;
+ const WORLD_CAP=new Set(['limestone']),CAP_N=4;
+ state.worldCap=WORLD_CAP;
  function ground(g,px,py,size,h,id,x=0,y=0,variant=0){
   const w=art(id,'floorW');
   if(w){const sw=w.naturalWidth/WORLD_N,sh=w.naturalHeight/WORLD_N,ix=((x%WORLD_N)+WORLD_N)%WORLD_N,iy=((y%WORLD_N)+WORLD_N)%WORLD_N;
@@ -60,13 +62,20 @@
   for(let z=rise;z>=0;z--)fg.drawImage(top,0,70-z);
   fg.globalCompositeOperation='destination-out';fg.drawImage(top,0,70-rise);
   fg.globalCompositeOperation='source-in';
-  fg.drawImage(art(id,'wallF'+variant),phaseX*128,0,128,256,0,0,128,184);
+  const wf=art(id,'wallF'+variant),kf=wf.naturalWidth/256;   // sheets may be 256 or higher resolution
+  fg.drawImage(wf,phaseX*128*kf,0,128*kf,256*kf,0,0,128,184);
   // Darker vertical faces distinguish raised rock from the walkable floor.
   fg.globalCompositeOperation='source-atop';
   const shadow=fg.createLinearGradient(0,0,0,184);shadow.addColorStop(0,'rgba(0,0,0,.12)');shadow.addColorStop(1,'rgba(0,0,0,.55)');fg.fillStyle=shadow;fg.fillRect(0,0,128,184);
   g.drawImage(face,0,0);
   const cap=canvas(128,p),cg=cap.getContext('2d');
-  cg.drawImage(art(id,'wallT'+variant),phaseX*128,phaseY*64,128,128,0,0,128,p);
+  const wt=art(id,'wallT'+variant);
+  if(WORLD_CAP.has(id)){
+   // Top-down rock: each cell shows its own slice of one seamless sheet. The
+   // ceiling uses the same sheet and period, so cap and ceiling read as one mass.
+   const cw=wt.naturalWidth/CAP_N,ch=wt.naturalHeight/CAP_N,ci=((x%CAP_N)+CAP_N)%CAP_N,cj=((y%CAP_N)+CAP_N)%CAP_N;
+   cg.drawImage(wt,ci*cw,cj*ch,cw,ch,0,0,128,p);
+  }else{const kt=wt.naturalWidth/256;cg.drawImage(wt,phaseX*128*kt,phaseY*64*kt,128*kt,128*kt,0,0,128,p);}
   cg.globalCompositeOperation='destination-in';cg.drawImage(top,0,0);
   g.drawImage(cap,0,70-rise);
   if(cache.size>512)cache.clear();cache.set(k,c);return c;
