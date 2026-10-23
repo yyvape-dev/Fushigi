@@ -11,7 +11,7 @@ with sync_playwright() as p:
         page.on('pageerror',lambda e:errors.append(str(e)))
         page.on('response',lambda r:bad.append(r.url) if r.status>=400 and '/assets/vfx/' in r.url else None)
         page.goto('http://127.0.0.1:8000/fushigi-vfx-v1/game-review.html')
-        page.wait_for_function('ApprovedHero.ready&&HeroActions.ready&&DungeonExperience.ready&&MonsterSprites.ready&&Object.keys(EventVfx.state.images).length===7')
+        page.wait_for_function('ApprovedHero.ready&&HeroActions.ready&&DungeonExperience.ready&&MonsterSprites.ready&&Object.keys(EventVfx.state.images).length>=8')
         page.wait_for_load_state('networkidle')
         for kind in kinds:
             start=page.evaluate('''(kind)=>{reviewEvent(kind);const baseline=turn,blocked=EventVfx.busy();playerMove(1,0);playerAttack();openGameMenu();openBag();return {blocked,same:turn===baseline,menu:menuOpen||bagOpen,logs,events:EventVfx.state.events.map(e=>e.kind)};}''',kind)

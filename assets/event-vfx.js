@@ -7,7 +7,7 @@
  const live=()=>!state.flushing&&(state.force||(typeof Image!=='undefined'&&typeof requestAnimationFrame==='function'&&!document.hidden));
  const pending=()=>state.tasks.length>0||clock()<state.until;
  const busy=()=>!state.flushing&&(pending()||state.waiters.size>0);
- const names=['blessing','transfer','explosion','spark','ring','gas','dust'];
+ const names=['blessing','transfer','explosion','spark','ring','gas','dust','lightning'];
  async function load(redraw){await Promise.all(names.map(name=>new Promise(resolve=>{
   const im=new Image();im.onload=()=>{state.images[name]=im;resolve();};im.onerror=()=>{state.error=name;console.error('VFX画像読込失敗',name);resolve();};im.src='assets/vfx/'+name+'.png';
  })));redraw();}

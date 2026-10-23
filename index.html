@@ -152,13 +152,14 @@ canvas{display:block;touch-action:none}
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
 <script src="assets/dungeon-shop.js?v=entrances-v2"></script>
 <script src="assets/shop-security.js?v=security-v1"></script>
-<script src="assets/allies.js?v=event-vfx-v1"></script>
+<script src="assets/allies.js?v=deep-enemy-vfx-v1"></script>
 <script src="assets/monster-roster.js?v=enemy-c-v1"></script>
 <script src="assets/monster-families.js?v=enemy-c-v1"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=room-ring-v3"></script>
 <script src="assets/game-audio.js?v=audio-v1"></script>
-<script src="assets/event-vfx.js?v=generated-house-v2"></script>
+<script src="assets/event-vfx.js?v=deep-enemy-vfx-v1"></script>
+<script src="assets/enemy-vfx.js?v=deep-enemy-vfx-v1"></script>
 <script src="fushigi-monster-house-v2/monster-house-vfx.js?v=generated-v2"></script>
 <script src="assets/run-save.js?v=event-vfx-v1"></script>
 <script>
@@ -590,6 +591,7 @@ function lineTarget() {                                         // 向いてい�
 function zapTarget() { const t = lineTarget();if (!t) say('しかし、何も起こらなかった。'); return t; }
 function zapHit(e, dmg, label) {
   if(e.isShopkeeper){ShopSystem.hit(dmg,e);return;}
+  if(e.mim)EnemyVfx.emit('reveal',e);
   e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
   if (e.hp <= 0) { say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); killEnemy(e); }
   else { say(`${label}で${eT(e).name}に${dmg}ダメージ。`); afterDamage(e); }
@@ -647,6 +649,7 @@ function afterDamage(e) {
     const re = roomGrid[e.y][e.x];
     if (re >= 0 && re === roomGrid[player.y][player.x]) {
       enemyAttackPose(e);
+      EnemyVfx.emit('lightning',e,player,{duration:500});
       const [lo, hi] = eT(e).zap(floorNo), dmg = Math.max(1, rnd(lo, hi) - Math.floor(defBonus() / 2));
       fxText(player.x, player.y, '雷', '#ffe65a'); vfxShake(5, 250); say(`${eT(e).name}から雷が走った！ ${dmg}ダメージ。`);
       hurtPlayer(dmg, `雷に打たれて力尽きた…（${floorNo}階）`);
@@ -1538,6 +1541,7 @@ function strikeOne(e, again) {
   let dmg = calcDamage(e), crit = false;
   if (Math.random() < 0.2 * ringN('moroha') + (wSeal() === 'crit' ? 0.25 : 0)) { dmg *= 2; crit = true; }
   if (wSeal() === 'bat' && (eT(e).flying || e.kind === 'bat')) dmg *= 2;
+  if(e.mim)EnemyVfx.emit('reveal',e);
   e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
   fxText(e.x, e.y, '-' + dmg, crit ? '#ffe28a' : '#ffffff');
   vfxHit(e.x, e.y, e.x - player.x, e.y - player.y, '#ffe9a0', e.hp <= 0 || crit);
@@ -1712,12 +1716,13 @@ function enemyStrike(e, T, range, verb) {
   enemyAttackPose(e);
   bumpToward(e, player.x, player.y);
   if (e.x !== player.x) e.fl = player.x < e.x;
-  if (Math.random() >= ACC.e) { say(`${T.name}の${verb}！ はずれた。`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
-  if (sSeal() === 'dodge' && Math.random() < 0.25) { say(`${T.name}の${verb}！ ひらりとかわした！`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
+  if (Math.random() >= ACC.e) { EnemyVfx.attack(e,T,player,false,verb!=='攻撃'); say(`${T.name}の${verb}！ はずれた。`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
+  if (sSeal() === 'dodge' && Math.random() < 0.25) { EnemyVfx.attack(e,T,player,false,verb!=='攻撃'); say(`${T.name}の${verb}！ ひらりとかわした！`); fxText(player.x, player.y, 'MISS', '#9ad8ff'); return { dead: false, hit: false, dmg: 0 }; }
   let dmg = Math.max(1, Math.round(rnd(lo, hi) * enemyAtkK()) - defBonus()), crit = false;
   if (Math.random() < 0.1 * ringN('moroha') + 0.15 * ringN('tsukon')) { crit = true; if (sSeal() !== 'critguard') dmg *= 2; }
   if (sSeal() === 'fullhalf' && player.hp >= player.maxhp) dmg = Math.max(1, Math.ceil(dmg / 2));
   if (player.st.invinc > 0) dmg = 0;
+  EnemyVfx.attack(e,T,player,true,verb!=='攻撃');
   player.hp -= dmg;
   if (dmg > 0) { hurtT = now(); player.flash = now() + 130; vfxShake(Math.min(7, 3 + dmg * 0.5), 230); }
   fxText(player.x, player.y, '-' + dmg, crit ? '#ffe28a' : '#ff6b6b');
@@ -1729,12 +1734,12 @@ function enemyStrike(e, T, range, verb) {
 }
 // まじゅつ師の魔弾の効果（ランクで変わる：転移→混乱→くちなし→レベルダウン）
 function castFx(T) {
-  if (T.fx === 'warp') { warpPlayer(); say('魔弾で遠くへ飛ばされた！'); }
-  else if (T.fx === 'confuse') { if (addStatus('confuse', T.statusTurns || 8)) say('魔弾で混乱した！'); }
-  else if (T.fx === 'mute') { if (addStatus('mute', T.statusTurns || 10)) say('魔弾で声が出なくなった！（草も巻物も使えない）'); }
+  if (T.fx === 'warp') { const from={x:player.x,y:player.y};warpPlayer();if(from.x!==player.x||from.y!==player.y){EnemyVfx.emit('vanish',from);EnemyVfx.emit('arrival',player,player,{delay:100});}say('魔弾で遠くへ飛ばされた！'); }
+  else if (T.fx === 'confuse') { const applied=addStatus('confuse', T.statusTurns || 8);EnemyVfx.emit('curse',player,player,{status:'confuse',blocked:!applied,delay:120});if(applied)say('魔弾で混乱した！'); }
+  else if (T.fx === 'mute') { const applied=addStatus('mute', T.statusTurns || 10);EnemyVfx.emit('curse',player,player,{status:'mute',blocked:!applied,delay:120});if(applied)say('魔弾で声が出なくなった！（草も巻物も使えない）'); }
   else if (T.fx === 'drain' && player.st.invinc <= 0 && player.lv > 1) {
     player.lv--; player.exp = 0; player.maxhp = Math.max(BASE_HP, player.maxhp - 4); player.hp = Math.min(player.hp, player.maxhp);
-    fxText(player.x, player.y, 'Lv' + player.lv, '#c070ff'); say(`魔弾でレベルが${player.lv}に下がった！`);
+    EnemyVfx.emit('curse',player,player,{status:'drain',delay:120});fxText(player.x, player.y, 'Lv' + player.lv, '#c070ff'); say(`魔弾でレベルが${player.lv}に下がった！`);
   }
 }
 // すず坊主の鈴：近くの床に、その階に出る敵を呼ぶ（呼ばれた敵は経験値が半分。呼ぶ敵・化ける敵は呼ばれない）
@@ -1746,8 +1751,8 @@ function summonAround(e, T) {
     if ((dx || dy) && inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x, y) && !ShopSystem.at(x, y) && !(x === player.x && y === player.y) && los(e.x, e.y, x, y)) cells.push([x, y]);
   }
   let n = 0;
-  for (let i = 0; i < (T.summon || 1) && cells.length; i++) { const [x, y] = cells.splice(rnd(0, cells.length - 1), 1)[0]; spawnEnemy(x, y, true, rollEnemy(floorNo, true)).sum = true; n++; }
-  if (n) { fxText(e.x, e.y, '♪', '#ffd070'); say(`${T.name}が鈴を鳴らした！ 仲間が${n}体現れた！`); }
+  for (let i = 0; i < (T.summon || 1) && cells.length; i++) { const [x, y] = cells.splice(rnd(0, cells.length - 1), 1)[0];const actor=spawnEnemy(x, y, true, rollEnemy(floorNo, true));actor.sum=true;EnemyVfx.emit('arrival',actor,actor,{delay:90+i*35});n++; }
+  if (n) { EnemyVfx.emit('bell',e);fxText(e.x, e.y, '♪', '#ffd070'); say(`${T.name}が鈴を鳴らした！ 仲間が${n}体現れた！`); }
 }
 function enemyTurn() {
   const d = distMap();
@@ -1758,7 +1763,7 @@ function enemyTurn() {
     if (S.sleep > 0) { S.sleep--; continue; }                     // 眠っている敵は動かない（殴られると起きる）
     if (e.mim) {                                                  // ミミック：近づかれるまで動かない。隣に来たら正体を現す
       if (Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)) > 1) continue;
-      e.mim = false; e.aware = true; e.lost = 0; fxText(e.x, e.y, 'ミミック！', '#ff6a9a'); vfxShake(4, 220); say('アイテムだと思ったら、ミミックだった！'); continue;
+      EnemyVfx.emit('reveal',e);e.mim = false; e.aware = true; e.lost = 0; fxText(e.x, e.y, 'ミミック！', '#ff6a9a'); vfxShake(4, 220); say('アイテムだと思ったら、ミミックだった！'); continue;
     }
     if (S.cool > 0) S.cool--;
     if (S.bell > 0) S.bell--;
@@ -2571,6 +2576,7 @@ function draw() {
   }
   drawVfx(t, camX, camY);                                                          // 斬撃の弧・火花
   EventVfx.drawWorld(ctx,t,camX,camY,TS,tilePitchY(),'front');
+  if(dungeon)EnemyVfx.draw(ctx,t,camX,camY,TS,tilePitchY(),(x,y)=>!!vis[y]?.[x]);
   fx.splice(0, fx.length, ...fx.filter(f => t - f.t0 < 700));                      // 浮かぶ数字
   for (const f of fx) {
     const k = (t - f.t0) / 700;

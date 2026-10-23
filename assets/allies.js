@@ -100,8 +100,8 @@
   const ranged=T.range&&dist>1&&dist<=T.range&&aligned(e.x,e.y,a.x,a.y)&&clearRay(e,a),adj=dist===1&&(T.ai==='ghost'||geomOK(e.x,e.y,a.x-e.x,a.y-e.y));
   if(ranged||adj){e.monsterFace=[Math.sign(a.x-e.x),Math.sign(a.y-e.y)];e.monsterAttackFace=e.monsterFace.slice();e.monsterAttackStart=now();
    if(T.ai==='bomb'){enemies.splice(enemies.indexOf(e),1);hurt(Math.max(1,Math.ceil((5+Math.floor(floorNo*.8))*(T.bombScale||1))-Math.floor(stats(a).defense/2)));say(T.name+'が'+config(a).name+'のそばで爆発した！');if(distance(e,player)<=1)hurtPlayer(Math.max(1,5+floorNo-defBonus()),'爆風で力尽きた…');return true;}
-   if(Math.random()>=ACC.e){fxText(a.x,a.y,'MISS','#c7dfff');return true;}
-   const range=ranged&&T.ai==='breath'?T.breath(floorNo):T.atk(floorNo),damage=Math.max(1,rnd(...range)-stats(a).defense);hurt(damage);say(T.name+'の攻撃！ '+config(a).name+'に'+damage+'ダメージ。');
+   if(Math.random()>=ACC.e){if(typeof EnemyVfx!=='undefined')EnemyVfx.attack(e,T,a,false,ranged);fxText(a.x,a.y,'MISS','#c7dfff');return true;}
+   const range=ranged&&T.ai==='breath'?T.breath(floorNo):T.atk(floorNo),damage=Math.max(1,rnd(...range)-stats(a).defense);if(typeof EnemyVfx!=='undefined')EnemyVfx.attack(e,T,a,true,ranged);hurt(damage);say(T.name+'の攻撃！ '+config(a).name+'に'+damage+'ダメージ。');
    if(state.actor){if(T.ai==='sleepy')a.st.sleep=T.statusTurns||5;if(T.ai==='dazzle')a.st.confuse=T.statusTurns||8;if(T.ai==='venom')a.poison=Math.min(4,(a.poison||0)+1);}return true;
   }
   if(T.spd==='still'||T.spd==='slow'&&turn%2===1)return true;
