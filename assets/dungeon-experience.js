@@ -39,6 +39,22 @@
  // Ambient shade colour per location; deeper floors get a little darker.
  const SHADE={forest:[3,10,6],limestone:[6,7,14],ruins:[12,8,3],ice:[3,10,26],volcano:[26,6,2]};
  const WARM={forest:'255,205,120',limestone:'255,200,130',ruins:'255,190,100',ice:'200,225,255',volcano:'255,140,60'};
+ // Fake depth of field: the bottom (near) band of the picture is replaced by a soft
+ // copy, faded in toward the edge. Repeated half-size copies give a real blur
+ // without Canvas.filter, which iOS Safari does not support.
+ state.depthBlur=function(g,src,width,height,amount){
+  if(!amount||!src||!src.width)return;
+  const dpr=src.width/width,band=Math.round(height*.30),sy=Math.round((height-band)*dpr),sh=Math.round(band*dpr);
+  if(sh<8)return;
+  let w=src.width,h=sh,[cur,cg]=layer('blur0',w,h);cg.drawImage(src,0,sy,src.width,sh,0,0,w,h);
+  const steps=amount>1?4:3;
+  for(let i=1;i<=steps;i++){const nw=Math.max(2,Math.ceil(w/2)),nh=Math.max(2,Math.ceil(h/2)),[nx,ng]=layer('blur'+i,nw,nh);ng.imageSmoothingEnabled=true;ng.drawImage(cur,0,0,w,h,0,0,nw,nh);cur=nx;w=nw;h=nh;}
+  const [out,og]=layer('blurOut',src.width,sh);og.imageSmoothingEnabled=true;og.imageSmoothingQuality='high';og.drawImage(cur,0,0,w,h,0,0,src.width,sh);
+  og.globalCompositeOperation='destination-in';
+  const gr=og.createLinearGradient(0,0,0,sh);gr.addColorStop(0,'rgba(0,0,0,0)');gr.addColorStop(.35,'rgba(0,0,0,'+(.18*amount).toFixed(3)+')');gr.addColorStop(1,'rgba(0,0,0,'+Math.min(.95,.8*amount).toFixed(3)+')');
+  og.fillStyle=gr;og.fillRect(0,0,src.width,sh);og.globalCompositeOperation='source-over';
+  g.save();g.setTransform(1,0,0,1,0,0);g.drawImage(out,0,sy);g.restore();
+ };
  state.fog=function(g,{width,height,size,pitch,camX,camY,player,rooms,roomIndex,roomGrid,map,seen,theme,terrain,revision=0,seed=0,mood=0,depth=1}){
   const m=MOOD[mood]||MOOD[0],tid=theme==='overgrown-garden'?'ruins':ids.includes(theme)?theme:'limestone';
   const warm=()=>{
