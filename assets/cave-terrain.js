@@ -92,8 +92,13 @@
   const k=state.shadeK;if(!k)return;
   const wall=(dx,dy)=>map[y+dy]?.[x+dx]===undefined||map[y+dy][x+dx]===0;
   const s=wall(0,1);   // only the bottom edge: shade on the other sides floated off the rock edges
-  const band=(x0,y0,x1,y1,rx,ry,rw,rh,a)=>{const gr=g.createLinearGradient(x0,y0,x1,y1);gr.addColorStop(0,'rgba(6,4,3,'+(a*k).toFixed(3)+')');gr.addColorStop(.45,'rgba(6,4,3,'+(a*k*.42).toFixed(3)+')');gr.addColorStop(1,'rgba(6,4,3,0)');g.fillStyle=gr;g.fillRect(rx,ry,rw,rh);};
-  if(s){const d=h*.26;band(px,py+h,px,py+h-d,px,py+h-d,size,d,.22);}
+  if(s){
+   // The wall below rises over the lower part of this cell: put the shade just above
+   // the top edge of that rock (not under it), fading upward onto the visible floor.
+   const rise=size*HEIGHTS[state.heightPref][0]/128,edge=py+h-rise,d=h*.34;
+   if(edge>py+2){const top=Math.max(py,edge-d),gr=g.createLinearGradient(0,top,0,edge);gr.addColorStop(0,'rgba(6,4,3,0)');gr.addColorStop(.55,'rgba(6,4,3,'+(.16*k).toFixed(3)+')');gr.addColorStop(1,'rgba(6,4,3,'+(.34*k).toFixed(3)+')');g.fillStyle=gr;g.fillRect(px,top,size,edge-top);
+    g.fillStyle='rgba(6,4,3,'+(.34*k).toFixed(3)+')';g.fillRect(px,edge,size,py+h-edge);}   // hidden under the rock except where its outline is scalloped
+  }
  }
  state.draw=function(g,key,px,py,size,{map,x=0,y=0,theme,seed=0}){if(!state.ready)return false;const id=ids.includes(theme?.id)?theme.id:'limestone',h=size*PITCH;g.imageSmoothingEnabled=true;
   if(key.startsWith('floor')){const hash=(((x*73856093)^(y*19349663)^seed)>>>0),v=hash%31===0?3:hash%3;ground(g,px,py,size,h,id,x,y,v);edgeShade(g,map,x,y,px,py,size,h);return true;}
