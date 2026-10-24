@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Fushigi 3D実験</title>
+<style>
+ html,body{margin:0;height:100%;background:#05060a;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none;font-family:system-ui,sans-serif;color:#e8e2d0}
+ canvas{display:block;width:100%;height:100%}
+ #hud{position:fixed;left:8px;top:calc(8px + env(safe-area-inset-top));display:flex;flex-wrap:wrap;gap:6px;max-width:calc(100% - 16px)}
+ #hud button,#pad button{background:rgba(20,18,28,.72);color:#f1e7c6;border:1px solid rgba(255,230,160,.35);border-radius:10px;font-size:14px;padding:8px 10px;min-height:38px}
+ #hud button:active,#pad button:active{background:rgba(120,90,30,.8)}
+ #info{position:fixed;left:8px;top:calc(56px + env(safe-area-inset-top));max-width:70%;font-size:12px;opacity:.8;line-height:1.5;text-shadow:0 1px 2px #000;pointer-events:none}
+ #pad{position:fixed;right:calc(10px + env(safe-area-inset-right));bottom:calc(14px + env(safe-area-inset-bottom));display:grid;grid-template-columns:repeat(3,62px);grid-template-rows:repeat(3,62px);gap:6px}
+ #pad button{font-size:22px;padding:0;min-height:0;border-radius:50%}
+ #pad .c{visibility:hidden}
+ #msg{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);font-size:22px;letter-spacing:.1em;text-shadow:0 2px 6px #000;opacity:0;transition:opacity .4s;pointer-events:none}
+ #err{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:24px;text-align:center;background:#05060a;font-size:15px;line-height:1.7}
+</style>
+</head>
+<body>
+<div id="hud">
+ <button id="bNew">新しい階</button>
+ <button id="bTheme">地形</button>
+ <button id="bCam">カメラ</button>
+ <button id="bShadow">影</button>
+</div>
+<div id="info"></div>
+<div id="pad"></div>
+<div id="msg"></div>
+<div id="err"></div>
+
+<script src="assets/dungeon-generator.js"></script>
+<script type="module">
+import * as THREE from './assets/vendor/three.module.min.js';
+
+const W=56,H=32;                       // 本編と同じマップ寸法
+const WALL_H=0.95;                     // 壁の高さ（タイル=1）
+const STEP_SEC=0.15;                   // 1マス歩く時間
+const THEME_ORDER=['forest','limestone','ruins','ice','volcano'];
+const DIRS={E:[1,0],W:[-1,0],S:[0,1],N:[0,-1],SE:[1,1],SW:[-1,1],NE:[1,-1],NW:[-1,-1]};
+const CAMS=[{name:'45°',tilt:45},{name:'55°',tilt:55},{name:'65°',tilt:65}];
+const VIEW_TILES=9;                    // 画面の横幅に入れたいマス数
+
+const $=id=>document.getElementById(id);
+function fail(t){const e=$('err');e.style.display='flex';e.textContent=t;}
+
+let renderer;
+try{
+ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});
+}catch(e){fail('この端末ではWebGLを開始できませんでした。');throw e;}
+renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+renderer.shadowMap.enabled=true;
+renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+document.body.prepend(renderer.domElement);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x05060a);
+scene.fog=new THREE.Fog(0x05060a,12,26);
+const camera=new THREE.PerspectiveCamera(40,1,0.1,80);
+
+const ambient=new THREE.AmbientLight(0x7a8098,1.1);
+scene.add(ambient);
+const torch=new THREE.PointLight(0xffd9a0,90,16,2);
+torch.castShadow=true;
+torch.shadow.mapSize.set(512,512);
+torch.shadow.bias=-0.002;
+torch.shadow.camera.near=0.3;
+scene.add(torch);
+
+// ---------- 状態 ----------
+const state={
+ depth:1,themeIdx:0,camIdx:1,shadows:true,seed:0,
+ map:null,rooms:null,stairs:null,
+ hero:{x:0,y:0,fx:0,fy:0,tx:0,ty:0,moving:false,t:0,dir:'S',frame:0},
+ held:new Set(),
+ group:null
+};
+
+// ---------- テクスチャ ----------
+const loader=new THREE.TextureLoader();
+const texCache=new Map();
+function tex(url,{repeat=true}={}){
+ if(texCache.has(url))return texCache.get(url);
+ const t=loader.load(url,undefined,undefined,()=>console.warn('load failed',url));
+ t.colorSpace=THREE.SRGBColorSpace;
+ t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());
+ t.wrapS=t.wrapT=repeat?THREE.RepeatWrapping:THREE.ClampToEdgeWrapping;
+ texCache.set(url,t);return t;
+}
+function themeId(){return THEME_ORDER[state.themeIdx%THEME_ORDER.length];}
+function themeUrl(name){return `assets/dungeon/locations-v1/${themeId()}/${name}.webp`;}
+
+// ---------- 地形 ----------
+function buildLevel(){
+ if(state.group){scene.remove(state.group);state.group.traverse(o=>{if(o.isInstancedMesh||o.isMesh){o.geometry.dispose();}});}
+ const g=new THREE.Group();state.group=g;scene.add(g);
+
+ const seed=(Math.random()*0xffffffff)>>>0;state.seed=seed;
+ const plan=window.DungeonGenerator.generate(W,H,seed,state.depth);
+ state.map=plan.map;state.rooms=plan.rooms;
+ const map=plan.map;
+ const floor=(x,y)=>x>=0&&y>=0&&x<W&&y<H&&map[y][x];
+
+ // 床：4種のテクスチャを座標ハッシュで振り分ける
+ const floorGeo=new THREE.PlaneGeometry(1,1);floorGeo.rotateX(-Math.PI/2);
+ const fCells=[[],[],[],[]];
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++)if(map[y][x]){
+  const hsh=((x*73856093)^(y*19349663))>>>0;fCells[hsh%4].push([x,y]);
+ }
+ const dummy=new THREE.Object3D();
+ fCells.forEach((cells,i)=>{
+  if(!cells.length)return;
+  const mat=new THREE.MeshLambertMaterial({map:tex(themeUrl('floor'+i))});
+  const im=new THREE.InstancedMesh(floorGeo,mat,cells.length);
+  cells.forEach(([x,y],k)=>{dummy.position.set(x,0,y);dummy.rotation.set(0,0,0);dummy.updateMatrix();im.setMatrixAt(k,dummy.matrix);});
+  im.receiveShadow=true;g.add(im);
+ });
+
+ // 壁：床に隣接する（8近傍）壁マスだけ箱にする。側面=wallF、上面=wallT
+ const wCells=[[],[]];
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){
+  if(map[y][x])continue;
+  let adj=false;
+  for(let dy=-1;dy<=1&&!adj;dy++)for(let dx=-1;dx<=1;dx++)if((dx||dy)&&floor(x+dx,y+dy)){adj=true;break;}
+  if(adj)wCells[((x*31+y*17)>>>0)%2].push([x,y]);
+ }
+ const boxGeo=new THREE.BoxGeometry(1,WALL_H,1);
+ wCells.forEach((cells,i)=>{
+  if(!cells.length)return;
+  const side=new THREE.MeshLambertMaterial({map:tex(themeUrl('wallF'+i))});
+  const top=new THREE.MeshLambertMaterial({map:tex(themeUrl('wallT'+i))});
+  const mats=[side,side,top,top,side,side];
+  const im=new THREE.InstancedMesh(boxGeo,mats,cells.length);
+  cells.forEach(([x,y],k)=>{dummy.position.set(x,WALL_H/2,y);dummy.rotation.set(0,0,0);dummy.updateMatrix();im.setMatrixAt(k,dummy.matrix);});
+  im.castShadow=true;im.receiveShadow=true;g.add(im);
+ });
+
+ // 階段：最後の部屋の中心
+ const sr=plan.rooms[plan.rooms.length-1];
+ state.stairs={x:sr.cx,y:sr.cy};
+ const stMat=new THREE.MeshLambertMaterial({map:tex(themeUrl('stairs'))});
+ const stairs=new THREE.Mesh(floorGeo,stMat);
+ stairs.position.set(sr.cx,0.01,sr.cy);stairs.receiveShadow=true;g.add(stairs);
+ const glow=new THREE.PointLight(0xffc060,10,5,2);glow.position.set(sr.cx,0.8,sr.cy);g.add(glow);
+
+ // 主人公の初期位置：最初の部屋の中心
+ const r0=plan.rooms[0],h=state.hero;
+ h.x=h.fx=h.tx=r0.cx;h.y=h.fy=h.ty=r0.cy;h.moving=false;h.dir='S';
+ showMsg(`${state.depth}F　${plan.theme?plan.theme.name:''}`);
+ updateInfo();
+}
+
+// ---------- 主人公（既存の8方向コマ絵を板で立てる） ----------
+const heroTex={};
+function heroSheet(dir){
+ if(heroTex[dir])return heroTex[dir];
+ const t=loader.load(`assets/hero-actions-v1/${dir}-walk.webp`);
+ t.colorSpace=THREE.SRGBColorSpace;t.anisotropy=4;
+ t.repeat.set(0.25,1);t.offset.set(0,0);
+ return heroTex[dir]=t;
+}
+const HERO_SIZE=2.5, FOOT=(256-231)/256;   // 足元は絵の下端から約10%上
+const heroMat=new THREE.MeshBasicMaterial({map:heroSheet('S'),transparent:true,alphaTest:0.4,side:THREE.DoubleSide});
+const heroMesh=new THREE.Mesh(new THREE.PlaneGeometry(HERO_SIZE,HERO_SIZE),heroMat);
+heroMesh.renderOrder=2;
+scene.add(heroMesh);
+// 足元の落ち影（ビルボードは影を落とさないため丸影を別に置く）
+const blobTex=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');
+ const gr=x.createRadialGradient(32,32,2,32,32,30);gr.addColorStop(0,'rgba(0,0,0,.65)');gr.addColorStop(1,'rgba(0,0,0,0)');
+ x.fillStyle=gr;x.fillRect(0,0,64,64);const t=new THREE.CanvasTexture(c);return t;})();
+const blob=new THREE.Mesh(new THREE.PlaneGeometry(1.0,1.0),new THREE.MeshBasicMaterial({map:blobTex,transparent:true,depthWrite:false}));
+blob.rotation.x=-Math.PI/2;blob.position.y=0.02;scene.add(blob);
+
+// ---------- 入力 ----------
+const KEYMAP={ArrowRight:'E',ArrowLeft:'W',ArrowDown:'S',ArrowUp:'N',d:'E',a:'W',s:'S',w:'N',e:'NE',q:'NW',c:'SE',z:'SW'};
+addEventListener('keydown',e=>{const d=KEYMAP[e.key];if(d){state.held.add(d);e.preventDefault();}});
+addEventListener('keyup',e=>{const d=KEYMAP[e.key];if(d)state.held.delete(d);});
+const PAD=[['NW','↖'],['N','↑'],['NE','↗'],['W','←'],['','' ],['E','→'],['SW','↙'],['S','↓'],['SE','↘']];
+for(const [d,label] of PAD){
+ const b=document.createElement('button');b.textContent=label;
+ if(!d)b.className='c';else{
+  const on=e=>{e.preventDefault();state.held.add(d);};
+  const off=e=>{e.preventDefault();state.held.delete(d);};
+  b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);
+  b.addEventListener('pointerleave',off);b.addEventListener('pointercancel',off);
+ }
+ $('pad').appendChild(b);
+}
+function heldVector(){
+ // 押されている方向を合成して8方向のどれかにする
+ let dx=0,dy=0;for(const d of state.held){dx+=DIRS[d][0];dy+=DIRS[d][1];}
+ dx=Math.sign(dx);dy=Math.sign(dy);
+ if(!dx&&!dy)return null;
+ for(const k in DIRS)if(DIRS[k][0]===dx&&DIRS[k][1]===dy)return [k,dx,dy];
+ return null;
+}
+const walkable=(x,y)=>x>=0&&y>=0&&x<W&&y<H&&state.map[y][x];
+
+function tryMove(){
+ const v=heldVector();if(!v)return;
+ const [k,dx,dy]=v,h=state.hero;
+ h.dir=k;
+ const nx=h.x+dx,ny=h.y+dy;
+ if(!walkable(nx,ny))return;
+ if(dx&&dy&&(!walkable(h.x+dx,h.y)||!walkable(h.x,h.y+dy)))return; // 斜めは壁の角をすり抜けない
+ h.fx=h.x;h.fy=h.y;h.tx=nx;h.ty=ny;h.moving=true;h.t=0;
+}
+
+// ---------- UI ----------
+let msgTimer=0;
+function showMsg(t){const m=$('msg');m.textContent=t;m.style.opacity=1;clearTimeout(msgTimer);msgTimer=setTimeout(()=>m.style.opacity=0,1600);}
+function updateInfo(){
+ $('info').innerHTML=`${state.depth}F ／ 地形：${themeId()} ／ カメラ：${CAMS[state.camIdx].name} ／ 影：${state.shadows?'あり':'なし'}<br>操作：矢印キー・WASD（斜め QEZC）／右下パッド　階段（光る床）で次の階`;
+}
+$('bNew').onclick=()=>{buildLevel();};
+$('bTheme').onclick=()=>{state.themeIdx++;buildLevel();};
+$('bCam').onclick=()=>{state.camIdx=(state.camIdx+1)%CAMS.length;updateInfo();};
+$('bShadow').onclick=()=>{state.shadows=!state.shadows;torch.castShadow=state.shadows;scene.traverse(o=>{if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.needsUpdate=true);});updateInfo();};
+function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+addEventListener('resize',resize);resize();
+
+// ---------- ループ ----------
+const cam={x:0,y:0};let last=performance.now(),fpsAcc=0,fpsN=0,fps=0;
+function frame(now){
+ const dt=Math.min(0.05,(now-last)/1000);last=now;
+ const h=state.hero;
+ if(!h.moving)tryMove();
+ let px=h.x,py=h.y;
+ if(h.moving){
+  h.t+=dt/STEP_SEC;
+  const k=Math.min(1,h.t);
+  px=h.fx+(h.tx-h.fx)*k;py=h.fy+(h.ty-h.fy)*k;
+  h.frame=Math.floor(k*4)%4;
+  if(h.t>=1){
+   h.x=h.tx;h.y=h.ty;h.moving=false;h.frame=0;px=h.x;py=h.y;
+   if(h.x===state.stairs.x&&h.y===state.stairs.y){state.depth++;state.themeIdx=(state.themeIdx+1)%THEME_ORDER.length;buildLevel();}
+   else tryMove();
+  }
+ }
+ // 向きとコマ
+ const t=heroSheet(h.dir);t.offset.x=h.frame*0.25;heroMat.map=t;
+ heroMesh.position.set(px,HERO_SIZE/2-FOOT*HERO_SIZE+0.02,py);
+ blob.position.x=px;blob.position.z=py;
+ // カメラ：斜め上から追従
+ const c=CAMS[state.camIdx],tilt=c.tilt*Math.PI/180;
+ const halfW=Math.tan(camera.fov*Math.PI/360)*camera.aspect;
+ c.dist=Math.max(9,Math.min(24,VIEW_TILES/(2*halfW)));
+ cam.x+=(px-cam.x)*Math.min(1,dt*7);cam.y+=(py-cam.y)*Math.min(1,dt*7);
+ camera.position.set(cam.x,Math.sin(tilt)*c.dist+0.4,cam.y+Math.cos(tilt)*c.dist);
+ camera.lookAt(cam.x,0.35,cam.y);
+ scene.fog.near=c.dist-1;scene.fog.far=c.dist+8;
+ // ビルボード：カメラの傾きに合わせて板を起こす（縦は立て気味）
+ heroMesh.rotation.set(-(tilt*0.35),0,0);
+ torch.position.set(px,1.9,py+0.2);
+ renderer.render(scene,camera);
+ fpsAcc+=dt;fpsN++;if(fpsAcc>1){fps=Math.round(fpsN/fpsAcc);fpsAcc=0;fpsN=0;$('info').dataset.fps=fps;
+  $('info').innerHTML=$('info').innerHTML.replace(/ ／ [0-9]+fps/,'')+` ／ ${fps}fps`;}
+ requestAnimationFrame(frame);
+}
+buildLevel();
+requestAnimationFrame(frame);
+window.__fushigi3d=state;   // 検証用
+</script>
+</body>
+</html>
