@@ -169,6 +169,7 @@ node tests/harness.js index.html tests/test_mvp.js      # ALL OK が出れば成
 - 絵の入れ方：ゲーム内の取り込み機能は無い。`assets/<キー>.png` を置く（https のときのみ自動読込）。シートの切り出しは `node tests/tools/sheets.js`。
 - スマホ運用のため、**絵のプロンプトは毎回チャットに本文を貼る**（ユーザー明言）。
 - 木の棒・大斧（旧画像、512px高）は、承認済み武器（256px高）と同じ0.66倍で描くと約2倍に見える。`assets/approved-hero.js` の旧装備分岐で `0.66*256/画像高` に補正済み（握り位置は元画像の座標のまま）。旧PR #9は競合したため、同じ修正を最新mainへ入れ直した。
+- **自動マージ（2026-10-24）**：`.github/workflows/auto-merge.yml`。同じリポジトリの `feat/` `fix/` `docs/` `experiment/` `ci/` のPRで、`tests/run_all.sh`（全 `tests/test_*.js`、各最大3回再試行、約3分）が通れば自動でマージする。**ドラフトPRは対象外**（PRは非ドラフトで作る）。止めるには：PRをドラフトにする／接頭辞を変える／ワークフローを削除。手動実行：Actions →「auto-merge」→ Run workflow に PR番号。**未確認**：標準トークンのマージで公開ページが更新されるか（更新されなければ、リポジトリの Secrets に `AUTOMERGE_TOKEN` を登録）。テスト合格は見た目を保証しない（重大な変更はPRを見てからマージする運用も併用）。
 
 ## 7. 再開用の一言（新しい会話に貼る）
 
