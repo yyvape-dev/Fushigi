@@ -13,7 +13,7 @@
  for(const f of T.facilities)assert(reached.has(f.x+','+f.y),'facility is reachable: '+f.id);
  assert(reached.has(T.gate.x+','+T.gate.y),'dungeon gate reachable');
  assert(T.layout.items.filter(o=>o.private).every(o=>solid(map[o.y-1][o.x])),'private homes remain closed');
- assert(solid(map[26][30]),'fountain blocks walking');
+ assert(solid(map[CastleTown.layout.byId('fountain').y-1][CastleTown.layout.byId('fountain').x]),'fountain blocks walking');
  const roaming=T.state.npcs.filter(n=>!n.fixed);
  assert(roaming.length>=10&&roaming.filter(n=>n.mercenary).length===3,'residents and three mercenaries populate town');
  assert(roaming.every(n=>!solid(map[n.y][n.x])),'all roaming actors start on streets');
@@ -46,9 +46,9 @@
  assert(wh.length===1&&inv.length===0,'new deposit counter retains storage behavior');
  bank=0;gold=500;bankMove(true);assert(bank===500&&gold===0,'deposit shop retains money storage');
  T.enterInn();T.rest();assert(T.state.waking&&player.x===T.bed.x&&player.hp===player.maxhp,'rest returns to the bed');
- T.leaveInn();player.x=31;player.y=30;saveGame();const saved=JSON.parse(__store[SAVE_KEY]);
- assert(saved.town.area==='outside'&&saved.town.x===31,'save includes town area and position');
- T.restore(saved.town);toTown(false);assert(T.state.area==='outside'&&player.x===31&&player.y===30,'reload restores street position');
+ T.leaveInn();player.x=T.door.x;player.y=T.door.y+1;saveGame();const saved=JSON.parse(__store[SAVE_KEY]);
+ assert(saved.town.area==='outside'&&saved.town.x===T.door.x,'save includes town area and position');
+ T.restore(saved.town);toTown(false);assert(T.state.area==='outside'&&player.x===T.door.x&&player.y===T.door.y+1,'reload restores street position');
  inv=[mkItem('potion')];gold=700;enterDungeon();enemies=[];floorItems=[];clearDungeon();
  assert(scene==='town'&&T.state.area==='inn'&&T.state.waking&&inv.length===1&&gold===700,'clear keeps loot and returns to inn bed');
  enterDungeon();enemies=[];floorItems=[];dead=true;afterDeath();
