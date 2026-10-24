@@ -1,0 +1,125 @@
+{
+  "browser": "Chromium",
+  "checks": [
+    "PCM finite/non-silent/headroom",
+    "real Web Audio output for all 16 effects",
+    "8 voice cap",
+    "mute",
+    "zero volume",
+    "stop requires new input"
+  ],
+  "effects": [
+    {
+      "key": "swing",
+      "seconds": 0.18,
+      "peak": 0.29186883568763733,
+      "rms": 0.1073091838167857,
+      "audible": true
+    },
+    {
+      "key": "hit",
+      "seconds": 0.18,
+      "peak": 0.4810762107372284,
+      "rms": 0.09404499385650732,
+      "audible": true
+    },
+    {
+      "key": "critical",
+      "seconds": 0.32,
+      "peak": 0.5194225907325745,
+      "rms": 0.075343036444964,
+      "audible": true
+    },
+    {
+      "key": "hurt",
+      "seconds": 0.25,
+      "peak": 0.4527702331542969,
+      "rms": 0.07923327203893467,
+      "audible": true
+    },
+    {
+      "key": "pickup",
+      "seconds": 0.22,
+      "peak": 0.24910372495651245,
+      "rms": 0.0676731254091131,
+      "audible": true
+    },
+    {
+      "key": "coin",
+      "seconds": 0.32,
+      "peak": 0.24686481058597565,
+      "rms": 0.056079708959263536,
+      "audible": true
+    },
+    {
+      "key": "throw",
+      "seconds": 0.24,
+      "peak": 0.2037048488855362,
+      "rms": 0.07361372053976506,
+      "audible": true
+    },
+    {
+      "key": "potbreak",
+      "seconds": 0.48,
+      "peak": 0.37405192852020264,
+      "rms": 0.05816154891675213,
+      "audible": true
+    },
+    {
+      "key": "trap",
+      "seconds": 0.12,
+      "peak": 0.3623747229576111,
+      "rms": 0.05681781856657342,
+      "audible": true
+    },
+    {
+      "key": "trap-mine",
+      "seconds": 0.65,
+      "peak": 0.5228715538978577,
+      "rms": 0.08304287352097559,
+      "audible": true
+    },
+    {
+      "key": "trap-gas",
+      "seconds": 0.65,
+      "peak": 0.11995578557252884,
+      "rms": 0.048393785578479384,
+      "audible": true
+    },
+    {
+      "key": "trap-pit",
+      "seconds": 0.65,
+      "peak": 0.2821389138698578,
+      "rms": 0.12759028528595598,
+      "audible": true
+    },
+    {
+      "key": "trap-warp",
+      "seconds": 0.65,
+      "peak": 0.24666611850261688,
+      "rms": 0.08993612899243572,
+      "audible": true
+    },
+    {
+      "key": "trap-hungry",
+      "seconds": 0.45,
+      "peak": 0.24695445597171783,
+      "rms": 0.1262739371031272,
+      "audible": true
+    },
+    {
+      "key": "trap-summon",
+      "seconds": 0.7,
+      "peak": 0.3268287181854248,
+      "rms": 0.06138666290308531,
+      "audible": true
+    },
+    {
+      "key": "forge",
+      "seconds": 1.05,
+      "peak": 0.4120369851589203,
+      "rms": 0.049935202591844675,
+      "audible": true
+    }
+  ]
+}
