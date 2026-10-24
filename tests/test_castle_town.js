@@ -12,8 +12,8 @@
  let reached=reach(player.x,player.y);
  for(const f of T.facilities)assert(reached.has(f.x+','+f.y),'facility is reachable: '+f.id);
  assert(reached.has(T.gate.x+','+T.gate.y),'dungeon gate reachable');
- assert(solid(map[10][15])&&solid(map[33][18])&&solid(map[17][4]),'private homes remain closed');
- assert(solid(map[24][31]),'fountain blocks walking');
+ assert(T.layout.items.filter(o=>o.private).every(o=>solid(map[o.y-1][o.x])),'private homes remain closed');
+ assert(solid(map[26][30]),'fountain blocks walking');
  const roaming=T.state.npcs.filter(n=>!n.fixed);
  assert(roaming.length>=10&&roaming.filter(n=>n.mercenary).length===3,'residents and three mercenaries populate town');
  assert(roaming.every(n=>!solid(map[n.y][n.x])),'all roaming actors start on streets');
@@ -38,10 +38,10 @@
  const standing=T.state.npcs.map(n=>[n.x,n.y]);for(let i=0;i<20;i++)T.animate(50,300000+i*300);
  assert(T.state.npcs.every((n,i)=>n.x===standing[i][0]&&n.y===standing[i][1]),'NPC motion pauses for dialog');
  T.close(false);
- const oldgold=gold;player.x=48;player.y=26;T.context().fn();
+ const deposit=T.facilities.find(f=>f.id==='deposit');player.x=deposit.x;player.y=deposit.y;T.context().fn();
  assert(whOpen&&whSide==='bag','deposit counter opens storage');closeWh();
  T.context().fn();assert(whSegEl.children.filter(e=>['shop','sell'].includes(e.dataset.side)).every(e=>e.hidden),'deposit counter does not offer buying or selling');closeWh();
- player.x=39;player.y=21;T.context().fn();assert(whSide==='shop'&&$('bankIn').hidden,'market sells goods without deposit controls');closeWh();
+ const market=T.facilities.find(f=>f.id==='market');player.x=market.x;player.y=market.y;T.context().fn();assert(whSide==='shop'&&$('bankIn').hidden,'market sells goods without deposit controls');closeWh();
  wh=[];inv=[mkItem('potion')];whSide='bag';whTransfer(ikey(inv[0]),false);
  assert(wh.length===1&&inv.length===0,'new deposit counter retains storage behavior');
  bank=0;gold=500;bankMove(true);assert(bank===500&&gold===0,'deposit shop retains money storage');

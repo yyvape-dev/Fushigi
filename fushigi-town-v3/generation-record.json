@@ -1,0 +1,9 @@
+{
+  "reference": "../fushigi-town-v2/source-art/approved-mock.png",
+  "generator": "image_gen",
+  "source": "source-art/modular-town.png",
+  "registration": "art-registration.json",
+  "npcMotion": "existing shopkeeper and companion sprites, unchanged",
+  "layout": "../assets/castle-town-layout.js",
+  "sourceSha256": "c363df775b09264ac632f7795ba0b648b1f80a9ff194e93ed4fc0c467636aa72"
+}

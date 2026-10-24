@@ -174,8 +174,10 @@ canvas{display:block;touch-action:none}
 <script src="assets/monster-combat.js?v=blast-evolution-v1"></script>
 <script src="fushigi-monster-house-v2/monster-house-vfx.js?v=generated-v2"></script>
 <script src="assets/run-save.js?v=event-vfx-v1"></script>
-<link rel="stylesheet" href="assets/castle-town.css?v=castle-v1">
-<script src="assets/castle-town.js?v=castle-v1"></script>
+<link rel="stylesheet" href="assets/castle-town.css?v=town-grid-v3">
+<script src="assets/town-v3/art.js?v=town-grid-v3"></script>
+<script src="assets/castle-town-layout.js?v=town-grid-v3"></script>
+<script src="assets/castle-town-v3.js?v=town-grid-v3"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -1336,6 +1338,7 @@ function toTown(fromDungeon) {
   seen = Array.from({ length: MH }, () => new Array(MW).fill(true));
   snapVis(); updateVis();
   closeBag(); closeWh();
+  resize();
   if (fromDungeon || !shopStock.length) rollShop();
   startFade(); saveGame();
 }
@@ -1350,6 +1353,7 @@ function enterDungeon() {
   saveGame(true);                                               // 出発時点の持ち物を保存
   newFloor();
   say(`${DUNGEONS[dungeonId].name}に入った。`);
+  resize();
   startFade(); render();
 }
 function clearDungeon() {
@@ -1374,7 +1378,7 @@ function boot() {
   const giftMsg = !gift;
   if (!gift) { for (const t of ['stick', 'sword', 'axe', 'woodshield', 'ironshield']) wh.push(mkItem(t, 0)); gift = true; }   // 動作確認用：武器と盾を倉庫へ（1回だけ）
   const resumed = RunSave.restore();                             // 冒険の途中で閉じていたら、その場面から再開
-  if (resumed === true) { say(`${DUNGEONS[dungeonId].name} ${floorNo}階から再開した。`); snapVis(); updateVis(); startFade(); render(); return; }
+  if (resumed === true) { say(`${DUNGEONS[dungeonId].name} ${floorNo}階から再開した。`); snapVis(); updateVis(); resize(); startFade(); render(); return; }
   toTown(resumed === 'dead');
   if (resumed === 'dead') say('前回の冒険は力尽きていた…持ち物と所持金を失った。（倉庫・預金は無事）');
   say(CastleTown.state.waking?'赤いマント亭で目を覚ました。宿を出て、城下町で冒険の準備をしよう。':'城下町に戻ってきた。冒険の準備をしよう。');
@@ -2402,7 +2406,8 @@ function resize() {
   DPR = window.devicePixelRatio || 1;
   const auto = isLand() ? BASE * Math.max(3, Math.min(6, Math.round(innerHeight / 6.5 / BASE)))   // 横持ち：縦に約6.5マス
                         : BASE * Math.max(2, Math.min(3, Math.round(innerWidth / 11 / BASE)));
-  TS = [auto, 32, 48, 64, 80, 96][zoomPref];
+  const townAuto=scene==='town'&&isLand()?BASE*Math.max(2,Math.min(4,Math.round(innerHeight/9/BASE))):auto;
+  TS = [townAuto, 32, 48, 64, 80, 96][zoomPref] * (scene==='town'?CastleTown.tileScale():1);
   cv.width = innerWidth * DPR; cv.height = innerHeight * DPR;
   cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -2590,7 +2595,7 @@ function drawEntity(key, e, t, camX, camY) {
   const newMonster = typeof MonsterSprites !== 'undefined' && MonsterSprites.ready && MonsterSprites.has(e.kind);
   const hop = key !== 'player' && !newMonster && d > 0.001 && d <= 1.5 ? Math.sin(Math.min(1, d) * Math.PI) * 0.1 : 0;     // 新敵は描いた歩行コマを使用
   ctx.fillStyle = 'rgba(0,0,0,.35)';
-  const ck = CHAR_K[charPref];
+  const ck = CHAR_K[charPref] * (scene==='town'?CastleTown.characterScale():1);
   ctx.beginPath(); ctx.ellipse(px + TS / 2, py + tilePitchY() * 0.9, TS * 0.32 * Math.min(ck, 1.25), TS * 0.1 * Math.min(ck, 1.25), 0, 0, Math.PI * 2); ctx.fill();
   ctx.save();
   if (e.fl && key !== 'player' && !newMonster) { ctx.translate(px + TS, Math.round(py - hop * TS)); ctx.scale(-1, 1); } else ctx.translate(px, Math.round(py - hop * TS));
@@ -2660,6 +2665,7 @@ function shadeTile(key, x, y, px, py, m) {
 // 町の一枚絵：マップ全体(MW×MH)に合わせて描く。縦横比が違えば中央を切り出す
 function drawTownArt(camX, camY) {
   if(CastleTown.draw(ctx,camX,camY))return;
+  if(!SPRITES.town)return;
   const im = SPRITES.town, W = MW * TS, H = MH * TS, want = MW / MH, have = im.width / im.height;
   let sx = 0, sy = 0, sw = im.width, sh = im.height;
   if (have > want) { sw = im.height * want; sx = (im.width - sw) / 2; } else if (have < want) { sh = im.width / want; sy = (im.height - sh) / 2; }
@@ -2686,13 +2692,14 @@ function draw() {
   const [shx, shy] = shakeOff(t);
   ctx.save(); ctx.translate(Math.round(shx), Math.round(shy));                     // 画面の揺れ：世界だけ揺らす（地図・HUDは揺らさない）
   // 自キャラは画面のやや上寄りに置く（下はコントローラーで隠れるため）
-  const camX = Math.round(innerWidth / 2 - (player.vx + 0.5) * TS);
-  const camY = Math.round(focusY() - (player.vy + 0.5) * tilePitchY());
+  let camX = Math.round(innerWidth / 2 - (player.vx + 0.5) * TS);
+  let camY = Math.round(focusY() - (player.vy + 0.5) * tilePitchY());
+  if(scene==='town')[camX,camY]=CastleTown.camera(camX,camY);
   const x0 = Math.max(0, Math.floor(-camX / TS)), x1 = Math.min(MW - 1, Math.ceil((innerWidth - camX) / TS));
   const y0 = Math.max(0, Math.floor(-camY / tilePitchY()) - 2), y1 = Math.min(MH - 1, Math.ceil((innerHeight - camY) / tilePitchY()) + 1);
   const dungeon = scene === 'dungeon', m = SHADE_K[shadePref];
   if (typeof CaveTerrain !== 'undefined') CaveTerrain.setHeight(wallPref), CaveTerrain.shadeK = m;
-  const townArt = scene === 'town' && (CastleTown.state.images[CastleTown.state.area==='inn'?'inn':'town'] || SPRITES.town);
+  const townArt = scene === 'town';
   if (townArt) drawTownArt(camX, camY);                                          // 町は一枚絵（判定は内部の格子のまま）
   for (let y = y0; y <= y1 && !townArt; y++) for (let x = x0; x <= x1; x++) {
     if (!dungeon && !seen[y][x]) continue;
@@ -2721,10 +2728,11 @@ function draw() {
   }
   for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
   // 描画順：奥（上）から手前（下）へ。主人公より手前（下）にいる敵・味方・店主は、主人公の後に描く（主人公が手前の味方を踏んで見えないように）
-  const worldEnts = [...enemies,...(dungeon&&AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):CastleTown.state.npcs)].sort((a,b)=>a.vy-b.vy);
-  const inFront = e => e.vy > player.vy && e.vy - player.vy < 1.2 && Math.abs(e.vx - player.vx) < 1.2;
+  const worldEnts = [...enemies,...(dungeon&&AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):CastleTown.entities())].sort((a,b)=>a.vy-b.vy);
+  const inFront = e => scene==='town'?e.vy>player.vy:e.vy > player.vy && e.vy - player.vy < 1.2 && Math.abs(e.vx - player.vx) < 1.2;
   const drawEnt = e => {
     if (!vis[e.y][e.x]) return;
+    if(e.isTownProp){CastleTown.drawProp(ctx,e,t,camX,camY);return;}
     if(e.isTown){CastleTown.drawNPC(ctx,e,t,camX,camY);return;}
     if(e.isShopkeeper){ShopSystem.draw(ctx,e,t,camX,camY);return;}
     if(ShopSecurity.isSecurity(e)){ShopSecurity.draw(ctx,e,t,camX,camY);return;}
