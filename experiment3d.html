@@ -24,6 +24,7 @@
  <button id="bTheme">地形</button>
  <button id="bCam">カメラ</button>
  <button id="bShadow">影</button>
+ <button id="bLean">キャラ傾き</button>
 </div>
 <div id="info"></div>
 <div id="pad"></div>
@@ -40,6 +41,7 @@ const STEP_SEC=0.15;                   // 1マス歩く時間
 const THEME_ORDER=['forest','limestone','ruins','ice','volcano'];
 const DIRS={E:[1,0],W:[-1,0],S:[0,1],N:[0,-1],SE:[1,1],SW:[-1,1],NE:[1,-1],NW:[-1,-1]};
 const CAMS=[{name:'45°',tilt:45},{name:'55°',tilt:55},{name:'65°',tilt:65}];
+const LEANS=[{name:'小',k:0.35},{name:'中',k:0.7},{name:'大',k:0.95}];  // 板をカメラ側へ傾ける割合（大=縦つぶれ補正が最大）
 const VIEW_TILES=9;                    // 画面の横幅に入れたいマス数
 
 const $=id=>document.getElementById(id);
@@ -70,7 +72,7 @@ scene.add(torch);
 
 // ---------- 状態 ----------
 const state={
- depth:1,themeIdx:0,camIdx:1,shadows:true,seed:0,
+ depth:1,themeIdx:0,camIdx:2,leanIdx:2,shadows:true,seed:0,
  map:null,rooms:null,stairs:null,
  hero:{x:0,y:0,fx:0,fy:0,tx:0,ty:0,moving:false,t:0,dir:'S',frame:0},
  held:new Set(),
@@ -162,7 +164,7 @@ function heroSheet(dir){
 }
 const HERO_SIZE=2.5, FOOT=(256-231)/256;   // 足元は絵の下端から約10%上
 const heroMat=new THREE.MeshBasicMaterial({map:heroSheet('S'),transparent:true,alphaTest:0.4,side:THREE.DoubleSide});
-const heroMesh=new THREE.Mesh(new THREE.PlaneGeometry(HERO_SIZE,HERO_SIZE),heroMat);
+const heroMesh=new THREE.Mesh(new THREE.PlaneGeometry(HERO_SIZE,HERO_SIZE).translate(0,HERO_SIZE/2-FOOT*HERO_SIZE,0),heroMat);
 heroMesh.renderOrder=2;
 scene.add(heroMesh);
 // 足元の落ち影（ビルボードは影を落とさないため丸影を別に置く）
@@ -211,11 +213,12 @@ function tryMove(){
 let msgTimer=0;
 function showMsg(t){const m=$('msg');m.textContent=t;m.style.opacity=1;clearTimeout(msgTimer);msgTimer=setTimeout(()=>m.style.opacity=0,1600);}
 function updateInfo(){
- $('info').innerHTML=`${state.depth}F ／ 地形：${themeId()} ／ カメラ：${CAMS[state.camIdx].name} ／ 影：${state.shadows?'あり':'なし'}<br>操作：矢印キー・WASD（斜め QEZC）／右下パッド　階段（光る床）で次の階`;
+ $('info').innerHTML=`${state.depth}F ／ 地形：${themeId()} ／ カメラ：${CAMS[state.camIdx].name} ／ キャラ傾き：${LEANS[state.leanIdx].name} ／ 影：${state.shadows?'あり':'なし'}<br>操作：矢印キー・WASD（斜め QEZC）／右下パッド　階段（光る床）で次の階`;
 }
 $('bNew').onclick=()=>{buildLevel();};
 $('bTheme').onclick=()=>{state.themeIdx++;buildLevel();};
 $('bCam').onclick=()=>{state.camIdx=(state.camIdx+1)%CAMS.length;updateInfo();};
+$('bLean').onclick=()=>{state.leanIdx=(state.leanIdx+1)%LEANS.length;updateInfo();};
 $('bShadow').onclick=()=>{state.shadows=!state.shadows;torch.castShadow=state.shadows;scene.traverse(o=>{if(o.material)(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>m.needsUpdate=true);});updateInfo();};
 function resize(){const w=innerWidth,h=innerHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
 addEventListener('resize',resize);resize();
@@ -240,7 +243,7 @@ function frame(now){
  }
  // 向きとコマ
  const t=heroSheet(h.dir);t.offset.x=h.frame*0.25;heroMat.map=t;
- heroMesh.position.set(px,HERO_SIZE/2-FOOT*HERO_SIZE+0.02,py);
+ heroMesh.position.set(px,0.02,py);
  blob.position.x=px;blob.position.z=py;
  // カメラ：斜め上から追従
  const c=CAMS[state.camIdx],tilt=c.tilt*Math.PI/180;
@@ -251,7 +254,7 @@ function frame(now){
  camera.lookAt(cam.x,0.35,cam.y);
  scene.fog.near=c.dist-1;scene.fog.far=c.dist+8;
  // ビルボード：カメラの傾きに合わせて板を起こす（縦は立て気味）
- heroMesh.rotation.set(-(tilt*0.35),0,0);
+ heroMesh.rotation.set(-(tilt*LEANS[state.leanIdx].k),0,0);
  torch.position.set(px,1.9,py+0.2);
  renderer.render(scene,camera);
  fpsAcc+=dt;fpsN++;if(fpsAcc>1){fps=Math.round(fpsN/fpsAcc);fpsAcc=0;fpsN=0;$('info').dataset.fps=fps;
