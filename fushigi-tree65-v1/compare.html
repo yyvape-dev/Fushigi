@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>65°固定・木の描画比較</title>
+<style>
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#102328;color:#f2e7c9;font-family:system-ui,sans-serif}header{text-align:center;padding:20px 12px 12px}h1{font-size:20px;margin:0 0 8px}p{font-size:13px;color:#b5c6bf;margin:6px}button{border:1px solid #7c7656;border-radius:7px;background:#213739;color:#ffe2a2;padding:8px 13px;margin:8px 3px}.pair{display:grid;grid-template-columns:1fr 1fr;max-width:1100px;margin:auto}.sample{text-align:center;min-width:0}.sample h2{font-size:16px;font-weight:500;margin:12px 0}.stage{width:100%;height:460px;position:relative}.stage canvas{position:absolute;inset:0;width:100%;height:100%}footer{text-align:center;padding:12px;font-size:12px;color:#b5c6bf}@media(max-width:600px){header{padding-top:14px}h1{font-size:17px}.stage{height:340px}.sample h2{font-size:13px}}
+</style>
+<header><h1>65°固定で、木1本を比較</h1><p>同じ地面・カメラ角度・画面上の高さ・足元</p><button data-height="160">ゲーム相当 160px</button><button data-height="280">拡大 280px</button></header>
+<main class="pair"><section class="sample"><h2>現在の3Dモデル</h2><div class="stage" id="solid"></div></section><section class="sample"><h2>65°専用の2D絵</h2><div class="stage" id="painted"></div></section></main>
+<footer>右の木の陰影は描き込み。接地影と地面の明かりは描画側で追加。ゲーム本編の表示は変更していません。</footer>
+<script type="module">
+import * as THREE from '../assets/vendor/three.module.min.js';
+import { buildForestModels } from '../assets/forest-models3d.js';
+const TILT=65*Math.PI/180,loader=new THREE.TextureLoader(),textures=new Map(),panels=[];
+let targetHeight=160,ready=false,alphaBounds=null,paintedMesh=null,report=null;
+function texture(name){if(textures.has(name))return textures.get(name);const t=loader.load('../assets/dungeon/locations-v1/forest/'+name+'.webp',()=>{if(ready)draw();});t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;textures.set(name,t);return t;}
+for(const id of ['solid','painted']){
+ const host=document.getElementById(id),renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;host.appendChild(renderer.domElement);
+ const scene=new THREE.Scene(),camera=new THREE.OrthographicCamera();
+ scene.add(new THREE.AmbientLight(0x9bc6ce,1.35));
+ const moon=new THREE.DirectionalLight(0xa9ced7,.9);moon.position.set(-4,8,3);scene.add(moon);
+ const light=new THREE.PointLight(0xffdbac,28,12,2);light.position.set(1.5,2.8,2.2);light.castShadow=true;light.shadow.mapSize.set(512,512);light.shadow.bias=-.002;scene.add(light);
+ const ground=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.MeshLambertMaterial({map:texture('floorW')}));ground.rotation.x=-Math.PI/2;ground.position.y=.18;ground.receiveShadow=true;scene.add(ground);
+ panels.push({host,renderer,scene,camera});
+}
+const group=new THREE.Group();panels[0].scene.add(group);
+const models=buildForestModels(group,{seed:123,trees:[{x:0,y:0,size:1.85}],lamps:[],garlands:[]},texture);
+// Paint only the sprite's opacity at runtime; the archived source stays intact.
+const im=await new Promise((resolve,reject)=>{const i=new Image();i.onload=()=>resolve(i);i.onerror=reject;i.src='../assets/dungeon/forest-fixed65-v1/tree.png';});
+const cut=document.createElement('canvas');cut.width=im.width;cut.height=im.height;const cg=cut.getContext('2d');cg.drawImage(im,0,0);
+const data=cg.getImageData(0,0,cut.width,cut.height);let minX=cut.width,minY=cut.height,maxX=0,maxY=0;
+for(let y=0;y<cut.height;y++)for(let x=0;x<cut.width;x++){const i=(y*cut.width+x)*4,r=data.data[i],g=data.data[i+1],b=data.data[i+2];if(r>100&&b>100&&r>g*1.3&&b>g*1.3)data.data[i+3]=0;else{minX=Math.min(minX,x);maxX=Math.max(maxX,x);minY=Math.min(minY,y);maxY=Math.max(maxY,y);}}
+cg.putImageData(data,0,0);alphaBounds={minX,minY,maxX:maxX+1,maxY:maxY+1};
+const spriteTex=new THREE.CanvasTexture(cut);spriteTex.colorSpace=THREE.SRGBColorSpace;
+paintedMesh=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:spriteTex,transparent:true,alphaTest:.04,depthWrite:false,toneMapped:false}));panels[1].scene.add(paintedMesh);
+// A soft ground contact shadow, independent of the painted tree silhouette.
+const shadowCanvas=document.createElement('canvas');shadowCanvas.width=shadowCanvas.height=64;const sg=shadowCanvas.getContext('2d'),gradient=sg.createRadialGradient(32,32,2,32,32,31);gradient.addColorStop(0,'rgba(0,0,0,.42)');gradient.addColorStop(1,'rgba(0,0,0,0)');sg.fillStyle=gradient;sg.fillRect(0,0,64,64);
+const contact=new THREE.Mesh(new THREE.PlaneGeometry(.85,.75),new THREE.MeshBasicMaterial({map:new THREE.CanvasTexture(shadowCanvas),transparent:true,depthWrite:false}));contact.rotation.x=-Math.PI/2;contact.position.set(.5,.19,.5);panels[1].scene.add(contact);
+function vertices(){const out=[];group.updateMatrixWorld(true);const m=new THREE.Matrix4(),v=new THREE.Vector3();group.traverse(o=>{if(!o.isMesh)return;const p=o.geometry.attributes.position;for(let i=0;i<o.count;i++){o.getMatrixAt(i,m);m.premultiply(o.matrixWorld);for(let j=0;j<p.count;j++)out.push(v.fromBufferAttribute(p,j).applyMatrix4(m).clone());}});return out;}
+const points=vertices();
+function bounds(camera){const p=points.map(v=>v.clone().project(camera));return {minX:Math.min(...p.map(v=>v.x)),maxX:Math.max(...p.map(v=>v.x)),minY:Math.min(...p.map(v=>v.y)),maxY:Math.max(...p.map(v=>v.y))};}
+function draw(){if(!ready)return;const size=panels[0].host.getBoundingClientRect(),w=size.width,h=size.height;
+ for(const p of panels){p.renderer.setSize(w,h,false);p.camera.position.set(.5,Math.sin(TILT)*10+.9,.5+Math.cos(TILT)*10);p.camera.lookAt(.5,.9,.5);p.camera.near=.1;p.camera.far=60;p.camera.left=-2.5;p.camera.right=2.5;p.camera.top=2.5*h/w;p.camera.bottom=-2.5*h/w;p.camera.updateProjectionMatrix();p.camera.updateMatrixWorld();}
+ const preliminary=bounds(panels[0].camera),actual=(preliminary.maxY-preliminary.minY)*h/2,factor=actual/Math.min(targetHeight,h*.82,w*.85*(alphaBounds.maxY-alphaBounds.minY)/(alphaBounds.maxX-alphaBounds.minX));
+ for(const p of panels){p.camera.left*=factor;p.camera.right*=factor;p.camera.top*=factor;p.camera.bottom*=factor;p.camera.updateProjectionMatrix();}
+ const b=bounds(panels[0].camera),worldHeight=(b.maxY-b.minY)*(panels[0].camera.top-panels[0].camera.bottom)/2;
+ const pixelsPerUnit=h/(panels[0].camera.top-panels[0].camera.bottom),spriteSize=worldHeight/((alphaBounds.maxY-alphaBounds.minY)/cut.height);
+ paintedMesh.scale.setScalar(spriteSize);paintedMesh.quaternion.copy(panels[1].camera.quaternion);
+ const centerY=(b.minY+b.maxY)/2,centerX=(b.minX+b.maxX)/2;
+ const origin=new THREE.Vector3(centerX,centerY,0).unproject(panels[1].camera),right=new THREE.Vector3(1,0,0).applyQuaternion(panels[1].camera.quaternion),up=new THREE.Vector3(0,1,0).applyQuaternion(panels[1].camera.quaternion);
+ // Align visible bounding boxes without stretching the source art.
+ origin.addScaledVector(right,-(((alphaBounds.minX+alphaBounds.maxX)/2)/cut.width-.5)*spriteSize);origin.addScaledVector(up,(((alphaBounds.minY+alphaBounds.maxY)/2)/cut.height-.5)*spriteSize);paintedMesh.position.copy(origin);
+ // Put the card at the tree's world depth, keeping its projected position.
+ const direction=new THREE.Vector3(0,0,-1).applyQuaternion(panels[1].camera.quaternion),along=new THREE.Vector3(.5,.9,.5).sub(paintedMesh.position).dot(direction);paintedMesh.position.addScaledVector(direction,along);
+ paintedMesh.updateMatrixWorld();
+ const paintedCorners=[];for(const px of [alphaBounds.minX,alphaBounds.maxX])for(const py of [alphaBounds.minY,alphaBounds.maxY])paintedCorners.push(new THREE.Vector3(px/cut.width-.5,.5-py/cut.height,0).applyMatrix4(paintedMesh.matrixWorld).project(panels[1].camera));
+ const paintedTop=Math.max(...paintedCorners.map(p=>p.y)),paintedBottom=Math.min(...paintedCorners.map(p=>p.y));
+ for(const p of panels)p.renderer.render(p.scene,p.camera);
+ report={tilt:65,solidHeight:(b.maxY-b.minY)*h/2,paintedHeight:(paintedTop-paintedBottom)*h/2,solidFoot:(1-b.minY)*h/2,paintedFoot:(1-paintedBottom)*h/2,sourceAspectPreserved:true,targetHeight,models:models.stats};
+ window.tree65Comparison.report=report;
+}
+window.tree65Comparison={setHeight:n=>{targetHeight=n;draw();},report:null,panels,group,paintedMesh};
+for(const b of document.querySelectorAll('[data-height]'))b.onclick=()=>window.tree65Comparison.setHeight(+b.dataset.height);
+ready=true;addEventListener('resize',draw);draw();
+</script>
+</html>

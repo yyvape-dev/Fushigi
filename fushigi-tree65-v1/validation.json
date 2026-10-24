@@ -1,0 +1,72 @@
+{
+  "reports": [
+    {
+      "tilt": 65,
+      "solidHeight": 160.00000000000006,
+      "paintedHeight": 160.00000000000009,
+      "solidFoot": 296.8709013385169,
+      "paintedFoot": 296.8709013385169,
+      "sourceAspectPreserved": true,
+      "targetHeight": 160,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 4,
+        "instances": 11,
+        "triangles": 508,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry"
+        ]
+      }
+    },
+    {
+      "tilt": 65,
+      "solidHeight": 280,
+      "paintedHeight": 280,
+      "solidFoot": 347.0240773424045,
+      "paintedFoot": 347.0240773424048,
+      "sourceAspectPreserved": true,
+      "targetHeight": 280,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 4,
+        "instances": 11,
+        "triangles": 508,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry"
+        ]
+      }
+    },
+    {
+      "tilt": 65,
+      "solidHeight": 147.8948170731707,
+      "paintedHeight": 147.89481707317074,
+      "solidFoot": 231.81162325611248,
+      "paintedFoot": 231.8116232561126,
+      "sourceAspectPreserved": true,
+      "targetHeight": 160,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 4,
+        "instances": 11,
+        "triangles": 508,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry"
+        ]
+      }
+    }
+  ],
+  "pageErrors": [],
+  "note": "same fixed 65 degree view; matched projected visible height and feet, original sprite aspect preserved; browser Chromium SwiftShader"
+}
