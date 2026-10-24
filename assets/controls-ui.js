@@ -52,7 +52,7 @@ function controlsMove(dx,dy,mode=controlMode){
  if(mode==='dash'&&(dx||dy)&&scene==='dungeon'){if(runActive||dashBlocked)return;runActive=true;runStep(dx,dy);return;}
  playerMove(dx,dy);
 }
-function menuEntries(){return [['持ち物',()=>openBag()],['足元',()=>showMenuInfo('ground')],['状態',()=>showMenuInfo('status')],['地図',()=>{mapMode=(mapMode+1)%3;saveGame();renderMenu();render();}],['メッセージ履歴',()=>openHist()],['設定',()=>openCfg()],['操作ガイド',()=>showMenuInfo('help')]];}
+function menuEntries(){return [['持ち物',()=>openBag()],['足元',()=>showMenuInfo('ground')],['状態',()=>showMenuInfo('status')],['地図',()=>{if(scene==='town'){CastleTown.show('map');return;}mapMode=(mapMode+1)%3;saveGame();renderMenu();render();}],['メッセージ履歴',()=>openHist()],['設定',()=>openCfg()],['操作ガイド',()=>showMenuInfo('help')]];}
 function renderMenu(){const entries=menuEntries();$('menuList').innerHTML=entries.map(([name],i)=>'<button class="menu-row '+(i===menuIndex?'selected':'')+'" data-menu="'+i+'">'+name+(i===3?'　'+MAP_LABEL[mapMode]:'')+'</button>').join('');}
 function closeGameMenu(){menuOpen=false;groundMenuItem=null;groundMenuDirect=false;$('gameMenu').hidden=true;document.body?.classList.remove('menu-visible');}
 function openGameMenu(){if((typeof EventVfx!=='undefined'&&EventVfx.busy())||dead||stairsOpen||whOpen)return;holdStop();closeBag();closeHist();closeCfg();menuOpen=true;$('gameMenu').hidden=false;$('menuInfo').hidden=true;document.body?.classList.add('menu-visible');renderMenu();render();}

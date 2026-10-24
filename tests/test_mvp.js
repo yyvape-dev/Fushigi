@@ -3,6 +3,8 @@
   const fail = [];
   const ok = (name, cond) => { console.log((cond ? 'OK  ' : 'NG  ') + name); if (!cond) fail.push(name); };
   const out = n => '/tmp/' + n;
+  const townGate = () => { CastleTown.close(false); CastleTown.state.area='outside'; CastleTown.state.waking=false; buildTown(); seen=Array.from({length:MH},()=>Array(MW).fill(true)); player.x=CastleTown.gate.x; player.y=CastleTown.gate.y+1; snapVis(); updateVis(); };
+  const depart = () => { CastleTown.close(false); enterDungeon(); };
   const cnt = t => inv.filter(i => i.type === t).length, wcnt = t => wh.filter(i => i.type === t).length;
 
   // --- ドット絵データの形
@@ -12,16 +14,16 @@
 
   // --- 起動：町、倉庫に薬3個
   DUNGEONS.first.floors = 1;                                       // 旧テストは1階想定（多階層は末尾で別に検証）
-  ok('boot: starts in town at spawn', scene === 'town' && player.x === 11 && player.y === 9);
+  ok('boot: starts in town at spawn', scene === 'town' && CastleTown.state.area === 'inn' && player.x === CastleTown.bed.x && player.y === CastleTown.bed.y);
   ok('boot: fresh save has 3 potions in warehouse, bag empty', wcnt('potion') === 3 && inv.length === 0);
   fadeT = -1e9; draw(); __savePng(out('shot_town.png'));
 
   // --- 町の移動と倉庫
   ok('town: all tiles seen/visible', seen.every(r => r.every(v => v)) && vis.every(r => r.every(v => v)));
-  player.x = 4; player.y = 4; snapVis();
-  playerMove(0, -1);                                               // 倉庫の入口を踏む
-  ok('town: stepping on warehouse door opens warehouse', whOpen === true && map[player.y][player.x] === DOOR);
-  ok('town: ctx button on door = 倉庫', (() => { closeWh(); const c = ctxInfo(); return c && c.label === '倉庫'; })());
+  CastleTown.leaveInn(); CastleTown.state.npcs=[];
+  player.x=48; player.y=26; snapVis(); doCtx();
+  ok('town: deposit counter opens warehouse', whOpen === true);
+  ok('town: ctx button at counter = 預け屋', (() => { closeWh(); const c = ctxInfo(); return c && c.label === '預け屋'; })());
   openWh(); whSide = 'wh'; whTransfer('potion', true);
   ok('warehouse: take all out', cnt('potion') === 3 && wcnt('potion') === 0);
   whSide = 'bag'; whTransfer('potion', false);
@@ -49,17 +51,17 @@
   // --- 町でできないこと
   playerAttack();
   ok('town: 決定(Attack) on the door opens warehouse', whOpen === true); closeWh();
-  player.x = 11; player.y = 9; snapVis();
+  player.x = 31; player.y = 30; snapVis();
   dropType('potion');
   ok('town: cannot drop items on the ground', inv.length === 2 && floorItems.length === 0);
   playerAttack();
   ok('town: attack away from facilities does nothing harmful', scene === 'town' && !whOpen);
 
   // --- ダンジョンへ
-  player.x = 17; player.y = 3; snapVis();
+  townGate();
   playerMove(0, -1);
   ok('town: gate tile + ctx button = 潜る', map[player.y][player.x] === GATE && ctxInfo().label === '潜る');
-  doCtx();
+  doCtx(); ok('town: gate opens destination choice', CastleTown.state.panel==='departure'); depart();
   ok('enter dungeon: scene/floor/hp/bag kept', scene === 'dungeon' && floorNo === 1 && player.hp === 20 && inv.length === 2);
   ok('dungeon: stairs exist & reachable, items reachable', (() => {
     // distMap() は敵AI用に90歩で打ち切るので、広い階では上限なしの探索で確認する
@@ -88,7 +90,7 @@
 
   // --- 死亡：持ち物ロスト、倉庫は無事
   wh = [mkItem('potion'), mkItem('potion'), mkItem('potion')]; inv = [mkItem('potion'), mkItem('potion')]; saveGame();
-  player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx();
+  townGate(); playerMove(0, -1); depart();
   ok('second run starts', scene === 'dungeon');
   player.hp = 1; enemies = [];
   const d2 = DIRS.find(([dx, dy]) => geomOK(player.x, player.y, dx, dy));
@@ -111,7 +113,7 @@
   for (let n = 0; n < 60; n++) {
     if (dead) { deadAt = -1e9; playerMove(0, 0); }                 // 前回の最後の1手で死亡していた場合は、町へ戻してから始める
     wh = [mkItem('potion'), mkItem('potion')]; inv = []; saveGame();
-    toTown(false); player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx();
+    toTown(false); townGate(); playerMove(0, -1); depart();
     if (scene !== 'dungeon') { bug++; continue; }
     runs++;
     const c0 = clears, d0 = deaths;
@@ -143,7 +145,7 @@
   let goal = 0, goalDead = 0, goalTurns = [];
   for (let n = 0; n < 60; n++) {
     if (dead) { deadAt = -1e9; playerMove(0, 0); }
-    wh = []; inv = [mkItem('potion')]; toTown(false); player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx();
+    wh = []; inv = [mkItem('potion')]; toTown(false); townGate(); playerMove(0, -1); depart();
     let st2 = null; for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (map[y][x] === STAIRS) st2 = [x, y];
     const dist = Array.from({ length: MH }, () => new Array(MW).fill(-1)); const q = [st2]; dist[st2[1]][st2[0]] = 0;
     for (let i = 0; i < q.length; i++) { const [x, y] = q[i]; for (const [dx, dy] of DIRS) { if (!geomOK(x, y, dx, dy)) continue; const nx = x + dx, ny = y + dy; if (dist[ny][nx] >= 0) continue; dist[ny][nx] = dist[y][x] + 1; q.push([nx, ny]); } }
@@ -304,12 +306,12 @@
   try { draw(); } catch (e) { th5 = e; console.log(e); }
   ok('town art draws without error', !th5);
   { const camX = Math.round(innerWidth / 2 - (player.vx + 0.5) * TS), camY = Math.round(innerHeight * 0.4 - (player.vy + 0.5) * TS);
-    // 木(3,7)のマスの中心：タイル絵ではなく一枚絵の色になっている
-    const tx = Math.round(camX + 9.5 * TS), ty = Math.round(camY + 5.5 * TS), d = ctx.getImageData(tx, ty, 1, 1).data;
-    ok('town art replaces tile art (tree tile shows art colour)', map[5][9] === TREE && d[0] > 180 && d[1] < 80 && d[2] > 100); }
+    // ベッド(5,3)のマスの中心：タイル絵ではなく一枚絵の色になっている
+    const tx = Math.round(camX + 5.5 * TS), ty = Math.round(camY + 3.5 * TS), d = ctx.getImageData(tx, ty, 1, 1).data;
+    ok('town art replaces tile art on solid bedroom furniture', solid(map[3][5]) && d[0] > 180 && d[1] < 80 && d[2] > 100); }
   showGrid = true; try { draw(); __savePng('shot_town_grid.png'); } catch (e) { th5 = e; console.log(e); } ok('town grid overlay draws', !th5);
   { const camX = Math.round(innerWidth / 2 - (player.vx + 0.5) * TS), camY = Math.round(innerHeight * 0.4 - (player.vy + 0.5) * TS);
-    const d = ctx.getImageData(Math.round(camX + 9.5 * TS), Math.round(camY + 5.5 * TS), 1, 1).data;
+    const d = ctx.getImageData(Math.round(camX + 5.5 * TS), Math.round(camY + 3.5 * TS), 1, 1).data;
     ok('grid marks solid tiles red', d[0] > d[2] && d[0] > 200); }
   showGrid = false; delete SPRITES.town; zoomPref = 0; resize(); draw();
   openCfg(); ok('cfg has grid row', cfgListEl.innerHTML.includes('町の判定を表示')); ok('cfg: no in-game image import UI (art comes only from assets/)', !/シート取り込み|画像を選ぶ|素材|data-cfg="(pick|reset|sheet)/.test(cfgListEl.innerHTML) && typeof setArtFromBlob === 'undefined' && typeof importSheet === 'undefined' && typeof idbPut === 'undefined'); closeCfg();
@@ -330,7 +332,7 @@
   toTown(false);
   // ===== 追加：3階建て =====
   DUNGEONS.first.floors = 3; logPos = 1;
-  scene = 'town'; dead = false; wh = []; inv = [mkItem('potion'), mkItem('bread')]; toTown(false); player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx();
+  scene = 'town'; dead = false; wh = []; inv = [mkItem('potion'), mkItem('bread')]; toTown(false); townGate(); playerMove(0, -1); depart();
   ok('3F: enter dungeon on floor 1', scene === 'dungeon' && floorNo === 1);
   const stepStairs = () => {
     enemies = []; let st = null; for (let y = 0; y < MH; y++) for (let x = 0; x < MW; x++) if (map[y][x] === STAIRS) st = [x, y];
@@ -345,7 +347,7 @@
   stepStairs(); ok('3F: floor 3', floorNo === 3 && scene === 'dungeon');
   const c0b = clears; stepStairs(); ok('3F: clearing floor 3 returns to town', scene === 'town' && clears === c0b + 1 && inv.length === 2);
   // 3階で死亡：持ち物を失う
-  scene = 'town'; toTown(false); player.x = 17; player.y = 3; snapVis(); playerMove(0, -1); doCtx(); stepStairs(); stepStairs();
+  scene = 'town'; toTown(false); townGate(); playerMove(0, -1); depart(); stepStairs(); stepStairs();
   player.hp = 1; dead = true; deadAt = -1e9; playerMove(0, 0);
   ok('3F: death on floor 3 -> town, bag lost, deaths counted', scene === 'town' && inv.length === 0);
   // ===== 追加：敵の種類・装備と強化値・5階建て =====
@@ -419,7 +421,7 @@
   { localStorage.removeItem(SAVE_KEY); RunSave.clear(); gift = false; boot();
     ok('gift: 5 weapons/shields given once on a fresh boot', ['stick', 'sword', 'axe', 'woodshield', 'ironshield'].every(t => wh.some(i => i.type === t)) && gift === true);
     const n0 = wh.length; boot(); ok('gift: not given twice after save/load', wh.length === n0 || wh.length === n0);
-    scene = 'town'; toTown(false); player.x = 11; player.y = 9; snapVis(); player.swing = 0; playerAttack(); ok('town: attack is blocked (no swing)', player.swing === 0); }
+    scene = 'town'; toTown(false); player.x = 31; player.y = 30; snapVis(); player.swing = 0; playerAttack(); ok('town: attack is blocked (no swing)', player.swing === 0); }
   ok('log position default is bottom-right', logPos === 1);
   // ===== 追加：戦闘の演出（斬撃・火花・揺れ）=====
   { const fresh = () => { scene = 'dungeon'; floorNo = 1; newFloor(); dead = false; vfx.length = 0; shakeAmp = 0; };

@@ -174,13 +174,15 @@ canvas{display:block;touch-action:none}
 <script src="assets/monster-combat.js?v=blast-evolution-v1"></script>
 <script src="fushigi-monster-house-v2/monster-house-vfx.js?v=generated-v2"></script>
 <script src="assets/run-save.js?v=event-vfx-v1"></script>
+<link rel="stylesheet" href="assets/castle-town.css?v=castle-v1">
+<script src="assets/castle-town.js?v=castle-v1"></script>
 <script>
 'use strict';
 // =====================================================================
 //  設定
 // =====================================================================
 const DW = 56, DH = 32;           // ダンジョンのマップ寸法（区画方式は 14×10 マスの区画を 4×3 並べる）
-const TW = 22, TH = 15;           // 町のマップ寸法
+const TW = 60, TH = 48;           // 城下町（宿屋の屋内は別マップ）
 let MW = DW, MH = DH;             // 現在のマップ寸法
 let TS = 32;                      // 1マスのpx（16の倍数にしてドット絵をくっきり出す）
 const BASE = 16;                  // 内蔵ドット絵の基準サイズ
@@ -1089,7 +1091,7 @@ const decItem = t => {
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
-const uiBlocked = () => EventVfx.busy() || bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen || AllySystem.state.open || ShopSystem.state.open;
+const uiBlocked = () => EventVfx.busy() || bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen || AllySystem.state.open || ShopSystem.state.open || CastleTown.state.open;
 function rollType() {
   const ks = Object.keys(ITEMS).filter(k => (ITEMS[k].from || 1) <= floorNo);
   let r = Math.random() * ks.reduce((a, k) => a + ITEMS[k].w, 0);
@@ -1103,13 +1105,14 @@ function saveGame(departure) {
     // 冒険中は、持ち物・装備・所持金を出発時のまま残す（途中の物は RunSave が持つ）。再読み込みで拾った物を町へ持ち帰れる抜け道をふさぐ
     const prev = scene === 'dungeon' && !departure ? JSON.parse(localStorage.getItem(SAVE_KEY) || 'null') : null, keep = !!(prev && prev.v === 1);
     const carried=inv.filter(it=>!ShopSystem.unpaid(it));
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: keep ? prev.bag : carried.map(encItem), eq: keep ? prev.eq : [carried.indexOf(eqWeapon), carried.indexOf(eqShield)], rings: keep ? prev.rings : eqRings.map(r => carried.indexOf(r)), gift, quick, clears, dClears, deaths, gold: keep ? prev.gold : gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, moodPref, wallPref, blurPref, logPos, rigPref, vfxPref }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: keep ? prev.bag : carried.map(encItem), eq: keep ? prev.eq : [carried.indexOf(eqWeapon), carried.indexOf(eqShield)], rings: keep ? prev.rings : eqRings.map(r => carried.indexOf(r)), gift, quick, clears, dClears, deaths, gold: keep ? prev.gold : gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, moodPref, wallPref, blurPref, logPos, rigPref, vfxPref, town: CastleTown.snapshot() }));
   } catch (_) {}
 }
 function loadGame() {
   try {
     const s = JSON.parse(localStorage.getItem(SAVE_KEY) || 'null');
     if (!s || s.v !== 1) return false;
+    CastleTown.restore(s.town);
     wh = (s.wh || []).map(decItem).filter(Boolean);
     inv = (s.bag || []).map(decItem).filter(Boolean);
     eqWeapon = eqShield = null;
@@ -1147,20 +1150,8 @@ function genMap() {
   floorPlan = DungeonGenerator.generate(DW, DH, seed, floorNo); floorPlan.t0 = turn;   // t0：この階に来たターン（敵の湧きの起点。冒険の保存にも入る）
   map = floorPlan.map; rooms = floorPlan.rooms;
 }
-// 町：固定マップ（倉庫の建物と、ダンジョンの入口）
-function buildTown() {
-  if(player){player.action=null;player.walkEnd=0;}
-  floorShop = null;
-  MW = TW; MH = TH;
-  map = Array.from({ length: TH }, () => new Array(TW).fill(FLOOR));
-  // 配置は「町の一枚絵」(1519×1036)の実測に合わせてある（木は幹の根元、建物は足元の位置）
-  for (let x = 0; x < TW; x++) map[0][x] = map[TH - 2][x] = map[TH - 1][x] = TREE;     // 森の縁（下は2マス分）
-  for (let y = 0; y < TH; y++) map[y][0] = map[y][TW - 1] = TREE;
-  for (let x = 2; x < 7; x++) { map[1][x] = ROOF; map[2][x] = ROOF; map[3][x] = HWALL; }
-  map[3][4] = DOOR;                                             // 倉庫の入口（扉の絵の位置）
-  map[2][16] = PILLAR; map[2][18] = PILLAR; map[1][17] = PILLAR; map[2][17] = GATE;   // ダンジョンの入口
-  for (const [x, y] of [[3, 7], [18, 7], [2, 11], [19, 11], [9, 5], [13, 11], [7, 9], [15, 5]]) map[y][x] = TREE;
-}
+// 城下町・宿屋のマップは専用モジュールが持つ。
+function buildTown() { CastleTown.build(); }
 
 function buildRoomGrid() {
   roomGrid = Array.from({ length: MH }, () => new Array(MW).fill(-1));
@@ -1338,10 +1329,10 @@ function toTown(fromDungeon) {
   closeStairs();
   if(menuOpen&&typeof closeGameMenu==='function')closeGameMenu();
   ShopSystem.reset();
-  scene = 'town'; AllySystem.reset(); buildTown();
+  scene = 'town'; AllySystem.reset();
   enemies = []; floorItems = []; traps = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
   player.lv = 1; player.exp = 0; atkUp = 0; player.maxhp = BASE_HP; player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus(); floorLight = false;
-  player.x = fromDungeon ? 17 : 11; player.y = fromDungeon ? 4 : 9;
+  CastleTown.arrive(fromDungeon);
   seen = Array.from({ length: MH }, () => new Array(MW).fill(true));
   snapVis(); updateVis();
   closeBag(); closeWh();
@@ -1384,9 +1375,9 @@ function boot() {
   if (!gift) { for (const t of ['stick', 'sword', 'axe', 'woodshield', 'ironshield']) wh.push(mkItem(t, 0)); gift = true; }   // 動作確認用：武器と盾を倉庫へ（1回だけ）
   const resumed = RunSave.restore();                             // 冒険の途中で閉じていたら、その場面から再開
   if (resumed === true) { say(`${DUNGEONS[dungeonId].name} ${floorNo}階から再開した。`); snapVis(); updateVis(); startFade(); render(); return; }
-  toTown(false);
+  toTown(resumed === 'dead');
   if (resumed === 'dead') say('前回の冒険は力尽きていた…持ち物と所持金を失った。（倉庫・預金は無事）');
-  say('町に着いた。倉庫で道具を用意して、入口から潜ろう。');
+  say(CastleTown.state.waking?'赤いマント亭で目を覚ました。宿を出て、城下町で冒険の準備をしよう。':'城下町に戻ってきた。冒険の準備をしよう。');
   if (giftMsg) say('倉庫に武器と盾を入れておいた。持ち物に出して装備してみよう。');
   render();
 }
@@ -1660,12 +1651,14 @@ function takeFloor(f) {
 // 移動（敵のマスへ動けば体当たり攻撃）。(0,0)は待機
 function playerMove(dx, dy, {skipPickup=false}={}) {
   if (uiBlocked() || guardDead()) return;
+  if(scene==='town'&&CastleTown.state.waking){CastleTown.wake();return;}
   if (!dx && !dy) { endTurn(); return; }
   if (player.st.confuse > 0) { const r = DIRS8[rnd(0, 7)]; dx = r[0]; dy = r[1]; }          // 混乱：向きがでたらめ
   player.face = [dx, dy];                                       // 向きは壁に当たっても更新
   if (dx) player.fl = dx < 0;                                   // 絵は右向きが基本。左へ動くときは反転
   if (!geomOK(player.x, player.y, dx, dy)) { render(); return; }  // 壁：ターン消費なし
   const nx = player.x + dx, ny = player.y + dy;
+  if(scene==='town'&&!CastleTown.beforeMove(nx,ny)){render();return;}
   if(!ShopSystem.beforeMove(nx,ny)){render();return;}
   const ally=AllySystem.at(nx,ny);
   if(ally){if(!ally.following){AllySystem.talk();return;}ally.x=player.x;ally.y=player.y;ally.face=[-dx,-dy];ally.walkStart=now();ally.walkEnd=now()+220;}
@@ -1677,7 +1670,7 @@ function playerMove(dx, dy, {skipPickup=false}={}) {
     player.x = nx; player.y = ny;
     const t = map[ny][nx];
     if (scene === 'town') {
-      if (t === DOOR) { openWh(); return; }                     // 倉庫の入口を踏むと倉庫が開く
+      if (CastleTown.step()) return;
       if (t === GATE) say(`ダンジョンの入口だ。行き先：${DUNGEONS[dungeonId].name}（${DUNGEONS[dungeonId].floors}階）。「潜る」で出発。${Object.keys(DUNGEONS).filter(unlocked).length > 1 ? '行き先は設定で変えられる。' : ''}`);
     } else {
       if (t === STAIRS) {
@@ -1729,10 +1722,7 @@ function ctxInfo() {
     if(AllySystem.nearby())return {label:'話す',fn:AllySystem.talk};
     return atDungeonShop() ? { label: '店', fn: openWh } : null;
   }
-  const t = map[player.y][player.x];
-  if (t === DOOR) return { label: '倉庫', fn: openWh };
-  if (t === GATE) return { label: '潜る', fn: enterDungeon };
-  return null;
+  return CastleTown.context();
 }
 function doCtx() {
   if (uiBlocked() || guardDead()) return;
@@ -2274,7 +2264,7 @@ function openWh() {
   holdStop(); closeBag(); whOpen = true; whEl.hidden = false; whSel = null; whMsg = '';
   renderWh(); render();
 }
-function closeWh() { whOpen = false; whSel = null; whEl.hidden = true; }
+function closeWh() { whOpen = false; whSel = null; whEl.hidden = true; CastleTown.state.service=null; }
 function moveItems(type, n, from, to, cap) {
   let moved = 0;
   for (let i = 0; i < n; i++) {
@@ -2298,11 +2288,11 @@ function whTransfer(type, all) {
 function renderWh() {
   if (scene === 'dungeon' && !['shop', 'sell'].includes(whSide)) whSide = 'shop';
   const shop = whSide === 'shop' || whSide === 'sell';
-  $('bankIn').hidden = $('bankOut').hidden = scene !== 'town';
-  $('whTitle').textContent = shop ? (scene === 'dungeon' ? 'ダンジョンの店' : '店（倉庫の窓口）') : `倉庫 ${wh.length}/${MAXWH}`;
+  $('bankIn').hidden = $('bankOut').hidden = scene !== 'town' || CastleTown.state.service==='market';
+  $('whTitle').textContent = shop ? (scene === 'dungeon' ? 'ダンジョンの店' : '道具の露店') : `預け屋 ${wh.length}/${MAXWH}`;
   const kids = [...whSegEl.children];
   kids[0].textContent = `預ける ${inv.length}/${MAXBAG}`; kids[1].textContent = `出す ${wh.length}/${MAXWH}`; kids[2].textContent = '買う'; kids[3].textContent = '売る';
-  for (const el of kids) { el.hidden = scene === 'dungeon' && ['bag', 'wh'].includes(el.dataset.side); el.classList.toggle('on', el.dataset.side === whSide); }
+  for (const el of kids) { el.hidden = (scene === 'dungeon' && ['bag', 'wh'].includes(el.dataset.side)) || (scene==='town' && CastleTown.state.service==='deposit' && ['shop','sell'].includes(el.dataset.side)) || (scene==='town' && CastleTown.state.service==='market' && ['bag','wh'].includes(el.dataset.side)); el.classList.toggle('on', el.dataset.side === whSide); }
   $('whGold').textContent = `所持金 ${gold}G${scene === 'town' ? ' ／ 預金 ' + bank + 'G' : ''}`;
   $('whMsg').textContent = whMsg;
   const src = whSide === 'bag' ? inv : whSide === 'wh' ? wh : whSide === 'shop' ? activeShopStock() : inv.filter(i => !isEq(i));
@@ -2424,8 +2414,9 @@ function setS(id, prop, v) { const k = id + '.' + prop; if (cache.get(k) !== v) 
 function setH(id, html) { if (cache.get(id) !== html) { cache.set(id, html); $(id).innerHTML = html; } }
 function refreshUI() {
   AllySystem.ui();
+  CastleTown.ui();
   if(typeof GameAudio!=='undefined')GameAudio.sync(scene,floorPlan?.theme.id,dead);
-  setH('where', scene === 'town' ? `町　踏破${clears}　${DUNGEONS[dungeonId].name}` : `${DUNGEONS[dungeonId].name} ${floorNo}F ${floorPlan?.theme.name || ''}<br><small>ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}</small>`);
+  setH('where', scene === 'town' ? `${CastleTown.label()}　踏破${clears}` : `${DUNGEONS[dungeonId].name} ${floorNo}F ${floorPlan?.theme.name || ''}<br><small>ちから${curStr()}　EXP ${player.exp}/${expNeed(player.lv)}${statusText() ? '　' + statusText() : ''}</small>`);
   setH('bagc', `持${inv.length}/${MAXBAG}<img class="hud-coin" src="assets/dungeon/experience-v1/coin.png" alt="ギタン"> ${gold.toLocaleString()}G`);
   setH('belly', `満腹度 ${belly}/${maxBelly()}`);
   setS('blbar', 'display', scene === 'dungeon' ? 'block' : 'none');
@@ -2668,6 +2659,7 @@ function shadeTile(key, x, y, px, py, m) {
 }
 // 町の一枚絵：マップ全体(MW×MH)に合わせて描く。縦横比が違えば中央を切り出す
 function drawTownArt(camX, camY) {
+  if(CastleTown.draw(ctx,camX,camY))return;
   const im = SPRITES.town, W = MW * TS, H = MH * TS, want = MW / MH, have = im.width / im.height;
   let sx = 0, sy = 0, sw = im.width, sh = im.height;
   if (have > want) { sw = im.height * want; sx = (im.width - sw) / 2; } else if (have < want) { sh = im.width / want; sy = (im.height - sh) / 2; }
@@ -2700,7 +2692,7 @@ function draw() {
   const y0 = Math.max(0, Math.floor(-camY / tilePitchY()) - 2), y1 = Math.min(MH - 1, Math.ceil((innerHeight - camY) / tilePitchY()) + 1);
   const dungeon = scene === 'dungeon', m = SHADE_K[shadePref];
   if (typeof CaveTerrain !== 'undefined') CaveTerrain.setHeight(wallPref), CaveTerrain.shadeK = m;
-  const townArt = scene === 'town' && SPRITES.town;
+  const townArt = scene === 'town' && (CastleTown.state.images[CastleTown.state.area==='inn'?'inn':'town'] || SPRITES.town);
   if (townArt) drawTownArt(camX, camY);                                          // 町は一枚絵（判定は内部の格子のまま）
   for (let y = y0; y <= y1 && !townArt; y++) for (let x = x0; x <= x1; x++) {
     if (!dungeon && !seen[y][x]) continue;
@@ -2729,10 +2721,11 @@ function draw() {
   }
   for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
   // 描画順：奥（上）から手前（下）へ。主人公より手前（下）にいる敵・味方・店主は、主人公の後に描く（主人公が手前の味方を踏んで見えないように）
-  const worldEnts = [...enemies,...(AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):[])].sort((a,b)=>a.vy-b.vy);
+  const worldEnts = [...enemies,...(dungeon&&AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):CastleTown.state.npcs)].sort((a,b)=>a.vy-b.vy);
   const inFront = e => e.vy > player.vy && e.vy - player.vy < 1.2 && Math.abs(e.vx - player.vx) < 1.2;
   const drawEnt = e => {
     if (!vis[e.y][e.x]) return;
+    if(e.isTown){CastleTown.drawNPC(ctx,e,t,camX,camY);return;}
     if(e.isShopkeeper){ShopSystem.draw(ctx,e,t,camX,camY);return;}
     if(ShopSecurity.isSecurity(e)){ShopSecurity.draw(ctx,e,t,camX,camY);return;}
     if(e.isAlly){AllySystem.draw(ctx,e,t,camX,camY);return;}
@@ -2749,8 +2742,9 @@ function draw() {
   if(dungeon)DungeonExperience.fog(ctx,{width:innerWidth,height:innerHeight,size:TS,pitch:tilePitchY(),camX,camY,player,rooms,roomIndex:playerRoom(),roomGrid,map,seen,theme:floorPlan?.theme?.id,terrain:CaveTerrain,revision:visibilityRevision,seed:floorPlan?.artSeed,mood:moodPref,depth:floorNo});
   if(dungeon)ShopSystem.prices(ctx,camX,camY);
   EventVfx.drawWorld(ctx,t,camX,camY,TS,tilePitchY(),'floor');
-  const [ppx, ppy] = drawEntity('player', player, t, camX, camY);
+  const [ppx, ppy] = !dungeon&&CastleTown.drawWake(ctx,camX,camY) ? [camX+player.vx*TS,camY+player.vy*TS] : drawEntity('player', player, t, camX, camY);
   for (const e of worldEnts) if (inFront(e)) drawEnt(e);                          // 主人公より手前にいる者は、主人公の上に描く
+  if(!dungeon)CastleTown.foreground(ctx,camX,camY);
   const under = dungeon ? itemAt(player.x, player.y) : null;                       // 足元のアイテム名
   if (under) {
     ctx.font = '12px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
@@ -2789,6 +2783,7 @@ function draw() {
 // アニメーション：動いている間だけ rAF を回す
 function stepVis(dt) {
   AllySystem.animate(dt);
+  CastleTown.animate(dt,now());
   for (const e of [player, ...enemies,...ShopSystem.keepers().filter(k=>k.hp>0)]) {
     const dx = e.x - e.vx, dy = e.y - e.vy, d = Math.hypot(dx, dy);
     if (e !== player && typeof MonsterSprites !== 'undefined' && (MonsterSprites.has(e.kind)||ShopSecurity.isSecurity(e)) && d>.001 && d<=2.5) {
@@ -2810,6 +2805,7 @@ function stepVis(dt) {
   }
 }
 function animating(t) {
+  if(scene==='town'&&CastleTown.state.area==='outside'&&!document.hidden&&!uiBlocked())return true;
   if(EventVfx.animating(t))return true;
   if(AllySystem.animating(t))return true;
   if(ShopSystem.keepers().some(k=>k.walkEnd>t||t-k.attackStart<300))return true;
@@ -2949,10 +2945,10 @@ if (globalThis.__previewFloor) {                                   // 確認用�
   floorNo = Math.max(1, Math.min(globalThis.__previewFloor, DUNGEONS[dungeonId].floors)); newFloor();
   say(`【確認用】${DUNGEONS[dungeonId].name} ${floorNo}階から開始（保存しません）`); startFade(); render();
 }
-if (typeof Image !== 'undefined') { MonsterHouseVfx.load(render); EventVfx.load(render); ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
+if (typeof Image !== 'undefined') { CastleTown.load(render); MonsterHouseVfx.load(render); EventVfx.load(render); ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
 </script>
-<script src="assets/controls-ui.js?v=event-vfx-v1"></script>
+<script src="assets/controls-ui.js?v=castle-v1"></script>
 <script src="assets/ergonomic-ui.js?v=ground-v2"></script>
-<script>AllySystem.init();ShopSystem.init();</script>
+<script>AllySystem.init();ShopSystem.init();CastleTown.init();</script>
 </body>
 </html>

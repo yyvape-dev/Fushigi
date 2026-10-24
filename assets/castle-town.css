@@ -1,0 +1,15 @@
+#townMapButton{position:fixed;top:88px;right:12px;z-index:4;border:1px solid #bd9b58;border-radius:7px;background:#282016df;color:#ffe6ac;padding:9px 14px;font:14px sans-serif;touch-action:manipulation}
+#townMapButton[hidden],#townDialog[hidden]{display:none!important}
+#townDialog{position:fixed;inset:0;z-index:40;background:#100d0aa0;display:flex;align-items:center;justify-content:center;padding:max(12px,env(safe-area-inset-top)) 12px max(12px,env(safe-area-inset-bottom));box-sizing:border-box}
+.town-dialog{width:min(600px,100%);max-height:100%;box-sizing:border-box;overflow:auto;overscroll-behavior:contain;background:linear-gradient(135deg,#30241df7,#171518fa);border:2px solid #b69a5b;border-radius:12px;padding:20px;color:#f0dfbb;box-shadow:0 12px 50px #000b;font:15px/1.65 sans-serif}
+.town-dialog h2{margin:0 0 12px;color:#ffe7ac;font-size:21px;border-bottom:1px solid #8e7648;padding-bottom:9px}
+#townActions{display:flex;flex-direction:column;gap:8px;margin-top:16px}
+#townActions button{font:inherit;text-align:left;border:1px solid #a18b59;border-radius:7px;background:linear-gradient(#665638,#352c22);color:#fff0cc;min-height:44px;padding:10px 14px;touch-action:manipulation}
+#townActions button:focus-visible{outline:3px solid #ffe6a1;outline-offset:2px;background:#917446}
+#townActions button:disabled{opacity:.45}
+.town-map{position:relative;margin:auto;max-width:520px}
+.town-map img{display:block;width:100%;border-radius:6px}
+.town-map-pin,.town-map-player{position:absolute;transform:translate(-50%,-50%);font-size:11px;font-weight:bold;white-space:nowrap;line-height:1.3;background:#241b12df;color:#ffe0a1;border:1px solid #c4a76c;border-radius:4px;padding:3px 4px;pointer-events:none}
+.town-map-player{color:#fff;background:#b43321;border-color:#ffe4b5;z-index:2}
+body.town-dialog-open #pad,body.town-dialog-open #act,body.town-dialog-open #lft,body.town-dialog-open #modebar{visibility:hidden;pointer-events:none}
+@media(orientation:landscape){#townMapButton{top:44px}.town-dialog{max-height:calc(100dvh - 20px);padding:14px 20px}#townDialog:has(.town-map) .town-dialog{width:min(760px,94vw)}.town-map{max-width:260px}#townActions{margin-top:10px}#townText:has(.town-map) p{font-size:12px;margin:6px 0;line-height:1.4}}

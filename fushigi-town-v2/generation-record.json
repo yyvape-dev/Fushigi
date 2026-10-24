@@ -1,0 +1,79 @@
+{
+  "date": "2026-10-24",
+  "approvedMock": "source-art/approved-mock.png",
+  "generator": "image_gen",
+  "referencesForBothBackgrounds": [
+    "source-art/approved-mock.png"
+  ],
+  "characterMotion": "Existing shopkeeper 3-color 8-direction idle/walk and existing 3 companion atlases; no new character generation",
+  "employment": false,
+  "artifacts": [
+    {
+      "path": "source-art/approved-mock.png",
+      "size": [
+        1619,
+        971
+      ],
+      "sha256": "6384cb5f9c6d8c8a8fb47dc7394d0471ed2d98cb2224be5bc89c6bdb534c2f61"
+    },
+    {
+      "path": "source-art/town.png",
+      "size": [
+        1402,
+        1122
+      ],
+      "sha256": "0ac5b67aba0cfbb8fa54519df2c638c70862707bed6f7958eeb618726cb9cd3c"
+    },
+    {
+      "path": "source-art/inn-before-scale.png",
+      "size": [
+        1145,
+        1374
+      ],
+      "sha256": "82ef55f608c381989b2148a561b68ac55d7afff5e7d20d2dc06ef96ee231f9d9"
+    },
+    {
+      "path": "source-art/inn.png",
+      "size": [
+        1144,
+        1375
+      ],
+      "sha256": "aef19bb4c7d0caf5e45b63b37ac38e879517c4e6a072e72e4c738823f658351b"
+    },
+    {
+      "path": "source-art/rana-rest.png",
+      "size": [
+        1536,
+        1024
+      ],
+      "sha256": "dfa2af9d26c6838f9c779a6612d7bbd562fa21e2f8342dc2bc6f51e33b9d541f"
+    },
+    {
+      "path": "../assets/town-v2/town.webp",
+      "size": [
+        1402,
+        1122
+      ],
+      "sha256": "93c4ac57b1a95d236dc64f6d701811167d948c15d2be0c84420ffd271bd63177"
+    },
+    {
+      "path": "../assets/town-v2/inn.webp",
+      "size": [
+        1144,
+        1375
+      ],
+      "sha256": "a84269c3c4554c99cb45e4d2d60151998fef0e1fb08631034b716ac837563183"
+    },
+    {
+      "path": "../assets/town-v2/rana-rest.png",
+      "size": [
+        320,
+        200
+      ],
+      "sha256": "eac802edbe2f899e700446ede0d3e97f4e83cfa31578153d8b27e9a5c742a65d"
+    }
+  ],
+  "bedCorrection": "Compact single bed; complete resting character on top of cover, no torso clipping or blanket mask",
+  "restPoseReference": "fushigi-equipment-v3/assets/hero-base/S.png",
+  "bedScaleReference": "source-art/inn-before-scale.png"
+}
