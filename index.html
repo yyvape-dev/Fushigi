@@ -168,7 +168,8 @@ canvas{display:block;touch-action:none}
 <script src="assets/monster-families.js?v=enemy-c-v1"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=garden-v1"></script>
-<script src="assets/game-audio.js?v=audio-v1"></script>
+<script src="assets/action-sfx.js?v=action-se-v1"></script>
+<script src="assets/game-audio.js?v=action-se-v1"></script>
 <script src="assets/event-vfx.js?v=deep-enemy-vfx-v1"></script>
 <script src="assets/enemy-vfx.js?v=blast-evolution-v1"></script>
 <script src="assets/monster-combat.js?v=blast-evolution-v1"></script>
@@ -177,7 +178,7 @@ canvas{display:block;touch-action:none}
 <link rel="stylesheet" href="assets/castle-town.css?v=town-grid-v3">
 <script src="assets/town-v4/art.js?v=town-commercial-v4"></script>
 <script src="assets/castle-town-layout-v4.js?v=town-commercial-v4"></script>
-<script src="assets/castle-town-v4.js?v=town-commercial-v4"></script>
+<script src="assets/castle-town-v4.js?v=action-se-v1"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -612,6 +613,7 @@ function zapTarget() { const t = lineTarget();if (!t) say('しかし、何も起
 function zapHit(e, dmg, label) {
   if(e.isShopkeeper){ShopSystem.hit(dmg,e);return;}
   if(e.mim)EnemyVfx.emit('reveal',e);
+  playSE('hit');
   e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
   if (e.hp <= 0) { say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); killEnemy(e); }
   else { say(`${label}で${eT(e).name}に${dmg}ダメージ。`); afterDamage(e); }
@@ -629,6 +631,7 @@ const weaponPow = () => eqWeapon ? Math.max(0, ITEMS[eqWeapon.type].atk + eqWeap
 function playerAtk() {
   return levelAtk(player.lv) + weaponPow() * (0.75 + curStr() / 32) + (curStr() - 8) + (wHas('hungry') && belly <= 30 ? 3 : 0);
 }
+function playSE(key){if(typeof GameAudio!=='undefined')GameAudio.effect(key);}
 function calcDamage(e) {
   return Math.max(1, Math.round((playerAtk() - (eT(e).def || 0) + 1) * (0.875 + Math.random() * 0.25)));
 }
@@ -764,6 +767,7 @@ function eatBread(def, fill, grow, moldy) {                       // パンを�
 }
 function hurtPlayer(n, msg) {                                   // 敵以外から受けるダメージ（草・爆風）。無敵なら無効
   if (player.st.invinc > 0) { fxText(player.x, player.y, '0', '#9ad8ff'); return false; }
+  if(n>0)playSE('hurt');
   player.hp -= n; player.flash = now() + 130; hurtT = now(); fxText(player.x, player.y, '-' + n, '#ffb347'); vfxShake(3, 160);
   return checkDeath(msg);
 }
@@ -1294,6 +1298,7 @@ function checkHouse() {                                           // 魔物部�
   MonsterHouseVfx.play(player.x,player.y);
 }
 function animateTrap(tr,skipPickup) {
+  playSE('trap');
   tr.seen=true;player.swing=0;player.action=null;updateVis();
   say(`${TRAPS[tr.kind].name}を踏んだ！`);fxText(tr.x,tr.y,TRAPS[tr.kind].name,TRAPS[tr.kind].col);
   const kind=tr.kind,duration=kind==='pit'?950:kind==='warp'?900:850;
@@ -1310,6 +1315,7 @@ function animateTrap(tr,skipPickup) {
   render();
 }
 function triggerTrap(tr,announced=false) {                        // 罠を踏んだ。落とし穴で階が変わったら true
+  playSE('trap-'+tr.kind);
   tr.seen = true; const T = TRAPS[tr.kind];
   if(!announced){say(`${T.name}を踏んだ！`); fxText(player.x, player.y, T.name, T.col);}
   if (tr.kind === 'pit') { floorNo++; say(`${floorNo}階へ落ちた！`); newFloor(); startFade(); render(); return true; }
@@ -1599,6 +1605,7 @@ function endTurn() {
   });
 }
 function hitEnemy(e) {
+  playSE('swing');
   player.swing = now(); player.attackFace = player.face.slice(); kick();
   if (e.x !== player.x) player.fl = e.x < player.x;
   bumpToward(player, e.x, e.y);
@@ -1623,6 +1630,7 @@ function strikeOne(e, again) {
   if (Math.random() < 0.2 * ringN('moroha') + (wHas('crit') ? 0.25 : 0)) { dmg *= 2; crit = true; }
   if (wHas('bat') && (eT(e).flying || e.kind === 'bat')) dmg *= 2;
   if(e.mim)EnemyVfx.emit('reveal',e);
+  playSE(crit?'critical':'hit');
   e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
   fxText(e.x, e.y, '-' + dmg, crit ? '#ffe28a' : '#ffffff');
   vfxHit(e.x, e.y, e.x - player.x, e.y - player.y, '#ffe9a0', e.hp <= 0 || crit);
@@ -1646,6 +1654,7 @@ function strikeOne(e, again) {
 // 床のアイテムを持ち物へ。入らなければ false
 function takeFloor(f) {
   if (inv.length >= MAXBAG && !(ITEMS[f.item.type].stack && inv.some(i => i.type === f.item.type && i.shopLot === f.item.shopLot))) { say('持ち物がいっぱいだ。（持ち物から「置く」で交換できる）'); return false; }
+  playSE('pickup');
   ShopSystem.pickup(f.item);
   inv.push(f.item); floorItems.splice(floorItems.indexOf(f), 1); inv = mergeStacks(inv);
   say(`${itemName(f.item)}を拾った。（${inv.length}/${MAXBAG}）`);
@@ -1694,7 +1703,7 @@ function finishPlayerMove(skipPickup=false){
   if(dead||scene!=='dungeon'){render();return;}
   checkHouse();
   const f=itemAt(player.x,player.y);
-  if(f&&!skipPickup&&f.item.type==='gold'){gold+=f.item.plus;floorItems.splice(floorItems.indexOf(f),1);fxText(player.x,player.y,'+'+f.item.plus+'G','#ffd54a');say(`${f.item.plus}ギタンを拾った。（所持金 ${gold}G）`);}
+  if(f&&!skipPickup&&f.item.type==='gold'){playSE('coin');gold+=f.item.plus;floorItems.splice(floorItems.indexOf(f),1);fxText(player.x,player.y,'+'+f.item.plus+'G','#ffd54a');say(`${f.item.plus}ギタンを拾った。（所持金 ${gold}G）`);}
   else if(f){if(autoPick&&!skipPickup&&!ShopSystem.unpaid(f.item))takeFloor(f);else say(`足元に${itemName(f.item)}がある。`);}
   endTurn();
   const openUnder=()=>{const under=scene==='dungeon'&&!dead?itemAt(player.x,player.y):null;if(under&&ShopSystem.unpaid(under.item)&&!uiBlocked())openGroundMenu();};
@@ -1749,7 +1758,7 @@ function playerAttack() {
   if (player.st.confuse > 0) {                                  // 混乱：向きがでたらめ。敵がいなければ空振り
     const d = DIRS8[rnd(0, 7)]; player.face = d;
     const o = geomOK(player.x, player.y, d[0], d[1]) ? enemyAt(player.x + d[0], player.y + d[1]) : null;
-    if (o) hitEnemy(o); else { player.swing = now(); player.attackFace = player.face.slice(); say('混乱していて空振りした！'); }
+    if (o) hitEnemy(o); else { player.swing = now(); player.attackFace = player.face.slice(); playSE('swing');say('混乱していて空振りした！'); }
     if (o) endTurnAfterSwing(); else endTurn(); return;
   }
   const [fx_, fy_] = player.face;
@@ -1770,8 +1779,8 @@ function playerAttack() {
   }
   if (!t) {
     const tr = trapAt(player.x + fx_, player.y + fy_);
-    if (tr && !tr.seen) { tr.seen = true; player.swing = now(); player.attackFace = player.face.slice(); kick(); say(`${TRAPS[tr.kind].name}を見つけた！`); fxText(tr.x, tr.y, '罠！', TRAPS[tr.kind].col); endTurn(); return; }
-    player.swing=now();player.attackFace=player.face.slice();kick();say('素振りをした。');endTurn();return;
+    if (tr && !tr.seen) { tr.seen = true; player.swing = now(); player.attackFace = player.face.slice(); kick(); playSE('swing');say(`${TRAPS[tr.kind].name}を見つけた！`); fxText(tr.x, tr.y, '罠！', TRAPS[tr.kind].col); endTurn(); return; }
+    player.swing=now();player.attackFace=player.face.slice();kick();playSE('swing');say('素振りをした。');endTurn();return;
   }
   hitEnemy(t);
   endTurnAfterSwing();
@@ -1809,7 +1818,7 @@ function enemyStrike(e, T, range, verb) {
   if (player.st.invinc > 0) dmg = 0;
   EnemyVfx.attack(e,T,player,true,verb!=='攻撃');
   player.hp -= dmg;
-  if (dmg > 0) { hurtT = now(); player.flash = now() + 130; vfxShake(Math.min(7, 3 + dmg * 0.5), 230); }
+  if (dmg > 0) { playSE('hurt'); hurtT = now(); player.flash = now() + 130; vfxShake(Math.min(7, 3 + dmg * 0.5), 230); }
   fxText(player.x, player.y, '-' + dmg, crit ? '#ffe28a' : '#ff6b6b');
   vfxHit(player.x, player.y, player.x - e.x, player.y - e.y, '#ff6a4d', crit);
   say(`${crit ? '痛恨の一撃！ ' : ''}${T.name}の${verb}！ ${dmg}ダメージ。`);
@@ -2013,6 +2022,7 @@ function fuseItems(items) {                                      // 土台＝最
   return base;
 }
 function breakPot(pot, x, y) {
+  playSE('potbreak');
   let items = pot.pot.splice(0);
   if (ITEMS[pot.type].fuse && items.length > 1) { const names = items.map(itemName).join('＋'); items = [fuseItems(items)]; say(`${names}が合成された！ → ${itemName(items[0])}`); }
   ShopSystem.consume(pot, true);
@@ -2023,6 +2033,7 @@ function throwType(key, floorEntry=null) {
   if (guardDead()) return;
   const it = floorEntry?floorEntry.item:firstOf(key); if (!it) return;
   if (scene !== 'dungeon') { say('町では投げられない。'); closeBag(); render(); return; }
+  playSE('throw');
   const d = ITEMS[it.type]; let one;
   const removeSource=()=>{if(floorEntry){const i=floorItems.indexOf(floorEntry);if(i>=0)floorItems.splice(i,1);}else{const i=inv.indexOf(it);if(i>=0)inv.splice(i,1);}};
   if (d.stack) { it.plus--; one = { id: ++uid, type: it.type, plus: 1 }; ShopSystem.split(it,one); if (it.plus <= 0) removeSource(); }
@@ -2044,6 +2055,7 @@ function throwType(key, floorEntry=null) {
       let dmg = d.stack ? Math.max(1, rnd(5, 8) - (T.def || 0)) : 1, extra = '';
       if (one.type === 'sleepherb') { tgt.st.sleep = 8; extra = '眠ってしまった！'; } else if (one.type === 'confherb') { tgt.st.confuse = 8; extra = '混乱した！'; }
       else if (one.type === 'poisonherb') { dmg = 6; }
+      playSE('hit');
       tgt.hp -= dmg; tgt.aware = true; tgt.flash = now() + 130; if (tgt.st && !extra.startsWith('眠')) tgt.st.sleep = 0;
       fxText(tgt.x, tgt.y, '-' + dmg, '#ffffff'); vfxHit(tgt.x, tgt.y, dir[0], dir[1], '#ffe9a0', tgt.hp <= 0);
       say(`${itemName(one)}を投げた！ ${T.name}に${dmg}ダメージ。${extra}`);
@@ -2125,7 +2137,7 @@ function dropType(key) {
   const f = itemAt(player.x, player.y);
   if (f) {
     const old = f.item; ShopSystem.pickup(old);f.item = it; inv[inv.indexOf(it)] = old;
-    say(`${itemName(it)}を置いて、${itemName(old)}を拾った。`);
+    playSE('pickup');say(`${itemName(it)}を置いて、${itemName(old)}を拾った。`);
   } else {
     floorItems.push({ x: player.x, y: player.y, item: it }); inv.splice(inv.indexOf(it), 1);
     say(`${itemName(it)}を足元に置いた。`);
@@ -2960,3 +2972,4 @@ if (typeof Image !== 'undefined') { CastleTown.load(render); MonsterHouseVfx.loa
 <script>AllySystem.init();ShopSystem.init();CastleTown.init();</script>
 </body>
 </html>
+

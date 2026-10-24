@@ -131,6 +131,7 @@
   if(scene!=='town'||!state.open||state.panel!=='smith'||!nearService('smith'))return false;
   const it=smithItems().find(i=>i.id===id);if(!it)return false;
   const cost=price(it);if((it.plus||0)>=9||gold<cost)return false;
+  if(typeof GameAudio!=='undefined')GameAudio.effect('forge');
   gold-=cost;it.plus=(it.plus||0)+1;saveGame();say(itemName(it)+'を鍛えてもらった。（'+cost+'G）');show('smith');return true;
  }
  function rest(){
@@ -294,3 +295,4 @@
  function label(){return state.area==='inn'?'赤いマント亭':'城下町';}
  root.CastleTown={state,OUT,IN,bed,door,gate,facilities,mapFor,build,arrive,restore,snapshot,travel,enterInn,leaveInn,step,beforeMove,wake,context,strengthen,rest,show,close,init,load,animate,draw,drawNPC,drawProp,entities,camera,characterScale,tileScale,ready,layout,foreground,drawWake,ui,label,price};
 })(typeof window==='undefined'?globalThis:window);
+
