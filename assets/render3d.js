@@ -155,11 +155,18 @@ function frame(o) {
   renderer.render(scene, camera);
 }
 
-function show(on) { if (cvs) cvs.style.display = on ? 'block' : 'none'; }
+// html にも同じ暗色の背景があるので、body の背景だけ透明にすれば見た目は変わらない
+// （body の背景は z-index:-1 の3Dキャンバスより手前に塗られてしまうため）
+function show(on) {
+  if (!cvs) return;
+  cvs.style.display = on ? 'block' : 'none';
+  document.body.style.backgroundColor = on ? 'transparent' : '';
+}
 
 window.Render3D = {
   init,
   ready: () => !failed,          // 読み込み済みで、WebGLの開始に失敗していない
   pitchK: () => S,               // 1行の高さ = TS * pitchK（2D側の tilePitchY が使う）
   sync, frame, show,
+  debug: () => ({ inited, failed, levelKey, children: group ? group.children.length : -1, cam: camera ? camera.position.toArray() : null, frustum: camera ? [camera.left, camera.right, camera.top, camera.bottom] : null, size: renderer ? renderer.getSize(new THREE.Vector2()).toArray() : null, calls: renderer ? renderer.info.render.calls : -1, tris: renderer ? renderer.info.render.triangles : -1 }),
 };
