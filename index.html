@@ -608,7 +608,7 @@ function zapTarget() { const t = lineTarget();if (!t) say('しかし、何も起
 function zapHit(e, dmg, label) {
   if(e.isShopkeeper){ShopSystem.hit(dmg,e);return;}
   if(e.mim)EnemyVfx.emit('reveal',e);
-  e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0; 
+  e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0; fxText(e.x, e.y, '-' + dmg, '#ffb06b');
   if (e.hp <= 0) { say(`${label}で${eT(e).name}に${dmg}ダメージ。倒した！`); killEnemy(e); }
   else { say(`${label}で${eT(e).name}に${dmg}ダメージ。`); afterDamage(e); }
 }
@@ -760,7 +760,7 @@ function eatBread(def, fill, grow, moldy) {                       // パンを�
 }
 function hurtPlayer(n, msg) {                                   // 敵以外から受けるダメージ（草・爆風）。無敵なら無効
   if (player.st.invinc > 0) { fxText(player.x, player.y, '0', '#9ad8ff'); return false; }
-  player.hp -= n; player.flash = now() + 130; hurtT = now();  vfxShake(3, 160);
+  player.hp -= n; player.flash = now() + 130; hurtT = now(); fxText(player.x, player.y, '-' + n, '#ffb347'); vfxShake(3, 160);
   return checkDeath(msg);
 }
 // 「部屋の中の敵」。通路にいるときは周囲1マスの敵
@@ -1541,7 +1541,7 @@ function hungerTick() {
     say(stage === 20 ? 'おなかがへってきた…' : stage === 10 ? 'ふらふらしてきた…' : 'おなかがすいて倒れそうだ！HPが減っていく…');
   }
   if (belly <= 0) {                                             // 空腹：毎ターンHP-1
-    player.hp--; player.flash = now() + 130; hurtT = now(); 
+    player.hp--; player.flash = now() + 130; hurtT = now(); fxText(player.x, player.y, '-1', '#ffb347');
     checkDeath(`ひもじさで力尽きた…（${floorNo}階）`);
   }
 }
@@ -1621,7 +1621,7 @@ function strikeOne(e, again) {
   if (wHas('bat') && (eT(e).flying || e.kind === 'bat')) dmg *= 2;
   if(e.mim)EnemyVfx.emit('reveal',e);
   e.hp -= dmg; e.aware = true; e.mim = false; e.flash = now() + 130; if (e.st) e.st.sleep = 0;
-  
+  fxText(e.x, e.y, '-' + dmg, crit ? '#ffe28a' : '#ffffff');
   vfxHit(e.x, e.y, e.x - player.x, e.y - player.y, '#ffe9a0', e.hp <= 0 || crit);
   vfxShake(e.hp <= 0 ? 4 : crit ? 3 : 2, e.hp <= 0 ? 200 : 110);
   const pre = crit ? '会心の一撃！ ' : '';
@@ -1808,7 +1808,7 @@ function enemyStrike(e, T, range, verb) {
   EnemyVfx.attack(e,T,player,true,verb!=='攻撃');
   player.hp -= dmg;
   if (dmg > 0) { hurtT = now(); player.flash = now() + 130; vfxShake(Math.min(7, 3 + dmg * 0.5), 230); }
-  
+  fxText(player.x, player.y, '-' + dmg, crit ? '#ffe28a' : '#ff6b6b');
   vfxHit(player.x, player.y, player.x - e.x, player.y - e.y, '#ff6a4d', crit);
   say(`${crit ? '痛恨の一撃！ ' : ''}${T.name}の${verb}！ ${dmg}ダメージ。`);
   if (sHas('counter') && dmg > 0 && e.hp > 0) zapHit(e, Math.max(1, Math.ceil(dmg / 2)), 'カウンター');
@@ -2043,7 +2043,7 @@ function throwType(key, floorEntry=null) {
       if (one.type === 'sleepherb') { tgt.st.sleep = 8; extra = '眠ってしまった！'; } else if (one.type === 'confherb') { tgt.st.confuse = 8; extra = '混乱した！'; }
       else if (one.type === 'poisonherb') { dmg = 6; }
       tgt.hp -= dmg; tgt.aware = true; tgt.flash = now() + 130; if (tgt.st && !extra.startsWith('眠')) tgt.st.sleep = 0;
-      vfxHit(tgt.x, tgt.y, dir[0], dir[1], '#ffe9a0', tgt.hp <= 0);
+      fxText(tgt.x, tgt.y, '-' + dmg, '#ffffff'); vfxHit(tgt.x, tgt.y, dir[0], dir[1], '#ffe9a0', tgt.hp <= 0);
       say(`${itemName(one)}を投げた！ ${T.name}に${dmg}ダメージ。${extra}`);
       if (tgt.hp <= 0) { say(`${T.name}を倒した！`); killEnemy(tgt); } else afterDamage(tgt);
       lost = d.stack ? Math.random() < 0.5 : (one.type === 'sleepherb' || one.type === 'confherb' || one.type === 'poisonherb');   // 矢は半分こわれる。草は使われる
@@ -2755,9 +2755,9 @@ function draw() {
   fx.splice(0, fx.length, ...fx.filter(f => t - f.t0 < 700));                      // 浮かぶ数字
   for (const f of fx) {
     const k = (t - f.t0) / 700;
-    ctx.globalAlpha = 1 - k * k; ctx.font = 'bold 16px monospace'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.globalAlpha = 1 - k * k; ctx.font = '800 22px "Hiragino Sans","Noto Sans JP","Yu Gothic",system-ui,sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     const tx = camX + (f.x + 0.5) * TS, ty = camY + f.y * tilePitchY() - k * 20;
-    ctx.fillStyle = '#000'; ctx.fillText(f.text, tx + 1, ty + 1);
+    ctx.lineJoin = 'round'; ctx.lineWidth = 5; ctx.strokeStyle = 'rgba(0,0,0,.85)'; ctx.strokeText(f.text, tx, ty);   // 太い縁取りで読みやすく
     ctx.fillStyle = f.color; ctx.fillText(f.text, tx, ty);
     ctx.globalAlpha = 1;
   }
