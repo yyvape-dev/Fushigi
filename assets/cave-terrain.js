@@ -3,10 +3,16 @@
  const SIZE=128,PITCH=.82,images={},cache=new Map();
  const ids=['forest','limestone','ruins','ice','volcano'];
  const state={ready:false,error:null,version:'wall-relief-v1',images,cache,pitch:PITCH,ids};
+ // Wall height presets [room-facing face, interior mass] in sheet pixels (128px = one cell wide).
+ // 0 = original look. OFF is the headroom the sprite needs above its cell.
+ const HEIGHTS=[[28,70],[44,100],[60,130]];
+ state.heightPref=0;
+ state.setHeight=function(n){n=HEIGHTS[n]?n:0;if(state.heightPref!==n){state.heightPref=n;cache.clear();}};
+ const offOf=()=>HEIGHTS[state.heightPref][1];
  const keys=['floor0','floor1','floor2','floor3','wallT0','wallT1','wallF0','wallF1','stairs'];
  state.load=async function(redraw){try{await Promise.all(ids.flatMap(id=>keys.map(key=>new Promise((resolve,reject)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{images[id+':'+key]=im;resolve();};im.onerror=()=>reject(Error(id+'/'+key));im.src='assets/dungeon/locations-v1/'+id+'/'+key+'.webp';}))));await Promise.all(ids.map(id=>new Promise(resolve=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{images[id+':floorW']=im;resolve();};im.onerror=()=>resolve();im.src='assets/dungeon/locations-v1/'+id+'/floorW.webp';})));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('ロケーション画像読込失敗',e);redraw();}};
  state.topology=function(map,x,y){const f=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;let edges=0,diagonals=0;[[0,-1],[1,0],[0,1],[-1,0]].forEach(([dx,dy],i)=>{if(f(x+dx,y+dy))edges|=1<<i;});[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([dx,dy],i)=>{if(f(x+dx,y+dy))diagonals|=1<<i;});return {edges,diagonals};};
- state.rise=(map,x,y,size)=>size*((state.topology(map,x,y).edges&1)?.22:.55);
+ state.rise=(map,x,y,size)=>size*HEIGHTS[state.heightPref][(state.topology(map,x,y).edges&1)?0:1]/128;
  function canvas(w=SIZE,h=SIZE){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
  function art(id,key){return images[id+':'+key];}
  function patch(id,key){const k=id+':patch:'+key;if(cache.has(k))return cache.get(k);const c=canvas(),g=c.getContext('2d');g.drawImage(art(id,key),0,0,SIZE,SIZE);g.globalCompositeOperation='destination-in';const r=g.createRadialGradient(64,64,18,64,64,62);r.addColorStop(0,'#000');r.addColorStop(1,'#0000');g.fillStyle=r;g.fillRect(0,0,SIZE,SIZE);cache.set(k,c);return c;}
@@ -52,21 +58,21 @@
  function bank(id,map,x,y,seed,variant,phaseX,phaseY){
   const {edges,diagonals}=state.topology(map,x,y);
   // Neighbour-owned radii depend on world coordinates, not just topology.
-  const k=[id,x,y,seed,edges,diagonals,variant].join(':');if(cache.has(k))return cache.get(k);
-  const rise=(edges&1)?28:70,p=105,c=canvas(128,184),g=c.getContext('2d');
+  const k=[id,x,y,seed,edges,diagonals,variant,state.heightPref].join(':');if(cache.has(k))return cache.get(k);
+  const OFF=offOf(),H=OFF+114,rise=HEIGHTS[state.heightPref][(edges&1)?0:1],p=105,c=canvas(128,H),g=c.getContext('2d');
   const footprint=state.footprint(map,x,y,seed,id),top=canvas(128,p),tg=top.getContext('2d');
   tg.drawImage(footprint,0,0,128,p);
   // Extrude the actual scalloped footprint. A rectangular facade would fill
   // the negative space back in and undo the partial-cell silhouette.
-  const face=canvas(128,184),fg=face.getContext('2d');
-  for(let z=rise;z>=0;z--)fg.drawImage(top,0,70-z);
-  fg.globalCompositeOperation='destination-out';fg.drawImage(top,0,70-rise);
+  const face=canvas(128,H),fg=face.getContext('2d');
+  for(let z=rise;z>=0;z--)fg.drawImage(top,0,OFF-z);
+  fg.globalCompositeOperation='destination-out';fg.drawImage(top,0,OFF-rise);
   fg.globalCompositeOperation='source-in';
   const wf=art(id,'wallF'+variant),kf=wf.naturalWidth/256;   // sheets may be 256 or higher resolution
-  fg.drawImage(wf,phaseX*128*kf,0,128*kf,256*kf,0,0,128,184);
+  fg.drawImage(wf,phaseX*128*kf,0,128*kf,256*kf,0,0,128,H);
   // Darker vertical faces distinguish raised rock from the walkable floor.
   fg.globalCompositeOperation='source-atop';
-  const shadow=fg.createLinearGradient(0,0,0,184);shadow.addColorStop(0,'rgba(0,0,0,.12)');shadow.addColorStop(1,'rgba(0,0,0,.55)');fg.fillStyle=shadow;fg.fillRect(0,0,128,184);
+  const shadow=fg.createLinearGradient(0,0,0,H);shadow.addColorStop(0,'rgba(0,0,0,.12)');shadow.addColorStop(1,'rgba(0,0,0,.55)');fg.fillStyle=shadow;fg.fillRect(0,0,128,H);
   g.drawImage(face,0,0);
   const cap=canvas(128,p),cg=cap.getContext('2d');
   const wt=art(id,'wallT'+variant);
@@ -77,13 +83,13 @@
    cg.drawImage(wt,ci*cw,cj*ch,cw,ch,0,0,128,p);
   }else{const kt=wt.naturalWidth/256;cg.drawImage(wt,phaseX*128*kt,phaseY*64*kt,128*kt,128*kt,0,0,128,p);}
   cg.globalCompositeOperation='destination-in';cg.drawImage(top,0,0);
-  g.drawImage(cap,0,70-rise);
+  g.drawImage(cap,0,OFF-rise);
   if(cache.size>512)cache.clear();cache.set(k,c);return c;
  }
  state.draw=function(g,key,px,py,size,{map,x=0,y=0,theme,seed=0}){if(!state.ready)return false;const id=ids.includes(theme?.id)?theme.id:'limestone',h=size*PITCH;g.imageSmoothingEnabled=true;
   if(key.startsWith('floor')){const hash=(((x*73856093)^(y*19349663)^seed)>>>0),v=hash%31===0?3:hash%3;ground(g,px,py,size,h,id,x,y,v);return true;}
   if(key==='stairs'){ground(g,px,py,size,h,id,x,y,1);g.drawImage(patch(id,'stairs'),px,py,size,h);return true;}
-  if(key!=='wallF'&&key!=='wallT')return false;const {edges,diagonals}=state.topology(map,x,y);ground(g,px,py,size,h,id,x,y,1);const v=(((x>>1)*37^(y>>1)*71^seed)>>>0)&1;g.drawImage(bank(id,map,x,y,seed,v,x&1,y&1),px,py-size*70/128,size,size*184/128);return true;
+  if(key!=='wallF'&&key!=='wallT')return false;const {edges,diagonals}=state.topology(map,x,y);ground(g,px,py,size,h,id,x,y,1);const v=(((x>>1)*37^(y>>1)*71^seed)>>>0)&1;const OFF=offOf();g.drawImage(bank(id,map,x,y,seed,v,x&1,y&1),px,py-size*OFF/128,size,size*(OFF+114)/128);return true;
  };
  root.CaveTerrain=state;
 })(typeof window==='undefined'?globalThis:window);
