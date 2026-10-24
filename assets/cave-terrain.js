@@ -86,8 +86,26 @@
   g.drawImage(cap,0,OFF-rise);
   if(cache.size>512)cache.clear();cache.set(k,c);return c;
  }
+  // Soft ambient shadow on floor cells beside walls (shadeK: 0 none, 1 standard, 1.6 strong).
+ state.shadeK=1;
+ function edgeShade(g,map,x,y,px,py,size,h){
+  const k=state.shadeK;if(!k)return;
+  const wall=(dx,dy)=>map[y+dy]?.[x+dx]===undefined||map[y+dy][x+dx]===0;
+  const n=wall(0,-1),s=wall(0,1),w=wall(-1,0),e=wall(1,0);
+  const band=(x0,y0,x1,y1,rx,ry,rw,rh,a)=>{const gr=g.createLinearGradient(x0,y0,x1,y1);gr.addColorStop(0,'rgba(6,4,3,'+(a*k).toFixed(3)+')');gr.addColorStop(.45,'rgba(6,4,3,'+(a*k*.42).toFixed(3)+')');gr.addColorStop(1,'rgba(6,4,3,0)');g.fillStyle=gr;g.fillRect(rx,ry,rw,rh);};
+  if(n){const d=h*.62;band(px,py,px,py+d,px,py,size,d,.46);}
+  if(w){const d=size*.36;band(px,py,px+d,py,px,py,d,h,.30);}
+  if(e){const d=size*.36;band(px+size,py,px+size-d,py,px+size-d,py,d,h,.30);}
+  if(s){const d=h*.26;band(px,py+h,px,py+h-d,px,py+h-d,size,d,.22);}
+  // Inner corners where only the diagonal neighbour is rock.
+  const corner=(cx,cy,sx,sy)=>{const r=size*.40,gr=g.createRadialGradient(cx,cy,0,cx,cy,r);gr.addColorStop(0,'rgba(6,4,3,'+(.30*k).toFixed(3)+')');gr.addColorStop(1,'rgba(6,4,3,0)');g.save();g.beginPath();g.rect(px,py,size,h);g.clip();g.fillStyle=gr;g.fillRect(cx-r,cy-r,r*2,r*2);g.restore();};
+  if(!n&&!w&&wall(-1,-1))corner(px,py);
+  if(!n&&!e&&wall(1,-1))corner(px+size,py);
+  if(!s&&!w&&wall(-1,1))corner(px,py+h);
+  if(!s&&!e&&wall(1,1))corner(px+size,py+h);
+ }
  state.draw=function(g,key,px,py,size,{map,x=0,y=0,theme,seed=0}){if(!state.ready)return false;const id=ids.includes(theme?.id)?theme.id:'limestone',h=size*PITCH;g.imageSmoothingEnabled=true;
-  if(key.startsWith('floor')){const hash=(((x*73856093)^(y*19349663)^seed)>>>0),v=hash%31===0?3:hash%3;ground(g,px,py,size,h,id,x,y,v);return true;}
+  if(key.startsWith('floor')){const hash=(((x*73856093)^(y*19349663)^seed)>>>0),v=hash%31===0?3:hash%3;ground(g,px,py,size,h,id,x,y,v);edgeShade(g,map,x,y,px,py,size,h);return true;}
   if(key==='stairs'){ground(g,px,py,size,h,id,x,y,1);g.drawImage(patch(id,'stairs'),px,py,size,h);return true;}
   if(key!=='wallF'&&key!=='wallT')return false;const {edges,diagonals}=state.topology(map,x,y);ground(g,px,py,size,h,id,x,y,1);const v=(((x>>1)*37^(y>>1)*71^seed)>>>0)&1;const OFF=offOf();g.drawImage(bank(id,map,x,y,seed,v,x&1,y&1),px,py-size*OFF/128,size,size*(OFF+114)/128);return true;
  };
