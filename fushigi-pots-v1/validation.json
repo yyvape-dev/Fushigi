@@ -1,0 +1,32 @@
+{
+  "potTypes": [
+    "fusepot",
+    "savepot"
+  ],
+  "sharedSprite": true,
+  "sharedInventoryImage": true,
+  "spriteSize": [
+    256,
+    256
+  ],
+  "inventoryImages": [
+    {
+      "complete": true,
+      "width": 72
+    },
+    {
+      "complete": true,
+      "width": 72
+    },
+    {
+      "complete": true,
+      "width": 72
+    },
+    {
+      "complete": true,
+      "width": 72
+    }
+  ],
+  "loadedHero": true,
+  "pageErrors": []
+}

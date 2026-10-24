@@ -1,0 +1,35 @@
+{
+  "date": "2026-10-24",
+  "approval": "User approved generated pot artwork with GO",
+  "tool": "image_gen",
+  "reference": "fushigi-equipment-v3/assets/hero-base/S.png",
+  "usage": [
+    "dungeon floor",
+    "inventory",
+    "warehouse",
+    "shop"
+  ],
+  "sharedCategory": "壺",
+  "spriteKey": "icon_pot",
+  "source": {
+    "path": "source-art/pot.png",
+    "sha256": "e1f16393ea23e3c7c3ef1e13b5fac813c454022637374a0cce0bc0168ecbc7d8"
+  },
+  "asset": {
+    "path": "../assets/icon_pot.png",
+    "sha256": "669b4085e2bc031c4a504819976f5ca9206405f8b5c8785e8997165a90f2ba93",
+    "size": [
+      256,
+      256
+    ],
+    "mode": "RGBA"
+  },
+  "registration": {
+    "maxArtworkSize": [
+      224,
+      224
+    ],
+    "bottomY": 240,
+    "script": "build.py"
+  }
+}
