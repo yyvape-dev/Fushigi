@@ -1,0 +1,24 @@
+{
+  "tool": "image_gen",
+  "prompt": "Create a production sprite sheet of EXACTLY NINE forest environment props in a STRICT 3 columns by 3 rows equal square grid. Square canvas, no drawn grid lines, ALL backgrounds pure flat magenta #FF00FF, no words or labels. Reference 1 is the approved final tree sprite: match its premium 2D painted chunky volumetric fantasy style, blue-teal/sage foliage, warm gray-brown wood, moss, rich internal shading and rounded overlapping shapes. Reference 2 is the woodland location art direction. Every object must use the SAME fixed orthographic camera at 65 DEGREES ABOVE HORIZONTAL, showing tops and near surfaces. No extra viewpoints. One isolated fully visible object per cell with at least 12% safe margin, visually centered, ground contact at 88% of its own cell height (except hanging rope strip, centered). No cast ground shadows; paint each object's own volumetric shading and occlusion. No background scenery or characters. Objects in reading order: row1 col1 a small young rounded oak tree with a short thick trunk and blue-teal canopy (same species as approved tree); row1 col2 a gnarled mossy old oak stump with visible top growth rings and two tiny roots; row1 col3 a single large softly rounded mossy gray woodland boulder. Row2 col1 a low pile of three small gray stones with restrained moss; row2 col2 a lush low compact fern clump with 5 to7 readable broad fronds in sage-teal; row2 col3 a small clump of 4 tiny warm cream-and-amber mushrooms growing in moss, no neon glow. Row3 col1 a hanging handcrafted aged brass lantern with warm amber glass and short dark wooden curved mounting arm, isolated with no wall, light contained in glass; row3 col2 a low rustic wooden lantern post standing on a small mossy base, carrying one matching brass amber lantern; row3 col3 a single shallow sagging rope with SEVEN TINY amber festival globe lights, two muted coral/seafoam accents, fully contained in cell width with 12% side margin; globes only 4% of cell width each and total strip height at most22% of cell height, centered at55% cell height. Keep props richly painted and legible at small game scale, shapes cohesive, no plastic shine, no fine noise, no halos spilling onto the magenta. Absolutely no object crosses a cell boundary.",
+  "references": [
+    "assets/dungeon/forest-fixed65-v1/tree.png",
+    "fushigi-lantern-forest-v1/source-art/concept.png"
+  ],
+  "transparent_background": false,
+  "grid": [
+    3,
+    3
+  ],
+  "keys": [
+    "sapling",
+    "stump",
+    "boulder",
+    "rocks",
+    "fern",
+    "mushrooms",
+    "lantern",
+    "lanternpost",
+    "garland"
+  ]
+}

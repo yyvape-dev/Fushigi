@@ -1,0 +1,111 @@
+{
+  "floors": [
+    {
+      "floor": 1,
+      "theme": "forest",
+      "pitch": 0.9063077870366499,
+      "terrainPitch": 0.9063077870366499,
+      "webgl": 0,
+      "render3d": "undefined",
+      "legacyPreference": 0,
+      "wh": "[\"potion\",\"potion\",\"potion\",\"bread\",\"bread\",\"stick:0\",\"sword:0\",\"axe:0\",\"woodshield:0\",\"ironshield:0\"]",
+      "bank": 0
+    },
+    {
+      "floor": 2,
+      "theme": "limestone",
+      "pitch": 0.9063077870366499,
+      "terrainPitch": 0.9063077870366499,
+      "webgl": 0,
+      "render3d": "undefined",
+      "legacyPreference": 0,
+      "wh": "[\"potion\",\"potion\",\"potion\",\"bread\",\"bread\",\"stick:0\",\"sword:0\",\"axe:0\",\"woodshield:0\",\"ironshield:0\"]",
+      "bank": 0
+    },
+    {
+      "floor": 3,
+      "theme": "ruins",
+      "pitch": 0.9063077870366499,
+      "terrainPitch": 0.9063077870366499,
+      "webgl": 0,
+      "render3d": "undefined",
+      "legacyPreference": 0,
+      "wh": "[\"potion\",\"potion\",\"potion\",\"bread\",\"bread\",\"stick:0\",\"sword:0\",\"axe:0\",\"woodshield:0\",\"ironshield:0\"]",
+      "bank": 0
+    },
+    {
+      "floor": 4,
+      "theme": "ice",
+      "pitch": 0.9063077870366499,
+      "terrainPitch": 0.9063077870366499,
+      "webgl": 0,
+      "render3d": "undefined",
+      "legacyPreference": 0,
+      "wh": "[\"potion\",\"potion\",\"potion\",\"bread\",\"bread\",\"stick:0\",\"sword:0\",\"axe:0\",\"woodshield:0\",\"ironshield:0\"]",
+      "bank": 0
+    },
+    {
+      "floor": 5,
+      "theme": "volcano",
+      "pitch": 0.9063077870366499,
+      "terrainPitch": 0.9063077870366499,
+      "webgl": 0,
+      "render3d": "undefined",
+      "legacyPreference": 0,
+      "wh": "[\"potion\",\"potion\",\"potion\",\"bread\",\"bread\",\"stick:0\",\"sword:0\",\"axe:0\",\"woodshield:0\",\"ironshield:0\"]",
+      "bank": 0
+    },
+    {
+      "floor": 5,
+      "theme": "volcano",
+      "pitch": 0.9063077870366499,
+      "terrainPitch": 0.9063077870366499,
+      "webgl": 0,
+      "render3d": "undefined",
+      "legacyPreference": 0,
+      "wh": "[\"potion\",\"potion\",\"potion\",\"bread\",\"bread\",\"stick:0\",\"sword:0\",\"axe:0\",\"woodshield:0\",\"ironshield:0\"]",
+      "bank": 0
+    }
+  ],
+  "scenery": {
+    "unexploredHidden": true,
+    "inputMapUnchanged": true,
+    "keys": [
+      "tree",
+      "sapling",
+      "stump",
+      "boulder",
+      "rocks",
+      "fern",
+      "mushrooms",
+      "lantern",
+      "lanternpost",
+      "garland"
+    ],
+    "feet": {
+      "tree": 0.908203125,
+      "stump": 0.900390625,
+      "sapling": 0.900390625,
+      "boulder": 0.900390625,
+      "rocks": 0.900390625,
+      "fern": 0.900390625,
+      "lanternpost": 0.900390625,
+      "mushrooms": 0.900390625,
+      "lantern": 0.900390625,
+      "garland": 0.5625
+    }
+  },
+  "pageErrors": [],
+  "forbidden3DRequests": [],
+  "viewports": [
+    [
+      1100,
+      850
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "note": "WebGL throws if requested. Screenshot player moved onto the centre of an existing lit clearing; terrain unchanged."
+}

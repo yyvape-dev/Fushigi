@@ -1,0 +1,235 @@
+[
+  {
+    "key": "sapling",
+    "path": "assets/dungeon/forest-fixed65-v1/sapling.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      0,
+      0
+    ],
+    "sourceBox": [
+      48,
+      65,
+      398,
+      400
+    ],
+    "reusedAsset": null,
+    "foot": [
+      256,
+      461
+    ],
+    "bytes": 221674,
+    "sha256": "e64d15cbfb55be91484be79e1c8b10fe46262178ac0f90b4b34fa3c8feecd5d5"
+  },
+  {
+    "key": "stump",
+    "path": "assets/dungeon/forest-fixed65-v1/stump.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      1,
+      0
+    ],
+    "sourceBox": [
+      24,
+      91,
+      396,
+      391
+    ],
+    "reusedAsset": null,
+    "foot": [
+      256,
+      461
+    ],
+    "bytes": 197857,
+    "sha256": "abbfa6b0fdb70015351f12ab0e632656d3c1685182bd0c6661e23e60374454ca"
+  },
+  {
+    "key": "boulder",
+    "path": "assets/dungeon/forest-fixed65-v1/boulder.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      2,
+      0
+    ],
+    "sourceBox": [
+      42,
+      100,
+      381,
+      391
+    ],
+    "reusedAsset": null,
+    "foot": [
+      256,
+      461
+    ],
+    "bytes": 206357,
+    "sha256": "e038a63c728b2b4a6e4cf1941ce1e0ee5d1e8870a080408d4b4210faf9ed00e1"
+  },
+  {
+    "key": "rocks",
+    "path": "assets/dungeon/forest-fixed65-v1/rocks.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      0,
+      1
+    ],
+    "sourceBox": [
+      59,
+      92,
+      369,
+      326
+    ],
+    "reusedAsset": null,
+    "foot": [
+      256,
+      461
+    ],
+    "bytes": 179414,
+    "sha256": "b80cd797eea3622601a32ce3213b2b486a469d140439843efcbfc008cfcb8016"
+  },
+  {
+    "key": "fern",
+    "path": "assets/dungeon/forest-fixed65-v1/fern.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      1,
+      1
+    ],
+    "sourceBox": [
+      33,
+      63,
+      398,
+      342
+    ],
+    "reusedAsset": null,
+    "foot": [
+      256,
+      461
+    ],
+    "bytes": 198078,
+    "sha256": "f0fdf2a53c21ec30fa0d67cb360d95d955df700f6d3cfedc717ca16b425385a5"
+  },
+  {
+    "key": "mushrooms",
+    "path": "assets/dungeon/forest-fixed65-v1/mushrooms.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      2,
+      1
+    ],
+    "sourceBox": [
+      55,
+      106,
+      347,
+      330
+    ],
+    "reusedAsset": null,
+    "foot": [
+      256,
+      461
+    ],
+    "bytes": 161998,
+    "sha256": "81fa259c6ca88425967fcac13cbad112de9a17c02bd249e33ef9043868f6e05e"
+  },
+  {
+    "key": "lantern",
+    "path": "assets/dungeon/forest-fixed65-v1/lantern.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      0,
+      2
+    ],
+    "sourceBox": [
+      72,
+      0,
+      319,
+      313
+    ],
+    "reusedAsset": null,
+    "foot": [
+      256,
+      461
+    ],
+    "bytes": 154339,
+    "sha256": "7813b66fcf4042061c97a2a76372f3f09a308568e2d731cc5994ba1c702287ba"
+  },
+  {
+    "key": "lanternpost",
+    "path": "assets/dungeon/forest-fixed65-v1/lanternpost.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      1,
+      2
+    ],
+    "sourceBox": [
+      73,
+      0,
+      297,
+      335
+    ],
+    "reusedAsset": null,
+    "foot": [
+      256,
+      461
+    ],
+    "bytes": 133616,
+    "sha256": "cf8bec54e3c0517711fa7fec468c10618cd6e5e9c7259e77507a4fb605645b55"
+  },
+  {
+    "key": "garland",
+    "path": "assets/dungeon/forest-fixed65-v1/garland.png",
+    "size": [
+      512,
+      512
+    ],
+    "cell": [
+      2,
+      2
+    ],
+    "sourceBox": [
+      12,
+      88,
+      381,
+      232
+    ],
+    "reusedAsset": "assets/dungeon/forest-festival-v1/garland.png",
+    "foot": null,
+    "bytes": 15458,
+    "sha256": "b3537e1e35f2b9cbb003451009da2f01482b8fce2ca2f90bf988826bf4cf5c92"
+  },
+  {
+    "key": "tree",
+    "path": "assets/dungeon/forest-fixed65-v1/tree.png",
+    "size": [
+      512,
+      512
+    ],
+    "adoptedFrom": "fushigi-tree65-v1/source-art/tree.png",
+    "bytes": 304017,
+    "sha256": "85752cd9ddb1c30f3689bf7662ed2135f8c884e74142a6366fe344716e3073b0"
+  }
+]

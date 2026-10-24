@@ -1,6 +1,6 @@
 // Five original location sets; projected floor + raised, topology-aware banks.
 (function(root){
- const SIZE=128,PITCH=.82,images={},cache=new Map();
+ const SIZE=128,PITCH=Math.sin(65*Math.PI/180),images={},cache=new Map();
  const ids=['forest','limestone','ruins','ice','volcano'];
  const state={ready:false,error:null,version:'wall-relief-v1',images,cache,pitch:PITCH,ids};
  // Wall height presets [room-facing face, interior mass] in sheet pixels (128px = one cell wide).
@@ -59,7 +59,7 @@
   const {edges,diagonals}=state.topology(map,x,y);
   // Neighbour-owned radii depend on world coordinates, not just topology.
   const k=[id,x,y,seed,edges,diagonals,variant,state.heightPref].join(':');if(cache.has(k))return cache.get(k);
-  const OFF=offOf(),H=OFF+114,rise=HEIGHTS[state.heightPref][(edges&1)?0:1],p=105,c=canvas(128,H),g=c.getContext('2d');
+  const OFF=offOf(),H=OFF+Math.ceil(128*PITCH)+9,rise=id==='forest'?((edges&1)?8:16):HEIGHTS[state.heightPref][(edges&1)?0:1],p=Math.round(128*PITCH),c=canvas(128,H),g=c.getContext('2d');
   const footprint=state.footprint(map,x,y,seed,id),top=canvas(128,p),tg=top.getContext('2d');
   tg.drawImage(footprint,0,0,128,p);
   // Extrude the actual scalloped footprint. A rectangular facade would fill
@@ -103,7 +103,7 @@
  state.draw=function(g,key,px,py,size,{map,x=0,y=0,theme,seed=0}){if(!state.ready)return false;const id=ids.includes(theme?.id)?theme.id:'limestone',h=size*PITCH;g.imageSmoothingEnabled=true;
   if(key.startsWith('floor')){const hash=(((x*73856093)^(y*19349663)^seed)>>>0),v=hash%31===0?3:hash%3;ground(g,px,py,size,h,id,x,y,v);edgeShade(g,map,x,y,px,py,size,h);return true;}
   if(key==='stairs'){ground(g,px,py,size,h,id,x,y,1);g.drawImage(patch(id,'stairs'),px,py,size,h);return true;}
-  if(key!=='wallF'&&key!=='wallT')return false;const {edges,diagonals}=state.topology(map,x,y);ground(g,px,py,size,h,id,x,y,1);const v=(((x>>1)*37^(y>>1)*71^seed)>>>0)&1;const OFF=offOf();g.drawImage(bank(id,map,x,y,seed,v,x&1,y&1),px,py-size*OFF/128,size,size*(OFF+114)/128);return true;
+  if(key!=='wallF'&&key!=='wallT')return false;const {edges,diagonals}=state.topology(map,x,y);ground(g,px,py,size,h,id,x,y,1);const v=(((x>>1)*37^(y>>1)*71^seed)>>>0)&1;const OFF=offOf();g.drawImage(bank(id,map,x,y,seed,v,x&1,y&1),px,py-size*OFF/128,size,size*(OFF+Math.ceil(128*PITCH)+9)/128);return true;
  };
  root.CaveTerrain=state;
 })(typeof window==='undefined'?globalThis:window);
