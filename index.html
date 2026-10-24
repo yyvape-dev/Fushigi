@@ -1555,6 +1555,13 @@ function turnCore() {
   if (!dead && !free && sHas('mend') && turn % 5 === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;   // 自己治癒：5ターンごとにHP+1
   if (!dead) tickStatus();
 }
+// 攻撃は交互：こちらの攻撃が終わってから、隣の敵が反撃する（同時に殴り合わない）。
+// ターン数は変わらない。待つのは見た目の間だけ（攻撃の動き SWING_MS）。入力は EventVfx の待ちで止まる。
+function endTurnAfterSwing() {
+  const respond = enemies.some(e => e.hp > 0 && !e.mh && !e.mim && !(e.st && e.st.sleep > 0) && Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)) <= 1);
+  if (respond && EventVfx.play('swing-wait', player.x, player.y, { duration: SWING_MS })) { EventVfx.defer(endTurn); return; }
+  endTurn();
+}
 function endTurn() {
   if(EventVfx.defer(endTurn))return;
   ShopSystem.boundary();
@@ -1632,7 +1639,7 @@ function playerMove(dx, dy, {skipPickup=false}={}) {
   const ally=AllySystem.at(nx,ny);
   if(ally){if(!ally.following){AllySystem.talk();return;}ally.x=player.x;ally.y=player.y;ally.face=[-dx,-dy];ally.walkStart=now();ally.walkEnd=now()+220;}
   const e = enemyAt(nx, ny);
-  if (e) hitEnemy(e);
+  if (e) { hitEnemy(e); endTurnAfterSwing(); return; }
   else {
     if (!player.walkEnd || now() > player.walkEnd) player.walkStart = now();
     player.walkEnd = now() + 220; player.action = null;player.swing=0;
@@ -1718,7 +1725,7 @@ function playerAttack() {
     const d = DIRS8[rnd(0, 7)]; player.face = d;
     const o = geomOK(player.x, player.y, d[0], d[1]) ? enemyAt(player.x + d[0], player.y + d[1]) : null;
     if (o) hitEnemy(o); else { player.swing = now(); player.attackFace = player.face.slice(); say('混乱していて空振りした！'); }
-    endTurn(); return;
+    if (o) endTurnAfterSwing(); else endTurn(); return;
   }
   const [fx_, fy_] = player.face;
   if(geomOK(player.x,player.y,fx_,fy_)&&ShopSystem.at(player.x+fx_,player.y+fy_)){ShopSystem.hit(undefined,ShopSystem.at(player.x+fx_,player.y+fy_));endTurn();return;}
@@ -1742,7 +1749,7 @@ function playerAttack() {
     player.swing=now();player.attackFace=player.face.slice();kick();say('素振りをした。');endTurn();return;
   }
   hitEnemy(t);
-  endTurn();
+  endTurnAfterSwing();
 }
 
 const aligned = (ax, ay, bx, by) => { const dx = bx - ax, dy = by - ay; return dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy); };
