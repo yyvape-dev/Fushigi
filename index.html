@@ -2043,7 +2043,7 @@ function throwType(key, floorEntry=null) {
       if (one.type === 'sleepherb') { tgt.st.sleep = 8; extra = '眠ってしまった！'; } else if (one.type === 'confherb') { tgt.st.confuse = 8; extra = '混乱した！'; }
       else if (one.type === 'poisonherb') { dmg = 6; }
       tgt.hp -= dmg; tgt.aware = true; tgt.flash = now() + 130; if (tgt.st && !extra.startsWith('眠')) tgt.st.sleep = 0;
-      fxText(tgt.x, tgt.y, '-' + dmg, '#ffffff'); vfxHit(tgt.x, tgt.y, dir[0], dir[1], '#ffe9a0', tgt.hp <= 0);
+      vfxHit(tgt.x, tgt.y, dir[0], dir[1], '#ffe9a0', tgt.hp <= 0);
       say(`${itemName(one)}を投げた！ ${T.name}に${dmg}ダメージ。${extra}`);
       if (tgt.hp <= 0) { say(`${T.name}を倒した！`); killEnemy(tgt); } else afterDamage(tgt);
       lost = d.stack ? Math.random() < 0.5 : (one.type === 'sleepherb' || one.type === 'confherb' || one.type === 'poisonherb');   // 矢は半分こわれる。草は使われる
