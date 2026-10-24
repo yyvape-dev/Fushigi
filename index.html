@@ -1546,24 +1546,54 @@ function hungerTick() {
   }
 }
 // 1ターン分の処理。倍速のときは2回に1回、敵も空腹も進まない
-function turnCore() {
+// 敵の反撃は1体ずつ順番に（本家の見せ方）。移動は同時、攻撃だけ順番。結果（HP・ターン数）は従来どおり1ターン分。
+// defer=true のときだけ、反撃を待ち行列に積んで、間を空けて実行する（EventVfx が無効な環境では即時＝従来どおり）。
+const ENEMY_STEP_MS = 280;
+function turnCore(defer = false, then = null) {
   const free = scene === 'dungeon' && player.st.haste > 0 && (hasteFlip = !hasteFlip);
-  if (scene === 'dungeon' && !free) { ShopSecurity.tick(); ShopSystem.tick(); if (!dead) AllySystem.tick(); if (!dead) enemyTurn(); }
+  let queue = null;
+  if (scene === 'dungeon' && !free) {
+    ShopSecurity.tick(); ShopSystem.tick(); if (!dead) AllySystem.tick();
+    if (!dead) { queue = defer && EventVfx.live() ? [] : null; enemyTurn(queue); }
+  }
+  if (queue && queue.length && !dead) { runEnemyStrikes(queue, () => { turnCoreRest(free); if (then) then(); }); return; }
+  turnCoreRest(free); if (then) then();
+}
+function turnCoreRest(free) {
   if (!free) turn++;
   if (!dead && scene === 'dungeon' && !free) { hungerTick(); ringTick(); spawnTick(); }
   if (!dead && !free && turn % Math.max(2, Math.round(10 / (1 + ringN('regen')))) === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;
   if (!dead && !free && sHas('mend') && turn % 5 === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;   // 自己治癒：5ターンごとにHP+1
   if (!dead) tickStatus();
 }
+function runEnemyStrikes(queue, done) {
+  const step = () => {
+    let item = queue.shift();
+    while (item && !enemies.includes(item.e)) item = queue.shift();   // 倒された敵は飛ばす
+    if (!item || dead) { done(); return; }
+    if (item.run()) { queue.length = 0; done(); return; }            // 力尽きた
+    if (queue.length && EventVfx.play('strike-wait', player.x, player.y, { duration: ENEMY_STEP_MS })) EventVfx.defer(step);
+    else step();
+  };
+  step();
+}
+// 攻撃は交互：こちらの攻撃が終わってから、隣の敵が反撃する（同時に殴り合わない）。
+// ターン数は変わらない。待つのは見た目の間だけ（攻撃の動き SWING_MS）。入力は EventVfx の待ちで止まる。
+function endTurnAfterSwing() {
+  const respond = enemies.some(e => e.hp > 0 && !e.mh && !e.mim && !(e.st && e.st.sleep > 0) && Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)) <= 1);
+  if (respond && EventVfx.play('swing-wait', player.x, player.y, { duration: SWING_MS })) { EventVfx.defer(endTurn); return; }
+  endTurn();
+}
 function endTurn() {
   if(EventVfx.defer(endTurn))return;
   ShopSystem.boundary();
   checkHouse();
   if(EventVfx.defer(endTurn))return;
-  turnCore();
-  for (let g = 0; g < 12 && !dead && scene === 'dungeon' && player.st.sleep > 0; g++) turnCore();   // 眠っている間は、敵だけが動く
-  updateVis();
-  render();
+  turnCore(true, () => {
+    for (let g = 0; g < 12 && !dead && scene === 'dungeon' && player.st.sleep > 0; g++) turnCore();   // 眠っている間は、敵だけが動く
+    updateVis();
+    render();
+  });
 }
 function hitEnemy(e) {
   player.swing = now(); player.attackFace = player.face.slice(); kick();
@@ -1632,7 +1662,7 @@ function playerMove(dx, dy, {skipPickup=false}={}) {
   const ally=AllySystem.at(nx,ny);
   if(ally){if(!ally.following){AllySystem.talk();return;}ally.x=player.x;ally.y=player.y;ally.face=[-dx,-dy];ally.walkStart=now();ally.walkEnd=now()+220;}
   const e = enemyAt(nx, ny);
-  if (e) hitEnemy(e);
+  if (e) { hitEnemy(e); endTurnAfterSwing(); return; }
   else {
     if (!player.walkEnd || now() > player.walkEnd) player.walkStart = now();
     player.walkEnd = now() + 220; player.action = null;player.swing=0;
@@ -1718,7 +1748,7 @@ function playerAttack() {
     const d = DIRS8[rnd(0, 7)]; player.face = d;
     const o = geomOK(player.x, player.y, d[0], d[1]) ? enemyAt(player.x + d[0], player.y + d[1]) : null;
     if (o) hitEnemy(o); else { player.swing = now(); player.attackFace = player.face.slice(); say('混乱していて空振りした！'); }
-    endTurn(); return;
+    if (o) endTurnAfterSwing(); else endTurn(); return;
   }
   const [fx_, fy_] = player.face;
   if(geomOK(player.x,player.y,fx_,fy_)&&ShopSystem.at(player.x+fx_,player.y+fy_)){ShopSystem.hit(undefined,ShopSystem.at(player.x+fx_,player.y+fy_));endTurn();return;}
@@ -1742,7 +1772,7 @@ function playerAttack() {
     player.swing=now();player.attackFace=player.face.slice();kick();say('素振りをした。');endTurn();return;
   }
   hitEnemy(t);
-  endTurn();
+  endTurnAfterSwing();
 }
 
 const aligned = (ax, ay, bx, by) => { const dx = bx - ax, dy = by - ay; return dx === 0 || dy === 0 || Math.abs(dx) === Math.abs(dy); };
@@ -1807,7 +1837,7 @@ function summonAround(e, T) {
   for (let i = 0; i < (T.summon || 1) && cells.length; i++) { const [x, y] = cells.splice(rnd(0, cells.length - 1), 1)[0];const actor=spawnEnemy(x, y, true, rollEnemy(floorNo, true));actor.sum=true;EnemyVfx.emit('arrival',actor,actor,{delay:90+i*35});n++; }
   if (n) { EnemyVfx.emit('bell',e);fxText(e.x, e.y, '♪', '#ffd070'); say(`${T.name}が鈴を鳴らした！ 仲間が${n}体現れた！`); }
 }
-function enemyTurn() {
+function enemyTurn(queue = null) {
   const d = distMap();
   for (const e of [...enemies]) {
     const T = eT(e), S = e.st || (e.st = {}), ai = T.ai || 'melee';
@@ -1845,10 +1875,17 @@ function enemyTurn() {
       const range = T.range || (ai === 'archer' ? 6 : ai === 'breath' ? 4 : 0);   // 遠距離攻撃：直線上で、間に何も無いとき
       if (!confused && MonsterCombat.isCannon(T) && e.aware && !(S.cool > 0) && dist > 1) {const impact=MonsterCombat.plan(e,player);if(impact){const r=MonsterCombat.fire(e,player,impact);if(r.dead)return;break;}}
       if (!MonsterCombat.isCannon(T) && !confused && range && e.aware && !(S.cool > 0) && dist > 1 && dist <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e)) {
-        const r = enemyStrike(e, T, ai === 'breath' ? T.breath(floorNo) : T.atk(floorNo), ai === 'breath' ? '炎' : (T.verb || '矢'));
-        if (r.dead) return;
-        if (T.cool) S.cool = T.cool;
-        if (ai === 'caster' && r.hit && r.dmg > 0) castFx(T);
+        const run = () => {
+          const dd = Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y));   // 待つ間にこちらが動いた（転移など）なら撃たない
+          if (!(dd > 1 && dd <= range && aligned(e.x, e.y, player.x, player.y) && clearShot(e))) return false;
+          const r = enemyStrike(e, T, ai === 'breath' ? T.breath(floorNo) : T.atk(floorNo), ai === 'breath' ? '炎' : (T.verb || '矢'));
+          if (r.dead) return true;
+          if (T.cool) S.cool = T.cool;
+          if (ai === 'caster' && r.hit && r.dmg > 0) castFx(T);
+          return false;
+        };
+        if (queue) { queue.push({ e, run }); break; }
+        if (run()) return;
         break;
       }
       const adj = dist === 1 && (ai === 'ghost' || geomOK(e.x, e.y, player.x - e.x, player.y - e.y));
@@ -1866,16 +1903,22 @@ function enemyTurn() {
           say(`${T.name}に${itemName(it)}を盗まれた！ 倒せば取り返せる。`); fxText(player.x, player.y, '盗まれた', '#ffb347');
           break;
         }
-        const r = enemyStrike(e, T, T.atk(floorNo), '攻撃');
-        if (r.dead) return;
-        if (r.hit && r.dmg > 0) {
-          if (ai === 'sleepy' && addStatus('sleep', T.statusTurns || 5)) say('眠ってしまった…');
-          else if (ai === 'dazzle' && addStatus('confuse', T.statusTurns || 8)) say('目が回って混乱した！');
-          else if (ai === 'venom') {
-            if (ringN('antidote')) say('腕輪の力で毒を防いだ！');
-            else if (atkUp > -4) { atkUp--; fxText(player.x, player.y, 'ちから-1', '#c0e040'); say('毒でちからが下がった！'); }
+        const run = () => {
+          if (Math.max(Math.abs(e.x - player.x), Math.abs(e.y - player.y)) !== 1) return false;   // 待つ間にこちらが動いた（転移など）なら殴らない
+          const r = enemyStrike(e, T, T.atk(floorNo), '攻撃');
+          if (r.dead) return true;
+          if (r.hit && r.dmg > 0) {
+            if (ai === 'sleepy' && addStatus('sleep', T.statusTurns || 5)) say('眠ってしまった…');
+            else if (ai === 'dazzle' && addStatus('confuse', T.statusTurns || 8)) say('目が回って混乱した！');
+            else if (ai === 'venom') {
+              if (ringN('antidote')) say('腕輪の力で毒を防いだ！');
+              else if (atkUp > -4) { atkUp--; fxText(player.x, player.y, 'ちから-1', '#c0e040'); say('毒でちからが下がった！'); }
+            }
           }
-        }
+          return false;
+        };
+        if (queue) { queue.push({ e, run }); break; }
+        if (run()) return;
         break;
       }
       if (T.spd === 'still') break;                               // 動かない敵
