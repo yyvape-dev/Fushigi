@@ -2,9 +2,7 @@
   "date": "2026-10-24",
   "environment": "V8 isolated functional runner; canvas API stub",
   "limitations": [
-    "Managed execution environment disconnected during this task.",
-    "Native canvas MVP and real Chromium output for the additional 38 sounds must be checked by the included GitHub Actions workflow.",
-    "The previous 16 synthesized sounds were verified in Chromium before PR #68."
+    "Sound preference and iOS hardware playback remain unverified."
   ],
   "functional": [
     {
@@ -412,5 +410,17 @@
       "peak": 0.22776159644126892,
       "rms": 0.06703084735777456
     }
-  ]
+  ],
+  "ci": {
+    "status": "success",
+    "commit": "4819dafe946c016d4d6e50f357940c7769afe803",
+    "workflow": "https://github.com/yyvape-dev/Fushigi/actions/runs/40095738764",
+    "checks": [
+      "Native @napi-rs/canvas MVP ALL OK",
+      "All 12 gameplay/audio regression scripts ALL OK",
+      "Chromium actual output of all 54 PCM effects",
+      "Mute, zero volume, stop, 8 voice cap"
+    ],
+    "mixerTestDoubles": "passed: input unlock, SE survives BGM stop at death, mute, hidden stop and no unsolicited resume"
+  }
 }

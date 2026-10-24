@@ -62,3 +62,5 @@ PR #68はmainへ反映・Pages成功。追加38音により、PCM合成54種類�
 自然回復・待機・保存・画面更新、画面外のNPCの移動は静かに保つ。音はセリフではなく実アクションの関数から発火し、加入失敗や売買失敗で成功音は出さない。既存録音のコピーや外部サンプルは使用しない。
 
 環境の接続切断後、GitHub経由で変更を復元。V8のCanvasスタブで味方47／アヴェニウス42／シェリニーニャ43／砲撃82／壺／街／交互攻撃／店／途中保存と追加の音イベント回帰を実行。全54音のPCM有限値・非無音・ピークを確認。記録は `action-v2-validation.json`。ネイティブCanvasのMVPと実Chromiumの54音確認は `.github/workflows/audio-regression.yml` で実行する。実機の聴感・iOS確認は別途。
+
+最終検証：GitHub Actions [Audio regression](https://github.com/yyvape-dev/Fushigi/actions/runs/40095738764) が成功。ネイティブCanvasのMVPを含む12本すべてALL OK。実Chromiumでも54音すべての出力、音量0、ミュート、停止、同時発音上限がALL OK。上記の接続切断による検証保留は解消済み。
