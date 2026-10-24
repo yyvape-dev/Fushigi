@@ -1,0 +1,15 @@
+{
+  "browserErrors": [],
+  "npcMotion": true,
+  "services": [
+    "inn transition",
+    "rest",
+    "smith upgrade",
+    "deposit money",
+    "town map",
+    "mercenary conversation without hiring"
+  ],
+  "portraitAndLandscape": true,
+  "reloadTownPosition": true,
+  "clearAndDeathReturnToBed": true
+}
