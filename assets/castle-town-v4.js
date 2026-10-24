@@ -89,6 +89,7 @@
   snapshot();
  }
  function travel(area,x,y){
+  playSE('door');
   holdStop();close(false);state.area=area;state.waking=false;build();place(x,y);
   seen=Array.from({length:MH},()=>Array(MW).fill(true));updateVis();snapshot();saveGame();resize();startFade();render();
  }
@@ -136,12 +137,13 @@
  }
  function rest(){
   if(scene!=='town'||state.area!=='inn')return;
-  close(false);state.waking=true;place(bed.x,bed.y);player.hp=player.maxhp;player.st=newStatus();snapshot();saveGame();say('ゆっくり休んだ。ベッドで目を覚ました。');startFade();render();
+  playSE('heal');close(false);state.waking=true;place(bed.x,bed.y);player.hp=player.maxhp;player.st=newStatus();snapshot();saveGame();say('ゆっくり休んだ。ベッドで目を覚ました。');startFade();render();
  }
  function talk(npc){if(npc.mercenary){state.talking=npc;show('mercTalk');}else if(npc.id==='smith')show('smith');else if(npc.id==='depositor')activate('deposit');else if(npc.id==='market')activate('market');else if(npc.id==='innkeeper')show('innkeeper');else{state.talking=npc;show('resident');}}
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function button(action,label,data='',disabled=false){return '<button data-town="'+action+'"'+data+(disabled?' disabled':'')+'>'+label+'</button>';}
  function show(panel){
+  if(!state.open||state.panel!==panel)playSE('ui-open');
   if(scene!=='town')return;
   holdStop();if(typeof closeGameMenu==='function'&&menuOpen)closeGameMenu();closeBag();closeWh();
   if(!state.open)state.focus=document.activeElement;

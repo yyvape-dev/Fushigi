@@ -25,7 +25,7 @@
  function clearTags(){for(const l of state.lots.values())delete l.item.shopLot;state.lots.clear();inv=mergeStacks(inv);}
  function leaveFloor(){if(debt())steal('代金を払わず、店のある階を離れた！');clearTags();close();state.wanted=false;ShopSecurity.reset();}
  function reset(){leaveFloor();state.wanted=false;ShopSecurity.reset();}
- function steal(reason){if(!floorShop||floorShop.hostile)return;floorShop.hostile=true;state.wanted=true;close();say(reason+' 店主が怒った！');clearTags();ShopSecurity.alert();}
+ function steal(reason){if(!floorShop||floorShop.hostile)return;floorShop.hostile=true;state.wanted=true;playSE('alarm');close();say(reason+' 店主が怒った！');clearTags();ShopSecurity.alert();}
  function stock(tier,count=11){const defaults=['potion','bread','arrow'].map(k=>mkItem(k));let ks=Object.keys(ITEMS).filter(k=>ITEMS[k].w>0&&(ITEMS[k].from||1)<=floorNo+tier*4&&!['gold','weed','potion','onigiri','arrow'].includes(k));if(tier===2){const rare=ks.filter(k=>ITEMS[k].w<=2);if(rare.length)ks=rare;}
   for(let n=0;n<count-3&&ks.length;n++){const weight=k=>Math.pow(ITEMS[k].w,tier===0?1:tier===1?0:-.5);let r=Math.random()*ks.reduce((s,k)=>s+weight(k),0),k=ks[0];for(const c of ks){r-=weight(c);if(r<0){k=c;break;}}const it=mkItem(k);if(ITEMS[k].equip&&ITEMS[k].equip!=='ring')it.plus=Math.max(it.plus,tier);defaults.push(it);}return defaults;}
  // Count corridor mouths, not every room tile touching a parallel corridor.
@@ -60,9 +60,9 @@
   for(const it of stock(tier,Math.min(count,placement.length))){const c=placement.shift();if(!c)break;tag(it);floorItems.push({...c,item:it});}
  }
  function pay(){const cost=Math.ceil(debt());if(!cost){talk('お勘定は済んでいる。');return false;}if(gold<cost){talk('お金が足りない。商品を床に戻すこともできる。');return false;}
-  gold-=cost;for(const [id,l]of state.lots)if(l.claimed||l.used){delete l.item.shopLot;state.lots.delete(id);}inv=mergeStacks(inv);say(cost+'Gを支払った。');for(const k of keepers())if(k.hp>0)moveKeeper(k,k.home,false);saveGame();talk('確かに受け取った。また寄ってくれ。');return true;}
+  playSE('trade');gold-=cost;for(const [id,l]of state.lots)if(l.claimed||l.used){delete l.item.shopLot;state.lots.delete(id);}inv=mergeStacks(inv);say(cost+'Gを支払った。');for(const k of keepers())if(k.hp>0)moveKeeper(k,k.home,false);saveGame();talk('確かに受け取った。また寄ってくれ。');return true;}
  function offers(){return floorItems.filter(f=>inside(f.x,f.y)&&!lot(f.item)&&f.item.type!=='gold');}
- function sell(id){if(!floorShop||floorShop.hostile||!inside(player.x,player.y))return false;const f=offers().find(f=>f.item.id===id);if(!f)return false;const price=sellFull(f.item);gold+=price;tag(f.item);for(const c of f.item.pot||[])if(!lot(c))tag(c);say(itemName(f.item)+'を'+price+'Gで売った。');saveGame();talk('買い取った。ほかにもあるか？');return true;}
+ function sell(id){if(!floorShop||floorShop.hostile||!inside(player.x,player.y))return false;const f=offers().find(f=>f.item.id===id);if(!f)return false;const price=sellFull(f.item);playSE('trade');gold+=price;tag(f.item);for(const c of f.item.pot||[])if(!lot(c))tag(c);say(itemName(f.item)+'を'+price+'Gで売った。');saveGame();talk('買い取った。ほかにもあるか？');return true;}
  function talk(message){if(!floorShop||!keepers().some(k=>k.hp>0)||floorShop.hostile)return;if(!inside(player.x,player.y)&&!nearby())return;holdStop();closeBag();state.focus=document.activeElement;state.open=true;const el=document.getElementById('shopPrompt');if(!el)return;el.hidden=false;document.body?.classList?.add('shop-dialog-open');const cfg=tiers[floorShop.tier];
   document.getElementById('shopPortrait').src=base+'assets/'+cfg.id+'/S.png';document.getElementById('shopTitle').textContent=cfg.name+'の店主';
   document.getElementById('shopText').textContent=message||'商品は床から拾って選んでくれ。帰る前に精算だ。売りたい物は店の床へ置くといい。';
@@ -70,7 +70,7 @@
   const actions=document.getElementById('shopActions');actions.innerHTML='<button data-shop="pay">精算する</button>'+offers().map(f=>'<button data-shop="sell" data-id="'+f.item.id+'">'+itemName(f.item)+'を売る '+sellFull(f.item)+'G</button>').join('')+(debt()?'<button data-shop="steal">払わず持ち出す</button>':'')+'<button data-shop="close">戻る</button>';actions.querySelector?.('button')?.focus?.();render();}
  function beforeMove(nx,ny){const k=at(nx,ny);if(!k)return true;if(floorShop.hostile){hit(undefined,k);endTurn();}else talk(debt()?'まだ代金を受け取っていない。精算か返品を頼む。':undefined);return false;}
  function boundary(){if(debt()&&!inside(player.x,player.y))steal('未精算の商品を持って店から離れた！');}
- function hit(damage,actor){const k=actor||nearby()||floorShop?.keeper;if(!k||k.hp<=0)return;steal('店主を攻撃した！');k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];const dmg=damage??Math.max(1,playerAtk()-tiers[floorShop.tier].def);k.hp-=dmg;k.flash=now()+150;player.swing=now();player.attackFace=player.face.slice();fxText(k.x,k.y,'-'+dmg,'#ffe1af');if(k.hp<=0)say('店主を倒した。');}
+ function hit(damage,actor){const k=actor||nearby()||floorShop?.keeper;if(!k||k.hp<=0)return;playSE('hit',k);steal('店主を攻撃した！');k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];const dmg=damage??Math.max(1,playerAtk()-tiers[floorShop.tier].def);k.hp-=dmg;k.flash=now()+150;player.swing=now();player.attackFace=player.face.slice();fxText(k.x,k.y,'-'+dmg,'#ffe1af');if(k.hp<=0)say('店主を倒した。');}
  function moveKeeper(k,target,hostile){if(distance(k,target)===0)return;
   const q=[{x:k.x,y:k.y,first:null}],visited=new Set([k.x+','+k.y]);let best=null;
   for(let i=0;i<q.length&&i<MW*MH;i++){const c=q[i];if((c.x===target.x&&c.y===target.y)||(hostile&&distance(c,target)===1&&geomOK(c.x,c.y,target.x-c.x,target.y-c.y))){best=c.first;break;}for(const [dx,dy]of DIRS8){const x=c.x+dx,y=c.y+dy,key=x+','+y;if(!geomOK(c.x,c.y,dx,dy)||visited.has(key)||enemyAt(x,y)||AllySystem.at(x,y)||(at(x,y)&&at(x,y)!==k)||(player.x===x&&player.y===y)||(!hostile&&!inside(x,y)))continue;visited.add(key);q.push({x,y,first:c.first||{x,y}});}}
@@ -79,7 +79,7 @@
  function tick(){boundary();if(!floorShop)return;const s=floorShop,cfg=tiers[s.tier];for(const k of keepers()){
   if(k.hp<=0||dead)continue;
   if(!s.hostile){moveKeeper(k,debt()?k.door:k.home,false);k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];continue;}
-  if(distance(player,k)===1&&geomOK(k.x,k.y,player.x-k.x,player.y-k.y)){k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];k.attackStart=now();const dmg=player.st.invinc>0?0:Math.max(1,cfg.atk-defBonus());hurtPlayer(dmg,'店主に倒された…');say('店主の攻撃！ '+dmg+'ダメージ。');}else moveKeeper(k,player,true);
+  if(distance(player,k)===1&&geomOK(k.x,k.y,player.x-k.x,player.y-k.y)){k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];k.attackStart=now();playSE('swing',k);const dmg=player.st.invinc>0?0:Math.max(1,cfg.atk-defBonus());hurtPlayer(dmg,'店主に倒された…');say('店主の攻撃！ '+dmg+'ダメージ。');}else moveKeeper(k,player,true);
  }}
  function direction(face){return {'0,1':'S','-1,1':'SW','-1,0':'W','-1,-1':'NW','0,-1':'N','1,-1':'NE','1,0':'E','1,1':'SE'}[face.join(',')]||'S';}
  function draw(ctx,k,t,camX,camY){const cfg=tiers[floorShop.tier],action=k.attackStart&&t-k.attackStart<240?'attack':k.walkEnd>t&&Math.floor((t-k.walkStart)/80)%2===0?'walk':'idle',d=direction(k.face),im=state.images[cfg.id+'/'+d+'/'+action];if(!im?.width)return;const size=TS*CHAR_K[charPref]*256/192,x=camX+(k.vx+.5)*TS,y=camY+(k.vy+.9)*tilePitchY();ctx.save();ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(x,y,TS*.3,TS*.10,0,0,Math.PI*2);ctx.fill();ctx.drawImage(im,x-size*.5,y-size*224/256,size,size);if(floorShop.hostile){ctx.fillStyle='#f45';ctx.fillRect(x-TS*.4,y+2,TS*.8*k.hp/k.maxhp,3);}ctx.restore();}

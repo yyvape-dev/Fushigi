@@ -4,11 +4,16 @@
  const colors={warp:'#71dcff',confuse:'#ec85ed',mute:'#aaa0ff',drain:'#bd67ed'};
  const point=e=>({x:e.x,y:e.y});
  function emit(type,from,to=from,options={}){
+  const sounds={shuriken:'throw',magic:'ally-magic',cannon:'cannon',abyss:'fire',bite:'swing',lightning:'lightning',bell:'bell',evolve:'evolve',reveal:'alarm',curse:options.blocked?'block':'status',vanish:'trap-warp'};
+  if(sounds[type])playSE(sounds[type],from);
   const e=root.EventVfx.emit('enemy-'+type,from.x,from.y,{screenOnly:true,from:point(from),to:point(to),duration:650,...options});
   if(e&&typeof kick==='function')kick();return e;
  }
  function attack(e,T,target,hit,ranged){
-  const f=T.family||e.kind,type=ranged?(f==='ninja'?'shuriken':f==='caster'?'magic':f==='cannon'?'cannon':T.boss&&T.ai==='breath'?'abyss':null):f==='mimic'?'bite':null;
+  const f=T.family||e.kind;
+  if(!hit)playSE('miss',target);
+  const type=ranged?(f==='ninja'?'shuriken':f==='caster'?'magic':f==='cannon'?'cannon':T.boss&&T.ai==='breath'?'abyss':null):f==='mimic'?'bite':null;
+  if(!type)playSE(ranged?(T.ai==='breath'?'fire':'throw'):'swing',e);
   return type?emit(type,e,target,{hit,color:colors[T.fx]||'#b785f5',duration:type==='shuriken'?420:type==='abyss'?720:650}):null;
  }
  const tintCache=new Map();
