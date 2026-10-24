@@ -21,7 +21,7 @@
   // --- 町の移動と倉庫
   ok('town: all tiles seen/visible', seen.every(r => r.every(v => v)) && vis.every(r => r.every(v => v)));
   CastleTown.leaveInn(); CastleTown.state.npcs=[];
-  player.x=48; player.y=26; snapVis(); doCtx();
+  {const f=CastleTown.facilities.find(f=>f.id==='deposit');player.x=f.x;player.y=f.y;} snapVis(); doCtx();
   ok('town: deposit counter opens warehouse', whOpen === true);
   ok('town: ctx button at counter = 預け屋', (() => { closeWh(); const c = ctxInfo(); return c && c.label === '預け屋'; })());
   openWh(); whSide = 'wh'; whTransfer('potion', true);
@@ -168,10 +168,10 @@
 
   // --- 描画：画面幅ごと（小型スマホ/タブレット相当）で例外が出ない
   for (const [w, h] of [[320, 568], [360, 740], [414, 896]]) { innerWidth = w; innerHeight = h; zoomPref = 0; resize(); draw(); }
-  ok('resize at various sizes', TS === 48 || TS === 32);
+  ok('resize at various sizes', [32,48].includes(TS/(scene==='town'?CastleTown.tileScale():1)));
   // 横持ち：縦に約6.5マス → 高さ390で64px、横は約13マス見える
   innerWidth = 844; innerHeight = 390; zoomPref = 0; resize(); draw();
-  ok('landscape: auto tile 64px (about 13 tiles across)', TS === 64 && Math.round(844 / TS) === 13);
+  ok('landscape: scene-specific framing preserves scale', scene==='town'?TS===48*CastleTown.tileScale():TS===64&&Math.round(844/TS)===13);
   ok('landscape: focus at screen centre, portrait above centre', focusY() === 195 && (innerWidth = 390, innerHeight = 844, focusY() < 844 / 2));
   innerWidth = 844; innerHeight = 390; resize(); mapMode = 1; scene = 'dungeon'; drawMinimap();
   ok('landscape: minimap sits top-left', mmRect && mmRect.x < 20);
@@ -299,21 +299,20 @@
   scene = 'town'; buildTown(); SPRITES.roof = wide; SPRITES.ground = wide; let th4 = null;
   try { zoomPref = 4; resize(); draw(); __savePng('shot_town_wide.png'); } catch (e) { th4 = e; console.log(e); }
   ok('town draws with wide tile images', !th4); delete SPRITES.roof; delete SPRITES.ground; zoomPref = 0; resize(); toTown(false);
-  // ===== 追加：町の一枚絵 =====
-  ok('ASSET_KEYS has town', ASSET_KEYS.includes('town'));
-  toTown(false); zoomPref = 1; resize(); const ta = document.createElement('canvas'); ta.width = 1500; ta.height = 1000; { const g = ta.getContext('2d'); g.fillStyle = '#d02090'; g.fillRect(0, 0, 1500, 1000); }
-  SPRITES.town = ta; fadeT = -1e9; hurtT = 0; let th5 = null;
-  try { draw(); } catch (e) { th5 = e; console.log(e); }
-  ok('town art draws without error', !th5);
-  { const camX = Math.round(innerWidth / 2 - (player.vx + 0.5) * TS), camY = Math.round(innerHeight * 0.4 - (player.vy + 0.5) * TS);
-    // ベッド(5,3)のマスの中心：タイル絵ではなく一枚絵の色になっている
-    const tx = Math.round(camX + 5.5 * TS), ty = Math.round(camY + 3.5 * TS), d = ctx.getImageData(tx, ty, 1, 1).data;
-    ok('town art replaces tile art on solid bedroom furniture', solid(map[3][5]) && d[0] > 180 && d[1] < 80 && d[2] > 100); }
-  showGrid = true; try { draw(); __savePng('shot_town_grid.png'); } catch (e) { th5 = e; console.log(e); } ok('town grid overlay draws', !th5);
-  { const camX = Math.round(innerWidth / 2 - (player.vx + 0.5) * TS), camY = Math.round(innerHeight * 0.4 - (player.vy + 0.5) * TS);
-    const d = ctx.getImageData(Math.round(camX + 5.5 * TS), Math.round(camY + 3.5 * TS), 1, 1).data;
-    ok('grid marks solid tiles red', d[0] > d[2] && d[0] > 200); }
-  showGrid = false; delete SPRITES.town; zoomPref = 0; resize(); draw();
+  // ===== Modular town art uses the same ground anchor as collision =====
+  CastleTown.leaveInn(); CastleTown.state.npcs=[]; zoomPref=1;resize();
+  const inn=CastleTown.layout.byId('inn'), oldProp=CastleTown.state.images['prop-inn'];
+  const art=CastleTown.layout.art.inn, ta=document.createElement('canvas');ta.width=art.width;ta.height=art.height;
+  {const g=ta.getContext('2d');g.fillStyle='#d02090';g.fillRect(0,0,ta.width,ta.height);}
+  CastleTown.state.images['prop-inn']=ta;player.x=inn.x;player.y=inn.y+1;snapVis();fadeT=-1e9;hurtT=0;
+  let th5=null;try{draw();}catch(e){th5=e;}ok('registered town sprites draw without error',!th5);
+  const camera=()=>CastleTown.camera(Math.round(innerWidth/2-(player.vx+.5)*TS),Math.round(focusY()-(player.vy+.5)*TS));
+  {const [camX,camY]=camera(),d=ctx.getImageData(Math.round(camX+(inn.x+.5)*TS),Math.round(camY+(inn.y-.1)*TS),1,1).data;
+   ok('registered building art occupies its actual footprint',solid(map[inn.y-1][inn.x])&&d[0]>180&&d[1]<80&&d[2]>100);}
+  showGrid=true;draw();
+  {const [camX,camY]=camera(),d=ctx.getImageData(Math.round(camX+(inn.x+.5)*TS),Math.round(camY+(inn.y-.1)*TS),1,1).data;
+   ok('grid marks actual building footprint red',d[0]>d[2]&&d[0]>200);}
+  showGrid=false;if(oldProp)CastleTown.state.images['prop-inn']=oldProp;else delete CastleTown.state.images['prop-inn'];zoomPref=0;resize();draw();
   openCfg(); ok('cfg has grid row', cfgListEl.innerHTML.includes('町の判定を表示')); ok('cfg: no in-game image import UI (art comes only from assets/)', !/シート取り込み|画像を選ぶ|素材|data-cfg="(pick|reset|sheet)/.test(cfgListEl.innerHTML) && typeof setArtFromBlob === 'undefined' && typeof importSheet === 'undefined' && typeof idbPut === 'undefined'); closeCfg();
   // ===== 追加：メッセージ窓 =====
   scene = 'town'; dead = false; enterDungeon(); enemies = []; floorItems = [];

@@ -8,7 +8,7 @@
 #townActions button:focus-visible{outline:3px solid #ffe6a1;outline-offset:2px;background:#917446}
 #townActions button:disabled{opacity:.45}
 .town-map{position:relative;margin:auto;max-width:520px}
-.town-map img{display:block;width:100%;border-radius:6px}
+.town-map img,.town-map canvas{display:block;width:100%;border-radius:6px}
 .town-map-pin,.town-map-player{position:absolute;transform:translate(-50%,-50%);font-size:11px;font-weight:bold;white-space:nowrap;line-height:1.3;background:#241b12df;color:#ffe0a1;border:1px solid #c4a76c;border-radius:4px;padding:3px 4px;pointer-events:none}
 .town-map-player{color:#fff;background:#b43321;border-color:#ffe4b5;z-index:2}
 body.town-dialog-open #pad,body.town-dialog-open #act,body.town-dialog-open #lft,body.town-dialog-open #modebar{visibility:hidden;pointer-events:none}
