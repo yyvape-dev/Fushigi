@@ -60,6 +60,7 @@
    // the rectangular cliff islands of the wall sprites.
    const span=4,px=size*span,py=pitch*span;
    for(let y=Math.floor(y0/span);y<=Math.ceil(y1/span);y++)for(let x=Math.floor(x0/span);x<=Math.ceil(x1/span);x++){
+    if(terrain?.worldCap?.has(id)){cg.drawImage(im,camX+x*px,camY+y*py,px+1,py+1);continue;}   // seamless sheet: plain tiling, same period as the wall caps
     cg.save();cg.translate(camX+(x+(x%2?1:0))*px,camY+(y+(y%2?1:0))*py);cg.scale(x%2?-1:1,y%2?-1:1);cg.drawImage(im,0,0,px+1,py+1);cg.restore();
    }
   }

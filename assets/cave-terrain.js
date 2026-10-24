@@ -4,7 +4,7 @@
  const ids=['forest','limestone','ruins','ice','volcano'];
  const state={ready:false,error:null,version:'wall-relief-v1',images,cache,pitch:PITCH,ids};
  const keys=['floor0','floor1','floor2','floor3','wallT0','wallT1','wallF0','wallF1','stairs'];
- state.load=async function(redraw){try{await Promise.all(ids.flatMap(id=>keys.map(key=>new Promise((resolve,reject)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{images[id+':'+key]=im;resolve();};im.onerror=()=>reject(Error(id+'/'+key));im.src='assets/dungeon/locations-v1/'+id+'/'+key+'.webp';}))));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('ロケーション画像読込失敗',e);redraw();}};
+ state.load=async function(redraw){try{await Promise.all(ids.flatMap(id=>keys.map(key=>new Promise((resolve,reject)=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{images[id+':'+key]=im;resolve();};im.onerror=()=>reject(Error(id+'/'+key));im.src='assets/dungeon/locations-v1/'+id+'/'+key+'.webp';}))));await Promise.all(ids.map(id=>new Promise(resolve=>{const im=new Image();im.crossOrigin='anonymous';im.onload=()=>{images[id+':floorW']=im;resolve();};im.onerror=()=>resolve();im.src='assets/dungeon/locations-v1/'+id+'/floorW.webp';})));state.ready=true;redraw();}catch(e){state.error=e.message;console.error('ロケーション画像読込失敗',e);redraw();}};
  state.topology=function(map,x,y){const f=(xx,yy)=>map[yy]?.[xx]!==undefined&&map[yy][xx]!==0;let edges=0,diagonals=0;[[0,-1],[1,0],[0,1],[-1,0]].forEach(([dx,dy],i)=>{if(f(x+dx,y+dy))edges|=1<<i;});[[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([dx,dy],i)=>{if(f(x+dx,y+dy))diagonals|=1<<i;});return {edges,diagonals};};
  state.rise=(map,x,y,size)=>size*((state.topology(map,x,y).edges&1)?.22:.55);
  function canvas(w=SIZE,h=SIZE){const c=document.createElement('canvas');c.width=w;c.height=h;return c;}
@@ -16,7 +16,18 @@
   for(let y=0;y<128;y++)for(let x=0;x<128;x++){const wx=Math.max(0,(1-Math.min(x,127-x)/8))*.5,wy=Math.max(0,(1-Math.min(y,127-y)/8))*.5;for(let ch=0;ch<4;ch++){const sample=(xx,yy)=>d[(yy*128+xx)*4+ch];out.data[(y*128+x)*4+ch]=sample(x,y)*(1-wx)*(1-wy)+sample(127-x,y)*wx*(1-wy)+sample(x,127-y)*(1-wx)*wy+sample(127-x,127-y)*wx*wy;}}
   g.putImageData(out,0,0);cache.set(k,c);return c;
  }
- function ground(g,px,py,size,h,id,x=0,y=0,variant=0){g.drawImage(base(id),px,py,size,h);if(variant!==1)g.drawImage(patch(id,'floor'+variant),px,py,size,h);}
+ // Optional seamless sheet (floorW): each floor cell shows its own slice of one
+ // continuous picture, so large slabs run across tiles with no per-tile repeat.
+ // The sheet repeats every WORLD_N cells; the stairs keep their own patch.
+ const WORLD_N=3;
+ const WORLD_CAP=new Set(['limestone']),CAP_N=4;
+ state.worldCap=WORLD_CAP;
+ function ground(g,px,py,size,h,id,x=0,y=0,variant=0){
+  const w=art(id,'floorW');
+  if(w){const sw=w.naturalWidth/WORLD_N,sh=w.naturalHeight/WORLD_N,ix=((x%WORLD_N)+WORLD_N)%WORLD_N,iy=((y%WORLD_N)+WORLD_N)%WORLD_N;
+   // 1px overlap hides hairline gaps between neighbouring cells.
+   g.drawImage(w,ix*sw,iy*sh,sw,sh,px,py,size+1,h+1);return;}
+  g.drawImage(base(id),px,py,size,h);if(variant!==1)g.drawImage(patch(id,'floor'+variant),px,py,size,h);}
  // Carve the footprint from neighbouring floor cells, in WORLD coordinates.
  // A floor cell owns its cutter: both wall neighbours therefore share endpoints.
  // Diagonal cutters make fan-shaped corners; cardinal cutters make deep recesses.
@@ -51,13 +62,20 @@
   for(let z=rise;z>=0;z--)fg.drawImage(top,0,70-z);
   fg.globalCompositeOperation='destination-out';fg.drawImage(top,0,70-rise);
   fg.globalCompositeOperation='source-in';
-  fg.drawImage(art(id,'wallF'+variant),phaseX*128,0,128,256,0,0,128,184);
+  const wf=art(id,'wallF'+variant),kf=wf.naturalWidth/256;   // sheets may be 256 or higher resolution
+  fg.drawImage(wf,phaseX*128*kf,0,128*kf,256*kf,0,0,128,184);
   // Darker vertical faces distinguish raised rock from the walkable floor.
   fg.globalCompositeOperation='source-atop';
   const shadow=fg.createLinearGradient(0,0,0,184);shadow.addColorStop(0,'rgba(0,0,0,.12)');shadow.addColorStop(1,'rgba(0,0,0,.55)');fg.fillStyle=shadow;fg.fillRect(0,0,128,184);
   g.drawImage(face,0,0);
   const cap=canvas(128,p),cg=cap.getContext('2d');
-  cg.drawImage(art(id,'wallT'+variant),phaseX*128,phaseY*64,128,128,0,0,128,p);
+  const wt=art(id,'wallT'+variant);
+  if(WORLD_CAP.has(id)){
+   // Top-down rock: each cell shows its own slice of one seamless sheet. The
+   // ceiling uses the same sheet and period, so cap and ceiling read as one mass.
+   const cw=wt.naturalWidth/CAP_N,ch=wt.naturalHeight/CAP_N,ci=((x%CAP_N)+CAP_N)%CAP_N,cj=((y%CAP_N)+CAP_N)%CAP_N;
+   cg.drawImage(wt,ci*cw,cj*ch,cw,ch,0,0,128,p);
+  }else{const kt=wt.naturalWidth/256;cg.drawImage(wt,phaseX*128*kt,phaseY*64*kt,128*kt,128*kt,0,0,128,p);}
   cg.globalCompositeOperation='destination-in';cg.drawImage(top,0,0);
   g.drawImage(cap,0,70-rise);
   if(cache.size>512)cache.clear();cache.set(k,c);return c;
