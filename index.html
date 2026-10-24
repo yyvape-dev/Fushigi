@@ -141,6 +141,16 @@ canvas{display:block;touch-action:none}
     <div class="plist" id="cfgList"></div>
 </div>
 
+<script>
+// 確認用の入口：index.html?floor=2（&dungeon=first|second|third）でその階から始まる。
+// 保存は読み出し専用のコピーに向け、プレイ用のセーブには書き込まない。
+(function(){if(typeof location==='undefined'||typeof window==='undefined')return;const m=/[?&]floor=(\d+)/.exec(location.search);if(!m)return;
+ const d=/[?&]dungeon=(first|second|third)/.exec(location.search),mem={};
+ try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);mem[k]=localStorage.getItem(k);}}catch(e){}
+ const shim={getItem:k=>k in mem?mem[k]:null,setItem:(k,v)=>{mem[k]=String(v);},removeItem:k=>{delete mem[k];},clear:()=>{for(const k in mem)delete mem[k];},key:i=>Object.keys(mem)[i]??null,get length(){return Object.keys(mem).length;}};
+ try{Object.defineProperty(window,'localStorage',{value:shim,configurable:true});globalThis.__previewFloor=+m[1];globalThis.__previewDungeon=d?d[1]:'first';}catch(e){console.error('確認用の入口：保存の分離に失敗したので無効',e);}
+})();
+</script>
 <script src="fushigi-equipment-v3/hero-base-renderer.js"></script>
 <script src="fushigi-equipment-v3/hero-attack-renderer.js"></script>
 <script src="assets/approved-hero.js?v=legacy-scale-v2"></script>
@@ -188,7 +198,7 @@ const MAXBELLY = 100, HUNGER_TURNS = [10, 2];
 // need=踏破の合計回数／req=そのダンジョンを踏破すると行ける／stageK=敵の出現表の「段階」＝階×この値（assets/enemy-table.js）／boss=最終階に主がいる
 const DUNGEONS = { first: { name: 'はじまりの洞窟', floors: 5, stageK: 1 }, second: { name: 'ふかい洞窟', floors: 12, need: 1, stageK: 1.25 }, third: { name: 'そこなしの洞窟', floors: 30, req: 'second', stageK: 1, boss: true } };
 let dClears = {};                                               // ダンジョンごとの踏破回数
-const unlocked = id => DUNGEONS[id].req ? (dClears[DUNGEONS[id].req] | 0) >= 1 : clears >= (DUNGEONS[id].need || 0);
+const unlocked = id => globalThis.__previewFloor ? true : DUNGEONS[id].req ? (dClears[DUNGEONS[id].req] | 0) >= 1 : clears >= (DUNGEONS[id].need || 0);
 
 // 草の回復：HPが満タンなら、回復のかわりに最大HPが上がる（本家と同じ）。cure: 0=なし 1=混乱だけ 2=悪い状態すべて
 function healHerb(label, heal, up, cure) {
@@ -2864,6 +2874,11 @@ resize();
 loadExternalAssets();
 loadRig();
 boot();
+if (globalThis.__previewFloor) {                                   // 確認用の入口（?floor=N）：指定の階から始める
+  dungeonId = globalThis.__previewDungeon; enterDungeon();
+  floorNo = Math.max(1, Math.min(globalThis.__previewFloor, DUNGEONS[dungeonId].floors)); newFloor();
+  say(`【確認用】${DUNGEONS[dungeonId].name} ${floorNo}階から開始（保存しません）`); startFade(); render();
+}
 if (typeof Image !== 'undefined') { MonsterHouseVfx.load(render); EventVfx.load(render); ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
 </script>
 <script src="assets/controls-ui.js?v=event-vfx-v1"></script>
