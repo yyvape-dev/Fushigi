@@ -1,0 +1,919 @@
+{
+  "modelStructure": {
+    "checkedBatches": 12,
+    "noSprites": true,
+    "noPlanes": true,
+    "nonzeroDepth": true,
+    "deterministicTransforms": true,
+    "stats": {
+      "kind": "solid-mesh-v1",
+      "billboardCount": 0,
+      "batches": 12,
+      "instances": 96,
+      "triangles": 3380,
+      "geometryTypes": [
+        "CylinderGeometry",
+        "CylinderGeometry",
+        "CylinderGeometry",
+        "IcosahedronGeometry",
+        "CylinderGeometry",
+        "CylinderGeometry",
+        "ConeGeometry",
+        "TorusGeometry",
+        "CylinderGeometry",
+        "CylinderGeometry",
+        "SphereGeometry",
+        "CylinderGeometry"
+      ]
+    }
+  },
+  "maps": [
+    {
+      "seed": 1,
+      "trees": 209,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2677,
+        "triangles": 117308,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 2,
+      "trees": 253,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 3161,
+        "triangles": 139660,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 3,
+      "trees": 256,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 3194,
+        "triangles": 141184,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 4,
+      "trees": 218,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2713,
+        "triangles": 120024,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 5,
+      "trees": 215,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2680,
+        "triangles": 118500,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 6,
+      "trees": 212,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2710,
+        "triangles": 118832,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 7,
+      "trees": 201,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2589,
+        "triangles": 113244,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 8,
+      "trees": 184,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2402,
+        "triangles": 104608,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 9,
+      "trees": 166,
+      "lanterns": 8,
+      "garlands": 4,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2078,
+        "triangles": 91752,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 10,
+      "trees": 213,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2721,
+        "triangles": 119340,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 11,
+      "trees": 224,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2842,
+        "triangles": 124928,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 12,
+      "trees": 234,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2952,
+        "triangles": 130008,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 13,
+      "trees": 188,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2446,
+        "triangles": 106640,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 14,
+      "trees": 173,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2281,
+        "triangles": 99020,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 15,
+      "trees": 173,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2281,
+        "triangles": 99020,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 16,
+      "trees": 217,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2765,
+        "triangles": 121372,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 17,
+      "trees": 202,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2537,
+        "triangles": 111896,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 18,
+      "trees": 210,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2688,
+        "triangles": 117816,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 19,
+      "trees": 213,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2721,
+        "triangles": 119340,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 20,
+      "trees": 209,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2614,
+        "triangles": 115452,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 21,
+      "trees": 181,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2306,
+        "triangles": 101228,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 22,
+      "trees": 222,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2820,
+        "triangles": 123912,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 23,
+      "trees": 226,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2864,
+        "triangles": 125944,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 24,
+      "trees": 229,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2897,
+        "triangles": 127468,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 25,
+      "trees": 223,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2831,
+        "triangles": 124420,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 26,
+      "trees": 201,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2589,
+        "triangles": 113244,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 27,
+      "trees": 179,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2347,
+        "triangles": 102068,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 28,
+      "trees": 223,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2831,
+        "triangles": 124420,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 29,
+      "trees": 222,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2820,
+        "triangles": 123912,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    },
+    {
+      "seed": 30,
+      "trees": 216,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "models": {
+        "kind": "solid-mesh-v1",
+        "billboardCount": 0,
+        "batches": 12,
+        "instances": 2754,
+        "triangles": 120864,
+        "geometryTypes": [
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "IcosahedronGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "ConeGeometry",
+          "TorusGeometry",
+          "CylinderGeometry",
+          "CylinderGeometry",
+          "SphereGeometry",
+          "CylinderGeometry"
+        ]
+      },
+      "mapUnchanged": true
+    }
+  ],
+  "pageErrors": [],
+  "views": [
+    [
+      65,
+      0
+    ],
+    [
+      45,
+      45
+    ],
+    [
+      85,
+      0
+    ]
+  ],
+  "renderer": "Chromium/SwiftShader; not a phone performance benchmark",
+  "screenshotNote": "player moved onto existing walkable terrain near a lantern; map unchanged"
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>灯祭りの森・立体モデル確認</title>
+<style>
+html,body{margin:0;height:100%;overflow:hidden;background:#0b2025;color:#eee;font-family:system-ui,sans-serif}canvas{display:block}nav{position:fixed;top:14px;left:14px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}button{padding:9px 14px;border:1px solid #8b7750;border-radius:8px;background:#182d30;color:#ffe3a2}span{font-size:13px}
+</style>
+<nav><button data-angle="45">45°</button><button data-angle="65">65°</button><button data-angle="85">85°</button><button id="rotate">横へ回す</button><span>本編と同じ幹・枝・樹冠・ランタン・ロープの立体形状</span></nav>
+<script type="module">
+import * as THREE from '../assets/vendor/three.module.min.js';
+import { buildForestModels } from '../assets/forest-models3d.js';
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0x0b2025);renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;document.body.appendChild(renderer.domElement);
+const scene=new THREE.Scene();scene.add(new THREE.AmbientLight(0x9bc6ce,1.35));
+const camera=new THREE.OrthographicCamera();
+const group=new THREE.Group();scene.add(group);
+const loader=new THREE.TextureLoader(),cache=new Map();
+function texture(name){if(cache.has(name))return cache.get(name);const t=loader.load('../assets/dungeon/locations-v1/forest/'+name+'.webp',()=>draw());t.colorSpace=THREE.SRGBColorSpace;t.wrapS=t.wrapT=THREE.RepeatWrapping;cache.set(name,t);return t;}
+const plan={seed:123,trees:[{x:0,y:0,size:1.85},{x:3,y:0,size:1.75},{x:6,y:0,size:1.8}],lamps:[{x:0,y:0},{x:6,y:0}],garlands:[{x0:0,x1:6,y:0}]};
+const models=buildForestModels(group,plan,texture);
+const ground=new THREE.Mesh(new THREE.PlaneGeometry(11,6),new THREE.MeshLambertMaterial({map:texture('floorW')}));ground.rotation.x=-Math.PI/2;ground.position.set(3.5,.18,.5);ground.receiveShadow=true;scene.add(ground);
+const key=new THREE.PointLight(0xffdbac,70,15,2);key.position.set(4,4,3);key.castShadow=true;key.shadow.mapSize.set(512,512);scene.add(key);
+for(const p of models.lampPositions){const l=new THREE.PointLight(0xffbd65,12,5,2);l.position.set(p.x,p.y,p.z);scene.add(l);}
+let tilt=65,yaw=0;
+function draw(){const aspect=innerWidth/innerHeight;renderer.setSize(innerWidth,innerHeight);camera.left=-5.5;camera.right=5.5;camera.top=5.5/aspect;camera.bottom=-5.5/aspect;camera.near=.1;camera.far=80;camera.updateProjectionMatrix();const a=tilt*Math.PI/180;camera.position.set(3.5+Math.sin(yaw)*Math.cos(a)*14,1+Math.sin(a)*14,.5+Math.cos(yaw)*Math.cos(a)*14);camera.lookAt(3.5,1,.5);renderer.render(scene,camera);}
+function setView(angle,rotation=0){tilt=angle;yaw=rotation;draw();}
+for(const b of document.querySelectorAll('[data-angle]'))b.onclick=()=>setView(+b.dataset.angle,yaw);
+document.getElementById('rotate').onclick=()=>setView(tilt,yaw+Math.PI/4);
+addEventListener('resize',draw);
+window.forestPreview={group,plan,models,setView,renderer,scene,camera};draw();
+</script>
+</html>
