@@ -96,7 +96,7 @@ canvas{display:block;touch-action:none}
   <button class="btn" id="quick">−</button>
   <button class="btn" id="bagbtn">持物<br><small>0</small></button>
 </div>
-<div id="moveModes"><button data-mode="turn" aria-pressed="false">向き</button><button data-mode="diagonal" aria-pressed="false">斜め</button><button data-mode="dash" aria-pressed="false">走る</button><span id="controlHint">移動</span></div>
+<div id="moveModes"><button data-mode="turn" aria-pressed="false">向き</button><button data-mode="diagonal" aria-pressed="false">斜め</button><button data-mode="dash" aria-pressed="false">走る</button><button id="restBtn" aria-pressed="false">休む</button><span id="controlHint">移動</span></div>
 <div id="act"><button class="btn" id="atk">Attack</button></div>
 <div id="pad">
   <button class="btn dp" data-d="-1,-1">↖</button>
@@ -1559,10 +1559,18 @@ function turnCore(defer = false, then = null) {
   if (queue && queue.length && !dead) { runEnemyStrikes(queue, () => { turnCoreRest(free); if (then) then(); }); return; }
   turnCoreRest(free); if (then) then();
 }
+const REGEN_DIV = 150;   // 本家（シレン1の海外Wiki）の例から推定した値（仮説）。小さいほど速い
+let regenAcc = 0;
 function turnCoreRest(free) {
   if (!free) turn++;
   if (!dead && scene === 'dungeon' && !free) { hungerTick(); ringTick(); spawnTick(); }
-  if (!dead && !free && turn % Math.max(2, Math.round(10 / (1 + ringN('regen')))) === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;
+  // 自然回復：最大HPに比例（毎ターン 最大HP÷REGEN_DIV。回復の腕輪で倍率UP）。小数は持ち越して、たまったら1ずつ回復
+  if (!dead && !free) {
+    if (player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) {
+      regenAcc += player.maxhp / REGEN_DIV * (1 + ringN('regen'));
+      while (regenAcc >= 1 - 1e-9 && player.hp < player.maxhp) { regenAcc -= 1; player.hp++; }
+    } else regenAcc = 0;
+  }
   if (!dead && !free && sHas('mend') && turn % 5 === 0 && player.hp < player.maxhp && !(scene === 'dungeon' && belly <= 0)) player.hp++;   // 自己治癒：5ターンごとにHP+1
   if (!dead) tickStatus();
 }
@@ -2827,7 +2835,24 @@ function render() { draw(); kick(); }
 //  入力：画面ボタン（十字キー・Attack/決定・状況ボタン・クイック）
 // =====================================================================
 let holdT = 0, holdI = 0;
-function holdStop() { if(typeof stopRun==='function')stopRun(); clearTimeout(holdT); clearInterval(holdI); holdT = holdI = 0; }
+// 休む：HPが満タンになるまで足踏みを自動で繰り返す。敵が見えた・HPが減った・満腹度が低い・何か操作したら止まる
+let restI = 0;
+function restStop() { clearInterval(restI); restI = 0; const b = document.getElementById('restBtn'); b?.setAttribute?.('aria-pressed', 'false'); }
+function restStart() {
+  if (scene !== 'dungeon' || dead || uiBlocked() || player.hp >= player.maxhp) { if (scene === 'dungeon' && !dead && player.hp >= player.maxhp) say('HPは満タンだ。'); return; }
+  const b = document.getElementById('restBtn'); b?.setAttribute?.('aria-pressed', 'true');
+  let last = player.hp;
+  restI = setInterval(() => {
+    if (EventVfx.busy()) return;
+    if (dead || scene !== 'dungeon' || uiBlocked()) { restStop(); return; }
+    if (player.hp < last) { restStop(); return; }
+    if (player.hp >= player.maxhp) { restStop(); say('HPが全回復した。'); return; }
+    if (enemies.some(e => !e.mim && vis[e.y]?.[e.x])) { restStop(); say('敵が見えたので休むのをやめた。'); return; }
+    if (belly <= 10) { restStop(); say('お腹がすいているので休むのをやめた。'); return; }
+    last = player.hp; playerMove(0, 0); last = player.hp;
+  }, 90);
+}
+function holdStop() { restStop(); if(typeof stopRun==='function')stopRun(); clearTimeout(holdT); clearInterval(holdI); holdT = holdI = 0; }
 function capture(b, ev) { try { b.setPointerCapture(ev.pointerId); } catch (_) {} }
 document.querySelectorAll('.dp').forEach(b => {
   const [dx, dy] = b.dataset.d.split(',').map(Number);
@@ -2856,6 +2881,7 @@ function bindAction(id, fn) {
   b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up); b.addEventListener('lostpointercapture', up);
 }
 bindAction('atk', playerAttack);
+(() => { const b = $('restBtn'); b.addEventListener('pointerdown', ev => { ev.preventDefault(); const was = !!restI; holdStop(); if (!was) restStart(); }); })();
 bindAction('pick', doCtx);
 bindAction('quick', useQuick);
 document.addEventListener('contextmenu', ev => ev.preventDefault());
