@@ -96,7 +96,29 @@ function sync(level) {
   const place = (cells, mesh, y) => cells.forEach(([x, z], k) => {
     dummy.position.set(x + 0.5, y, z + 0.5); dummy.rotation.set(0, 0, 0); dummy.updateMatrix(); mesh.setMatrixAt(k, dummy.matrix);
   });
+  // 鍾乳洞の広域床：ワールド座標で6マスに1枚。形は既存の床マスだけを使う。
+  // 単一マスへの縮小反復では細かな模様が目立ち、採用した静かな床にならない。
+  if (themeId === 'limestone') {
+    const positions = [], uvs = [], indices = [];
+    for (const [x, z] of fCells.flat()) {
+      const n = positions.length / 3;
+      positions.push(x, 0, z, x, 0, z + 1, x + 1, 0, z + 1, x + 1, 0, z);
+      uvs.push(x / 6, -z / 6, x / 6, -(z + 1) / 6, (x + 1) / 6, -(z + 1) / 6, (x + 1) / 6, -z / 6);
+      indices.push(n, n + 1, n + 2, n, n + 2, n + 3);
+    }
+    if (positions.length) {
+      const geo = new THREE.BufferGeometry();
+      geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      geo.setAttribute('uv', new THREE.Float32BufferAttribute(uvs, 2));
+      geo.setIndex(indices);
+      geo.computeVertexNormals();
+      const floor = new THREE.Mesh(geo, new THREE.MeshLambertMaterial({ map: tex(url('floorW')) }));
+      floor.receiveShadow = true;
+      g.add(floor);
+    }
+  }
   fCells.forEach((cells, i) => {
+    if (themeId === 'limestone') return;
     if (!cells.length) return;
     const im = new THREE.InstancedMesh(floorGeo, new THREE.MeshLambertMaterial({ map: tex(url('floor' + i)) }), cells.length);
     place(cells, im, 0);

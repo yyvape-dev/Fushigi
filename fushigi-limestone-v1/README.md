@@ -8,7 +8,7 @@
 - `assets/dungeon/locations-v1/limestone/` の床4種・壁側面2種・上面2種・階段を256×256、不透明、lossless WebPで更新。
 - 本編2Dは広域床 `floorW.webp` を優先するため、同じ床素材でこれも更新。
 - 2Dの天面と天井は同じ素材・周期を使うため、`assets/dungeon/experience-v1/ceiling-limestone.webp` を `wallT0.webp` と同一にする。
-- 3Dは既存の読み込み先から新しい素材を使用する。地形生成、当たり判定、乱数、セーブ形式、キャラクター描画は変更しない。
+- 3Dの鍾乳洞床は `render3d.js` で6マス周期のワールドUVに変更し、広域床を連続投影する。壁と階段は既存の読み込み先から新しい素材を使用する。他ロケーションの描画方式は変えない。地形生成、当たり判定、乱数、セーブ形式、キャラクター描画は変更しない。
 - `props/` は石筍・岩・苔・松明の単体512×512 PNG、背景は単色マゼンタ。規格書で小物配置は未実装なので、本編には接続していない。素材を追加しただけで出現すると扱わない。
 
 ## ランダム生成への対応
@@ -60,3 +60,12 @@ bash tests/run_all.sh
 階段（共通文なし）：
 
 > Create a single square opaque game ground tile: a descending limestone stairwell set flush within a limestone floor, seen from PERFECT ORTHOGRAPHIC TOP DOWN, no perspective, no exterior walls or doorway arch. Match the attached approved cavern's stylized softly painted limestone material in muted warm gray beige. Five broad stone steps lead down from lower edge toward upper edge into a rectangular opening, centered, with quiet broad flat floor margin covering outer 20% on every side. Neutral uniform diffuse lighting, no torch or flame, no colored glow, no directional cast shadows, no vignette, no dramatic highlights. Only the inherent darker color of the interior opening indicates depth. Crisp simple readable forms for a small dungeon tile. Full bleed square image, no characters, text, symbols, frames or UI.
+
+## 検証結果（2026-10-24）
+
+- `python fushigi-limestone-v1/verify.py`：LIMESTONE ASSET CHECK OK。
+- `node tests/check_art.js`：ART CHECK OK。
+- `bash tests/run_all.sh`：全32本、ALL TESTS PASSED（全て初回成功）。
+- Chromium + SwiftShaderでseed 1〜30のランダム地形を実際に3D描画し、例外なし・入力マップ不変を確認。詳細は `browser-validation.json`。
+- 本編の鍾乳洞で3D表示ON、1100×850と390×844の画面を記録。`game-3d.png` / `game-3d-mobile.png`。スマホ実機性能は未計測。
+- 最初のローカル実行は共有のCanvasライブラリへフォールバックして失敗したため、lockfile通りに `npm ci` して再実行。テストやゲームロジックを変更せず全件成功。
