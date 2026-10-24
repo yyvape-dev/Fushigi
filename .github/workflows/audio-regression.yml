@@ -1,0 +1,37 @@
+name: Audio regression
+on:
+  push:
+    branches: [feat/complete-action-audio]
+  pull_request:
+    paths:
+      - 'assets/*sfx*'
+      - 'assets/game-audio.js'
+      - 'assets/allies.js'
+      - 'assets/enemy-vfx.js'
+      - 'index.html'
+      - 'tests/*audio*'
+      - '.github/workflows/audio-regression.yml'
+permissions:
+  contents: read
+jobs:
+  audio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - name: Gameplay and audio event regression
+        run: |
+          for test in test_mvp test_action_audio test_allies test_avenius test_sherininya test_cannon_evolution test_pot test_castle_town test_alternate_attack test_shop_ground test_shop_security test_run_save; do
+            node tests/harness.js index.html tests/$test.js || exit 1
+          done
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install playwright
+      - run: python -m playwright install --with-deps chromium
+      - name: Verify all synthesized sounds in Chromium
+        run: python tests/check_action_audio.py

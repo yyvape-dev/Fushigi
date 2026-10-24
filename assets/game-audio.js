@@ -8,14 +8,14 @@
  const tracks=new Map(),effects=new Map();let wanted='town',current=null,unlocked=false,pending=null,epoch=0;
  const trackFor=(scene,theme,dead)=>dead?null:scene==='town'?'town':theme==='forest'?'green':['ice','volcano'].includes(theme)?'spooky':'depth';
  function get(map,key,ext,loop=false){if(!map.has(key)){const a=new Audio(path+key+ext);a.preload='none';a.loop=loop;map.set(key,a);}return map.get(key);}
- function levels(){const duck=(sfx?.active.length||[...effects.values()].some(a=>!a.paused&&!a.ended))?.35:1;for(const a of tracks.values()){a.volume=settings.bgm*duck;a.muted=settings.muted;}for(const a of effects.values()){a.volume=settings.se;a.muted=settings.muted;}}
+ function levels(){const duck=(sfx?.active.some(k=>!['step','ui-open','ui-close'].includes(k))||[...effects.values()].some(a=>!a.paused&&!a.ended))?.35:1;for(const a of tracks.values()){a.volume=settings.bgm*duck;a.muted=settings.muted;}for(const a of effects.values()){a.volume=settings.se;a.muted=settings.muted;}}
  function pause(){sfx?.stop();epoch++;pending=null;for(const a of [...tracks.values(),...effects.values()])a.pause();levels();}
  function reconcile(){
   if(!unlocked||document.hidden||settings.muted||settings.bgm===0||!wanted){for(const a of tracks.values())a.pause();return;}
   if(current!==wanted){for(const a of tracks.values())a.pause();current=wanted;epoch++;pending=null;}
   const a=get(tracks,current,'.mp3',true);levels();if(!a.paused||pending===a)return;
-  const version=epoch;pending=a;
-  a.play().catch(()=>{if(version===epoch&&wanted===current)unlocked=false;}).finally(()=>{if(pending===a)pending=null;});
+  pending=a;
+  a.play().catch(()=>{/* A missing BGM must not lock out action SE. */}).finally(()=>{if(pending===a)pending=null;});
  }
  function unlock(ev){if(ev&&ev.isTrusted===false)return;unlocked=true;sfx?.unlock();reconcile();}
  function configure(patch){for(const k of ['bgm','se'])if(Number.isFinite(patch[k]))settings[k]=Math.max(0,Math.min(1,patch[k]));if(typeof patch.muted==='boolean')settings.muted=patch.muted;try{localStorage.setItem(storeKey,JSON.stringify(settings));}catch{}if(settings.muted){for(const a of effects.values())a.pause();}sfx?.configure(settings.se,settings.muted);levels();reconcile();}
@@ -28,7 +28,7 @@
   const a=get(effects,key,'.wav');if(!a.dataset.bound){for(const e of ['play','pause','ended'])a.addEventListener(e,levels);a.addEventListener('error',()=>{a.pause();levels();});a.dataset.bound='1';}levels();a.play().catch(()=>{});
  }
  root.GameAudio={
-  sync(scene,theme,dead){const next=trackFor(scene,theme,dead);if(wanted===next)return;wanted=next;if(!next){pause();}reconcile();},
+  sync(scene,theme,dead){const next=trackFor(scene,theme,dead);if(wanted===next)return;wanted=next;if(!next){for(const a of tracks.values())a.pause();}reconcile();},
   effect,configure,cycle,trackFor,
   stop:pause,
   get settings(){return {...settings};},
