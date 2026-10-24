@@ -1,0 +1,194 @@
+{
+  "maps": [
+    {
+      "seed": 1,
+      "rooms": 10,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 2,
+      "rooms": 10,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 3,
+      "rooms": 11,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 4,
+      "rooms": 7,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 5,
+      "rooms": 8,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 6,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 7,
+      "rooms": 10,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 8,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 9,
+      "rooms": 6,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 10,
+      "rooms": 10,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 11,
+      "rooms": 11,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 12,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 13,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 14,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 15,
+      "rooms": 7,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 16,
+      "rooms": 11,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 17,
+      "rooms": 7,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 18,
+      "rooms": 11,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 19,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 20,
+      "rooms": 8,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 21,
+      "rooms": 6,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 22,
+      "rooms": 10,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 23,
+      "rooms": 10,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 24,
+      "rooms": 11,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 25,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 26,
+      "rooms": 10,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 27,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 28,
+      "rooms": 8,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 29,
+      "rooms": 11,
+      "rendered": true,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 30,
+      "rooms": 9,
+      "rendered": true,
+      "mapUnchanged": true
+    }
+  ],
+  "pageErrors": [],
+  "desktop": [
+    1100,
+    850
+  ],
+  "mobile": [
+    390,
+    844
+  ],
+  "webgl": "Chromium SwiftShader; performance not representative of a phone"
+}

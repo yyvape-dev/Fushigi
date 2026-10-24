@@ -1,0 +1,137 @@
+[
+  {
+    "path": "assets/dungeon/locations-v1/limestone/floor0.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 75994,
+    "sha256": "74dd38a6d02a0abe5655135e1bc1f91e880eaa89797dfbdc76f2ab7350f58e8a"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/floor1.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 75936,
+    "sha256": "067a3f72fa3708d85bb63a151b7bba9388a58a9d76eaf7348e95c2cd9331a8ca"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/floor2.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 75948,
+    "sha256": "5c024e271c8c9b65bd634a37315936dca4837b1b2c249b434f02b8f1020604b8"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/floor3.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 75758,
+    "sha256": "cec2ac3284833852b30e81ee10ba58ed821ea4ad1bd3d27325e0efd400624cea"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/floorW.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 77482,
+    "sha256": "29d061b5d003683568dffa2257d720b64142dcc76e78e0e1757bcd176c8b6029"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/stairs.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 79766,
+    "sha256": "fe894aa786082f9ed7b846c9906f89ecc0ebb5479e231786c9d76a4d38193d6c"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/wallF0.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 95948,
+    "sha256": "5534a725ffa5c8d43aa2e00280330a2ee0d8cc32a5f69e9a2f85f66925fc3f7b"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/wallF1.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 92160,
+    "sha256": "9d73334b1c8b02838d4a462d626d97dcb718bdc1811713e17b81a937a08b0a30"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/wallT0.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 92882,
+    "sha256": "e15a4d4b35156fe94cd89dcc63fe985d481851a9fac0c19ebad2de0f31509e7a"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/limestone/wallT1.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 90428,
+    "sha256": "84be5aef881fdcf832560e9142e8b42824b49bbc5eae746e19cf78eb94778928"
+  },
+  {
+    "path": "assets/dungeon/experience-v1/ceiling-limestone.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 92882,
+    "sha256": "e15a4d4b35156fe94cd89dcc63fe985d481851a9fac0c19ebad2de0f31509e7a"
+  },
+  {
+    "path": "fushigi-limestone-v1/props/moss.png",
+    "size": [
+      512,
+      512
+    ],
+    "bytes": 55483,
+    "sha256": "9f649a56db49cbb5d813ad0390a305354ded186de1c2bf2b08e52c4e549cde6e"
+  },
+  {
+    "path": "fushigi-limestone-v1/props/rocks.png",
+    "size": [
+      512,
+      512
+    ],
+    "bytes": 107449,
+    "sha256": "3cf1942e3ec271a5857252c88dc082bed4a635c292af2ebe4b6669df5e650a87"
+  },
+  {
+    "path": "fushigi-limestone-v1/props/stalagmites.png",
+    "size": [
+      512,
+      512
+    ],
+    "bytes": 127397,
+    "sha256": "f026c20bd0693f27ac12cdd9a621f20837131441f8bbfbc2bc020082d098889f"
+  },
+  {
+    "path": "fushigi-limestone-v1/props/torch.png",
+    "size": [
+      512,
+      512
+    ],
+    "bytes": 51183,
+    "sha256": "500f0a384caa3f9f41a46aa405f573f684c9e2a96e62adda3107da1f4599c96a"
+  }
+]
