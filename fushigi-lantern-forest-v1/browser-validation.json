@@ -1,0 +1,292 @@
+{
+  "maps": [
+    {
+      "seed": 1,
+      "rooms": 10,
+      "trees": 209,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 2,
+      "rooms": 10,
+      "trees": 253,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 3,
+      "rooms": 11,
+      "trees": 256,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 4,
+      "rooms": 7,
+      "trees": 218,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 5,
+      "rooms": 8,
+      "trees": 215,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 6,
+      "rooms": 9,
+      "trees": 212,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 7,
+      "rooms": 10,
+      "trees": 201,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 8,
+      "rooms": 9,
+      "trees": 184,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 9,
+      "rooms": 6,
+      "trees": 166,
+      "lanterns": 8,
+      "garlands": 4,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 10,
+      "rooms": 10,
+      "trees": 213,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 11,
+      "rooms": 11,
+      "trees": 224,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 12,
+      "rooms": 9,
+      "trees": 234,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 13,
+      "rooms": 9,
+      "trees": 188,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 14,
+      "rooms": 9,
+      "trees": 173,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 15,
+      "rooms": 7,
+      "trees": 173,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 16,
+      "rooms": 11,
+      "trees": 217,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 17,
+      "rooms": 7,
+      "trees": 202,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 18,
+      "rooms": 11,
+      "trees": 210,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 19,
+      "rooms": 9,
+      "trees": 213,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 20,
+      "rooms": 8,
+      "trees": 209,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 21,
+      "rooms": 6,
+      "trees": 181,
+      "lanterns": 10,
+      "garlands": 5,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 22,
+      "rooms": 10,
+      "trees": 222,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 23,
+      "rooms": 10,
+      "trees": 226,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 24,
+      "rooms": 11,
+      "trees": 229,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 25,
+      "rooms": 9,
+      "trees": 223,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 26,
+      "rooms": 10,
+      "trees": 201,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 27,
+      "rooms": 9,
+      "trees": 179,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 28,
+      "rooms": 8,
+      "trees": 223,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 29,
+      "rooms": 11,
+      "trees": 222,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    },
+    {
+      "seed": 30,
+      "rooms": 9,
+      "trees": 216,
+      "lanterns": 12,
+      "garlands": 6,
+      "lights": 6,
+      "mapUnchanged": true
+    }
+  ],
+  "pageErrors": [],
+  "themeTransitions": [
+    "limestone",
+    "ruins",
+    "ice",
+    "volcano"
+  ],
+  "viewports": [
+    [
+      1100,
+      850
+    ],
+    [
+      390,
+      844
+    ]
+  ],
+  "renderer": "Chromium SwiftShader, performance is not a phone benchmark"
+}

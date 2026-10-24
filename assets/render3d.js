@@ -13,12 +13,13 @@ const BG = 0x0d0d12;
 let inited = false, failed = false;
 let renderer, scene, camera, torch, ambient, group, cvs;
 let levelKey = '', sizeKey = '', shakeKey = '', shadowsOn = true;
+let lastFrame = null;
 const loader = new THREE.TextureLoader();
 const texCache = new Map();
 
 function tex(url) {
   if (texCache.has(url)) return texCache.get(url);
-  const t = loader.load(url, undefined, undefined, () => console.warn('Render3D: 画像を読めません', url));
+  const t = loader.load(url, () => { if (lastFrame && cvs?.style.display !== 'none') frame(lastFrame); }, undefined, () => console.warn('Render3D: 画像を読めません', url));
   t.colorSpace = THREE.SRGBColorSpace;
   t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -67,6 +68,44 @@ function disposeGroup() {
   group = null;
 }
 
+// Magenta remains in the source PNGs. Cut it out in the shader for 3D cards.
+function forestCardMaterial(name) {
+  const mat = new THREE.MeshBasicMaterial({ map: tex(`assets/dungeon/forest-festival-v1/${name}.png`), side: THREE.DoubleSide, toneMapped: false });
+  mat.onBeforeCompile = shader => {
+    shader.fragmentShader = shader.fragmentShader.replace('#include <map_fragment>', '#include <map_fragment>\nif (diffuseColor.r > 0.16 && diffuseColor.b > 0.16 && diffuseColor.r > diffuseColor.g * 1.6 && diffuseColor.b > diffuseColor.g * 1.6) discard;');
+  };
+  mat.customProgramCacheKey = () => 'forest-magenta-v1';
+  return mat;
+}
+
+function addForest(g, level) {
+  const plan = window.ForestFestival.plan(level);
+  const matrix = new THREE.Object3D();
+  const cards = (name, placements) => {
+    if (!placements.length) return;
+    const geo = new THREE.PlaneGeometry(1, 1).translate(0, name === 'garland' ? 0 : 0.4, 0);
+    const mesh = new THREE.InstancedMesh(geo, forestCardMaterial(name), placements.length);
+    placements.forEach((p, i) => {
+      matrix.position.set(p.x, p.y, p.z);
+      matrix.rotation.set(-TILT, 0, 0);
+      matrix.scale.set(p.w, p.h, 1);
+      matrix.updateMatrix(); mesh.setMatrixAt(i, matrix.matrix);
+    });
+    g.add(mesh);
+  };
+  cards('tree', plan.trees.map(t => ({ x: t.x + .5, y: .24, z: t.y + .8, w: t.size, h: t.size })));
+  cards('lantern', plan.lamps.map(l => ({ x: l.x + .5, y: .7, z: l.y + .85, w: .38, h: .6 })));
+  // Each string runs along a solid north bank; no support stands on a floor cell.
+  cards('garland', plan.garlands.map(s => ({ x: (s.x0 + s.x1 + 1) / 2, y: 1.1, z: s.y + 1, w: s.x1 - s.x0 + .8, h: s.x1 - s.x0 + .8 })));
+  // Six nearest lights illuminate the current view. Other lanterns stay emissive.
+  const lights = Array.from({ length: Math.min(6, plan.lamps.length) }, () => {
+    const light = new THREE.PointLight(0xffbd65, 12, 5, 2);
+    light.castShadow = false;
+    g.add(light); return light;
+  });
+  g.userData.forest = { plan, lights };
+}
+
 // 階の地形を作る。level = { map, W, H, themeId, wall, stairs }。内容が変わったときだけ作り直す。
 function sync(level) {
   if (!inited || failed || !level || !level.map) return;
@@ -80,6 +119,11 @@ function sync(level) {
   const g = new THREE.Group();
   group = g;
   scene.add(g);
+  const forest = themeId === 'forest' && !!window.ForestFestival;
+  ambient.color.setHex(forest ? 0x9bc6ce : 0x7a8098);
+  ambient.intensity = forest ? 1.35 : 1.1;
+  torch.intensity = forest ? 32 : 90;
+  renderer.setClearColor(forest ? 0x09181c : BG, 1);
   const url = n => `assets/dungeon/locations-v1/${themeId}/${n}.webp`;
   const isFloor = (x, y) => x >= 0 && y >= 0 && x < W && y < H && map[y][x] !== wall;
   const dummy = new THREE.Object3D();
@@ -98,7 +142,7 @@ function sync(level) {
   });
   // 鍾乳洞の広域床：ワールド座標で6マスに1枚。形は既存の床マスだけを使う。
   // 単一マスへの縮小反復では細かな模様が目立ち、採用した静かな床にならない。
-  if (themeId === 'limestone') {
+  if (themeId === 'limestone' || forest) {
     const positions = [], uvs = [], indices = [];
     for (const [x, z] of fCells.flat()) {
       const n = positions.length / 3;
@@ -118,7 +162,7 @@ function sync(level) {
     }
   }
   fCells.forEach((cells, i) => {
-    if (themeId === 'limestone') return;
+    if (themeId === 'limestone' || forest) return;
     if (!cells.length) return;
     const im = new THREE.InstancedMesh(floorGeo, new THREE.MeshLambertMaterial({ map: tex(url('floor' + i)) }), cells.length);
     place(cells, im, 0);
@@ -142,23 +186,26 @@ function sync(level) {
     for (let dy = -1; dy <= 1 && !adj; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && isFloor(x + dx, y + dy)) { adj = true; break; }
     if (adj) wCells[((x * 31 + y * 17) >>> 0) % 2].push([x, y]);
   }
-  const boxGeo = new THREE.BoxGeometry(1, WALL_H, 1);
+  const height = forest ? .2 : WALL_H;
+  const boxGeo = new THREE.BoxGeometry(1, height, 1);
   wCells.forEach((cells, i) => {
     if (!cells.length) return;
     const side = new THREE.MeshLambertMaterial({ map: tex(url('wallF' + i)) });
     const top = new THREE.MeshLambertMaterial({ map: tex(url('wallT' + i)) });
     const im = new THREE.InstancedMesh(boxGeo, [side, side, top, top, side, side], cells.length);
-    place(cells, im, WALL_H / 2);
+    place(cells, im, height / 2);
     im.castShadow = true;
     im.receiveShadow = true;
     g.add(im);
   });
+  if (forest) addForest(g, level);
 }
 
 // 毎フレーム。o = { camX, camY, TS, pitch, W, H, focusY, hx, hy, shx, shy, shadows }
 //   hx,hy：主人公の表示位置（タイル座標。マスの中心）。松明の位置に使う。
 function frame(o) {
   if (!inited || failed) return;
+  lastFrame = o;
   const { camX, camY, TS, pitch, W, H, focusY } = o;
   const sk = W + 'x' + H;
   if (sk !== sizeKey) { sizeKey = sk; renderer.setSize(W, H, false); cvs.style.width = W + 'px'; cvs.style.height = H + 'px'; }
@@ -172,6 +219,11 @@ function frame(o) {
   const sh = !!o.shadows;
   if (sh !== shadowsOn) { shadowsOn = sh; torch.castShadow = sh; scene.traverse(n => { if (n.material) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { m.needsUpdate = true; }); }); }
   torch.position.set(o.hx, 1.9, o.hy + 0.2);
+  if (group?.userData.forest) {
+    const { plan, lights } = group.userData.forest;
+    const near = plan.lamps.slice().sort((a, b) => (a.x+.5-o.hx)**2+(a.y+.85-o.hy)**2-((b.x+.5-o.hx)**2+(b.y+.85-o.hy)**2));
+    lights.forEach((light, i) => light.position.set(near[i].x + .5, .85, near[i].y + 1));
+  }
   const shk = Math.round(o.shx || 0) + ',' + Math.round(o.shy || 0);
   if (shk !== shakeKey) { shakeKey = shk; cvs.style.transform = shk === '0,0' ? '' : `translate(${shk.split(',')[0]}px,${shk.split(',')[1]}px)`; }
   renderer.render(scene, camera);
@@ -190,5 +242,5 @@ window.Render3D = {
   ready: () => !failed,          // 読み込み済みで、WebGLの開始に失敗していない
   pitchK: () => S,               // 1行の高さ = TS * pitchK（2D側の tilePitchY が使う）
   sync, frame, show,
-  debug: () => ({ inited, failed, levelKey, children: group ? group.children.length : -1, cam: camera ? camera.position.toArray() : null, frustum: camera ? [camera.left, camera.right, camera.top, camera.bottom] : null, size: renderer ? renderer.getSize(new THREE.Vector2()).toArray() : null, calls: renderer ? renderer.info.render.calls : -1, tris: renderer ? renderer.info.render.triangles : -1 }),
+  debug: () => ({ inited, failed, levelKey, children: group ? group.children.length : -1, forest: group?.userData.forest ? { trees: group.userData.forest.plan.trees.length, lanterns: group.userData.forest.plan.lamps.length, garlands: group.userData.forest.plan.garlands.length, lights: group.userData.forest.lights.length } : null, cam: camera ? camera.position.toArray() : null, frustum: camera ? [camera.left, camera.right, camera.top, camera.bottom] : null, size: renderer ? renderer.getSize(new THREE.Vector2()).toArray() : null, calls: renderer ? renderer.info.render.calls : -1, tris: renderer ? renderer.info.render.triangles : -1 }),
 };

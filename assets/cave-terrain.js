@@ -26,7 +26,7 @@
  // continuous picture, so large slabs run across tiles with no per-tile repeat.
  // The sheet repeats every WORLD_N cells; the stairs keep their own patch.
  const WORLD_N=6;
- const WORLD_CAP=new Set(['limestone']),CAP_N=4;
+ const WORLD_CAP=new Set(['limestone','forest']),CAP_N=4;
  state.worldCap=WORLD_CAP;
  function ground(g,px,py,size,h,id,x=0,y=0,variant=0){
   const w=art(id,'floorW');
