@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-24",
+  "tool": "image_gen",
+  "reference": "source-art/concept.png",
+  "transparent_background": false,
+  "jobs": [
+    [
+      "materials",
+      "Create a game material atlas from the attached approved Lantern Festival Forest concept. Square image divided into EXACTLY 2 by 2 equally sized square cells, edge-to-edge with NO gutter, NO borders, NO labels, no text. Every cell is a DIFFERENT opaque full-bleed texture. Top LEFT: calm flat earthen forest path material seen perfectly top-down, muted warm taupe beige, broad smooth compacted soil, very few broad embedded worn stones, extremely sparse fine cracks, low contrast, NO moss border, no plants, footprints or pebbles, no pattern resembling cobblestones. Top RIGHT: front orthographic close-up of thick old oak bark with broad rounded vertical ridges and a few quiet moss flecks, muted gray brown, full surface with no silhouette, no ground. Bottom LEFT: perfectly top-down close-up of dense stylized overlapping small rounded oak leaves, muted blue teal green, no branches, gaps or ground, full canopy material. Bottom RIGHT: a square tile of a small descending old moss-edged gray stone staircase set flush into taupe forest earth, seen perfectly top-down, four broad steps descending toward upper edge, unobstructed entrance at bottom, quiet earth margin 20% around entire cell. Match the substantial softly painted chunky 3D art direction of the reference. Each material texture has uniform neutral diffuse lighting, NO lantern light, baked cast shadows, directional highlights, vignette, lighting gradient, characters or UI. First three cells are seamless tileable texture samples. Keep floor especially calm and readable. This is a production texture atlas, not an environment scene."
+    ],
+    [
+      "tree",
+      "Create ONE isolated game environment tree asset matching the attached approved Lantern Festival Forest image. ONE old rounded oak tree, gnarled thick gray-brown trunk with a split branch, lush layered plush blue-teal green rounded leaf canopy, a few mossy roots huddled closely around trunk base, a small brass hanging lantern with a warm amber glass glow suspended beneath canopy on right side, no broad glow spilling on background. The whole tree fits the square with generous 8% margins, centered horizontally, foot at 90% image height. View is steep overhead 65 degrees above horizontal, near orthographic matching the reference's game camera. Substantial sculpted chunky 3D forms with soft painted material detail, restrained detail readable at small scale. Background pure flat solid magenta #FF00FF. No ground plane, no cast shadow, no background foliage, no surrounding scenery, no words, no UI. Fully show canopy and trunk, one object."
+    ],
+    [
+      "lantern",
+      "Create ONE isolated game prop: an ornate but simple handcrafted brass and dark wood hanging forest lantern, matching the attached approved Lantern Festival Forest concept. Rounded hexagonal amber glass chamber within warm aged brass frame, small arched top hook attached to short curved rustic wooden support with a small mounting plate. Warm amber glowing core only inside glass, no broad halo on background. Entire object centered and fully visible in square, occupying 80% height with ample margin. Steep overhead 65 degrees above horizontal, near orthographic. Substantial softly sculpted chunky 3D with restrained painted material detail. Background perfectly flat solid magenta #FF00FF. No tree, no ground, no cast shadow, text, border or UI."
+    ],
+    [
+      "garland",
+      "Create ONE isolated game environment decoration matching the attached Lantern Festival Forest concept: one gently sagging dark rope with seven small hanging festival glass globe lanterns, warm amber and pale gold with two muted coral and seafoam accents. From left to right across square canvas, forming a shallow graceful catenary with ends at 25% image height and bottom of bulbs at 65% image height. Entire rope and all lamps fully visible, 8% horizontal margin. Steep overhead 65 degree game-camera view, near orthographic, not an eye-level photograph. Handcrafted brass caps, substantial stylized softly painted 3D, warm glow contained in glass, NO halos or illumination on background. Pure perfectly flat solid magenta #FF00FF background. No poles, trees, background scene, cast ground shadows, text, UI or other objects."
+    ]
+  ],
+  "garland_refinement": {
+    "reference": "source-art/concept.png",
+    "transparent_background": false,
+    "output": "source-art/garland.png",
+    "prompt": "Production game prop sprite on pure perfectly flat magenta #FF00FF square background. ONE thin delicate forest festival light string spanning almost full width (from x=5% to95%). Seven TINY round glowing glass bulbs hanging from a thin dark rope. Bulbs are each ONLY 3% of the entire canvas width in diameter, truly small dots with tiny brass caps, NOT large detailed lanterns. Five pale amber gold bulbs, one muted coral and one muted seafoam. Rope endpoints at y=44% and center droops to y=49%, bulb bottoms never below y=55%. The entire object occupies only the central shallow horizontal band y=42%-55%. Leave the rest of the square pure flat magenta and empty. The rope has tiny loops on its ends, no posts or trees. Softly painted chunky 3D fantasy style of attached woodland concept, warm glow contained in bulbs, no external halo, no shadow, no text, UI, labels or scenery. Camera approximately 65 degrees overhead orthographic. Important miniature scale: restrained subtle little festival lights for environment, not big foreground props."
+  }
+}

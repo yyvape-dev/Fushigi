@@ -168,7 +168,8 @@ canvas{display:block;touch-action:none}
 <script src="assets/monster-families.js?v=enemy-c-v1"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=garden-v1"></script>
-<script type="module" src="assets/render3d.js?v=3d-phase1"></script>
+<script src="assets/forest-festival.js?v=forest-festival-v1"></script>
+<script type="module" src="assets/render3d.js?v=forest-festival-v1"></script>
 <script src="assets/action-sfx.js?v=action-se-v2"></script>
 <script src="assets/game-audio.js?v=action-se-v2"></script>
 <script src="assets/event-vfx.js?v=deep-enemy-vfx-v1"></script>
@@ -2743,6 +2744,7 @@ function draw() {
       if (m > 0) shadeTile(key, x, y, px, py, m);
     }
   }
+  if(dungeon && !r3 && floorPlan?.theme?.id==='forest') ForestFestival.draw2d(ctx,{map,W:MW,H:MH,wall:WALL,stairs:STAIRS,camX,camY,size:TS,pitch:tilePitchY()},draw);
   if(dungeon)ShopSystem.floorArt(ctx,camX,camY);
   if (scene === 'town' && showGrid) drawTownGrid(camX, camY);
   if (dungeon) for (const tr of traps) if (tr.seen && seen[tr.y][tr.x]) {                          // 見つけた罠：色つきのひし形

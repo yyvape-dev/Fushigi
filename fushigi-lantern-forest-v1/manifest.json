@@ -1,0 +1,128 @@
+[
+  {
+    "path": "assets/dungeon/locations-v1/forest/floor0.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 74556,
+    "sha256": "f3b827c3beb47b8d7fcc9281daa59cea48b94f93c6538847d034eabcb2190c7c"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/floor1.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 74622,
+    "sha256": "c5a216bd56e892f9fb5c73235553303e7a83c6011dcb73e77b301ed204143dfa"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/floor2.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 74580,
+    "sha256": "e116969830f0396068cc8ff8b9a85536969c3c3facca0140d3091ed30f8e7329"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/floor3.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 74526,
+    "sha256": "ecc94dbfe7dadf12947effbc81f038ef6dbf8fa9ec564977f3b8b493c0e56f9e"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/floorW.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 76130,
+    "sha256": "3cfe9cf5b02b7b23a18e7615e4cec432d919f838697f31010822743a96c7a001"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/stairs.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 87068,
+    "sha256": "d1aeabaad4d1e23a1bbbbe072c270964232fedd90516ee9a5f888fd3cc81dd09"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/wallF0.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 107402,
+    "sha256": "b92eabae3e04b80b03efb6ed9046658e06925c19730c56462badb968bfbb5c8c"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/wallF1.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 102210,
+    "sha256": "b718bda1ed57bd30755586ba0345b8a85b9dd12849e88e4b0d31df9793337a95"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/wallT0.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 112484,
+    "sha256": "23c77be9a3bbfe554fd5b27b1754aadb98e669812bfa277b6b16b23e5236ef84"
+  },
+  {
+    "path": "assets/dungeon/locations-v1/forest/wallT1.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 105652,
+    "sha256": "d8bb1a88710f3c07b08dc6f0ddbedbbce018e051f597ceebea2bd6dfc5d0b9d3"
+  },
+  {
+    "path": "assets/dungeon/forest-festival-v1/garland.png",
+    "size": [
+      512,
+      512
+    ],
+    "bytes": 15458,
+    "sha256": "b3537e1e35f2b9cbb003451009da2f01482b8fce2ca2f90bf988826bf4cf5c92"
+  },
+  {
+    "path": "assets/dungeon/forest-festival-v1/lantern.png",
+    "size": [
+      512,
+      512
+    ],
+    "bytes": 131402,
+    "sha256": "b2f7f1e4ccb876713546e6975cc8c7db66d221bbe8c0a4f5fa1468cc042c20bb"
+  },
+  {
+    "path": "assets/dungeon/forest-festival-v1/tree.png",
+    "size": [
+      512,
+      512
+    ],
+    "bytes": 277581,
+    "sha256": "034044e3e4d3f50896675607fff08bcaa95f234cc6ac57f7938badf4ff05c558"
+  },
+  {
+    "path": "assets/dungeon/experience-v1/ceiling-forest.webp",
+    "size": [
+      256,
+      256
+    ],
+    "bytes": 112484,
+    "sha256": "23c77be9a3bbfe554fd5b27b1754aadb98e669812bfa277b6b16b23e5236ef84"
+  }
+]
