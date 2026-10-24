@@ -1,5 +1,5 @@
-# 自動マージ：同じリポジトリの feat/ fix/ docs/ experiment/ ci/ ブランチのPRで、
-# 全テスト（tests/run_all.sh）が通ったらマージする。ドラフトPRは対象外（「Ready for review」にすると動く）。
+# 自動マージ：同じリポジトリの feat/ fix/ docs/ experiment/ ci/ art/ codex/ ブランチのPRで、
+# 絵の簡易チェック（tests/check_art.js）と全テスト（tests/run_all.sh）が通ったらマージする。ドラフトPRは対象外（「Ready for review」にすると動く）。
 # 止めたいとき：PRをドラフトにする／ブランチ名を上の接頭辞以外にする／このファイルを削除する。
 name: auto-merge
 
@@ -30,16 +30,20 @@ jobs:
        github.event.pull_request.draft == false &&
        (startsWith(github.head_ref, 'feat/') || startsWith(github.head_ref, 'fix/') ||
         startsWith(github.head_ref, 'docs/') || startsWith(github.head_ref, 'experiment/') ||
-        startsWith(github.head_ref, 'ci/')))
+        startsWith(github.head_ref, 'ci/') || startsWith(github.head_ref, 'art/') ||
+        startsWith(github.head_ref, 'codex/')))
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/pull/{0}/head', inputs.pr) || '' }}
+          fetch-depth: 0
+          ref: ${{ github.event_name == 'workflow_dispatch' && format('refs/pull/{0}/merge', inputs.pr) || '' }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
       - run: npm ci
+      - name: 絵の簡易チェック
+        run: node tests/check_art.js
       - name: 全テスト
         run: bash tests/run_all.sh
       - name: マージ
