@@ -1,0 +1,426 @@
+{
+  "date": "2026-10-24",
+  "environment": "V8 isolated functional runner; canvas API stub",
+  "limitations": [
+    "Sound preference and iOS hardware playback remain unverified."
+  ],
+  "functional": [
+    {
+      "test": "tests/test_allies.js",
+      "result": "passed",
+      "checks": 47
+    },
+    {
+      "test": "tests/test_avenius.js",
+      "result": "passed",
+      "logs": [
+        "ALL OK: 42 Avenius checks: range, LOS, landing, identity, return, accuracy, status, XP, recruitment, encounters, stairs, retreat and hero haste."
+      ]
+    },
+    {
+      "test": "tests/test_sherininya.js",
+      "result": "passed",
+      "logs": [
+        "ALL OK: 43 Sherininya checks: piercing rays, walls/corners, friendly immunity, accuracy, split identity, XP, sleep/confusion, recruitment, growth, encounters, stairs and retreat."
+      ]
+    },
+    {
+      "test": "tests/test_cannon_evolution.js",
+      "result": "passed",
+      "logs": [
+        "ALL OK: 82 cannon/evolution checks: 3x3, fixed power, collisions, walls, all families, multi-kill, self-blast, allies, XP, drops, persistence and fatal save"
+      ]
+    },
+    {
+      "test": "tests/test_pot.js",
+      "result": "passed",
+      "logs": [
+        "ALL OK: pot capacity/name, put/take, equipped+floor+unpaid contents, bill/return/theft, throw breaks and scatters, sell prices, run save, encode/decode"
+      ]
+    },
+    {
+      "test": "tests/test_castle_town.js",
+      "result": "passed",
+      "logs": [
+        "OK legacy save without town migrates to bed",
+        "ALL OK castle town"
+      ]
+    },
+    {
+      "test": "tests/test_alternate_attack.js",
+      "result": "passed",
+      "logs": [
+        "ALL OK: alternating attacks — player first, enemy answers after the swing, one turn",
+        "ALL OK: alternating attacks — one enemy at a time"
+      ]
+    },
+    {
+      "test": "tests/test_shop_ground.js",
+      "result": "passed",
+      "logs": [
+        "ALL OK: 36 shop ground checks: entry, locked price, cancel, pickup, floor use, full bag, failures, staff, equip, arrows, stale actions and keyboard"
+      ]
+    },
+    {
+      "test": "tests/test_shop_security.js",
+      "result": "passed",
+      "logs": [
+        "OK leaving after swap triggers theft without invisible exit wall",
+        "ALL OK 30 security and multiple-entrance checks"
+      ]
+    },
+    {
+      "test": "tests/test_run_save.js",
+      "result": "passed",
+      "logs": [
+        "ALL OK: 31 run-save checks: resume floor/bag/equip/shop debt/aliases/ally, departure bag without run save, death on reload, cleared on town, broken save fallback, size 28147 chars"
+      ]
+    },
+    {
+      "test": "tests/test_action_audio.js",
+      "result": "passed",
+      "logs": [
+        "ALL OK: action audio follows pickup, damage, pot, traps and forge results",
+        "ALL OK: distinct ally attacks, issen, boost, join, ally XP/retreat, revival/death, visibility, food, healing and equipment audio"
+      ]
+    }
+  ],
+  "pcm": [
+    {
+      "key": "swing",
+      "seconds": 0.18,
+      "peak": 0.29186883568763733,
+      "rms": 0.1073091838167857
+    },
+    {
+      "key": "hit",
+      "seconds": 0.18,
+      "peak": 0.4810762107372284,
+      "rms": 0.09404499385650732
+    },
+    {
+      "key": "critical",
+      "seconds": 0.32,
+      "peak": 0.5194225907325745,
+      "rms": 0.075343036444964
+    },
+    {
+      "key": "hurt",
+      "seconds": 0.25,
+      "peak": 0.4527702331542969,
+      "rms": 0.07923327203893467
+    },
+    {
+      "key": "pickup",
+      "seconds": 0.22,
+      "peak": 0.24910372495651245,
+      "rms": 0.0676731254091131
+    },
+    {
+      "key": "coin",
+      "seconds": 0.32,
+      "peak": 0.24686481058597565,
+      "rms": 0.056079708959263536
+    },
+    {
+      "key": "throw",
+      "seconds": 0.24,
+      "peak": 0.2037048488855362,
+      "rms": 0.07361372053976506
+    },
+    {
+      "key": "potbreak",
+      "seconds": 0.48,
+      "peak": 0.37405192852020264,
+      "rms": 0.05816154891675213
+    },
+    {
+      "key": "trap",
+      "seconds": 0.12,
+      "peak": 0.3623747229576111,
+      "rms": 0.05681781856657342
+    },
+    {
+      "key": "trap-mine",
+      "seconds": 0.65,
+      "peak": 0.5228715538978577,
+      "rms": 0.08304287352097559
+    },
+    {
+      "key": "trap-gas",
+      "seconds": 0.65,
+      "peak": 0.11995578557252884,
+      "rms": 0.048393785578479384
+    },
+    {
+      "key": "trap-pit",
+      "seconds": 0.65,
+      "peak": 0.2821389138698578,
+      "rms": 0.12759028528595598
+    },
+    {
+      "key": "trap-warp",
+      "seconds": 0.65,
+      "peak": 0.24666611850261688,
+      "rms": 0.08993612899243572
+    },
+    {
+      "key": "trap-hungry",
+      "seconds": 0.45,
+      "peak": 0.24695445597171783,
+      "rms": 0.1262739371031272
+    },
+    {
+      "key": "trap-summon",
+      "seconds": 0.7,
+      "peak": 0.3268287181854248,
+      "rms": 0.06138666290308531
+    },
+    {
+      "key": "forge",
+      "seconds": 1.05,
+      "peak": 0.4120369851589203,
+      "rms": 0.049935202591844675
+    },
+    {
+      "key": "ally-kunai",
+      "seconds": 0.22,
+      "peak": 0.18394869565963745,
+      "rms": 0.07768211556356958
+    },
+    {
+      "key": "ally-sword",
+      "seconds": 0.28002267573696143,
+      "peak": 0.24664482474327087,
+      "rms": 0.08316127818129494
+    },
+    {
+      "key": "ally-magic",
+      "seconds": 0.42,
+      "peak": 0.27965518832206726,
+      "rms": 0.09182473509305836
+    },
+    {
+      "key": "ally-issen",
+      "seconds": 0.38,
+      "peak": 0.2463618516921997,
+      "rms": 0.07992856287929276
+    },
+    {
+      "key": "join",
+      "seconds": 0.8,
+      "peak": 0.23282308876514435,
+      "rms": 0.06980411252909863
+    },
+    {
+      "key": "retreat",
+      "seconds": 0.65,
+      "peak": 0.19830341637134552,
+      "rms": 0.057433340527936964
+    },
+    {
+      "key": "boost",
+      "seconds": 0.5500226757369614,
+      "peak": 0.2794649600982666,
+      "rms": 0.09150485926390385
+    },
+    {
+      "key": "miss",
+      "seconds": 0.16,
+      "peak": 0.12165600061416626,
+      "rms": 0.049194027261402325
+    },
+    {
+      "key": "defeat",
+      "seconds": 0.24,
+      "peak": 0.33192968368530273,
+      "rms": 0.042077242735556256
+    },
+    {
+      "key": "status",
+      "seconds": 0.38,
+      "peak": 0.2077491581439972,
+      "rms": 0.07334623145086759
+    },
+    {
+      "key": "block",
+      "seconds": 0.18,
+      "peak": 0.33154869079589844,
+      "rms": 0.04871388033630075
+    },
+    {
+      "key": "heal",
+      "seconds": 0.45,
+      "peak": 0.26028352975845337,
+      "rms": 0.08007670087069742
+    },
+    {
+      "key": "revive",
+      "seconds": 1,
+      "peak": 0.23896008729934692,
+      "rms": 0.06977628807091708
+    },
+    {
+      "key": "death",
+      "seconds": 1,
+      "peak": 0.18628761172294617,
+      "rms": 0.05351801502027106
+    },
+    {
+      "key": "victory",
+      "seconds": 1.2,
+      "peak": 0.22647592425346375,
+      "rms": 0.06378152829875866
+    },
+    {
+      "key": "eat",
+      "seconds": 0.3,
+      "peak": 0.14555756747722626,
+      "rms": 0.028551754434307852
+    },
+    {
+      "key": "drink",
+      "seconds": 0.32,
+      "peak": 0.17737165093421936,
+      "rms": 0.08968649578763527
+    },
+    {
+      "key": "scroll",
+      "seconds": 0.4,
+      "peak": 0.1445348709821701,
+      "rms": 0.02535044992673223
+    },
+    {
+      "key": "staff",
+      "seconds": 0.28002267573696143,
+      "peak": 0.2761407494544983,
+      "rms": 0.09163631026717202
+    },
+    {
+      "key": "equip",
+      "seconds": 0.22,
+      "peak": 0.30410900712013245,
+      "rms": 0.044604481066863114
+    },
+    {
+      "key": "place",
+      "seconds": 0.14002267573696145,
+      "peak": 0.30469632148742676,
+      "rms": 0.05429328132281889
+    },
+    {
+      "key": "container",
+      "seconds": 0.2,
+      "peak": 0.33353427052497864,
+      "rms": 0.04695610847987406
+    },
+    {
+      "key": "trade",
+      "seconds": 0.32,
+      "peak": 0.2922160029411316,
+      "rms": 0.06323922859506809
+    },
+    {
+      "key": "step",
+      "seconds": 0.09,
+      "peak": 0.05838806927204132,
+      "rms": 0.013450102023858088
+    },
+    {
+      "key": "stairs",
+      "seconds": 0.45,
+      "peak": 0.2454417496919632,
+      "rms": 0.045330481119325805
+    },
+    {
+      "key": "door",
+      "seconds": 0.28002267573696143,
+      "peak": 0.2659403681755066,
+      "rms": 0.038336783780610464
+    },
+    {
+      "key": "ui-open",
+      "seconds": 0.1,
+      "peak": 0.05787128955125809,
+      "rms": 0.014217246927454444
+    },
+    {
+      "key": "ui-close",
+      "seconds": 0.09,
+      "peak": 0.056392405182123184,
+      "rms": 0.01498353345556485
+    },
+    {
+      "key": "error",
+      "seconds": 0.13,
+      "peak": 0.11734318733215332,
+      "rms": 0.027723107393365868
+    },
+    {
+      "key": "alarm",
+      "seconds": 0.75,
+      "peak": 0.27263426780700684,
+      "rms": 0.07046894373070857
+    },
+    {
+      "key": "cannon",
+      "seconds": 0.6,
+      "peak": 0.4728359580039978,
+      "rms": 0.07797036321144016
+    },
+    {
+      "key": "fire",
+      "seconds": 0.42,
+      "peak": 0.16433528065681458,
+      "rms": 0.06615017601998706
+    },
+    {
+      "key": "lightning",
+      "seconds": 0.35,
+      "peak": 0.39732447266578674,
+      "rms": 0.050908698115619266
+    },
+    {
+      "key": "bell",
+      "seconds": 0.6,
+      "peak": 0.3028936982154846,
+      "rms": 0.04620783358709474
+    },
+    {
+      "key": "evolve",
+      "seconds": 0.65,
+      "peak": 0.23675698041915894,
+      "rms": 0.07703099128737712
+    },
+    {
+      "key": "steal",
+      "seconds": 0.34002267573696143,
+      "peak": 0.23256845772266388,
+      "rms": 0.07887592217854411
+    },
+    {
+      "key": "identify",
+      "seconds": 0.32,
+      "peak": 0.3011222779750824,
+      "rms": 0.09358912978153933
+    },
+    {
+      "key": "fuse",
+      "seconds": 0.65,
+      "peak": 0.22776159644126892,
+      "rms": 0.06703084735777456
+    }
+  ],
+  "ci": {
+    "status": "success",
+    "commit": "4819dafe946c016d4d6e50f357940c7769afe803",
+    "workflow": "https://github.com/yyvape-dev/Fushigi/actions/runs/40095738764",
+    "checks": [
+      "Native @napi-rs/canvas MVP ALL OK",
+      "All 12 gameplay/audio regression scripts ALL OK",
+      "Chromium actual output of all 54 PCM effects",
+      "Mute, zero volume, stop, 8 voice cap"
+    ],
+    "mixerTestDoubles": "passed: input unlock, SE survives BGM stop at death, mute, hidden stop and no unsolicited resume"
+  }
+}

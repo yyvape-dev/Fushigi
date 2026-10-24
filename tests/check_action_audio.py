@@ -53,5 +53,5 @@ with sync_playwright() as p:
   return rows;
  }''')
  browser.close()
-(root/'fushigi-audio-v1/action-validation.json').write_text(json.dumps({'browser':'Chromium','checks':['PCM finite/non-silent/headroom','real Web Audio output for all 16 effects','8 voice cap','mute','zero volume','stop requires new input'],'effects':rows},ensure_ascii=False,indent=2)+'\n')
-print('ALL OK: 16 effects, real Web Audio output, voice cap, mute, volume, stop')
+(root/'fushigi-audio-v1/action-validation.json').write_text(json.dumps({'browser':'Chromium','checks':['PCM finite/non-silent/headroom','real Web Audio output for all effects','8 voice cap','mute','zero volume','stop requires new input'],'effects':rows},ensure_ascii=False,indent=2)+'\n')
+print(f'ALL OK: {len(rows)} effects, real Web Audio output, voice cap, mute, volume, stop')

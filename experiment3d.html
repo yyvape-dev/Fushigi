@@ -163,9 +163,10 @@ function heroSheet(dir){
  return heroTex[dir]=t;
 }
 const HERO_SIZE=2.5, FOOT=(256-231)/256;   // 足元は絵の下端から約10%上
-const heroMat=new THREE.MeshBasicMaterial({map:heroSheet('S'),transparent:true,alphaTest:0.4,side:THREE.DoubleSide});
+// 板を傾けると頭が北側の壁の箱に入り込むため、奥行き判定の対象外にして常に壁より手前に描く
+const heroMat=new THREE.MeshBasicMaterial({map:heroSheet('S'),transparent:true,alphaTest:0.4,side:THREE.DoubleSide,depthTest:false,depthWrite:false});
 const heroMesh=new THREE.Mesh(new THREE.PlaneGeometry(HERO_SIZE,HERO_SIZE).translate(0,HERO_SIZE/2-FOOT*HERO_SIZE,0),heroMat);
-heroMesh.renderOrder=2;
+heroMesh.renderOrder=10;
 scene.add(heroMesh);
 // 足元の落ち影（ビルボードは影を落とさないため丸影を別に置く）
 const blobTex=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');

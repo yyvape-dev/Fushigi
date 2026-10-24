@@ -35,20 +35,21 @@
   if(cells.length){const [x,y]=cells[rnd(0,cells.length-1)],kinds=Object.keys(roster);state.actor=make(x,y,kinds[Math.floor(Math.random()*kinds.length)]);}
  }
  function nearby(){const a=state.actor;return scene==='dungeon'&&a&&distance(a,player)<=1&&geomOK(player.x,player.y,a.x-player.x,a.y-player.y)?a:null;}
- function recruit(){const a=nearby();if(!a||a.following)return false;a.following=true;state.used=true;say(config(a).name+'「'+config(a).join+'」');hide();render();return true;}
+ function recruit(){const a=nearby();if(!a||a.following)return false;a.following=true;state.used=true;playSE('join');say(config(a).name+'「'+config(a).join+'」');hide();render();return true;}
  function infoHTML(){const a=state.actor;if(!a||!a.following)return '<p>同行している助っ人はいない。</p>';const s=stats(a),c=config(a),ability=a.kind==='sherininya'?'黒魔法：8方向の直線2マス。常に敵を狙って動く（ラナから離れすぎると戻る）。敵と味方を貫通し、敵だけに攻撃。壁の角をはさむ斜めも通る。まっすぐ壁があると止まる。':a.kind==='avenius'?'剣：隣接1マス<br>常に敵を狙って動く（ラナから離れすぎると戻る）<br>一閃：見える4マス以内の敵へ瞬間移動・必中の先制攻撃後に帰還。同じ敵につき1回。':'クナイ：8方向の直線2マス（隣接も含む）・障害物越し<br>常に敵を狙って動く（ラナから離れすぎると戻る）<br>狐火の襲：本人のみ4ターン2回行動'+(a.boost?'（残り'+a.boost+'）':'');return '<h3>'+c.name+'　Lv'+a.lv+'</h3><p>HP '+a.hp+'/'+a.maxhp+'　EXP '+a.exp+'/'+expNeed(a.lv)+'</p><p>攻撃 '+s.attack+'　守備 '+s.defense+'<br>装備固定：'+c.equipment+'<br>'+ability+'</p>';}
  function talk(){
-  const a=nearby();if(!a||uiBlocked())return;holdStop();state.returnFocus=document.activeElement;state.open=true;
+  const a=nearby();if(!a||uiBlocked())return;playSE('ui-open');holdStop();state.returnFocus=document.activeElement;state.open=true;
   document.body?.classList?.add('ally-dialog-open');const el=document.getElementById('allyPrompt');if(!el)return;el.hidden=false;
   document.getElementById('allyName').textContent=config(a).name;document.getElementById('allyPortrait').innerHTML=portrait(a);
   document.getElementById('allyContent').innerHTML='<p>'+(a.following?config(a).talk:config(a).meet)+'</p>';
   document.getElementById('allyJoin').hidden=a.following;document.getElementById('allyStay').textContent=a.following?'戻る':'そのまま';
   (a.following?document.getElementById('allyStay'):document.getElementById('allyJoin')).focus?.();render();
  }
- function gainExp(n){if(!live())return;const a=state.actor;a.exp+=n;while(a.lv<MAX_LV&&a.exp>=expNeed(a.lv)){a.exp-=expNeed(a.lv);a.lv++;a.maxhp=stats(a).maxhp;a.hp=Math.min(a.maxhp,a.hp+4);fxText(a.x,a.y,'Lv'+a.lv,'#c9a7ff');if(typeof EventVfx!=='undefined')EventVfx.play('level',a.x,a.y,{entity:a,duration:850});say(config(a).name+'はレベル'+a.lv+'になった！');}}
+ function gainExp(n){if(!live())return;const a=state.actor;a.exp+=n;while(a.lv<MAX_LV&&a.exp>=expNeed(a.lv)){a.exp-=expNeed(a.lv);a.lv++;a.maxhp=stats(a).maxhp;a.hp=Math.min(a.maxhp,a.hp+4);fxText(a.x,a.y,'Lv'+a.lv,'#c9a7ff');if(typeof EventVfx!=='undefined')EventVfx.play('level',a.x,a.y,{entity:a,duration:850});playSE('levelup');say(config(a).name+'はレベル'+a.lv+'になった！');}}
  function strike(a,e,issen=false){a.face=[Math.sign(e.x-a.x),Math.sign(e.y-a.y)];a.attackFace=a.face.slice();a.attackStart=now();a.walkEnd=0;const c=config(a);
-  if(!issen&&!(e.st?.sleep>0)&&Math.random()>=ACC.p){fxText(e.x,e.y,'MISS','#d7c3ff');say(c.name+'の'+c.verb+'は外れた。');return;}
-  const damage=Math.max(1,Math.round((stats(a).attack-eT(e).def+1)*(.875+Math.random()*.25)));e.hp-=damage;e.aware=true;e.flash=now()+130;if(e.st)e.st.sleep=0;
+  playSE(issen?'ally-issen':a.kind==='avenius'?'ally-sword':a.kind==='sherininya'?'ally-magic':'ally-kunai',a);
+  if(!issen&&!(e.st?.sleep>0)&&Math.random()>=ACC.p){playSE('miss',a);fxText(e.x,e.y,'MISS','#d7c3ff');say(c.name+'の'+c.verb+'は外れた。');return;}
+  playSE('hit',a);const damage=Math.max(1,Math.round((stats(a).attack-eT(e).def+1)*(.875+Math.random()*.25)));e.hp-=damage;e.aware=true;e.flash=now()+130;if(e.st)e.st.sleep=0;
   vfxHit(e.x,e.y,e.x-a.x,e.y-a.y,c.color,e.hp<=0);fxText(e.x,e.y,'-'+damage,c.color);say(c.name+'の'+(issen?'一閃':c.verb)+'！ '+eT(e).name+'に'+damage+'ダメージ。');
   if(e.hp<=0)killEnemy(e);else afterDamage(e);kick();
  }
@@ -94,7 +95,7 @@
   if(a.cooldown>0)a.cooldown--;
   if(a.st.sleep>0){a.st.sleep--;if(a.boost>0)a.boost--;return;}const confused=a.st.confuse>0;if(confused)a.st.confuse--;
   const inBattle=enemies.some(e=>!e.mh&&distance(a,e)<=5&&los(a.x,a.y,e.x,e.y));
-  if(a.kind==='yuzunamiki'&&!confused&&!a.boost&&!a.cooldown&&inBattle&&Math.random()<.12){a.boost=4;a.cooldown=12;a.castStart=now();fxText(a.x,a.y,'狐火の襲','#d9a0ff');say('ユズナミキは「狐火の襲」！ 本人だけ4ターン倍速。');}
+  if(a.kind==='yuzunamiki'&&!confused&&!a.boost&&!a.cooldown&&inBattle&&Math.random()<.12){playSE('boost',a);a.boost=4;a.cooldown=12;a.castStart=now();fxText(a.x,a.y,'狐火の襲','#d9a0ff');say('ユズナミキは「狐火の襲」！ 本人だけ4ターン倍速。');}
   for(let step=0;step<(a.boost>0?2:1);step++){
    if(confused){const [dx,dy]=DIRS8[rnd(0,7)],x=a.x+dx,y=a.y+dy;if(geomOK(a.x,a.y,dx,dy)&&!enemyAt(x,y)&&!merchantAt(x,y)&&!(player.x===x&&player.y===y))move(a,x,y);continue;}
    if(a.kind==='avenius'){
@@ -111,14 +112,14 @@
   }
   if(a.boost>0)a.boost--;if(turn%10===0&&a.hp<a.maxhp)a.hp++;
  }
- function hurt(n,killer=null){const a=state.actor;if(!a||a.hp<=0)return false;a.hp-=n;a.flash=now()+130;fxText(a.x,a.y,'-'+n,'#ffb6e8');if(a.hp<=0){say(config(a).name+'「'+config(a).retreat+'」');state.actor=null;state.used=true;hide();if(killer&&root.MonsterCombat)root.MonsterCombat.evolve(killer);return true;}return false;}
+ function hurt(n,killer=null){const a=state.actor;if(!a||a.hp<=0)return false;if(n>0)playSE('hurt',a);a.hp-=n;a.flash=now()+130;fxText(a.x,a.y,'-'+n,'#ffb6e8');if(a.hp<=0){playSE('retreat');say(config(a).name+'「'+config(a).retreat+'」');state.actor=null;state.used=true;hide();if(killer&&root.MonsterCombat)root.MonsterCombat.evolve(killer);return true;}return false;}
  function clearRay(e,a){let x=e.x,y=e.y;const dx=Math.sign(a.x-x),dy=Math.sign(a.y-y);while(x!==a.x||y!==a.y){if(!geomOK(x,y,dx,dy))return false;x+=dx;y+=dy;if((x!==a.x||y!==a.y)&&(enemyAt(x,y)||(player.x===x&&player.y===y)))return false;}return true;}
  function enemyAction(e,T){if(!live()||e.loot)return false;const a=state.actor,dist=distance(e,a);if(dist>=distance(e,player)||dist>SIGHT)return false;
   if(root.MonsterCombat?.isCannon(T)&&dist>1){if(e.st?.cool>0||!e.aware&&!los(e.x,e.y,a.x,a.y))return false;const impact=root.MonsterCombat.plan(e,a);if(!impact)return false;e.aware=true;root.MonsterCombat.fire(e,a,impact);return true;}
   if(!los(e.x,e.y,a.x,a.y))return false;e.aware=true;
   const ranged=T.range&&dist>1&&dist<=T.range&&aligned(e.x,e.y,a.x,a.y)&&clearRay(e,a),adj=dist===1&&(T.ai==='ghost'||geomOK(e.x,e.y,a.x-e.x,a.y-e.y));
   if(ranged||adj){e.monsterFace=[Math.sign(a.x-e.x),Math.sign(a.y-e.y)];e.monsterAttackFace=e.monsterFace.slice();e.monsterAttackStart=now();
-   if(T.ai==='bomb'){enemies.splice(enemies.indexOf(e),1);hurt(Math.max(1,Math.ceil((5+Math.floor(floorNo*.8))*(T.bombScale||1))-Math.floor(stats(a).defense/2)),e);say(T.name+'が'+config(a).name+'のそばで爆発した！');if(distance(e,player)<=1)hurtPlayer(Math.max(1,5+floorNo-defBonus()),'爆風で力尽きた…');return true;}
+   if(T.ai==='bomb'){playSE('cannon',e);enemies.splice(enemies.indexOf(e),1);hurt(Math.max(1,Math.ceil((5+Math.floor(floorNo*.8))*(T.bombScale||1))-Math.floor(stats(a).defense/2)),e);say(T.name+'が'+config(a).name+'のそばで爆発した！');if(distance(e,player)<=1)hurtPlayer(Math.max(1,5+floorNo-defBonus()),'爆風で力尽きた…');return true;}
    if(Math.random()>=ACC.e){if(typeof EnemyVfx!=='undefined')EnemyVfx.attack(e,T,a,false,ranged);fxText(a.x,a.y,'MISS','#c7dfff');return true;}
    const range=ranged&&T.ai==='breath'?T.breath(floorNo):T.atk(floorNo),damage=Math.max(1,rnd(...range)-stats(a).defense);if(typeof EnemyVfx!=='undefined')EnemyVfx.attack(e,T,a,true,ranged);hurt(damage,e);say(T.name+'の攻撃！ '+config(a).name+'に'+damage+'ダメージ。');
    if(state.actor){if(T.ai==='sleepy')a.st.sleep=T.statusTurns||5;if(T.ai==='dazzle')a.st.confuse=T.statusTurns||8;if(T.ai==='venom')a.poison=Math.min(4,(a.poison||0)+1);}return true;
