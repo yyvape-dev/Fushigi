@@ -1,0 +1,361 @@
+{
+  "version": 2,
+  "status": "Production redesign; adopted individual designs and heavier catalog",
+  "approvedBaseline": "../fushigi-equipment-v3/",
+  "weapons": [
+    {
+      "key": "woodsword",
+      "name": "木刀",
+      "path": "assets/woodsword.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        0,
+        0,
+        296,
+        420
+      ],
+      "sourceGrip": [
+        155,
+        345
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "1d41dccabf39af9fe7b3e5fce536b30d7106e72490af2959a25d685e3ee9410f",
+      "view": "front"
+    },
+    {
+      "key": "bronzesword",
+      "name": "青銅の太刀",
+      "path": "assets/bronzesword.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        296,
+        0,
+        591,
+        420
+      ],
+      "sourceGrip": [
+        450,
+        345
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "f669d370aac9b28778d2609e0dc8bb553d2a9d81540f7b3ae5be7fa299c5fea9",
+      "view": "front"
+    },
+    {
+      "key": "katana",
+      "name": "カタナ",
+      "path": "assets/katana.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        591,
+        0,
+        886,
+        420
+      ],
+      "sourceGrip": [
+        736,
+        345
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "0e4de39108f6887d38d3a9b61b6eaa3204b165e2e8a780e4361b5561b6a3ddb3",
+      "view": "front"
+    },
+    {
+      "key": "dotanuki",
+      "name": "どうたぬき",
+      "path": "assets/dotanuki.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        886,
+        0,
+        1182,
+        420
+      ],
+      "sourceGrip": [
+        1034,
+        345
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "06676370c6d7df64efb066556e9f575ee9f71ff45e01ab76fec58d7c46a4c1d5",
+      "view": "front"
+    },
+    {
+      "key": "minoaxe",
+      "name": "ミノタウロスの斧",
+      "path": "assets/minoaxe.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        0,
+        420,
+        296,
+        840
+      ],
+      "sourceGrip": [
+        155,
+        775
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "510c05de4de192cb61f2288805ec3170f03fac45c9d2d6ae17b01352167a1b61",
+      "view": "front"
+    },
+    {
+      "key": "renkentou",
+      "name": "連撃刀",
+      "path": "assets/renkentou.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        296,
+        420,
+        591,
+        840
+      ],
+      "sourceGrip": [
+        450,
+        775
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "0321e6335a94e689f0967ed166c65c8074fafb9b8ead4a466bd4c59e68b6920f",
+      "view": "front"
+    },
+    {
+      "key": "kamaitachi",
+      "name": "妖刀かまいたち",
+      "path": "assets/kamaitachi.png",
+      "grip": [
+        96,
+        274
+      ],
+      "size": [
+        192,
+        320
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/kamaitachi.png",
+      "sourceCell": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "sourceGrip": [
+        627,
+        1025
+      ],
+      "sourceSha256": "dfcc51277129c1893818c3cfe1b6786f2f94d1ec6072f2193b5d2de760312ead",
+      "spriteSha256": "97870fe0daf7b7cf94cc443bbe0f395fe04c7ee548b47235fddfbf385e2dd426",
+      "view": "front",
+      "bladeLengthScale": 1.35,
+      "glow": {
+        "path": "emission/kamaitachi.png",
+        "color": "#f32645",
+        "darkCore": false
+      }
+    },
+    {
+      "key": "healsword",
+      "name": "回復の剣",
+      "path": "assets/healsword.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        886,
+        420,
+        1182,
+        840
+      ],
+      "sourceGrip": [
+        1034,
+        775
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "d4e69f96c763550c2217922e56879c72de65f33acdb184bc4e3a4afd649d9c3b",
+      "view": "front"
+    },
+    {
+      "key": "steakknife",
+      "name": "ステーキナイフ",
+      "path": "assets/steakknife.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        0,
+        840,
+        296,
+        1330
+      ],
+      "sourceGrip": [
+        155,
+        1215
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "14286bc92dd88f031585b1d31d769f818b00ed3b0293bd2d607ba8d4d09b4bdb",
+      "view": "front"
+    },
+    {
+      "key": "harisen",
+      "name": "巨大ハリセン",
+      "path": "assets/harisen.png",
+      "grip": [
+        96,
+        210
+      ],
+      "size": [
+        192,
+        256
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/catalog.png",
+      "sourceCell": [
+        296,
+        840,
+        591,
+        1330
+      ],
+      "sourceGrip": [
+        450,
+        1215
+      ],
+      "sourceSha256": "9510bf073b353cf2cbbec04c76d707cfd16c17ce5f5ab822d53ce0ac9aaf9a01",
+      "spriteSha256": "5425003914112b540857a78203019746432eeedc6f9e29df0f47542a749758bf",
+      "view": "front"
+    },
+    {
+      "key": "skyblade",
+      "name": "空の刃",
+      "path": "assets/skyblade.png",
+      "grip": [
+        96,
+        274
+      ],
+      "size": [
+        192,
+        320
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/skyblade.png",
+      "sourceCell": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "sourceGrip": [
+        627,
+        1025
+      ],
+      "sourceSha256": "b4a2d028012c8b3ead9f209638aa8dd17bcfe025db96448d31f6fd459dc0aef9",
+      "spriteSha256": "ad38d31328c28bdfac08e6eb1b1e798f4f6cbfa2ee21e3e862306db07ea5f50b",
+      "view": "front",
+      "bladeLengthScale": 1.35,
+      "glow": {
+        "path": "emission/skyblade.png",
+        "color": "#2f9dff",
+        "darkCore": false
+      }
+    },
+    {
+      "key": "firesword",
+      "name": "火迅風魔刀",
+      "path": "assets/firesword.png",
+      "grip": [
+        96,
+        274
+      ],
+      "size": [
+        192,
+        320
+      ],
+      "renderScale": 0.66,
+      "source": "source-art/firesword.png",
+      "sourceCell": [
+        0,
+        0,
+        1254,
+        1254
+      ],
+      "sourceGrip": [
+        627,
+        1025
+      ],
+      "sourceSha256": "941e5a1baf601821fe816cb426e74c32e33eb7a7a22d06ce11e7fbebc157294e",
+      "spriteSha256": "2239cb91cfb4916a328942556ff9302baa5d6856eca5efe62391d27efea52802",
+      "view": "front",
+      "bladeLengthScale": 1.35,
+      "glow": {
+        "path": "emission/firesword.png",
+        "color": "#b31527",
+        "darkCore": true
+      }
+    }
+  ]
+}

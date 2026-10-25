@@ -1,0 +1,17 @@
+{
+  "attackDraws": 576,
+  "walkDraws": 96,
+  "glows": [
+    "skyblade",
+    "kamaitachi",
+    "firesword"
+  ],
+  "main": {
+    "catalog": 12,
+    "animated": true,
+    "key": "kamaitachi"
+  },
+  "browserErrors": [],
+  "mobileOverflow": false,
+  "reducedMotion": true
+}
