@@ -1,0 +1,8 @@
+#npcPrompt[hidden]{display:none!important}
+#npcPrompt{position:fixed;inset:0;z-index:180;display:flex;align-items:center;justify-content:center;background:rgba(6,8,12,.75);padding:16px;box-sizing:border-box}
+.npc-card{width:min(520px,100%);max-height:calc(100dvh - 32px);overflow:auto;display:grid;grid-template-columns:112px 1fr;gap:12px;padding:18px;box-sizing:border-box;background:linear-gradient(135deg,#252422,#10151b);border:1px solid #b99a62;border-radius:16px;box-shadow:0 16px 65px #000b;color:#f0e6d5;font-family:system-ui,sans-serif}
+#npcPortrait{width:112px;max-width:100%;align-self:start;image-rendering:auto;background:radial-gradient(ellipse,#bba27333,transparent 70%)}
+.npc-speech h2{font-size:18px;margin:6px 0 12px;color:#efd5a4}.npc-speech p{white-space:pre-line;font-size:15px;line-height:1.8;margin:0}
+.npc-choices{grid-column:1/-1;display:flex;gap:10px}.npc-choices button{flex:1;min-height:48px;border-radius:9px;border:1px solid #b89b6a;background:#3b3930;color:#f9edda;font:600 16px system-ui}.npc-choices button:focus-visible{outline:3px solid #f3d99f;outline-offset:2px}.npc-choices button:disabled{opacity:.45}.npc-choices button[hidden]{display:none}
+@media(max-width:420px){.npc-card{grid-template-columns:80px 1fr;padding:14px;gap:8px}#npcPortrait{width:80px}.npc-speech h2{font-size:17px}.npc-speech p{font-size:14px}}
+body.npc-dialog-open #menuDock{display:none!important}

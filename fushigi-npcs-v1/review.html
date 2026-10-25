@@ -1,0 +1,15 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>旅人3人の確認</title>
+<style>html,body{margin:0;height:100%;background:#11171c;color:#e9dfcd;font:14px system-ui}header{min-height:62px;box-sizing:border-box;padding:8px;display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}button{background:#39372e;color:#f7e4bc;border:1px solid #9e875d;border-radius:7px;padding:9px 12px;font:inherit}small{color:#a8b5b6}iframe{display:block;border:0;width:100%;height:calc(100dvh - 80px)}@media(min-width:650px){iframe{height:calc(100dvh - 62px)}}</style>
+<header><button data-kind="yursa">ユルサ</button><button data-kind="kamil">カミール</button><button data-kind="ialmas">イアルマス</button><small>確認用・本編セーブは変更しません</small></header>
+<iframe title="3人のNPCの確認ゲーム" src="../index.html?floor=3&dungeon=third"></iframe>
+<script>
+const frame=document.querySelector('iframe');let current='yursa';
+function show(kind){current=kind;const w=frame.contentWindow;if(!w.DungeonNPC)return;
+ w.eval(`(()=>{EventVfx.reset();closeBag();closeStairs();closeGameMenu();DungeonNPC.reset();AllySystem.reset();enemies=[];traps=[];floorItems=[];floorShop=null;
+ const cell=DIRS8.map(([dx,dy])=>({x:player.x+dx,y:player.y+dy,dx,dy})).find(p=>geomOK(player.x,player.y,p.dx,p.dy)&&map[p.y][p.x]===FLOOR);
+ if(!cell)return;const a=DungeonNPC.make(${JSON.stringify(kind)},cell.x,cell.y);DungeonNPC.state.actors=[a];
+ inv=[mkItem('sword',0),mkItem('ironshield',0)];eqWeapon=inv[0];eqShield=inv[1];player.hp=5;player.maxhp=40;player.st=newStatus();player.st.confuse=10;player.st.blind=10;
+ if(a.kind==='ialmas')inv.push(mkItem(a.request));player.face=[cell.dx,cell.dy];fadeT=-1e9;snapVis();updateVis();render();DungeonNPC.talk(a);})();`);
+}
+document.querySelectorAll('button').forEach(b=>b.onclick=()=>show(b.dataset.kind));frame.onload=()=>show(current);
+</script></html>

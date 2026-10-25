@@ -73,7 +73,7 @@
  function hit(damage,actor){const k=actor||nearby()||floorShop?.keeper;if(!k||k.hp<=0)return;playSE('hit',k);steal('店主を攻撃した！');k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];const dmg=damage??Math.max(1,playerAtk()-tiers[floorShop.tier].def);k.hp-=dmg;k.flash=now()+150;player.swing=now();player.attackFace=player.face.slice();fxText(k.x,k.y,'-'+dmg,'#ffe1af');if(k.hp<=0)say('店主を倒した。');}
  function moveKeeper(k,target,hostile){if(distance(k,target)===0)return;
   const q=[{x:k.x,y:k.y,first:null}],visited=new Set([k.x+','+k.y]);let best=null;
-  for(let i=0;i<q.length&&i<MW*MH;i++){const c=q[i];if((c.x===target.x&&c.y===target.y)||(hostile&&distance(c,target)===1&&geomOK(c.x,c.y,target.x-c.x,target.y-c.y))){best=c.first;break;}for(const [dx,dy]of DIRS8){const x=c.x+dx,y=c.y+dy,key=x+','+y;if(!geomOK(c.x,c.y,dx,dy)||visited.has(key)||enemyAt(x,y)||AllySystem.at(x,y)||(at(x,y)&&at(x,y)!==k)||(player.x===x&&player.y===y)||(!hostile&&!inside(x,y)))continue;visited.add(key);q.push({x,y,first:c.first||{x,y}});}}
+  for(let i=0;i<q.length&&i<MW*MH;i++){const c=q[i];if((c.x===target.x&&c.y===target.y)||(hostile&&distance(c,target)===1&&geomOK(c.x,c.y,target.x-c.x,target.y-c.y))){best=c.first;break;}for(const [dx,dy]of DIRS8){const x=c.x+dx,y=c.y+dy,key=x+','+y;if(!geomOK(c.x,c.y,dx,dy)||visited.has(key)||enemyAt(x,y)||friendlyAt(x,y)||(at(x,y)&&at(x,y)!==k)||(player.x===x&&player.y===y)||(!hostile&&!inside(x,y)))continue;visited.add(key);q.push({x,y,first:c.first||{x,y}});}}
   if(best){k.face=[Math.sign(best.x-k.x),Math.sign(best.y-k.y)];k.x=best.x;k.y=best.y;k.walkStart=now();k.walkEnd=now()+220;}
  }
  function tick(){boundary();if(!floorShop)return;const s=floorShop,cfg=tiers[s.tier];for(const k of keepers()){

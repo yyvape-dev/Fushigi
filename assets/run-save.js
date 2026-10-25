@@ -42,6 +42,7 @@
   return {dungeonId,floorNo,turn,MW,MH,map,rooms,roomGrid,floorPlan,floorShop,player,enemies,floorItems,traps,inv,eqWeapon,eqShield,eqRings,gold,
    belly,bellyWarn,bellyBonus,atkUp,floorLight,hasteFlip,alias,known,seen,logs,uid,zapDir,quick,
    ally:{actor:AllySystem.state.actor,used:AllySystem.state.used},
+   npcs:DungeonNPC.state.actors,
    shop:{wanted:ShopSystem.state.wanted,serial:ShopSystem.state.serial,lots:ShopSystem.state.lots},
    security:{active:ShopSecurity.state.active,nextWave:ShopSecurity.state.nextWave,spawnIndex:ShopSecurity.state.spawnIndex},
    history:msgHistory.slice(-80)};
@@ -74,6 +75,7 @@
    alias=s.alias||{};known=s.known instanceof Set?s.known:new Set();seen=s.seen;logs=s.logs||[];uid=Math.max(uid,s.uid|0);
    if(Array.isArray(s.zapDir))zapDir=s.zapDir;if(s.quick!==undefined)quick=s.quick;
    AllySystem.state.actor=s.ally?.actor||null;AllySystem.state.used=!!s.ally?.used;
+   DungeonNPC.reset();DungeonNPC.state.actors=Array.isArray(s.npcs)?s.npcs:[];
    ShopSystem.state.wanted=!!s.shop?.wanted;ShopSystem.state.serial=s.shop?.serial|0;ShopSystem.state.lots.clear();
    if(s.shop?.lots instanceof Map)for(const [k,v] of s.shop.lots)ShopSystem.state.lots.set(k,v);
    Object.assign(ShopSecurity.state,{active:!!s.security?.active,nextWave:s.security?.nextWave|0,spawnIndex:s.security?.spawnIndex|0});

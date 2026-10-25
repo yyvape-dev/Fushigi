@@ -156,7 +156,7 @@ canvas{display:block;touch-action:none}
 <script src="fushigi-equipment-v3/hero-attack-renderer.js"></script>
 <script src="fushigi-weapons-v2/weapon-glow.js"></script>
 <script src="assets/approved-hero.js?v=weapons-v2"></script>
-<script src="assets/pots.js?v=parity-v1"></script>
+<script src="assets/pots.js?v=travelers-v1"></script>
 <script src="assets/hero-actions.js?v=bread-art-v1"></script>
 <script src="assets/dungeon-generator.js?v=garden-release-v1"></script>
 <script src="assets/cave-terrain.js?v=fixed65-v1"></script>
@@ -164,9 +164,11 @@ canvas{display:block;touch-action:none}
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
 <link rel="stylesheet" href="assets/allies.css?v=dialog-v4">
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
-<script src="assets/dungeon-shop.js?v=action-se-v2"></script>
-<script src="assets/shop-security.js?v=security-v1"></script>
-<script src="assets/allies.js?v=action-se-v2"></script>
+<script src="assets/dungeon-shop.js?v=travelers-v1"></script>
+<script src="assets/shop-security.js?v=travelers-v1"></script>
+<script src="assets/allies.js?v=travelers-v1"></script>
+<script src="assets/dungeon-npcs.js?v=travelers-v1"></script>
+<link rel="stylesheet" href="assets/dungeon-npcs.css?v=travelers-v1">
 <script src="assets/monster-roster.js?v=enemy-c-v1"></script>
 <script src="assets/monster-families.js?v=enemy-c-v1"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
@@ -176,9 +178,9 @@ canvas{display:block;touch-action:none}
 <script src="assets/game-audio.js?v=action-se-v2"></script>
 <script src="assets/event-vfx.js?v=deep-enemy-vfx-v1"></script>
 <script src="assets/enemy-vfx.js?v=action-se-v2"></script>
-<script src="assets/monster-combat.js?v=blast-evolution-v1"></script>
+<script src="assets/monster-combat.js?v=travelers-v1"></script>
 <script src="fushigi-monster-house-v2/monster-house-vfx.js?v=generated-v2"></script>
-<script src="assets/run-save.js?v=event-vfx-v1"></script>
+<script src="assets/run-save.js?v=travelers-v1"></script>
 <link rel="stylesheet" href="assets/castle-town.css?v=town-grid-v3">
 <script src="assets/town-v4/art.js?v=town-commercial-v4"></script>
 <script src="assets/castle-town-layout-v4.js?v=town-commercial-v4"></script>
@@ -654,7 +656,7 @@ function gainExp(n) {
 function dropAt(x, y, it) {                                     // 盗まれた物などを、近くの空き床に置く
   for (let r = 0; r <= 4; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
     const nx = x + dx, ny = y + dy;
-    if (inb(nx, ny) && map[ny][nx] === FLOOR && !itemAt(nx, ny)) { floorItems.push({ x: nx, y: ny, item: it }); ShopSystem.landed(it,nx,ny);return true; }
+    if (inb(nx, ny) && map[ny][nx] === FLOOR && !DungeonNPC.at(nx,ny) && !itemAt(nx, ny)) { floorItems.push({ x: nx, y: ny, item: it }); ShopSystem.landed(it,nx,ny);return true; }
   }
   return false;
 }
@@ -688,7 +690,7 @@ function afterDamage(e) {
   if ((eT(e).ai !== 'split') || e.hp < 2 || (e.gen || 0) >= 3 || enemies.length >= 30) return;
   for (const [dx, dy] of DIRS8) {
     const nx = e.x + dx, ny = e.y + dy;
-    if (!geomOK(e.x, e.y, dx, dy) || enemyAt(nx, ny) || AllySystem.at(nx,ny) || (nx === player.x && ny === player.y)) continue;
+    if (!geomOK(e.x, e.y, dx, dy) || enemyAt(nx, ny) || friendlyAt(nx,ny) || (nx === player.x && ny === player.y)) continue;
     const c = { kind: e.kind, x: nx, y: ny, vx: e.x, vy: e.y, hp: Math.floor(e.hp / 2), maxhp: e.maxhp, aware: true, lost: 0, flash: 0, bump: null, fl: e.fl, st: {}, gen: (e.gen || 0) + 1 };
     e.hp -= c.hp; e.gen = c.gen; enemies.push(c); say(`${eT(e).name}が分裂した！`); return;
   }
@@ -787,7 +789,7 @@ function freeNear(n) {
   for (let r = 1; r <= 9 && out.length < n; r++) for (let dy = -r; dy <= r; dy++) for (let dx = -r; dx <= r; dx++) {
     if (Math.max(Math.abs(dx), Math.abs(dy)) !== r || out.length >= n) continue;
     const x = player.x + dx, y = player.y + dy;
-    if (inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x,y) && !ShopSystem.at(x,y) && !itemAt(x, y)) out.push([x, y]);
+    if (inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !friendlyAt(x,y) && !ShopSystem.at(x,y) && !itemAt(x, y)) out.push([x, y]);
   }
   return out;
 }
@@ -799,7 +801,7 @@ function spawnEnemy(x, y, aware, forceKind) {
 }
 function warpPlayer() {                                         // この階のどこかの部屋へ
   const c = [];
-  for (const R of rooms) for (let y = R.y; y < R.y + R.h; y++) for (let x = R.x; x < R.x + R.w; x++) if (map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x,y) && !ShopSystem.at(x,y) && !(x === player.x && y === player.y)) c.push([x, y]);
+  for (const R of rooms) for (let y = R.y; y < R.y + R.h; y++) for (let x = R.x; x < R.x + R.w; x++) if (map[y][x] === FLOOR && !enemyAt(x, y) && !friendlyAt(x,y) && !ShopSystem.at(x,y) && !(x === player.x && y === player.y)) c.push([x, y]);
   if (!c.length) return;
   playSE('trap-warp');const [x, y] = c[rnd(0, c.length - 1)]; player.x = player.vx = x; player.y = player.vy = y; fxText(x, y, '転移', '#9ad8ff');
 }
@@ -819,7 +821,7 @@ function ringTick() {
   }
   if (n('summon') && Math.random() < 0.03 * n('summon')) {
     const R = rooms[rnd(0, rooms.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
-    if (map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x,y) && !ShopSystem.at(x,y) && !vis[y][x] && !(x === player.x && y === player.y)) { spawnEnemy(x, y, true); say('どこかで魔物の気配がする…'); }
+    if (map[y][x] === FLOOR && !enemyAt(x, y) && !friendlyAt(x,y) && !ShopSystem.at(x,y) && !vis[y][x] && !(x === player.x && y === player.y)) { spawnEnemy(x, y, true); say('どこかで魔物の気配がする…'); }
   }
 }
 
@@ -831,7 +833,7 @@ function spawnTick() {
   const pool = rooms.filter((r, i) => !r.mh && !(floorShop && floorShop.room === i));
   for (let tries = 0; tries < 20 && pool.length; tries++) {
     const R = pool[rnd(0, pool.length - 1)], x = rnd(R.x, R.x + R.w - 1), y = rnd(R.y, R.y + R.h - 1);
-    if (map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x, y) && !ShopSystem.at(x, y) && !vis[y][x] && Math.max(Math.abs(x - player.x), Math.abs(y - player.y)) > 4) { spawnEnemy(x, y, false); return; }
+    if (map[y][x] === FLOOR && !enemyAt(x, y) && !friendlyAt(x, y) && !ShopSystem.at(x, y) && !vis[y][x] && Math.max(Math.abs(x - player.x), Math.abs(y - player.y)) > 4) { spawnEnemy(x, y, false); return; }
   }
 }
 // その階に出る敵の一覧（シレン6と同じ「階ごとの出現表」）から重みつきで1種。summoned=呼ばれた敵（呼ぶ敵・化ける敵は呼ばれない）
@@ -1104,7 +1106,8 @@ const decItem = t => {
 let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メッセージ窓：履歴パネル／位置(0=上 1=右下)／最後に出た時刻／所属ターン
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
-const uiBlocked = () => EventVfx.busy() || bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen || AllySystem.state.open || ShopSystem.state.open || CastleTown.state.open;
+const friendlyAt = (x,y) => AllySystem.at(x,y) || DungeonNPC.at(x,y);
+const uiBlocked = () => EventVfx.busy() || bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen || AllySystem.state.open || DungeonNPC.state.open || ShopSystem.state.open || CastleTown.state.open;
 function rollType() {
   const ks = Object.keys(ITEMS).filter(k => (ITEMS[k].from || 1) <= floorNo);
   let r = Math.random() * ks.reduce((a, k) => a + ITEMS[k].w, 0);
@@ -1193,6 +1196,7 @@ function pathDist(sx, sy) {
 }
 function newFloor() {
   EventVfx.reset();
+  DungeonNPC.reset();
   ShopSystem.leaveFloor();
   closeStairs();
   player.action=null;player.walkEnd=0;
@@ -1241,6 +1245,7 @@ function newFloor() {
   PotSystem.floorChanged();
   AllySystem.newFloor();
   ShopSecurity.newFloor();
+  DungeonNPC.newFloor();
   snapVis();
   updateVis();
   RunSave.save();                                               // 階に入るたびに冒険を保存
@@ -1346,7 +1351,7 @@ function toTown(fromDungeon) {
   closeStairs();
   if(menuOpen&&typeof closeGameMenu==='function')closeGameMenu();
   ShopSystem.reset();
-  scene = 'town'; AllySystem.reset();
+  scene = 'town'; AllySystem.reset(); DungeonNPC.reset();
   enemies = []; floorItems = []; traps = []; fx.length = 0; vfx.length = 0; shakeAmp = 0; logs = [];
   player.lv = 1; player.exp = 0; atkUp = 0; player.maxhp = BASE_HP; player.hp = player.maxhp; player.face = [0, 1]; player.st = newStatus(); floorLight = false;
   CastleTown.arrive(fromDungeon);
@@ -1360,7 +1365,7 @@ function toTown(fromDungeon) {
 function enterDungeon() {
   if (uiBlocked() || guardDead()) return;
   if (!unlocked(dungeonId)) dungeonId = 'first';
-  AllySystem.reset(); ShopSystem.reset();
+  AllySystem.reset(); ShopSystem.reset(); DungeonNPC.reset();
   playSE('stairs');scene = 'dungeon'; floorNo = 1; turn = 0; logs = []; fx.length = 0; vfx.length = 0; shakeAmp = 0;
   player.maxhp = BASE_HP; player.hp = player.maxhp; player.lv = 1; player.exp = 0; player.face = [0, 1]; player.st = newStatus();   // レベル・体力は毎回リセット（本家と同じ）
   atkUp = 0; bellyBonus = 0; floorLight = false; belly = maxBelly(); bellyWarn = 99;
@@ -1653,7 +1658,7 @@ function strikeOne(e, again) {
   }
   if (e.hp > 0 && wHas('knock') && Math.random() < 0.3) {
     const dx = Math.sign(e.x - player.x), dy = Math.sign(e.y - player.y);
-    if (geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy) && !AllySystem.at(e.x+dx,e.y+dy) && !ShopSystem.at(e.x+dx,e.y+dy)) { e.x += dx; e.y += dy; say('突き飛ばした！'); }
+    if (geomOK(e.x, e.y, dx, dy) && !enemyAt(e.x + dx, e.y + dy) && !friendlyAt(e.x+dx,e.y+dy) && !ShopSystem.at(e.x+dx,e.y+dy)) { e.x += dx; e.y += dy; say('突き飛ばした！'); }
   }
   if (wHas('thunder') && !again && Math.random() < 0.3) {          // 雷連撃：雷が落ち、対象と周りの敵（最大3体）にダメージ
     const hit = [e, ...enemies.filter(o => o !== e && o.hp > 0 && Math.abs(o.x - e.x) <= 1 && Math.abs(o.y - e.y) <= 1)].slice(0, 3);
@@ -1684,6 +1689,7 @@ function playerMove(dx, dy, {skipPickup=false}={}) {
   const nx = player.x + dx, ny = player.y + dy;
   if(scene==='town'&&!CastleTown.beforeMove(nx,ny)){render();return;}
   if(!ShopSystem.beforeMove(nx,ny)){render();return;}
+  const npc=DungeonNPC.at(nx,ny);if(npc){DungeonNPC.talk(npc);return;}
   const ally=AllySystem.at(nx,ny);
   if(ally){if(!ally.following){AllySystem.talk();return;}ally.x=player.x;ally.y=player.y;ally.face=[-dx,-dy];ally.walkStart=now();ally.walkEnd=now()+220;}
   const e = enemyAt(nx, ny);
@@ -1743,6 +1749,7 @@ function ctxInfo() {
     if (map[player.y][player.x]===STAIRS) return {label:'階段',fn:openStairs};
     if (itemAt(player.x, player.y)) return { label: '足元', fn: openGroundMenu };
     if(floorShop&&!floorShop.hostile&&(ShopSystem.inside(player.x,player.y)||ShopSystem.nearby()))return {label:'店主',fn:ShopSystem.talk};
+    if(DungeonNPC.nearby())return {label:'話す',fn:()=>DungeonNPC.talk()};
     if(AllySystem.nearby())return {label:'話す',fn:AllySystem.talk};
     return atDungeonShop() ? { label: '店', fn: openWh } : null;
   }
@@ -1776,6 +1783,7 @@ function playerAttack() {
     if (o) endTurnAfterSwing(); else endTurn(); return;
   }
   const [fx_, fy_] = player.face;
+  if(geomOK(player.x,player.y,fx_,fy_)&&DungeonNPC.at(player.x+fx_,player.y+fy_)){DungeonNPC.talk(DungeonNPC.at(player.x+fx_,player.y+fy_));return;}
   if(geomOK(player.x,player.y,fx_,fy_)&&ShopSystem.at(player.x+fx_,player.y+fy_)){ShopSystem.hit(undefined,ShopSystem.at(player.x+fx_,player.y+fy_));endTurn();return;}
   let t = geomOK(player.x, player.y, fx_, fy_) ? enemyAt(player.x + fx_, player.y + fy_) : null;
   if (!t) {
@@ -1786,6 +1794,7 @@ function playerAttack() {
       if (e) { t = e; player.face = [dx, dy]; }
     }
   }
+  if(!t&&DungeonNPC.nearby()){DungeonNPC.talk();return;}
   if(!t&&AllySystem.nearby()&&!AllySystem.nearby().following){AllySystem.talk();return;}
   if (!t && wHas('fire') && player.hp >= player.maxhp) {  // 炎飛ばし：HPが満タンなら、離れた敵に炎
     const z = lineTarget();
@@ -1857,7 +1866,7 @@ function summonAround(e, T) {
   const cells = [];
   for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) {
     const x = e.x + dx, y = e.y + dy;
-    if ((dx || dy) && inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !AllySystem.at(x, y) && !ShopSystem.at(x, y) && !(x === player.x && y === player.y) && los(e.x, e.y, x, y)) cells.push([x, y]);
+    if ((dx || dy) && inb(x, y) && map[y][x] === FLOOR && !enemyAt(x, y) && !friendlyAt(x, y) && !ShopSystem.at(x, y) && !(x === player.x && y === player.y) && los(e.x, e.y, x, y)) cells.push([x, y]);
   }
   let n = 0;
   for (let i = 0; i < (T.summon || 1) && cells.length; i++) { const [x, y] = cells.splice(rnd(0, cells.length - 1), 1)[0];const actor=spawnEnemy(x, y, true, rollEnemy(floorNo, true));actor.sum=true;EnemyVfx.emit('arrival',actor,actor,{delay:90+i*35});n++; }
@@ -1894,7 +1903,7 @@ function enemyTurn(queue = null) {
         for (const [dx, dy] of DIRS8) {
           if (!geomOK(e.x, e.y, dx, dy)) continue;
           const nx = e.x + dx, ny = e.y + dy;
-          if (d[ny][nx] > bd && !enemyAt(nx, ny) && !AllySystem.at(nx,ny) && !ShopSystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { bd = d[ny][nx]; best = [dx, dy]; }
+          if (d[ny][nx] > bd && !enemyAt(nx, ny) && !friendlyAt(nx,ny) && !ShopSystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { bd = d[ny][nx]; best = [dx, dy]; }
         }
         if (best) { e.x += best[0]; e.y += best[1]; if (best[0]) e.fl = best[0] < 0; }
         continue;
@@ -1955,7 +1964,7 @@ function enemyTurn(queue = null) {
       if (T.spd === 'slow' && turn % 2 === 1) break;               // 動きが遅い敵：2ターンに1歩
       if (ai === 'ghost' && !confused && e.aware) {               // 壁抜け：壁を無視してまっすぐ近づく
         const mx = Math.sign(player.x - e.x), my = Math.sign(player.y - e.y), nx = e.x + mx, ny = e.y + my;
-        if (inb(nx, ny) && !enemyAt(nx, ny) && !AllySystem.at(nx,ny) && !ShopSystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
+        if (inb(nx, ny) && !enemyAt(nx, ny) && !friendlyAt(nx,ny) && !ShopSystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
         continue;
       }
       let mx = 0, my = 0;
@@ -1966,7 +1975,7 @@ function enemyTurn(queue = null) {
           if (!dx && !dy) continue;
           if (!geomOK(e.x, e.y, dx, dy)) continue;
           const nx = e.x + dx, ny = e.y + dy;
-          if (d[ny][nx] < 0 || enemyAt(nx, ny) || AllySystem.at(nx,ny) || (nx === player.x && ny === player.y)) continue;
+          if (d[ny][nx] < 0 || enemyAt(nx, ny) || friendlyAt(nx,ny) || (nx === player.x && ny === player.y)) continue;
           if (d[ny][nx] < best) { best = d[ny][nx]; cand = [[dx, dy]]; }
           else if (d[ny][nx] === best && cand.length) cand.push([dx, dy]);
         }
@@ -1976,7 +1985,7 @@ function enemyTurn(queue = null) {
       }
       if ((mx || my) && geomOK(e.x, e.y, mx, my)) {
         const nx = e.x + mx, ny = e.y + my;
-        if (!enemyAt(nx, ny) && !AllySystem.at(nx,ny) && !ShopSystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
+        if (!enemyAt(nx, ny) && !friendlyAt(nx,ny) && !ShopSystem.at(nx,ny) && !(nx === player.x && ny === player.y)) { e.x = nx; e.y = ny; if (mx) e.fl = mx < 0; }
       }
     }
   }
@@ -2662,6 +2671,7 @@ function drawMinimap() {
     ctx.fillRect(bx + x * sc, by + y * sc, sc, sc);
   }
   for (const f of floorItems) if (seen[f.y][f.x] || senseItems()) { ctx.fillStyle = '#409cff'; ctx.fillRect(bx + f.x * sc, by + f.y * sc, sc, sc); }
+  for (const a of DungeonNPC.state.actors) if (vis[a.y]?.[a.x]) { ctx.fillStyle = '#8fe1ba'; ctx.fillRect(bx + a.x * sc, by + a.y * sc, sc, sc); }
   for (const e of enemies) if (!e.mim && (vis[e.y][e.x] || senseEnemies())) { ctx.fillStyle = '#ff4d4d'; ctx.fillRect(bx + e.x * sc, by + e.y * sc, sc, sc); }
   ctx.fillStyle = '#000'; ctx.fillRect(bx + player.x * sc - 2, by + player.y * sc - 2, sc + 4, sc + 4);
   ctx.fillStyle = '#fff'; ctx.fillRect(bx + player.x * sc - 1, by + player.y * sc - 1, sc + 2, sc + 2);
@@ -2761,10 +2771,11 @@ function draw() {
   }
   for (const f of floorItems) if (seen[f.y][f.x]) blit(iconOf(f.item.type), camX + f.x * TS, camY + f.y * tilePitchY() + tilePitchY() - TS);
   // 描画順：奥（上）から手前（下）へ。主人公より手前（下）にいる敵・味方・店主は、主人公の後に描く（主人公が手前の味方を踏んで見えないように）
-  const worldEnts = [...enemies,...(dungeon&&AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):CastleTown.entities())].sort((a,b)=>a.vy-b.vy);
+  const worldEnts = [...enemies,...(dungeon?DungeonNPC.state.actors:[]),...(dungeon&&AllySystem.state.actor?[AllySystem.state.actor]:[]),...(dungeon?ShopSystem.keepers().filter(k=>k.hp>0):CastleTown.entities())].sort((a,b)=>a.vy-b.vy);
   const inFront = e => scene==='town'?e.vy>player.vy:e.vy > player.vy && e.vy - player.vy < 1.2 && Math.abs(e.vx - player.vx) < 1.2;
   const drawEnt = e => {
     if (!vis[e.y][e.x]) return;
+    if(e.isDungeonNPC){DungeonNPC.draw(ctx,e,t,camX,camY);return;}
     if(e.isTownProp){CastleTown.drawProp(ctx,e,t,camX,camY);return;}
     if(e.isTown){CastleTown.drawNPC(ctx,e,t,camX,camY);return;}
     if(e.isShopkeeper){ShopSystem.draw(ctx,e,t,camX,camY);return;}
@@ -2990,9 +3001,9 @@ if (globalThis.__previewFloor) {                                   // 確認用�
 }
 if (typeof Image !== 'undefined') { CastleTown.load(render); MonsterHouseVfx.load(render); EventVfx.load(render); ApprovedHero.load(render); HeroActions.load(render); loadDungeonArt(); MonsterSprites.load(render); ShopSecurity.load(render); AllySystem.load(render); DungeonExperience.load(render); }
 </script>
-<script src="assets/controls-ui.js?v=action-se-v2"></script>
-<script src="assets/ergonomic-ui.js?v=ground-v2"></script>
-<script>AllySystem.init();ShopSystem.init();CastleTown.init();</script>
+<script src="assets/controls-ui.js?v=travelers-v1"></script>
+<script src="assets/ergonomic-ui.js?v=travelers-v1"></script>
+<script>AllySystem.init();ShopSystem.init();CastleTown.init();DungeonNPC.init();if(typeof Image!=='undefined')DungeonNPC.load(render);</script>
 </body>
 </html>
 

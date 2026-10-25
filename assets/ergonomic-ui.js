@@ -7,8 +7,9 @@ function applyHandLayout(){
  const select=document.getElementById('handLayout');if(select)select.value=handPreference;
 }
 function chooseHandLayout(value){if(!['auto','both','right','left'].includes(value))return;handPreference=value;try{localStorage.setItem('fushigi_hand_layout_v1',value);}catch(_){}applyHandLayout();}
-function touchMenuBack(){if(stairsOpen){chooseStairs(false);return;}if(whOpen){closeWh();render();return;}uiBack();}
+function touchMenuBack(){if(DungeonNPC.state.open){DungeonNPC.key('Escape');return;}if(stairsOpen){chooseStairs(false);return;}if(whOpen){closeWh();render();return;}uiBack();}
 function touchMenuKey(key){
+ if(DungeonNPC.key(key))return;
  if(stairsOpen){if(key==='Enter')chooseStairs(stairsChoice===0);else {stairsChoice=1-stairsChoice;updateStairsChoice();}return;}
  if(menuOpen&&!$('menuInfo').hidden){if(groundMenuKey(key))return;if(key==='Enter')$('menuGroundAction')?.click();else $('gameMenu').scrollBy({top:key==='ArrowUp'?-120:120,behavior:'smooth'});return;}
  if(bagOpen){bagKey(key);return;}
