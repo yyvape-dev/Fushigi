@@ -9,3 +9,5 @@
 # 絵の制作（地形・キャラ・小物）
 
 絵を作る・直すときは、最初に `docs/ART_SPEC.md`（規格書）を読み、数値・命名・背景色を守る。ブランチ名は `art/<内容>`、PRはドラフトにしない。絵とテストが通ると自動でマージされる（`.github/workflows/auto-merge.yml`）。完了条件は `node tests/check_art.js` と `bash tests/run_all.sh`。
+
+**3D表示は外さない**：設定「3D表示（洞窟）」と `assets/render3d.js` を消さない・無効化しない（`tests/test_fixed65.js` が検査）。小物は立体モデルでなく、マゼンタ背景の切り抜き絵（`docs/ART_SPEC.md` 6〜7章）。
