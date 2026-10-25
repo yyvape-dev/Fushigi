@@ -28,7 +28,7 @@
  const oldRandom=Math.random,oldRender=render;render=()=>{};
  function setup(kind='yuzunamiki'){
   AllySystem.reset();scene='dungeon';dead=false;bagOpen=whOpen=cfgOpen=histOpen=stairsOpen=menuOpen=false;
-  MW=26;MH=20;floorNo=3;turn=1;map=Array.from({length:MH},(_,y)=>Array.from({length:MW},(_,x)=>!x||!y||x===MW-1||y===MH-1?WALL:FLOOR));
+  DungeonNPC.reset();MW=26;MH=20;floorNo=3;turn=1;map=Array.from({length:MH},(_,y)=>Array.from({length:MW},(_,x)=>!x||!y||x===MW-1||y===MH-1?WALL:FLOOR));
   rooms=[{x:1,y:1,w:24,h:18,cx:12,cy:10}];roomGrid=map.map(r=>r.map(()=>0));seen=map.map(r=>r.map(()=>true));vis=map.map(r=>r.map(()=>true));
   player.x=player.vx=10;player.y=player.vy=10;player.hp=player.maxhp=200;player.lv=1;player.exp=0;player.st=newStatus();
   enemies=[];floorItems=[];traps=[];inv=[];eqWeapon=eqShield=null;eqRings=[null,null];atkUp=0;belly=80;

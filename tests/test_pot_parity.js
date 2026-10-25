@@ -3,7 +3,7 @@
  let checks=0;const assert=(v,m)=>{checks++;if(!v)throw Error(m);};
  const reset=()=>{
   EventVfx.reset();closeBag();closeGameMenu();ShopSystem.reset();floorShop=null;scene='dungeon';dungeonId='first';floorNo=3;turn=0;dead=false;inv=[];floorItems=[];enemies=[];traps=[];eqWeapon=eqShield=null;eqRings=[null,null];atkUp=0;belly=100;
-  MW=16;MH=14;map=Array.from({length:MH},(_,y)=>Array.from({length:MW},(_,x)=>x&&y&&x<MW-1&&y<MH-1?FLOOR:WALL));rooms=[{x:1,y:1,w:14,h:12,cx:8,cy:7}];buildRoomGrid();
+  DungeonNPC.reset();MW=16;MH=14;map=Array.from({length:MH},(_,y)=>Array.from({length:MW},(_,x)=>x&&y&&x<MW-1&&y<MH-1?FLOOR:WALL));rooms=[{x:1,y:1,w:14,h:12,cx:8,cy:7}];buildRoomGrid();
   player.x=player.vx=5;player.y=player.vy=6;player.face=[1,0];player.hp=player.maxhp=100;player.st=newStatus();delete player.boundPot;player.swing=0;player.action=null;player.walkEnd=0;player.lv=1;player.exp=0;
   vis=Array.from({length:MH},()=>Array(MW).fill(true));seen=vis.map(r=>r.slice());
  };

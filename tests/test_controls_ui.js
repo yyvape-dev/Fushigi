@@ -1,7 +1,7 @@
 {
  const assert=(v,m)=>{if(!v)throw Error(m);};
  const savedEnemy=enemyTurn;enemyTurn=()=>{};
- function corridor(){closeGameMenu();closeBag();closeStairs();closeHist();closeCfg();scene='dungeon';dead=false;MW=20;MH=15;map=Array.from({length:MH},()=>Array(MW).fill(WALL));for(let x=2;x<18;x++)map[7][x]=FLOOR;rooms=[];roomGrid=Array.from({length:MH},()=>Array(MW).fill(-1));seen=map.map(r=>r.map(()=>false));vis=map.map(r=>r.map(()=>false));player.x=player.vx=4;player.y=player.vy=7;player.hp=player.maxhp=20;player.st=newStatus();enemies=[];traps=[];floorItems=[];inv=[];floorShop=null;turn=0;updateVis();controlMode='walk';holdStop();dashBlocked=false;}
+ function corridor(){closeGameMenu();closeBag();closeStairs();closeHist();closeCfg();scene='dungeon';dead=false;DungeonNPC.reset();MW=20;MH=15;map=Array.from({length:MH},()=>Array(MW).fill(WALL));for(let x=2;x<18;x++)map[7][x]=FLOOR;rooms=[];roomGrid=Array.from({length:MH},()=>Array(MW).fill(-1));seen=map.map(r=>r.map(()=>false));vis=map.map(r=>r.map(()=>false));player.x=player.vx=4;player.y=player.vy=7;player.hp=player.maxhp=20;player.st=newStatus();enemies=[];traps=[];floorItems=[];inv=[];floorShop=null;turn=0;updateVis();controlMode='walk';holdStop();dashBlocked=false;}
  corridor();faceOnly(-1,0);assert(player.x===4&&turn===0&&player.face[0]===-1,'turn only must not move/spend turn');
  controlsMove(1,0,'diagonal');assert(player.x===4&&turn===0,'diagonal lock ignores cardinal input');
  floorItems=[{x:5,y:7,item:mkItem('gold',80)}];const money=gold;controlsMove(1,0,'dash');assert(player.x===5&&turn===1&&floorItems.length===1&&gold===money&&!runActive,'dash stops on money without picking it up');

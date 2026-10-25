@@ -58,7 +58,7 @@
   const g=bagGroups().find(g=>g.floor);assert(g&&g.items[0]===fl,'floor item appears as a candidate');potGo(g.key);
   assert(p.pot.includes(fl)&&!floorItems.some(f=>f.item===fl),'floor item moved into pot');}
  // 12) 未精算の物：壺に入れても未精算のまま。出しても同じ。持ち出すと盗難。精算で全部消える
- {ShopSystem.reset();MW=16;MH=14;map=Array.from({length:MH},()=>Array(MW).fill(WALL));rooms=[{x:2,y:3,w:7,h:7,cx:5,cy:6,role:'shop'}];for(let y=3;y<10;y++)for(let x=2;x<9;x++)map[y][x]=FLOOR;for(let x=9;x<14;x++)map[6][x]=FLOOR;buildRoomGrid();
+ {ShopSystem.reset();DungeonNPC.reset();MW=16;MH=14;map=Array.from({length:MH},()=>Array(MW).fill(WALL));rooms=[{x:2,y:3,w:7,h:7,cx:5,cy:6,role:'shop'}];for(let y=3;y<10;y++)for(let x=2;x<9;x++)map[y][x]=FLOOR;for(let x=9;x<14;x++)map[6][x]=FLOOR;buildRoomGrid();
   floorItems=[];enemies=[];traps=[];inv=[];eqWeapon=eqShield=null;eqRings=[null,null];floorNo=5;gold=5000;floorShop={room:0,x:5,y:6,stock:[]};ShopSystem.setup(0);
   player.x=5;player.y=6;player.vx=5;player.vy=6;floorItems=floorItems.filter(f=>!(f.x===5&&f.y===6));   // 立つ場所に商品が乱数で置かれていた場合は除く
   const own=mkItem('savepot',4);inv=[own];const goods=floorItems.filter(f=>ShopSystem.lot(f.item)).slice(0,2);assert(goods.length===2,'shop has goods');
@@ -85,7 +85,7 @@
   assert(tp.pot.length===0,'broken pot is empty');
   floorItems.length=0;const ep=mkItem('savepot',2);inv=[ep];throwType(ikey(ep));assert(!inv.includes(ep)&&floorItems.length===0,'empty pot just breaks');}
  // 14) 店で売る（ダンジョンの店）：壺＋中身それぞれの値段。中身も商品の札が付く
- {ShopSystem.reset();MW=16;MH=14;map=Array.from({length:MH},()=>Array(MW).fill(WALL));rooms=[{x:2,y:3,w:7,h:7,cx:5,cy:6,role:'shop'}];for(let y=3;y<10;y++)for(let x=2;x<9;x++)map[y][x]=FLOOR;buildRoomGrid();
+ {ShopSystem.reset();DungeonNPC.reset();MW=16;MH=14;map=Array.from({length:MH},()=>Array(MW).fill(WALL));rooms=[{x:2,y:3,w:7,h:7,cx:5,cy:6,role:'shop'}];for(let y=3;y<10;y++)for(let x=2;x<9;x++)map[y][x]=FLOOR;buildRoomGrid();
   floorItems=[];enemies=[];traps=[];inv=[];floorNo=5;gold=0;floorShop={room:0,x:5,y:6,stock:[]};ShopSystem.setup(0);floorItems=[];
   const sp=mkItem('savepot',3);sp.pot.push(mkItem('herb'),mkItem('potion'));const want=sellPrice(sp)+sellPrice(sp.pot[0])+sellPrice(sp.pot[1]);
   floorItems.push({x:4,y:6,item:sp});player.x=5;player.y=6;assert(ShopSystem.sell(sp.id),'dungeon shop buys the pot');
