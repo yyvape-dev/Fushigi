@@ -3,7 +3,7 @@
  const originalRender=render,originalRandom=Math.random;render=()=>{};
  function fixture(type='potion',plus){
   closeGameMenu();closeBag();holdStop();dashBlocked=false;ShopSystem.reset();AllySystem.reset();scene='dungeon';dead=false;bagOpen=whOpen=stairsOpen=menuOpen=cfgOpen=histOpen=false;
-  MW=20;MH=16;map=Array.from({length:MH},()=>Array(MW).fill(WALL));rooms=[{x:2,y:3,w:10,h:9,cx:7,cy:7,role:'shop'}];
+  DungeonNPC.reset();MW=20;MH=16;map=Array.from({length:MH},()=>Array(MW).fill(WALL));rooms=[{x:2,y:3,w:10,h:9,cx:7,cy:7,role:'shop'}];
   for(let y=3;y<12;y++)for(let x=2;x<12;x++)map[y][x]=FLOOR;for(let x=12;x<18;x++)map[7][x]=FLOOR;buildRoomGrid();
   floorNo=4;floorItems=[];enemies=[];traps=[];inv=[];eqWeapon=eqShield=null;eqRings=[null,null];gold=10000;turn=1;
   player.x=player.vx=4;player.y=player.vy=7;player.hp=10;player.maxhp=100;player.st=newStatus();player.face=[1,0];player.lv=1;belly=80;
