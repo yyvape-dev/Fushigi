@@ -2238,9 +2238,9 @@ function renderBag() {
 function bagActions(g){const d=ITEMS[g.type];
   if(potMode){
     if(potMode.kind==='destination'||potMode.kind==='extract')return [{act:'potgo',type:g.key,label:potMode.kind==='extract'?'吸い出す':'この壺に入れる'},{act:'potback',type:'',label:'戻る'}];
-    if(potMode.kind==='put')return [{act:'potgo',type:g.key,label:'入れる'},{act:'pottoggle',type:g.key,label:potMode.selected.has(g.key)?'選択解除':'選択する'},{act:'potbatch',type:'',label:`選択した${potMode.selected.size}個を入れる`},{act:'potback',type:'',label:'戻る'}];
+    if(potMode.kind==='put')return [potMode.selected.size?{act:'potbatch',type:'',label:`選択した${potMode.selected.size}個を入れる`}:{act:'potgo',type:g.key,label:'入れる'},{act:'pottoggle',type:g.key,label:potMode.selected.has(g.key)?'選択解除':'選択する'},{act:'potback',type:'',label:'戻る'}];
     if(ITEMS[potMode.pot.type].effect!=='store')return [{act:'potback',type:'',label:'戻る'}];
-    return [{act:'potgo',type:g.key,label:'取り出す'},{act:'potuse',type:g.key,label:d.equip?'取り出して装備':d.staff?'中から振る':d.throwOnly?'中から投げる':'中から使う'},...(!d.throwOnly?[{act:'potthrow',type:g.key,label:'中から投げる'}]:[]),{act:'pottoggle',type:g.key,label:potMode.selected.has(g.key)?'選択解除':'選択する'},{act:'potbatch',type:'',label:`選択した${potMode.selected.size}個を出す`},{act:'potback',type:'',label:'戻る'}];
+    return [potMode.selected.size?{act:'potbatch',type:'',label:`選択した${potMode.selected.size}個を出す`}:{act:'potgo',type:g.key,label:'取り出す'},{act:'potuse',type:g.key,label:d.equip?'取り出して装備':d.staff?'中から振る':d.throwOnly?'中から投げる':'中から使う'},...(!d.throwOnly?[{act:'potthrow',type:g.key,label:'中から投げる'}]:[]),{act:'pottoggle',type:g.key,label:potMode.selected.has(g.key)?'選択解除':'選択する'},{act:'potback',type:'',label:'戻る'}];
   }
   if(d.pot)return [{act:d.pushPot?'potpush':d.effect==='hide'?'pothide':'potput',type:g.key,label:d.pushPot?'押す':d.effect==='hide'?'入る':'入れる'},...(d.effect==='store'?[{act:'pottake',type:g.key,label:'中を見る・出す'}]:[{act:'potpeek',type:g.key,label:'中を見る'}]),{act:'drop',type:g.key,label:'置く'},{act:'throw',type:g.key,label:'投げる'}];
   return [{act:'use',type:g.key,label:d.equip?(isEq(g.items[0])?'外す':'装備'):d.staff?'振る':d.throwOnly?'投げる':'使う'},
