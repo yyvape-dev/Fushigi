@@ -4,7 +4,6 @@
 //   画面x = camX + 列*TS　／　画面y = camY + 行*pitch　（pitch = TS*sin(傾き)）
 // WebGL が使えない・読み込みに失敗したときは ready() が false になり、本編は従来の2D描画のまま動く。
 import * as THREE from './vendor/three.module.min.js';
-import { buildForestModels } from './forest-models3d.js';
 
 const TILT = 65 * Math.PI / 180, S = Math.sin(TILT), C = Math.cos(TILT);
 const WALL_H = 0.95;               // 壁の高さ（1マス=1）
@@ -67,21 +66,6 @@ function disposeGroup() {
     if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => m.dispose());
   });
   group = null;
-}
-
-// Woodland meshes share a small set of instanced geometry batches.
-function addForest(g, level) {
-  const plan = window.ForestFestival.plan(level);
-  const models = buildForestModels(g, plan, name => tex(`assets/dungeon/locations-v1/forest/${name}.webp`));
-  const moon = new THREE.DirectionalLight(0xa9ced7, .9);
-  moon.position.set(-4, 8, 3);
-  g.add(moon);
-  const lights = Array.from({ length: Math.min(6, models.lampPositions.length) }, () => {
-    const light = new THREE.PointLight(0xffbd65, 12, 5, 2);
-    light.castShadow = false;
-    g.add(light); return light;
-  });
-  g.userData.forest = { plan, lights, models: models.stats, lampPositions: models.lampPositions };
 }
 
 // 階の地形を作る。level = { map, W, H, themeId, wall, stairs }。内容が変わったときだけ作り直す。
@@ -164,7 +148,7 @@ function sync(level) {
     for (let dy = -1; dy <= 1 && !adj; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && isFloor(x + dx, y + dy)) { adj = true; break; }
     if (adj) wCells[((x * 31 + y * 17) >>> 0) % 2].push([x, y]);
   }
-  const height = forest ? .2 : WALL_H;
+  const height = WALL_H;   // 森の木・ランタンは2Dの絵（ForestFestival.draw2d）を上に重ねるので、壁は他の洞窟と同じ高さ
   const boxGeo = new THREE.BoxGeometry(1, height, 1);
   wCells.forEach((cells, i) => {
     if (!cells.length) return;
@@ -176,7 +160,6 @@ function sync(level) {
     im.receiveShadow = true;
     g.add(im);
   });
-  if (forest) addForest(g, level);
 }
 
 // 毎フレーム。o = { camX, camY, TS, pitch, W, H, focusY, hx, hy, shx, shy, shadows }
