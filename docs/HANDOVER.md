@@ -205,6 +205,7 @@ node tests/harness.js index.html tests/test_mvp.js      # ALL OK が出れば成
 - **自動マージ（2026-10-24）**：`.github/workflows/auto-merge.yml`。同じリポジトリの `feat/` `fix/` `docs/` `experiment/` `ci/` のPRで、`tests/run_all.sh`（全 `tests/test_*.js`、各最大3回再試行、約3分）が通れば自動でマージする。**ドラフトPRは対象外**（PRは非ドラフトで作る）。止めるには：PRをドラフトにする／接頭辞を変える／ワークフローを削除。手動実行：Actions →「auto-merge」→ Run workflow に PR番号。**未確認**：標準トークンのマージで公開ページが更新されるか（更新されなければ、リポジトリの Secrets に `AUTOMERGE_TOKEN` を登録）。テスト合格は見た目を保証しない（重大な変更はPRを見てからマージする運用も併用）。
 - **絵も自動マージ（2026-10-24）**：`art/` `codex/` ブランチも対象。マージ前に `tests/check_art.js`（変更した画像が壊れていない・6MB以下・寸法が範囲内）を実行。絵の良し悪しは見ない＝質に不満ならマージ後に `git revert`。規格書は [ART_SPEC.md](ART_SPEC.md)（65°見下ろし・影を焼き込まない・256px継ぎ目なし等）、Codexへの依頼文もその0章。手動実行（Run workflow）は PR を main と合成した状態で試験する。
 - **3D表示を復活（2026-10-25）**：ユーザー指示「一緒に作った65°の3D地形は採用済み」。Codexが `ed9a00c`（10/24）でゲームから外していたので戻した。設定「3D表示（洞窟）」（なし／影あり／影なし、**標準=影あり**、WebGL不可なら自動で2D）。保存名は `r3d`（旧 `view3dPref` は「なし」で保存された人がいるため使わない）。3Dも2Dも行の高さは同じ65°（`DUNGEON_PITCH`）。**森の木・ランタンは3Dモデルにしない**：`render3d.js` から低ポリ生成（`forest-models3d.js` の読み込み、森だけ壁を低くする処理）を外し、Codexの絵（`ForestFestival.draw2d`）を3D地形の上に重ねる。`assets/forest-models3d.js` はどこからも読まれない（削除してよい）。`tests/test_fixed65.js` を「3Dを出す」仕様に更新。5ロケーションで3D表示のエラー無しを確認。**実機未確認**：スマホの重さ、森の見た目。
+- **3Dの絵の差し込み口（2026-10-25）**：`assets/render3d.js`。各ロケーションの `variants.json`（床・壁側面・壁上面・岩・床の汚れ・小物の枚数）を読み、絵を置くだけで反映する。壁の外側（探索していない所）は岩の面で埋める（`rock0〜` が無ければ `wallT` を暗くして使う）。小物は部屋の北の壁際に、まばらに置く。鍾乳洞・森の床は広域床 `floorW` を使うので、`floor` 枚数は無関係。詳細・ファイル形式は [ART_SPEC.md](ART_SPEC.md) 7章。仮の絵で動作確認済み（実際の絵は未作成）。
 
 ## 7. 再開用の一言（新しい会話に貼る）
 
