@@ -11,6 +11,17 @@ const CAM_DIST = 30;               // 正射影なので見た目には影響し
 const BG = 0x0d0d12;
 
 let inited = false, failed = false;
+// 失敗しても本編が止まらないよう、描けなくなったら自動で2D表示に戻す（ready() が false になる）。理由は status() で見える（設定画面に表示）。
+let status = '準備中', contextLost = false, probeLeft = 0, blankCount = 0, texPending = 0;
+let autoNoShadow = false, slowSum = 0, slowN = 0, slowStrikes = 0, lastT = 0;
+function fail(reason) {
+  if (failed) return;
+  failed = true;
+  status = '失敗：' + reason + '（自動で2D表示に切替）';
+  console.warn('Render3D:', status);
+  if (cvs) cvs.style.display = 'none';
+  document.body.style.backgroundColor = '';
+}
 let renderer, scene, camera, torch, ambient, group, cvs;
 let levelKey = '', sizeKey = '', shakeKey = '', shadowsOn = true;
 let lastFrame = null;
@@ -19,7 +30,8 @@ const texCache = new Map();
 
 function tex(url) {
   if (texCache.has(url)) return texCache.get(url);
-  const t = loader.load(url, () => { if (lastFrame && cvs?.style.display !== 'none') frame(lastFrame); }, undefined, () => console.warn('Render3D: 画像を読めません', url));
+  texPending++;
+  const t = loader.load(url, () => { texPending--; if (lastFrame && cvs?.style.display !== 'none') frame(lastFrame); }, undefined, () => { texPending--; console.warn('Render3D: 画像を読めません', url); });
   t.colorSpace = THREE.SRGBColorSpace;
   t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -40,6 +52,10 @@ function init() {
     renderer.setClearColor(BG, 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.debug.onShaderError = () => fail('シェーダの作成に失敗');
+    // 画面メモリ不足などでWebGLが止まったら、2D表示に戻して復帰を待つ（復帰したら3Dを作り直す）
+    cvs.addEventListener('webglcontextlost', e => { e.preventDefault(); contextLost = true; status = '一時停止：WebGLが止まりました（2D表示で復帰待ち）'; console.warn('Render3D:', status); });
+    cvs.addEventListener('webglcontextrestored', () => { contextLost = false; levelKey = ''; probeLeft = 40; status = '動作中（復帰）'; if (lastLevel) { sync(lastLevel); if (lastFrame) frame(lastFrame); } });
     scene = new THREE.Scene();
     camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100);
     ambient = new THREE.AmbientLight(0x7a8098, 1.1);
@@ -51,8 +67,10 @@ function init() {
     torch.shadow.camera.near = 0.3;
     scene.add(torch);
     inited = true;
+    status = '動作中';
   } catch (e) {
     failed = true;
+    status = '失敗：WebGLを開始できません（2D表示）';
     console.warn('Render3D: WebGLを開始できません。2D描画のままにします。', e);
     if (cvs && cvs.parentNode) cvs.parentNode.removeChild(cvs);
   }
@@ -62,42 +80,82 @@ function disposeGroup() {
   if (!group) return;
   scene.remove(group);
   group.traverse(o => {
+    if (o.isInstancedMesh) o.dispose();
     if (o.geometry) o.geometry.dispose();
     if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => m.dispose());
   });
   group = null;
 }
 
+// ---------- 絵の枚数（variants.json）----------
+// 各テーマのフォルダ assets/dungeon/locations-v1/<テーマ>/variants.json に枚数を書くと、その分の絵を使う（絵を置くだけで反映される）。
+//   { "floor": 8, "wallF": 4, "wallT": 4, "rock": 5, "decals": 8, "props": 10 }
+//   floor  : floor0〜  床（鍾乳洞・森は広域床 floorW を使うので無関係）   wallF/wallT : wallF0〜／wallT0〜  壁の側面／上面
+//   rock   : rock0〜   壁の外側の岩の面（3Dでは探索していない所。無ければ wallT を暗くして使う）
+//   decals : decal0〜  床の汚れ（背景が透明のwebp。ひび・苔・水たまり・骨 など）
+//   props  : prop0〜   小物（背景が透明のwebp。柱・岩・鍾乳石・根・松明 など。部屋の北の壁際に置く）
+// ファイルが無い・json が無いときは、下の既定値（これまでと同じ見た目）で動く。
+const DEFAULT_VARIANTS = { floor: 4, wallF: 2, wallT: 2, rock: 0, decals: 0, props: 0 };
+const VARIANT_LIMIT = { floor: [1, 16], wallF: [1, 16], wallT: [1, 16], rock: [0, 32], decals: [0, 32], props: [0, 32] };
+const variantCache = new Map();
+let lastLevel = null;
+function variantsOf(themeId) {
+  if (variantCache.has(themeId)) return variantCache.get(themeId);
+  variantCache.set(themeId, DEFAULT_VARIANTS);   // 読み込み中は既定値
+  fetch(`assets/dungeon/locations-v1/${themeId}/variants.json`).then(r => r.ok ? r.json() : null).then(j => {
+    if (!j || typeof j !== 'object') return;
+    const v = { ...DEFAULT_VARIANTS };
+    for (const k in v) if (Number.isInteger(j[k]) && j[k] >= VARIANT_LIMIT[k][0] && j[k] <= VARIANT_LIMIT[k][1]) v[k] = j[k];
+    variantCache.set(themeId, v);
+    if (lastLevel && lastLevel.themeId === themeId) { levelKey = ''; sync(lastLevel); if (lastFrame) frame(lastFrame); }
+  }).catch(() => {});
+  return DEFAULT_VARIANTS;
+}
+// マス座標から決まる乱数（同じマスはいつも同じ絵になる）
+const hash2 = (x, y, salt = 0) => {
+  let h = Math.imul(x + 1013, 73856093) ^ Math.imul(y + 2029, 19349663) ^ Math.imul(salt + 7, 83492791);
+  h ^= h >>> 13; h = Math.imul(h, 0x5bd1e995); h ^= h >>> 15;
+  return h >>> 0;
+};
+const ROCK_MARGIN = 14;   // 地図の外にも岩の面を敷く（画面の端が真っ黒にならないように）
+
 // 階の地形を作る。level = { map, W, H, themeId, wall, stairs }。内容が変わったときだけ作り直す。
 function sync(level) {
   if (!inited || failed || !level || !level.map) return;
+  lastLevel = level;
   const { map, W, H, themeId, wall, stairs } = level;
+  const man = variantsOf(themeId);
   let h = 2166136261;
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) h = Math.imul(h ^ (map[y][x] + 1), 16777619);
-  const key = themeId + ':' + W + 'x' + H + ':' + (h >>> 0);
+  const key = themeId + ':' + W + 'x' + H + ':' + (h >>> 0) + ':' + JSON.stringify(man);
   if (key === levelKey) return;
   levelKey = key;
   disposeGroup();
   const g = new THREE.Group();
   group = g;
   scene.add(g);
+  probeLeft = 40;
+  const stats = { rock: 0, decals: 0, props: 0, floor: man.floor, wallF: man.wallF, wallT: man.wallT, wallMeshes: 0 };
+  g.userData.stats = stats;
   const forest = themeId === 'forest' && !!window.ForestFestival;
   ambient.color.setHex(forest ? 0x9bc6ce : 0x7a8098);
   ambient.intensity = forest ? 1.35 : 1.1;
   torch.intensity = forest ? 32 : 90;
   renderer.setClearColor(forest ? 0x09181c : BG, 1);
   const url = n => `assets/dungeon/locations-v1/${themeId}/${n}.webp`;
-  const isFloor = (x, y) => x >= 0 && y >= 0 && x < W && y < H && map[y][x] !== wall;
+  const inMap = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
+  const isFloor = (x, y) => inMap(x, y) && map[y][x] !== wall;
   const dummy = new THREE.Object3D();
 
-  // 床：4種を座標ハッシュで振り分け（階段は別メッシュ）
+  // 床：man.floor 種を座標ハッシュで振り分け（階段は別メッシュ）
   const floorGeo = new THREE.PlaneGeometry(1, 1);
   floorGeo.rotateX(-Math.PI / 2);
-  const fCells = [[], [], [], []], stCells = [];
+  const fCells = Array.from({ length: man.floor }, () => []), stCells = [], allFloor = [];
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
     if (!isFloor(x, y)) continue;
     if (map[y][x] === stairs) { stCells.push([x, y]); continue; }
-    fCells[(((x * 73856093) ^ (y * 19349663)) >>> 0) % 4].push([x, y]);
+    allFloor.push([x, y]);
+    fCells[(((x * 73856093) ^ (y * 19349663)) >>> 0) % man.floor].push([x, y]);
   }
   const place = (cells, mesh, y) => cells.forEach(([x, z], k) => {
     dummy.position.set(x + 0.5, y, z + 0.5); dummy.rotation.set(0, 0, 0); dummy.updateMatrix(); mesh.setMatrixAt(k, dummy.matrix);
@@ -140,26 +198,107 @@ function sync(level) {
     stCells.forEach(([x, z]) => { const l = new THREE.PointLight(0xffc060, 10, 5, 2); l.position.set(x + 0.5, 0.8, z + 0.5); g.add(l); });
   }
 
-  // 壁：床に隣接する（8近傍）壁マスだけ箱にする。側面=wallF、上面=wallT
-  const wCells = [[], []];
+  // 床の汚れ：背景が透明の絵を、床の一部（約24%）にランダムに薄く重ねる（同じ床の繰り返し感を消す）
+  if (man.decals > 0) {
+    const byDecal = Array.from({ length: man.decals }, () => []);
+    for (const [x, z] of allFloor) if (hash2(x, z, 11) % 100 < 24) byDecal[hash2(x, z, 12) % man.decals].push([x, z]);
+    byDecal.forEach((cells, i) => {
+      if (!cells.length) return;
+      const mat = new THREE.MeshLambertMaterial({ map: tex(url('decal' + i)), transparent: true, alphaTest: 0.02, depthWrite: false, polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
+      const im = new THREE.InstancedMesh(floorGeo, mat, cells.length);
+      cells.forEach(([x, z], k) => {
+        dummy.position.set(x + 0.5, 0.004, z + 0.5);
+        dummy.rotation.set(0, (hash2(x, z, 13) % 4) * Math.PI / 2, 0);
+        dummy.updateMatrix(); im.setMatrixAt(k, dummy.matrix);
+      });
+      im.receiveShadow = true;
+      g.add(im);
+      stats.decals += cells.length;
+    });
+  }
+
+  // 壁：床に隣接する（8近傍）壁マスだけ箱にする。側面=wallF、上面=wallT。F と T の枚数が同じなら同じ番号を組にする
+  const hasBox = (x, y) => {
+    if (!inMap(x, y) || isFloor(x, y)) return false;
+    for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && isFloor(x + dx, y + dy)) return true;
+    return false;
+  };
+  const wGroups = new Map();
   for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
-    if (isFloor(x, y)) continue;
-    let adj = false;
-    for (let dy = -1; dy <= 1 && !adj; dy++) for (let dx = -1; dx <= 1; dx++) if ((dx || dy) && isFloor(x + dx, y + dy)) { adj = true; break; }
-    if (adj) wCells[((x * 31 + y * 17) >>> 0) % 2].push([x, y]);
+    if (!hasBox(x, y)) continue;
+    const hf = ((x * 31 + y * 17) >>> 0), fi = hf % man.wallF, ti = man.wallF === man.wallT ? fi : hash2(x, y, 3) % man.wallT;
+    const k = fi + '_' + ti;
+    if (!wGroups.has(k)) wGroups.set(k, { fi, ti, cells: [] });
+    wGroups.get(k).cells.push([x, y]);
   }
   const height = WALL_H;   // 森の木・ランタンは2Dの絵（ForestFestival.draw2d）を上に重ねるので、壁は他の洞窟と同じ高さ
   const boxGeo = new THREE.BoxGeometry(1, height, 1);
-  wCells.forEach((cells, i) => {
-    if (!cells.length) return;
-    const side = new THREE.MeshLambertMaterial({ map: tex(url('wallF' + i)) });
-    const top = new THREE.MeshLambertMaterial({ map: tex(url('wallT' + i)) });
+  wGroups.forEach(({ fi, ti, cells }) => {
+    const side = new THREE.MeshLambertMaterial({ map: tex(url('wallF' + fi)) });
+    const top = new THREE.MeshLambertMaterial({ map: tex(url('wallT' + ti)) });
     const im = new THREE.InstancedMesh(boxGeo, [side, side, top, top, side, side], cells.length);
     place(cells, im, height / 2);
     im.castShadow = true;
     im.receiveShadow = true;
     g.add(im);
+    stats.wallMeshes++;
   });
+
+  // 岩の面：壁の外側（探索していない所）を、壁の上面と同じ高さの岩で埋める。地図の外にも敷く。
+  //   rock0〜 があればそれを、無ければ wallT を少し暗くして使う（3Dで真っ黒にならない）。
+  {
+    const nRock = man.rock > 0 ? man.rock : man.wallT, base = man.rock > 0 ? 'rock' : 'wallT';
+    const byRock = Array.from({ length: nRock }, () => []);
+    for (let y = -ROCK_MARGIN; y < H + ROCK_MARGIN; y++) for (let x = -ROCK_MARGIN; x < W + ROCK_MARGIN; x++) {
+      if (isFloor(x, y) || hasBox(x, y)) continue;
+      byRock[hash2(x, y, 5) % nRock].push([x, y]);
+    }
+    byRock.forEach((cells, i) => {
+      if (!cells.length) return;
+      const mat = new THREE.MeshLambertMaterial({ map: tex(url(base + i)), color: man.rock > 0 ? 0xffffff : 0xb4b4b4 });
+      const im = new THREE.InstancedMesh(floorGeo, mat, cells.length);
+      cells.forEach(([x, z], k) => {
+        dummy.position.set(x + 0.5, height, z + 0.5);
+        dummy.rotation.set(0, (hash2(x, z, 6) % 4) * Math.PI / 2, 0);
+        dummy.updateMatrix(); im.setMatrixAt(k, dummy.matrix);
+      });
+      g.add(im);
+      stats.rock += cells.length;
+    });
+  }
+
+  // 小物：背景が透明の絵を板として立てる。部屋の北の壁際（奥が壁・手前と左右が床・3×2が開けている所）に、まばらに置く。
+  //   通路・階段の近く・出入口には置かない。1つ置いたら左右2マスは空ける。
+  if (man.props > 0) {
+    const tilt = TILT * 0.95, size = 1.5;
+    const geo = new THREE.PlaneGeometry(size, size);
+    geo.translate(0, size / 2, 0);
+    const byProp = Array.from({ length: man.props }, () => []);
+    const placed = new Set();
+    const nearStairs = (x, y) => stCells.some(([sx, sy]) => Math.abs(sx - x) <= 2 && Math.abs(sy - y) <= 2);
+    for (let y = 1; y < H - 2; y++) for (let x = 1; x < W - 1; x++) {
+      if (!isFloor(x, y) || map[y][x] === stairs || isFloor(x, y - 1)) continue;
+      if (!(isFloor(x - 1, y) && isFloor(x + 1, y) && isFloor(x, y + 1) && isFloor(x - 1, y + 1) && isFloor(x + 1, y + 1) && isFloor(x, y + 2))) continue;
+      if (nearStairs(x, y) || placed.has((x - 1) + ',' + y) || placed.has((x - 2) + ',' + y)) continue;
+      if (hash2(x, y, 21) % 100 >= 14) continue;
+      placed.add(x + ',' + y);
+      byProp[hash2(x, y, 22) % man.props].push([x, y]);
+    }
+    byProp.forEach((cells, i) => {
+      if (!cells.length) return;
+      // 北の壁（箱）に頭が入って隠れないよう、奥行き判定の対象外にして壁より後に描く（主人公の板と同じ理由）
+      const mat = new THREE.MeshLambertMaterial({ map: tex(url('prop' + i)), transparent: true, alphaTest: 0.05, side: THREE.DoubleSide, depthTest: false, depthWrite: false });
+      const im = new THREE.InstancedMesh(geo, mat, cells.length);
+      im.renderOrder = 5;
+      cells.forEach(([x, z], k) => {
+        dummy.position.set(x + 0.5, 0.02, z + 0.62);
+        dummy.rotation.set(-tilt, 0, 0);
+        dummy.updateMatrix(); im.setMatrixAt(k, dummy.matrix);
+      });
+      g.add(im);
+      stats.props += cells.length;
+    });
+  }
 }
 
 // 毎フレーム。o = { camX, camY, TS, pitch, W, H, focusY, hx, hy, shx, shy, shadows }
@@ -177,7 +316,7 @@ function frame(o) {
   const tx = (W / 2 - camX) / TS, tz = (focusY - camY) / pitch;
   camera.position.set(tx, S * CAM_DIST, tz + C * CAM_DIST);
   camera.lookAt(tx, 0, tz);
-  const sh = !!o.shadows;
+  const sh = !!o.shadows && !autoNoShadow;
   if (sh !== shadowsOn) { shadowsOn = sh; torch.castShadow = sh; scene.traverse(n => { if (n.material) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { m.needsUpdate = true; }); }); }
   torch.position.set(o.hx, 1.9, o.hy + 0.2);
   if (group?.userData.forest) {
@@ -188,6 +327,40 @@ function frame(o) {
   const shk = Math.round(o.shx || 0) + ',' + Math.round(o.shy || 0);
   if (shk !== shakeKey) { shakeKey = shk; cvs.style.transform = shk === '0,0' ? '' : `translate(${shk.split(',')[0]}px,${shk.split(',')[1]}px)`; }
   renderer.render(scene, camera);
+  // --- 描けているか・重すぎないかの確認 ---
+  const now = performance.now(), dt = now - lastT;
+  lastT = now;
+  if (dt < 250) {                       // 続けて動いている間だけ測る（止まっている間の間隔は除く）
+    slowSum += dt; slowN++;
+    if (slowN >= 90) {
+      const avg = slowSum / slowN; slowSum = slowN = 0;
+      if (avg > 70 && !autoNoShadow) { autoNoShadow = true; status = '動作中（重いので影を自動でオフ）'; console.warn('Render3D: 重いので影をオフ', avg); }
+      else if (avg > 110 && ++slowStrikes >= 2) fail('重すぎます（' + Math.round(avg) + 'ms/コマ）');
+      else if (avg <= 110) slowStrikes = 0;
+    }
+  }
+  if (probeLeft > 0 && texPending === 0) {
+    probeLeft--;
+    if (isBlank(o)) { if (++blankCount >= 6) fail('3D画面が空のままです（画像の読み込み失敗など）'); }
+    else { blankCount = 0; probeLeft = 0; if (status.startsWith('動作中')) status = autoNoShadow ? status : '動作中'; }
+  }
+}
+
+// 主人公の足元とその周り5点の色を読む。全部が「背景色」か「ほぼ真っ黒」なら、描けていない。
+function isBlank(o) {
+  try {
+    const gl = renderer.getContext(), sc = gl.drawingBufferWidth / o.W, buf = new Uint8Array(4);
+    const clear = new THREE.Color(); renderer.getClearColor(clear);
+    const hex = clear.getHex(), cr = (hex >> 16) & 255, cg = (hex >> 8) & 255, cb = hex & 255;
+    for (const [dx, dy] of [[0, 0], [-1, 0], [1, 0], [0, 1], [0, -1]]) {
+      const px = Math.round((o.W / 2 + dx * o.TS) * sc), py = gl.drawingBufferHeight - Math.round((o.focusY + dy * o.pitch) * sc);
+      gl.readPixels(px, py, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+      const luma = buf[0] * .3 + buf[1] * .59 + buf[2] * .11;
+      const nearClear = Math.abs(buf[0] - cr) < 9 && Math.abs(buf[1] - cg) < 9 && Math.abs(buf[2] - cb) < 9;
+      if (luma >= 14 && !nearClear) return false;   // 1点でも、明るい（描けている）色があれば空ではない
+    }
+    return true;
+  } catch (e) { return false; }
 }
 
 // html にも同じ暗色の背景があるので、body の背景だけ透明にすれば見た目は変わらない
@@ -200,8 +373,9 @@ function show(on) {
 
 window.Render3D = {
   init,
-  ready: () => !failed,          // 読み込み済みで、WebGLの開始に失敗していない
+  ready: () => !failed && !contextLost,   // WebGLが動いている（失敗・停止中は false＝本編は2D表示）
+  status: () => status,          // 設定画面に出す状態の文
   pitchK: () => S,               // 1行の高さ = TS * pitchK（2D側の tilePitchY が使う）
   sync, frame, show,
-  debug: () => ({ inited, failed, levelKey, children: group ? group.children.length : -1, forest: group?.userData.forest ? { trees: group.userData.forest.plan.trees.length, lanterns: group.userData.forest.plan.lamps.length, garlands: group.userData.forest.plan.garlands.length, lights: group.userData.forest.lights.length, models: group.userData.forest.models } : null, cam: camera ? camera.position.toArray() : null, frustum: camera ? [camera.left, camera.right, camera.top, camera.bottom] : null, size: renderer ? renderer.getSize(new THREE.Vector2()).toArray() : null, calls: renderer ? renderer.info.render.calls : -1, tris: renderer ? renderer.info.render.triangles : -1 }),
+  debug: () => ({ status, autoNoShadow, texPending, probeLeft, blankCount, inited, failed, levelKey, children: group ? group.children.length : -1, stats: group ? group.userData.stats : null, forest: group?.userData.forest ? { trees: group.userData.forest.plan.trees.length, lanterns: group.userData.forest.plan.lamps.length, garlands: group.userData.forest.plan.garlands.length, lights: group.userData.forest.lights.length, models: group.userData.forest.models } : null, cam: camera ? camera.position.toArray() : null, frustum: camera ? [camera.left, camera.right, camera.top, camera.bottom] : null, size: renderer ? renderer.getSize(new THREE.Vector2()).toArray() : null, calls: renderer ? renderer.info.render.calls : -1, tris: renderer ? renderer.info.render.triangles : -1 }),
 };
