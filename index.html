@@ -173,6 +173,7 @@ canvas{display:block;touch-action:none}
 <script src="assets/monster-families.js?v=enemy-c-v1"></script>
 <script src="assets/enemy-table.js?v=table-v1"></script>
 <script src="assets/dungeon-experience.js?v=garden-v1"></script>
+<script type="module" src="assets/render3d.js?v=restore-3d-v1"></script>
 <script src="assets/forest-festival.js?v=forest65-final-v1"></script>
 <script src="assets/action-sfx.js?v=action-se-v2"></script>
 <script src="assets/game-audio.js?v=action-se-v2"></script>
@@ -1068,7 +1069,7 @@ let showGrid = false;             // 町の当たり判定の表示（絵との�
 let blurPref = 1;                 // 手前のぼかし：0=なし 1=標準 2=強（洞窟）
 let wallPref = 2;                 // 壁の高さ：0=従来 1=高め 2=高い（洞窟）
 let moodPref = 0;                 // 光の雰囲気：0=従来 1=標準（暗さ・ビネット・松明のゆらぎ） 2=濃い
-let view3dPref = 0;               // 旧セーブ互換。描画は65°固定の2Dのみ。
+let view3dPref = 1;               // 3D表示（洞窟）：0=なし（65°固定の2D） 1=影あり 2=影なし。assets/render3d.js。標準は「影あり」（WebGL不可なら自動で2D）
 let shadePref = 1;                // 陰影（立体感）：0=なし 1=標準 2=強
 const SHADE_K = [0, 1, 1.6];
 let vfxPref = 1;                  // 戦闘の演出（斬撃・火花・画面の揺れ）：0=なし 1=標準 2=強
@@ -1129,7 +1130,7 @@ function saveGame(departure) {
     // 冒険中は、持ち物・装備・所持金を出発時のまま残す（途中の物は RunSave が持つ）。再読み込みで拾った物を町へ持ち帰れる抜け道をふさぐ
     const prev = scene === 'dungeon' && !departure ? JSON.parse(localStorage.getItem(SAVE_KEY) || 'null') : null, keep = !!(prev && prev.v === 1);
     const carried=inv.filter(it=>!ShopSystem.unpaid(it));
-    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: keep ? prev.bag : carried.map(encItem), eq: keep ? prev.eq : [carried.indexOf(eqWeapon), carried.indexOf(eqShield)], rings: keep ? prev.rings : eqRings.map(r => carried.indexOf(r)), gift, quick, clears, dClears, deaths, gold: keep ? prev.gold : gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, moodPref, wallPref, blurPref, logPos, rigPref, vfxPref, town: CastleTown.snapshot() }));
+    localStorage.setItem(SAVE_KEY, JSON.stringify({ v: 1, wh: wh.map(encItem), bag: keep ? prev.bag : carried.map(encItem), eq: keep ? prev.eq : [carried.indexOf(eqWeapon), carried.indexOf(eqShield)], rings: keep ? prev.rings : eqRings.map(r => carried.indexOf(r)), gift, quick, clears, dClears, deaths, gold: keep ? prev.gold : gold, bank, shop: shopStock.map(encItem), dungeonId, autoPick, mapMode, zoomPref, charPref, hungerPref, shadePref, moodPref, wallPref, blurPref, r3d: view3dPref, logPos, rigPref, vfxPref, town: CastleTown.snapshot() }));
   } catch (_) {}
 }
 function loadGame() {
@@ -1156,7 +1157,7 @@ function loadGame() {
     shadePref = [0, 1, 2].includes(s.shadePref) ? s.shadePref : 1;
     moodPref = [0, 1, 2].includes(s.moodPref) ? s.moodPref : 0;
     wallPref = [0, 1, 2].includes(s.wallPref) ? s.wallPref : 2;
-    view3dPref = 0; // 旧3D設定を引き継がず、固定65°の2Dへ移行。
+    view3dPref = [0, 1, 2].includes(s.r3d) ? s.r3d : 1;   // 保存名は r3d（以前の view3dPref は「なし」で保存されていた人がいるため、別名にして標準=影あり）
     blurPref = [0, 1, 2].includes(s.blurPref) ? s.blurPref : 1;
     vfxPref = [0, 1, 2].includes(s.vfxPref) ? s.vfxPref : 1;
     logPos = [0, 1].includes(s.logPos) ? s.logPos : 1;
@@ -2401,6 +2402,7 @@ function renderCfg() {
     `<div class="set"><span class="lab">主人公の表示<br><small>承認済み8方向の基準絵・攻撃・所持品の武器盾を表示</small></span><span>承認済み8方向</span></div>`,
     `<div class="set"><span class="lab">陰影（立体感）<br><small>壁の高さ・壁際の影・暗がり。絵が平らに見えるとき「強」</small></span><button class="sm" data-cfg="shade">${['なし', '標準', '強'][shadePref]}</button></div>`,
     `<div class="set"><span class="lab">光の雰囲気（洞窟）<br><small>暗さ・周囲の影・松明のゆらぎ。階が深いほど暗くなる。「従来」で元の明るさ</small></span><button class="sm" data-cfg="mood">${['従来', '標準', '濃い'][moodPref]}</button></div>`,
+    `<div class="set"><span class="lab">3D表示（洞窟）<br><small>地形・壁・光を3Dで描く（65°）。重いときは「影なし」か「なし」。「なし」で2D絵のみ</small></span><button class="sm" data-cfg="view3d">${['なし', '影あり', '影なし'][view3dPref]}</button></div>`,
     `<div class="set"><span class="lab">壁の高さ（洞窟）<br><small>岩壁の背の高さ。「従来」で元の低い壁に戻る</small></span><button class="sm" data-cfg="wall">${['従来', '高め', '高い'][wallPref]}</button></div>`,
     `<div class="set"><span class="lab">手前のぼかし（洞窟）<br><small>画面の下（手前）をぼかして遠近感を出す。重いときは「なし」</small></span><button class="sm" data-cfg="blur">${['なし', '標準', '強'][blurPref]}</button></div>`,
     `<div class="set"><span class="lab">戦闘の演出<br><small>斬撃の弧・命中の火花・被弾や撃破での画面の揺れ。酔うときは「なし」</small></span><button class="sm" data-cfg="vfx">${['なし', '標準', '強'][vfxPref]}</button></div>`,
@@ -2423,6 +2425,7 @@ cfgListEl.addEventListener('click', ev => {
   else if (a === 'shade') shadePref = (shadePref + 1) % 3;
   else if (a === 'mood') moodPref = (moodPref + 1) % 3;
   else if (a === 'wall') wallPref = (wallPref + 1) % 3;
+  else if (a === 'view3d') view3dPref = (view3dPref + 1) % 3;
   else if (a === 'blur') blurPref = (blurPref + 1) % 3;
   else if (a === 'vfx') { vfxPref = (vfxPref + 1) % 3; vfx.length = 0; shakeAmp = 0; }
   else if (a === 'rig') rigPref = rigPref ? 0 : 1;
@@ -2449,7 +2452,8 @@ let raf = 0, lastT = 0;
 const tmp = mkCanvas(64, 64);
 const isLand = () => innerWidth > innerHeight;
 const DUNGEON_PITCH = Math.sin(65 * Math.PI / 180);
-const tilePitchY = () => scene === 'dungeon' ? TS * DUNGEON_PITCH : TS;
+const use3d = () => scene === 'dungeon' && view3dPref > 0 && typeof Render3D !== 'undefined' && Render3D.ready();   // 3D地形を使うか（WebGL不可・未読込なら false＝2D）
+const tilePitchY = () => scene === 'dungeon' ? TS * DUNGEON_PITCH : TS;   // 3Dも2Dも65°で同じ
 const focusY = () => innerHeight * (isLand() ? 0.5 : 0.4);   // 自キャラの縦位置（縦持ちは下のボタンを避けて上寄り）
 function resize() {
   DPR = window.devicePixelRatio || 1;
@@ -2739,7 +2743,10 @@ function drawTownGrid(camX, camY) {
 function draw() {
   const t = now();
   ctx.imageSmoothingEnabled = false;
-  ctx.fillStyle = '#0d0d12'; ctx.fillRect(0, 0, innerWidth, innerHeight);
+  if (scene === 'dungeon' && view3dPref > 0 && typeof Render3D !== 'undefined') Render3D.init();
+  const r3 = use3d();                                                              // 3D地形のとき、2Dは透明にして背面の3Dを見せる
+  if (typeof Render3D !== 'undefined') Render3D.show(r3);
+  if (r3) ctx.clearRect(0, 0, innerWidth, innerHeight); else { ctx.fillStyle = '#0d0d12'; ctx.fillRect(0, 0, innerWidth, innerHeight); }
   const [shx, shy] = shakeOff(t);
   ctx.save(); ctx.translate(Math.round(shx), Math.round(shy));                     // 画面の揺れ：世界だけ揺らす（地図・HUDは揺らさない）
   // 自キャラは画面のやや上寄りに置く（下はコントローラーで隠れるため）
@@ -2751,8 +2758,12 @@ function draw() {
   const dungeon = scene === 'dungeon', m = SHADE_K[shadePref];
   if (typeof CaveTerrain !== 'undefined') CaveTerrain.setHeight(wallPref), CaveTerrain.shadeK = m;
   const townArt = scene === 'town';
+  if (r3) {
+    Render3D.sync({ map, W: MW, H: MH, themeId: floorPlan?.theme?.id || 'forest', wall: WALL, stairs: STAIRS });
+    Render3D.frame({ camX, camY, TS, pitch: tilePitchY(), W: innerWidth, H: innerHeight, focusY: focusY(), hx: player.vx + 0.5, hy: player.vy + 0.5, shx, shy, shadows: view3dPref === 1 });
+  }
   if (townArt) drawTownArt(camX, camY);                                          // 町は一枚絵（判定は内部の格子のまま）
-  for (let y = y0; y <= y1 && !townArt; y++) for (let x = x0; x <= x1; x++) {
+  for (let y = y0; y <= y1 && !townArt && !r3; y++) for (let x = x0; x <= x1; x++) {
     if (!dungeon && !seen[y][x]) continue;
     const px = camX + x * TS, py = camY + y * tilePitchY();
     const key = tileKey(x, y);
@@ -2799,7 +2810,7 @@ function draw() {
     }
   };
   for (const e of worldEnts) if (!inFront(e)) drawEnt(e);
-  if(dungeon)DungeonExperience.fog(ctx,{width:innerWidth,height:innerHeight,size:TS,pitch:tilePitchY(),camX,camY,player,rooms,roomIndex:playerRoom(),roomGrid,map,seen,theme:floorPlan?.theme?.id,terrain:CaveTerrain,revision:visibilityRevision,seed:floorPlan?.artSeed,mood:moodPref,depth:floorNo});
+  if(dungeon&&!r3)DungeonExperience.fog(ctx,{width:innerWidth,height:innerHeight,size:TS,pitch:tilePitchY(),camX,camY,player,rooms,roomIndex:playerRoom(),roomGrid,map,seen,theme:floorPlan?.theme?.id,terrain:CaveTerrain,revision:visibilityRevision,seed:floorPlan?.artSeed,mood:moodPref,depth:floorNo});
   if(dungeon && floorPlan?.theme?.id==='forest') ForestFestival.draw2d(ctx,{map,W:MW,H:MH,wall:WALL,stairs:STAIRS,camX,camY,size:TS,pitch:tilePitchY(),seen,vis},draw);
   if(dungeon)ShopSystem.prices(ctx,camX,camY);
   EventVfx.drawWorld(ctx,t,camX,camY,TS,tilePitchY(),'floor');
@@ -2825,7 +2836,7 @@ function draw() {
     ctx.globalAlpha = 1;
   }
   ctx.restore();                                                                   // 揺れここまで
-  if (dungeon && blurPref) DungeonExperience.depthBlur(ctx, cv, innerWidth, innerHeight, [0, 1, 1.6][blurPref]);
+  if (dungeon && blurPref && !r3) DungeonExperience.depthBlur(ctx, cv, innerWidth, innerHeight, [0, 1, 1.6][blurPref]);
   drawMinimap();
   if (hurtT && t - hurtT < 260) { ctx.fillStyle = `rgba(255,40,40,${(0.28 * (1 - (t - hurtT) / 260)).toFixed(3)})`; ctx.fillRect(0, 0, innerWidth, innerHeight); }
   refreshUI();
