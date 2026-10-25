@@ -164,10 +164,10 @@ canvas{display:block;touch-action:none}
 <script src="fushigi-monsters-v1/monsters-renderer.js?v=motions-v1"></script>
 <link rel="stylesheet" href="assets/allies.css?v=dialog-v4">
 <link rel="stylesheet" href="assets/dungeon-shop.css?v=shops-v1">
-<script src="assets/dungeon-shop.js?v=travelers-v1"></script>
+<script src="assets/dungeon-shop.js?v=walking-facing-v1"></script>
 <script src="assets/shop-security.js?v=travelers-v1"></script>
-<script src="assets/allies.js?v=travelers-v1"></script>
-<script src="assets/dungeon-npcs.js?v=travelers-v1"></script>
+<script src="assets/allies.js?v=walking-facing-v1"></script>
+<script src="assets/dungeon-npcs.js?v=walking-facing-v1"></script>
 <link rel="stylesheet" href="assets/dungeon-npcs.css?v=travelers-v1">
 <script src="assets/monster-roster.js?v=enemy-c-v1"></script>
 <script src="assets/monster-families.js?v=enemy-c-v1"></script>
@@ -180,11 +180,11 @@ canvas{display:block;touch-action:none}
 <script src="assets/enemy-vfx.js?v=action-se-v2"></script>
 <script src="assets/monster-combat.js?v=travelers-v1"></script>
 <script src="fushigi-monster-house-v2/monster-house-vfx.js?v=generated-v2"></script>
-<script src="assets/run-save.js?v=travelers-v1"></script>
+<script src="assets/run-save.js?v=walking-facing-v1"></script>
 <link rel="stylesheet" href="assets/castle-town.css?v=town-grid-v3">
 <script src="assets/town-v4/art.js?v=town-commercial-v4"></script>
 <script src="assets/castle-town-layout-v4.js?v=town-commercial-v4"></script>
-<script src="assets/castle-town-v4.js?v=action-se-v2"></script>
+<script src="assets/castle-town-v4.js?v=walking-facing-v1"></script>
 <script>
 'use strict';
 // =====================================================================
@@ -1107,6 +1107,14 @@ let histOpen = false, logPos = 1, logT = 0, logTurn = -1, logTimer = 0;   // メ
 const msgHistory = [];
 const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
 const friendlyAt = (x,y) => AllySystem.at(x,y) || DungeonNPC.at(x,y);
+function facePlayer(a) {
+  if(!a)return;
+  const dx=Math.sign(player.x-a.x),dy=Math.sign(player.y-a.y);
+  if(dx||dy)a.face=[dx,dy];
+  a.walkEnd=0;a.attackStart=null;a.attackFace=(a.face||[0,1]).slice();
+  // Fixed town workers have deliberate visual offsets at their counters.
+  if(!a.fixed){a.vx=a.x;a.vy=a.y;}
+}
 const uiBlocked = () => EventVfx.busy() || bagOpen || whOpen || cfgOpen || histOpen || stairsOpen || menuOpen || AllySystem.state.open || DungeonNPC.state.open || ShopSystem.state.open || CastleTown.state.open;
 function rollType() {
   const ks = Object.keys(ITEMS).filter(k => (ITEMS[k].from || 1) <= floorNo);
@@ -1569,7 +1577,7 @@ function turnCore(defer = false, then = null) {
   const free = scene === 'dungeon' && player.st.haste > 0 && (hasteFlip = !hasteFlip);
   let queue = null;
   if (scene === 'dungeon' && !free) {
-    ShopSecurity.tick(); ShopSystem.tick(); if (!dead) AllySystem.tick();
+    ShopSecurity.tick(); ShopSystem.tick(); if (!dead) AllySystem.tick();if(!dead)DungeonNPC.tick();
     if (!dead) { queue = defer && EventVfx.live() ? [] : null; enemyTurn(queue); }
   }
   if (queue && queue.length && !dead) { runEnemyStrikes(queue, () => { turnCoreRest(free); if (then) then(); }); return; }
@@ -2836,6 +2844,7 @@ function draw() {
 // アニメーション：動いている間だけ rAF を回す
 function stepVis(dt) {
   AllySystem.animate(dt);
+  DungeonNPC.animate(dt);
   CastleTown.animate(dt,now());
   for (const e of [player, ...enemies,...ShopSystem.keepers().filter(k=>k.hp>0)]) {
     const dx = e.x - e.vx, dy = e.y - e.vy, d = Math.hypot(dx, dy);
@@ -2862,6 +2871,7 @@ function animating(t) {
   if(scene==='town'&&CastleTown.state.area==='outside'&&!document.hidden&&!uiBlocked())return true;
   if(EventVfx.animating(t))return true;
   if(AllySystem.animating(t))return true;
+  if(DungeonNPC.animating(t))return true;
   if(ShopSystem.keepers().some(k=>k.walkEnd>t||t-k.attackStart<300))return true;
   if (t - fadeT < 350 || (hurtT && t - hurtT < 260) || fx.length || vfx.length || (shakeAmp && t - shakeT0 < shakeLife)) return true;
   if (player.swing && t - player.swing < SWING_MS) return true;

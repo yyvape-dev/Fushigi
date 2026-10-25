@@ -1,0 +1,317 @@
+{
+  "reference": "../fushigi-npcs-v1/source.png",
+  "reference_sha256": "2bef02a2680e617087bbbcb3494f54a2a2e0250f9d43cfba39f6959569644a8a",
+  "source_sha256": "393f1b2c58b3130ba17caff193397534794ab59723752fa6aec4c825572fe19a",
+  "frame_size": [
+    256,
+    256
+  ],
+  "anchor": [
+    128,
+    224
+  ],
+  "row_edges_by_column": [
+    [
+      0,
+      252,
+      488,
+      751,
+      1007,
+      1248,
+      1536
+    ],
+    [
+      0,
+      255,
+      488,
+      752,
+      1007,
+      1249,
+      1536
+    ],
+    [
+      0,
+      254,
+      489,
+      750,
+      1011,
+      1249,
+      1536
+    ],
+    [
+      0,
+      253,
+      491,
+      752,
+      1011,
+      1249,
+      1536
+    ]
+  ],
+  "views": {
+    "yursa/S": {
+      "path": "fushigi-npcs-v1/assets/yursa/S-walk.png",
+      "scale_from_idle": 0.8571428571428571,
+      "bbox": [
+        58,
+        22,
+        193,
+        224
+      ],
+      "sha256": "354083eb15fdb733223c10061168b863f78714324fe6a569d9125eacc087df01"
+    },
+    "yursa/SW": {
+      "path": "fushigi-npcs-v1/assets/yursa/SW-walk.png",
+      "scale_from_idle": 0.8458149779735683,
+      "bbox": [
+        52,
+        24,
+        203,
+        224
+      ],
+      "sha256": "3847488a6edf240cc0fac4423c57591bb15b0c34d8ad54aad72847f4386cd041"
+    },
+    "yursa/W": {
+      "path": "fushigi-npcs-v1/assets/yursa/W-walk.png",
+      "scale_from_idle": 0.8384279475982532,
+      "bbox": [
+        57,
+        27,
+        200,
+        224
+      ],
+      "sha256": "7c02d9192f95008b72d2e23ed953c6eb85a32b39d6d0c7fc604f954bb4e0a5a2"
+    },
+    "yursa/NW": {
+      "path": "fushigi-npcs-v1/assets/yursa/NW-walk.png",
+      "scale_from_idle": 0.8571428571428571,
+      "bbox": [
+        60,
+        21,
+        195,
+        224
+      ],
+      "sha256": "6d267439d5b0618095e4431c94e2fee29edb2c90a5e41009a5c2e8574914d16c"
+    },
+    "yursa/N": {
+      "path": "fushigi-npcs-v1/assets/yursa/N-walk.png",
+      "scale_from_idle": 0.8888888888888888,
+      "bbox": [
+        58,
+        19,
+        200,
+        224
+      ],
+      "sha256": "b192292fb3ec4f503b6c92280fb70cd18f075a67076e5c07f6ea31a8e8344551"
+    },
+    "yursa/NE": {
+      "path": "fushigi-npcs-v1/assets/yursa/NE-walk.png",
+      "scale_from_idle": 0.8847926267281107,
+      "bbox": [
+        52,
+        23,
+        205,
+        224
+      ],
+      "sha256": "98f923d68308c1a0d7496e4863847b5b30d0987696e93b9acb542c94661f4dad"
+    },
+    "yursa/E": {
+      "path": "fushigi-npcs-v1/assets/yursa/E-walk.png",
+      "scale_from_idle": 0.8609865470852018,
+      "bbox": [
+        62,
+        27,
+        206,
+        224
+      ],
+      "sha256": "eaa11226572283af09c509a15d8651df9a9bdc032fe162f9e0bc731487f54d35"
+    },
+    "yursa/SE": {
+      "path": "fushigi-npcs-v1/assets/yursa/SE-walk.png",
+      "scale_from_idle": 0.8533333333333334,
+      "bbox": [
+        59,
+        26,
+        194,
+        224
+      ],
+      "sha256": "008da4d9d15aef00f5c4e91bce36d73551b1c45da1e0c8f2747da1d4388b5a38"
+    },
+    "kamil/S": {
+      "path": "fushigi-npcs-v1/assets/kamil/S-walk.png",
+      "scale_from_idle": 0.7649402390438247,
+      "bbox": [
+        66,
+        28,
+        192,
+        224
+      ],
+      "sha256": "6cccf8e77936adde21b31ed741d3322df1bbb4ee2a4fac13c06cba2d8ce50683"
+    },
+    "kamil/SW": {
+      "path": "fushigi-npcs-v1/assets/kamil/SW-walk.png",
+      "scale_from_idle": 0.768,
+      "bbox": [
+        65,
+        25,
+        192,
+        224
+      ],
+      "sha256": "acc92f239f4afa037c96145197896bba925349a80b58bf0ce55458d58f678776"
+    },
+    "kamil/W": {
+      "path": "fushigi-npcs-v1/assets/kamil/W-walk.png",
+      "scale_from_idle": 0.7710843373493976,
+      "bbox": [
+        66,
+        27,
+        192,
+        224
+      ],
+      "sha256": "a454d462d35dbcc43971f1bd84ec0e60ae425e112666f928a2a045b3da0c081e"
+    },
+    "kamil/NW": {
+      "path": "fushigi-npcs-v1/assets/kamil/NW-walk.png",
+      "scale_from_idle": 0.7741935483870968,
+      "bbox": [
+        66,
+        27,
+        189,
+        224
+      ],
+      "sha256": "0a062672a6a910e2c4587f260e58c01a6547f8948682279381eaf7a432ec67c0"
+    },
+    "kamil/N": {
+      "path": "fushigi-npcs-v1/assets/kamil/N-walk.png",
+      "scale_from_idle": 0.7966804979253111,
+      "bbox": [
+        62,
+        24,
+        193,
+        224
+      ],
+      "sha256": "717546505fc3a3ab25494be8460807c910703714913ed1dbafb81af75a205ead"
+    },
+    "kamil/NE": {
+      "path": "fushigi-npcs-v1/assets/kamil/NE-walk.png",
+      "scale_from_idle": 0.7868852459016393,
+      "bbox": [
+        65,
+        26,
+        196,
+        224
+      ],
+      "sha256": "5a7f90b5449afd315fad71e6a4dc58d5493fdad97fa0bec74d328d26dac9a3e3"
+    },
+    "kamil/E": {
+      "path": "fushigi-npcs-v1/assets/kamil/E-walk.png",
+      "scale_from_idle": 0.768,
+      "bbox": [
+        70,
+        27,
+        190,
+        224
+      ],
+      "sha256": "aa325646fb3fac6a7a3aeeff9315888e38c5cbb49d1343c128e76c1070483e23"
+    },
+    "kamil/SE": {
+      "path": "fushigi-npcs-v1/assets/kamil/SE-walk.png",
+      "scale_from_idle": 0.7710843373493976,
+      "bbox": [
+        65,
+        28,
+        191,
+        224
+      ],
+      "sha256": "5bc5e0036bb2c6a4840e4ba07f7be606bf2b788c0dcdde87e1404cb0229bc7db"
+    },
+    "ialmas/S": {
+      "path": "fushigi-npcs-v1/assets/ialmas/S-walk.png",
+      "scale_from_idle": 0.8170212765957446,
+      "bbox": [
+        50,
+        30,
+        220,
+        224
+      ],
+      "sha256": "0c2fb928209b048af773087cd5fa7969a062b70a73fb709f23cad69a34a393bd"
+    },
+    "ialmas/SW": {
+      "path": "fushigi-npcs-v1/assets/ialmas/SW-walk.png",
+      "scale_from_idle": 0.8067226890756303,
+      "bbox": [
+        49,
+        30,
+        212,
+        224
+      ],
+      "sha256": "87327ce9c892c2a9fe4da312632b24fdcdc02fb66c08c080a70b70aea26abbf6"
+    },
+    "ialmas/W": {
+      "path": "fushigi-npcs-v1/assets/ialmas/W-walk.png",
+      "scale_from_idle": 0.8067226890756303,
+      "bbox": [
+        59,
+        38,
+        204,
+        224
+      ],
+      "sha256": "e482dd38da634cfeb864425d7d532838b344aab3883ba1a3c97c4c01c2a88d63"
+    },
+    "ialmas/NW": {
+      "path": "fushigi-npcs-v1/assets/ialmas/NW-walk.png",
+      "scale_from_idle": 0.8240343347639485,
+      "bbox": [
+        56,
+        30,
+        206,
+        224
+      ],
+      "sha256": "3bee3eb046d3340cef9313c596e784d2a006e43316c5bc7bec906c3d715356a3"
+    },
+    "ialmas/N": {
+      "path": "fushigi-npcs-v1/assets/ialmas/N-walk.png",
+      "scale_from_idle": 0.8,
+      "bbox": [
+        54,
+        22,
+        205,
+        224
+      ],
+      "sha256": "f6d4805bd20c8a3ffcd1711ccf5465beea66bca8ecd30d42470049502f3d8710"
+    },
+    "ialmas/NE": {
+      "path": "fushigi-npcs-v1/assets/ialmas/NE-walk.png",
+      "scale_from_idle": 0.8,
+      "bbox": [
+        57,
+        24,
+        207,
+        224
+      ],
+      "sha256": "95b85a3de12475538e59ace57a5671ed6ed93efb0981fd519466310af1d652a8"
+    },
+    "ialmas/E": {
+      "path": "fushigi-npcs-v1/assets/ialmas/E-walk.png",
+      "scale_from_idle": 0.7741935483870968,
+      "bbox": [
+        55,
+        27,
+        241,
+        224
+      ],
+      "sha256": "17c113f9db1d1e39b9bf1895f7c55241a67bda500221ed3400aa764a25407a06"
+    },
+    "ialmas/SE": {
+      "path": "fushigi-npcs-v1/assets/ialmas/SE-walk.png",
+      "scale_from_idle": 0.7710843373493976,
+      "bbox": [
+        42,
+        26,
+        206,
+        224
+      ],
+      "sha256": "4e9a5b676772c26c336e096ab4f19b8e64ca4392b17f78af81fde269ed2573af"
+    }
+  }
+}

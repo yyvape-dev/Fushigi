@@ -38,7 +38,7 @@
  function recruit(){const a=nearby();if(!a||a.following)return false;a.following=true;state.used=true;playSE('join');say(config(a).name+'「'+config(a).join+'」');hide();render();return true;}
  function infoHTML(){const a=state.actor;if(!a||!a.following)return '<p>同行している助っ人はいない。</p>';const s=stats(a),c=config(a),ability=a.kind==='sherininya'?'黒魔法：8方向の直線2マス。常に敵を狙って動く（ラナから離れすぎると戻る）。敵と味方を貫通し、敵だけに攻撃。壁の角をはさむ斜めも通る。まっすぐ壁があると止まる。':a.kind==='avenius'?'剣：隣接1マス<br>常に敵を狙って動く（ラナから離れすぎると戻る）<br>一閃：見える4マス以内の敵へ瞬間移動・必中の先制攻撃後に帰還。同じ敵につき1回。':'クナイ：8方向の直線2マス（隣接も含む）・障害物越し<br>常に敵を狙って動く（ラナから離れすぎると戻る）<br>狐火の襲：本人のみ4ターン2回行動'+(a.boost?'（残り'+a.boost+'）':'');return '<h3>'+c.name+'　Lv'+a.lv+'</h3><p>HP '+a.hp+'/'+a.maxhp+'　EXP '+a.exp+'/'+expNeed(a.lv)+'</p><p>攻撃 '+s.attack+'　守備 '+s.defense+'<br>装備固定：'+c.equipment+'<br>'+ability+'</p>';}
  function talk(){
-  const a=nearby();if(!a||uiBlocked())return;playSE('ui-open');holdStop();state.returnFocus=document.activeElement;state.open=true;
+  const a=nearby();if(!a||uiBlocked())return;facePlayer(a);playSE('ui-open');holdStop();state.returnFocus=document.activeElement;state.open=true;
   document.body?.classList?.add('ally-dialog-open');const el=document.getElementById('allyPrompt');if(!el)return;el.hidden=false;
   document.getElementById('allyName').textContent=config(a).name;document.getElementById('allyPortrait').innerHTML=portrait(a);
   document.getElementById('allyContent').innerHTML='<p>'+(a.following?config(a).talk:config(a).meet)+'</p>';
