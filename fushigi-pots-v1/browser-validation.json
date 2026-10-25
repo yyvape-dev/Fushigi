@@ -1,0 +1,10 @@
+{
+  "sameTypeMultiSelection": true,
+  "batchOneTurn": true,
+  "directUseFromContents": true,
+  "floorPotWithoutPickup": true,
+  "mobileSizes": 3,
+  "potTypes": 19,
+  "isolatedReviewPage": true,
+  "browserErrors": []
+}

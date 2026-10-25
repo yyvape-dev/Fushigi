@@ -77,7 +77,7 @@
   if(best){k.face=[Math.sign(best.x-k.x),Math.sign(best.y-k.y)];k.x=best.x;k.y=best.y;k.walkStart=now();k.walkEnd=now()+220;}
  }
  function tick(){boundary();if(!floorShop)return;const s=floorShop,cfg=tiers[s.tier];for(const k of keepers()){
-  if(k.hp<=0||dead)continue;
+  if(k.hp<=0||dead||(s.hostile&&player.st.hidden>0))continue;
   if(!s.hostile){moveKeeper(k,debt()?k.door:k.home,false);k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];continue;}
   if(distance(player,k)===1&&geomOK(k.x,k.y,player.x-k.x,player.y-k.y)){k.face=[Math.sign(player.x-k.x),Math.sign(player.y-k.y)];k.attackStart=now();playSE('swing',k);const dmg=player.st.invinc>0?0:Math.max(1,cfg.atk-defBonus());hurtPlayer(dmg,'店主に倒された…');say('店主の攻撃！ '+dmg+'ダメージ。');}else moveKeeper(k,player,true);
  }}

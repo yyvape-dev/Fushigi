@@ -2,7 +2,7 @@
 // hand masks and back/front ordering to this canvas just as to the original PNG.
 (function(root){
  'use strict';
- const palettes={kamaitachi:{color:'#f32645',period:2100},skyblade:{color:'#2f9dff',period:2600},firesword:{color:'#bd182d',period:1800,darkCore:true}};
+ const palettes={kamaitachi:{color:'#f32645',period:6200},skyblade:{color:'#2f9dff',period:7200},firesword:{color:'#bd182d',period:6800,darkCore:true}};
  function create(image,mask,key){
   const style=palettes[key];if(!style||!image||!mask)return null;
   const make=()=>{const c=document.createElement('canvas');c.width=image.width;c.height=image.height;return c;};
