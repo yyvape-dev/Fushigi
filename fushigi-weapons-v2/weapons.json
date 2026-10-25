@@ -177,11 +177,11 @@
       "path": "assets/kamaitachi.png",
       "grip": [
         96,
-        210
+        274
       ],
       "size": [
         192,
-        256
+        320
       ],
       "renderScale": 0.66,
       "source": "source-art/kamaitachi.png",
@@ -196,8 +196,9 @@
         1025
       ],
       "sourceSha256": "dfcc51277129c1893818c3cfe1b6786f2f94d1ec6072f2193b5d2de760312ead",
-      "spriteSha256": "b5796adb0a8758633aa95ef3b7cc0b3dc9b80fbf6d14197e1d2963dd747115ce",
+      "spriteSha256": "97870fe0daf7b7cf94cc443bbe0f395fe04c7ee548b47235fddfbf385e2dd426",
       "view": "front",
+      "bladeLengthScale": 1.35,
       "glow": {
         "path": "emission/kamaitachi.png",
         "color": "#f32645",
@@ -294,11 +295,11 @@
       "path": "assets/skyblade.png",
       "grip": [
         96,
-        210
+        274
       ],
       "size": [
         192,
-        256
+        320
       ],
       "renderScale": 0.66,
       "source": "source-art/skyblade.png",
@@ -313,8 +314,9 @@
         1025
       ],
       "sourceSha256": "b4a2d028012c8b3ead9f209638aa8dd17bcfe025db96448d31f6fd459dc0aef9",
-      "spriteSha256": "67b182d117758a3ccd06a9dca40991acd39eaa3ac6aaf3cdb2895161fed38b10",
+      "spriteSha256": "ad38d31328c28bdfac08e6eb1b1e798f4f6cbfa2ee21e3e862306db07ea5f50b",
       "view": "front",
+      "bladeLengthScale": 1.35,
       "glow": {
         "path": "emission/skyblade.png",
         "color": "#2f9dff",
@@ -327,11 +329,11 @@
       "path": "assets/firesword.png",
       "grip": [
         96,
-        210
+        274
       ],
       "size": [
         192,
-        256
+        320
       ],
       "renderScale": 0.66,
       "source": "source-art/firesword.png",
@@ -346,8 +348,9 @@
         1025
       ],
       "sourceSha256": "941e5a1baf601821fe816cb426e74c32e33eb7a7a22d06ce11e7fbebc157294e",
-      "spriteSha256": "a72a2ea0502a0580861b887df15ba0211304faa8840045dea905bca0edc205e0",
+      "spriteSha256": "2239cb91cfb4916a328942556ff9302baa5d6856eca5efe62391d27efea52802",
       "view": "front",
+      "bladeLengthScale": 1.35,
       "glow": {
         "path": "emission/firesword.png",
         "color": "#b31527",

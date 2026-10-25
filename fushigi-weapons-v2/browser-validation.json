@@ -2,8 +2,8 @@
   "attackDraws": 576,
   "walkDraws": 96,
   "glows": [
-    "kamaitachi",
     "skyblade",
+    "kamaitachi",
     "firesword"
   ],
   "main": {

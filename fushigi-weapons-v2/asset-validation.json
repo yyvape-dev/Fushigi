@@ -7,7 +7,15 @@
       116,
       241
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "bronzesword",
@@ -17,7 +25,15 @@
       119,
       240
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "katana",
@@ -27,7 +43,15 @@
       118,
       240
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "dotanuki",
@@ -37,7 +61,15 @@
       127,
       240
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "minoaxe",
@@ -47,7 +79,15 @@
       160,
       241
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "renkentou",
@@ -57,17 +97,33 @@
       126,
       239
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "kamaitachi",
     "opaqueBounds": [
       84,
-      35,
+      49,
       107,
-      245
+      309
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      274
+    ],
+    "size": [
+      192,
+      320
+    ]
   },
   {
     "key": "healsword",
@@ -77,7 +133,15 @@
       126,
       239
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "steakknife",
@@ -87,7 +151,15 @@
       116,
       241
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "harisen",
@@ -97,26 +169,50 @@
       132,
       242
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      210
+    ],
+    "size": [
+      192,
+      256
+    ]
   },
   {
     "key": "skyblade",
     "opaqueBounds": [
       81,
-      35,
+      49,
       111,
-      245
+      309
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      274
+    ],
+    "size": [
+      192,
+      320
+    ]
   },
   {
     "key": "firesword",
     "opaqueBounds": [
       81,
-      35,
+      49,
       110,
-      245
+      309
     ],
-    "gripOpaque": true
+    "gripOpaque": true,
+    "grip": [
+      96,
+      274
+    ],
+    "size": [
+      192,
+      320
+    ]
   }
 ]

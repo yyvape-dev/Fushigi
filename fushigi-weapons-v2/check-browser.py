@@ -1,10 +1,10 @@
 """Browser integration: real main, all weapon poses, small screens and glow."""
 from pathlib import Path
-import json,base64,io
+import json,base64,io,os
 from PIL import Image
 from playwright.sync_api import sync_playwright
 R=Path(__file__).parent
-URL='http://127.0.0.1:8000/'
+URL=os.environ.get('FUSHIGI_REVIEW_URL','http://127.0.0.1:8000/')
 def check():
  with sync_playwright() as p:
   browser=p.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox'])
@@ -14,14 +14,15 @@ def check():
   result=page.evaluate('''() => {
    const c=document.createElement('canvas');c.width=256;c.height=288;const g=c.getContext('2d');let count=0;
    const ms=[17,70,120,170,230,280];
-   for(const w of ApprovedHero.weaponCatalog)for(const d of ApprovedHero.base.directions)for(const t of ms){
-    g.clearRect(0,0,256,288);weaponReview.drawHero(g,w.key,d.id,128,224,96,'attack',t,500,true);
+   function checkPose(key,id,action,t){
+    g.clearRect(0,0,256,288);weaponReview.drawHero(g,key,id,128,224,96,action,t,500,true);
     const a=g.getImageData(0,0,256,288).data;let pixels=0;for(let i=3;i<a.length;i+=4)if(a[i]>30)pixels++;
-    if(pixels<500)throw Error(w.key+': empty '+d.id+' '+t);
+    if(pixels<500)throw Error(key+': empty '+id+' '+action+' '+t);
     for(let x=0;x<256;x++)if(a[x*4+3]>3||a[(287*256+x)*4+3]>3)throw Error('vertical clipping');
-    for(let y=0;y<288;y++)if(a[y*256*4+3]>3||a[(y*256+255)*4+3]>3)throw Error('horizontal clipping');count++;
+    for(let y=0;y<288;y++)if(a[y*256*4+3]>3||a[(y*256+255)*4+3]>3)throw Error('horizontal clipping');
    }
-   let walk=0;for(const key of ['kamaitachi','skyblade','firesword'])for(const d of ApprovedHero.base.directions)for(const t of [40,140,240,340]){g.clearRect(0,0,256,288);weaponReview.drawHero(g,key,d.id,128,224,96,'walk',t,825,true);walk++;}
+   for(const w of ApprovedHero.weaponCatalog)for(const d of ApprovedHero.base.directions)for(const t of ms){checkPose(w.key,d.id,'attack',t);count++;}
+   let walk=0;for(const key of ['kamaitachi','skyblade','firesword'])for(const d of ApprovedHero.base.directions)for(const t of [40,140,240,340]){checkPose(key,d.id,'walk',t);walk++;}
    return {attackDraws:count,walkDraws:walk,glows:Object.keys(ApprovedHero.glows)};
   }''')
   contact=page.evaluate('''() => {

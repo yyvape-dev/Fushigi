@@ -39,17 +39,26 @@ def build():
   bg=Image.new('RGB',(512,512),'#ff00ff');bg.paste(item,mask=item.getchannel('A'));bg.save(R/'items'/f'{key}.png')
   # Same approved v3 tip-to-grip distance and pivot as the old catalog.
   k=175/384;registered=Image.new('RGBA',(192,256));registered.alpha_composite(item.resize((round(512*k),round(512*k)),Image.Resampling.LANCZOS),(round(96-256*k),round(210-410*k)))
+  blade_end=178;grip_y=210
+  if key in ('kamaitachi','skyblade','firesword'):
+   # Extend only the blade by 35%; keep hilt width, length and hand socket intact.
+   padding=64;blade_scale=1.35
+   longer=Image.new('RGBA',(192,320));length=round(blade_end*blade_scale)
+   longer.alpha_composite(registered.crop((0,0,192,blade_end)).resize((192,length),Image.Resampling.LANCZOS),(0,padding+blade_end-length))
+   longer.alpha_composite(registered.crop((0,blade_end,192,256)),(0,padding+blade_end))
+   registered=longer;blade_end+=padding;grip_y+=padding
   registered.save(R/'assets'/f'{key}.png')
-  e=dict(key=key,name=NAMES[i],path=f'assets/{key}.png',grip=[96,210],size=[192,256],renderScale=.66,source=src,sourceCell=box,sourceGrip=grip,sourceSha256=sha(R/src),spriteSha256=sha(R/'assets'/f'{key}.png'),view='front')
+  e=dict(key=key,name=NAMES[i],path=f'assets/{key}.png',grip=[96,grip_y],size=list(registered.size),renderScale=.66,source=src,sourceCell=box,sourceGrip=grip,sourceSha256=sha(R/src),spriteSha256=sha(R/'assets'/f'{key}.png'),view='front')
   if key in ('kamaitachi','skyblade','firesword'):
    # Illuminate blade only. Keep the ornate guard, hand and leather unlit.
-   mask=registered.copy();a=np.array(mask);a[178:]=0;mask=Image.fromarray(a);mask.save(R/'emission'/f'{key}.png')
+   e['bladeLengthScale']=1.35
+   mask=registered.copy();a=np.array(mask);a[blade_end:]=0;mask=Image.fromarray(a);mask.save(R/'emission'/f'{key}.png')
    e['glow']={'path':f'emission/{key}.png','color':{'kamaitachi':'#f32645','skyblade':'#2f9dff','firesword':'#b31527'}[key],'darkCore':key=='firesword'}
   entries.append(e)
  (R/'weapons.json').write_text(json.dumps(dict(version=2,status='Production redesign; adopted individual designs and heavier catalog',approvedBaseline='../fushigi-equipment-v3/',weapons=entries),ensure_ascii=False,indent=2)+'\n')
  contact=Image.new('RGB',(768,864),'#24252b');d=ImageDraw.Draw(contact)
  for i,e in enumerate(entries):
-  x=i%4*192;y=i//4*288;im=Image.open(R/e['path']);contact.paste(im,(x,y),im);d.text((x+8,y+264),e['key'],fill='#eeeeee')
+  x=i%4*192;y=i//4*288;im=Image.open(R/e['path']);im.thumbnail((192,256));contact.paste(im,(x+(192-im.width)//2,y),im);d.text((x+8,y+264),e['key'],fill='#eeeeee')
  contact.save(R/'catalog.png')
  print(json.dumps({e['key']:Image.open(R/e['path']).getbbox() for e in entries}))
 if __name__=='__main__':build()
