@@ -39,7 +39,7 @@
  for(const id of ['smith','depositor','market']){
   CastleTown.close(false);closeWh();const n=CastleTown.state.npcs.find(n=>n.id===id),service=CastleTown.facilities.find(f=>f.id===({depositor:'deposit'}[id]||id));
   const visual=[n.vx,n.vy];player.x=service.x;player.y=service.y;n.face=[0,-1];doCtx();
-  assert(n.face.join()===[Math.sign(player.x-n.x),Math.sign(player.y-n.y)].join(),'town '+id+' faces player on service interaction');
+  assert(n.face.join()==='0,1','town '+id+' faces south from its actual counter position');
   assert(n.vx===visual[0]&&n.vy===visual[1],'town '+id+' keeps counter registration');
  }
  CastleTown.close(false);closeWh();const resident=CastleTown.state.npcs.find(n=>!n.fixed&&!n.mercenary);player.x=resident.x-1;player.y=resident.y;resident.face=[1,0];CastleTown.beforeMove(resident.x,resident.y);assert(resident.face.join()==='-1,0','resident faces player on contact');CastleTown.close(false);

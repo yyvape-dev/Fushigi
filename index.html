@@ -1109,8 +1109,8 @@ const LOG_MS = 3500, LOG_LINES = 4, HIST_MAX = 150;
 const friendlyAt = (x,y) => AllySystem.at(x,y) || DungeonNPC.at(x,y);
 function facePlayer(a) {
   if(!a)return;
-  const dx=Math.sign(player.x-a.x),dy=Math.sign(player.y-a.y);
-  if(dx||dy)a.face=[dx,dy];
+  const dx=player.x-(a.fixed?(a.vx??a.x):a.x),dy=player.y-(a.fixed?(a.vy??a.y):a.y);
+  if(dx||dy){const angle=Math.round(Math.atan2(dy,dx)/(Math.PI/4))*Math.PI/4;a.face=[Math.round(Math.cos(angle)),Math.round(Math.sin(angle))];}
   a.walkEnd=0;a.attackStart=null;a.attackFace=(a.face||[0,1]).slice();
   // Fixed town workers have deliberate visual offsets at their counters.
   if(!a.fixed){a.vx=a.x;a.vy=a.y;}
