@@ -1,0 +1,122 @@
+[
+  {
+    "key": "woodsword",
+    "opaqueBounds": [
+      75,
+      35,
+      116,
+      241
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "bronzesword",
+    "opaqueBounds": [
+      74,
+      35,
+      119,
+      240
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "katana",
+    "opaqueBounds": [
+      76,
+      35,
+      118,
+      240
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "dotanuki",
+    "opaqueBounds": [
+      71,
+      35,
+      127,
+      240
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "minoaxe",
+    "opaqueBounds": [
+      41,
+      35,
+      160,
+      241
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "renkentou",
+    "opaqueBounds": [
+      68,
+      35,
+      126,
+      239
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "kamaitachi",
+    "opaqueBounds": [
+      84,
+      35,
+      107,
+      245
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "healsword",
+    "opaqueBounds": [
+      66,
+      35,
+      126,
+      239
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "steakknife",
+    "opaqueBounds": [
+      72,
+      35,
+      116,
+      241
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "harisen",
+    "opaqueBounds": [
+      58,
+      35,
+      132,
+      242
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "skyblade",
+    "opaqueBounds": [
+      81,
+      35,
+      111,
+      245
+    ],
+    "gripOpaque": true
+  },
+  {
+    "key": "firesword",
+    "opaqueBounds": [
+      81,
+      35,
+      110,
+      245
+    ],
+    "gripOpaque": true
+  }
+]

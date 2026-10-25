@@ -153,7 +153,8 @@ canvas{display:block;touch-action:none}
 </script>
 <script src="fushigi-equipment-v3/hero-base-renderer.js"></script>
 <script src="fushigi-equipment-v3/hero-attack-renderer.js"></script>
-<script src="assets/approved-hero.js?v=legacy-scale-v2"></script>
+<script src="fushigi-weapons-v2/weapon-glow.js"></script>
+<script src="assets/approved-hero.js?v=weapons-v2"></script>
 <script src="assets/hero-actions.js?v=bread-art-v1"></script>
 <script src="assets/dungeon-generator.js?v=garden-release-v1"></script>
 <script src="assets/cave-terrain.js?v=fixed65-v1"></script>
@@ -2836,6 +2837,7 @@ function stepVis(dt) {
   }
 }
 function animating(t) {
+  if(!dead&&!document.hidden&&!uiBlocked()&&ApprovedHero.animating(eqWeapon?.type))return true;
   if(scene==='town'&&CastleTown.state.area==='outside'&&!document.hidden&&!uiBlocked())return true;
   if(EventVfx.animating(t))return true;
   if(AllySystem.animating(t))return true;

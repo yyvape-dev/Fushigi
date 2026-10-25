@@ -1,21 +1,25 @@
 // Reuse approved v3 renderers and catalog metadata without modifying source art.
 (function(root){
  const R='fushigi-equipment-v3/';
- const state={ready:false,error:null,cache:new Map(),weapons:{},shields:{},baseImages:{},atlases:{},equipment:{},legacy:{}};
+ const state={ready:false,error:null,cache:new Map(),weapons:{},shields:{},baseImages:{},atlases:{},equipment:{},legacy:{},glows:{}};
  const json=async p=>{const r=await fetch(p);if(!r.ok)throw Error(p+': '+r.status);return r.json();};
  const image=p=>new Promise((resolve,reject)=>{const im=new Image();im.onload=()=>resolve(im);im.onerror=()=>reject(Error(p));im.src=p;});
  state.load=async function(redraw){
   try{
-   const [base,motion,wc,sc]=await Promise.all([json(R+'assets/hero-base/base.json'),json(R+'assets/hero-attack/attack.json'),json('fushigi-weapons-v1/weapons.json'),json('fushigi-shields-v1/shields.json')]);
+   const [base,motion,wc,sc]=await Promise.all([json(R+'assets/hero-base/base.json'),json(R+'assets/hero-attack/attack.json'),json('fushigi-weapons-v2/weapons.json'),json('fushigi-shields-v1/shields.json')]);
    state.base=base;state.motion=motion;state.weaponCatalog=wc.weapons;state.shieldCatalog=sc.shields;state.views=sc.viewMapping;
    await Promise.all([
     ...base.directions.map(async d=>state.baseImages[d.id]=await image(R+'assets/hero-base/'+d.id+'.png')),
     ...motion.directions.map(async d=>state.atlases[d.id]=await image(R+'assets/hero-attack/'+d.atlas)),
     ...Object.entries(base.equipmentAssets).map(async([k,s])=>state.equipment[k]=await image(R+'assets/hero-base/'+s.path)),
     ...['stick','axe','woodshield'].map(async k=>state.legacy[k]=await image('assets/'+k+'.png')),
-    ...wc.weapons.map(async w=>state.weapons[w.key]=await image('fushigi-weapons-v1/'+w.path)),
+    ...wc.weapons.map(async w=>state.weapons[w.key]=await image('fushigi-weapons-v2/'+w.path)),
     ...sc.shields.map(async s=>{state.shields[s.key]={};await Promise.all(Object.entries(s.views).map(async([v,a])=>state.shields[s.key][v]=await image('fushigi-shields-v1/'+a.path)));})
    ]);
+   if(typeof WeaponGlow!=='undefined'){
+    await Promise.all(wc.weapons.filter(w=>w.glow).map(async w=>{const mask=await image('fushigi-weapons-v2/'+w.glow.path);state.glows[w.key]=WeaponGlow.create(state.weapons[w.key],mask,w.key);}));
+    if(typeof matchMedia==='function')matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',redraw);
+   }
    state.ready=true;redraw();
   }catch(e){state.error=e.message;console.error('承認済みキャラの読込失敗',e);redraw();}
  };
@@ -24,7 +28,7 @@
   const meta=structuredClone(state.base),equipment={...state.equipment};
   const w=state.weaponCatalog.find(w=>w.key===weapon);
   // Preserve original item identity for legacy gear outside the approved catalogs.
-  if(w){meta.equipmentAssets.weapon={...w};equipment.weapon=state.weapons[weapon];}
+  if(w){meta.equipmentAssets.weapon={...w};equipment.weapon=state.glows[weapon]?.canvas||state.weapons[weapon];}
   // Legacy art (stick, axe) is 512px high; catalog art is 256px. Normalize the logical size
   // while keeping the grip in source pixels, for idle, attack and action poses.
   else if(state.legacy[weapon]){const im=state.legacy[weapon];meta.equipmentAssets.weapon={grip:[im.width*.5,im.height*.8],renderScale:.66*256/im.height};equipment.weapon=im;}
@@ -36,12 +40,14 @@
   }
   if(shield==='woodshield'){const canvas=document.createElement('canvas');canvas.width=160;canvas.height=192;const im=state.legacy.woodshield;canvas.getContext('2d').drawImage(im,0,0,160,192);meta.equipmentAssets.shield={grip:[80,96],renderScale:.59};equipment.shield=canvas;for(const v of ['front','quarter','side','back'])equipment['shield-'+v]=canvas;}
   const renderer=new HeroAttackRenderer(meta,state.baseImages,state.motion,state.atlases,equipment);
+  renderer.weaponGlow=state.glows[weapon]||null;
   state.cache.set(key,renderer);return renderer;
  };
  state.draw=function(g,face,x,y,height,elapsed,weapon,shield,entity,t){
   if(!state.ready){g.fillStyle='#ffe0a0';g.font='12px sans-serif';g.textAlign='center';g.fillText(state.error?'画像読込失敗':'読込中',x,y);return;}
   const [dx,dy]=face||[0,1],id=state.base.directions[(Math.round(Math.atan2(-dx,dy)/(Math.PI/4))+8)%8].id;
   const renderer=state.renderer(weapon,shield);
+  renderer.weaponGlow?.update(t);
   if(elapsed<0 && typeof HeroActions!=='undefined' && HeroActions.ready && entity){
    const act=entity.action;
    if(act && t-act.t0<act.duration){const [dx,dy]=act.face;const aid=state.base.directions[(Math.round(Math.atan2(-dx,dy)/(Math.PI/4))+8)%8].id;if(HeroActions.draw(g,aid,x,y,height,act.kind,t-act.t0,{renderer,prop:act.prop,face:act.face,weapon:!!weapon,shield:!!shield}))return;}
@@ -49,5 +55,6 @@
   }
   renderer.draw(g,id,x,y,height,elapsed,{weapon:!!weapon,shield:!!shield});
  };
+ state.animating=weapon=>state.ready&&!!state.glows[weapon]&&typeof WeaponGlow!=='undefined'&&WeaponGlow.animating(weapon);
  root.ApprovedHero=state;
 })(typeof window==='undefined'?globalThis:window);

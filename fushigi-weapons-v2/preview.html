@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><base href="../">
+<title>武器デザイン・発光確認</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#171b22;color:#eee7d8;font:15px system-ui,sans-serif}main{max-width:1080px;margin:auto;padding:24px}h1{font-size:24px}p{color:#b8b7ba;line-height:1.7}label{display:inline-flex;gap:8px;align-items:center;margin:8px 16px 8px 0}select,button{font:inherit;background:#303643;color:#fff;border:1px solid #606878;border-radius:6px;padding:8px}canvas{display:block;width:100%;height:auto;background:#252b35;border:1px solid #424a58;border-radius:12px}.row{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:20px 0}.row figure{margin:0}.row figcaption{text-align:center;margin:10px;color:#c4b9a0}#status{color:#cbb88b}a{color:#b4d8ff}@media(max-width:620px){main{padding:14px}.row{gap:6px}h1{font-size:21px}label{margin-right:6px}}
+</style>
+<main><h1>武器デザイン・発光確認</h1><p>妖刀かまいたち：赤 ／ 空の刃：青 ／ 火迅風魔刀：赤黒。刀身の光が待機・歩行・攻撃に追従します。</p>
+<label>武器<select id="weapon"></select></label><label>向き<select id="direction"></select></label><label>動作<select id="action"><option value="idle">待機</option><option value="walk">歩行</option><option value="attack">攻撃</option></select></label><label><input type="checkbox" id="glow" checked>発光</label><button id="pause">一時停止</button>
+<div class="row"><figure><canvas id="kamaitachi" width="320" height="360"></canvas><figcaption>妖刀かまいたち・赤</figcaption></figure><figure><canvas id="skyblade" width="320" height="360"></canvas><figcaption>空の刃・青</figcaption></figure><figure><canvas id="firesword" width="320" height="360"></canvas><figcaption>火迅風魔刀・赤黒</figcaption></figure></div>
+<p>全8方向・ゲーム内サイズ（頭頂から足元96px）</p><canvas id="directions" width="1024" height="560"></canvas><p id="status">読み込み中</p><p><a href="index.html">本編へ</a> · <a href="fushigi-weapons-v2/catalog.png">12種類のデザイン一覧</a></p></main>
+<script src="fushigi-equipment-v3/hero-base-renderer.js"></script><script src="fushigi-equipment-v3/hero-attack-renderer.js"></script><script src="fushigi-weapons-v2/weapon-glow.js"></script><script src="assets/approved-hero.js?v=weapons-v2"></script><script src="assets/hero-actions.js?v=bread-art-v1"></script>
+<script>
+const $=id=>document.getElementById(id),keys=['kamaitachi','skyblade','firesword'];let playing=true,clock=0,last=0,forced=null;
+function backdrop(g){g.fillStyle='#252b35';g.fillRect(0,0,g.canvas.width,g.canvas.height);g.strokeStyle='#343c49';g.lineWidth=1;for(let y=48;y<g.canvas.height;y+=64){g.beginPath();g.moveTo(0,y);g.lineTo(g.canvas.width,y);g.stroke();}}
+function drawHero(g,key,id,x,y,height,action,elapsed,time,glow=true){
+ const r=ApprovedHero.renderer(key,'ironshield');if(r.weaponGlow)r.weaponGlow.update(time);r.equipment.weapon=glow&&r.weaponGlow?r.weaponGlow.canvas:ApprovedHero.weapons[key];
+ if(action==='walk')HeroActions.draw(g,id,x,y,height,'walk',elapsed,{renderer:r,weapon:true,shield:true});else r.draw(g,id,x,y,height,action==='attack'?elapsed:-1,{weapon:true,shield:true});
+}
+function paint(){if(!ApprovedHero.ready||!HeroActions.ready)return;const id=$('direction').value,action=$('action').value,time=forced?.time??clock,elapsed=forced?.elapsed??clock%(action==='attack'?1000:700),enabled=$('glow').checked;
+ for(const key of keys){const g=$(key).getContext('2d');backdrop(g);drawHero(g,key,id,160,302,170,action,elapsed,time,enabled);}
+ const g=$('directions').getContext('2d');backdrop(g);for(const [i,d] of ApprovedHero.base.directions.entries()){const x=i%4*256+128,y=Math.floor(i/4)*280+208;drawHero(g,$('weapon').value,d.id,x,y,96,action,elapsed,time,enabled);g.fillStyle='#ddd7c7';g.font='16px system-ui';g.textAlign='center';g.fillText(d.id,x,Math.floor(i/4)*280+256);}
+ $('status').textContent=$('weapon').selectedOptions[0]?.textContent+' / '+id+' / '+action;
+}
+async function init(){await Promise.all([ApprovedHero.load(()=>{}),HeroActions.load(()=>{})]);if(!ApprovedHero.ready||!HeroActions.ready)throw Error(ApprovedHero.error||HeroActions.error);for(const w of ApprovedHero.weaponCatalog)$('weapon').add(new Option(w.name,w.key));$('weapon').value='kamaitachi';for(const d of ApprovedHero.base.directions)$('direction').add(new Option(d.id,d.id));$('direction').value='SW';
+ window.weaponReview={ready:true,drawHero,capture(key,id,action,elapsed,time,glow=true){$('weapon').value=key;$('direction').value=id;$('action').value=action;$('glow').checked=glow;forced={elapsed,time};playing=false;paint();}};
+ requestAnimationFrame(function loop(t){if(last&&playing){clock+=t-last;forced=null;}last=t;paint();requestAnimationFrame(loop);});
+}
+for(const id of ['weapon','direction','action','glow'])$(id).onchange=paint;$('pause').onclick=()=>{playing=!playing;forced=null;$('pause').textContent=playing?'一時停止':'再生';};init().catch(e=>{$('status').textContent=e.message;window.previewError=e.message;console.error(e);});
+</script></html>
