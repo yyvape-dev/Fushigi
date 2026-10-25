@@ -1,0 +1,12 @@
+.pot-checked{background:rgba(63,122,108,.35)!important;box-shadow:inset 3px 0 #9fe2c6}
+.pot-check{flex:0 0 40px;min-height:40px;margin:5px 2px 5px 5px;border:1px solid #8b9d95;border-radius:6px;background:#252d2c;color:#bcebd4;font-size:19px;cursor:pointer}
+.pot-check[aria-pressed=true]{background:#315e50;color:#fff}
+#bag .row{display:flex;align-items:center}#bag .row .main{min-width:0;flex:1}
+#bag .bag-help{line-height:1.6}
+#bag.pot-mode #autoBtn,#bag.pot-mode #cfgBtn{display:none}
+#bag.pot-mode .phead .ptitle{flex:1;min-width:0;line-height:1.5}
+#bag.pot-mode .phead{align-items:center;gap:8px}
+#bag .row.pot-checked.sel{background:#375c50!important;color:#fff;outline:1px solid #d8c184;outline-offset:-1px}
+#bag .row.pot-checked.sel .nm{color:#fff!important}
+#bag.pot-mode .ptitle{white-space:pre-line}
+#bag .acts [data-act=potbatch]{flex-basis:100%;font-weight:bold;border-color:#b5d9bd}

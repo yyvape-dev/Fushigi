@@ -57,8 +57,9 @@ function renderMenu(){const entries=menuEntries();$('menuList').innerHTML=entrie
 function closeGameMenu(){if(menuOpen)playSE('ui-close');menuOpen=false;groundMenuItem=null;groundMenuDirect=false;$('gameMenu').hidden=true;document.body?.classList.remove('menu-visible');}
 function openGameMenu(){if((typeof EventVfx!=='undefined'&&EventVfx.busy())||dead||stairsOpen||whOpen)return;holdStop();closeBag();closeHist();closeCfg();if(!menuOpen)playSE('ui-open');menuOpen=true;$('gameMenu').hidden=false;$('menuInfo').hidden=true;document.body?.classList.add('menu-visible');renderMenu();render();}
 function selectMenu(i){menuIndex=i;const fn=menuEntries()[i][1];if(i===3){fn();return;}if([1,2,6].includes(i)){fn();return;}closeGameMenu();menuTrail=true;fn();}
-function groundActions(f){const d=ITEMS[f.item.type];return [
+function groundActions(f){const d=ITEMS[f.item.type];if(d.pot)return [{act:'pickup',label:'拾う'},{act:'use',label:d.pushPot?'押す':d.effect==='hide'?'入る':'入れる'},{act:'potview',label:'中を見る'},{act:'throw',label:'投げる'},{act:'cancel',label:'そのまま'}];return [
  {act:'pickup',label:'拾う'},
+ ...(PotSystem.destinations(f.item).length?[{act:'potstore',label:'壺に入れる'}]:[]),
  ...(f.item.type!=='gold'?[{act:'use',label:d.equip?'装備':d.staff?'振る':d.throwOnly?'投げる':d.cat==='巻物'?'読む':d.cat==='食'?'食べる':['草','種','薬'].includes(d.cat)?'飲む':'使う'}]:[]),
  ...(!d.throwOnly?[{act:'throw',label:'投げる'}]:[]),
  {act:'cancel',label:'そのまま'}
@@ -69,6 +70,8 @@ function groundAction(act){
  if(!menuOpen||!f||scene!=='dungeon'||dead||itemAt(player.x,player.y)!==f||!groundActions(f).some(a=>a.act===act))return;
  const t=turn;closeGameMenu();menuTrail=false;
  if(act==='cancel'){render();return;}
+ if(act==='potview'){potOpen(f.item,'view');return;}
+ if(act==='potstore'){PotSystem.chooseDestination({item:f.item,floor:f});return;}
  if(act==='pickup')playerPickUp();else if(act==='throw')throwType(ikey(f.item),f);else useType(ikey(f.item),f);
  // Failed actions leave stock, capacity and the ledger intact, and let
  // the player choose again without spending a world turn.

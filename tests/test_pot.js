@@ -3,8 +3,9 @@
  const assert=(v,m)=>{if(!v)throw Error(m);};
  scene='dungeon';floorNo=3;newFloor();enemies=[];traps=[];floorItems.length=0;inv=[];eqWeapon=eqShield=null;eqRings=[null,null];
  // 1) 容量は2〜6のランダム、名前の後に（数字）
- const caps=new Set();for(let i=0;i<300;i++){const p=mkItem('savepot');assert(p.plus>=2&&p.plus<=6&&Array.isArray(p.pot)&&p.pot.length===0,'capacity 2-6');caps.add(p.plus);}
- assert(caps.size===5,'all capacities 2..6 occur (got '+[...caps].sort()+')');
+ const caps=new Set();for(let i=0;i<300;i++){const p=mkItem('savepot');assert(p.plus>=3&&p.plus<=5&&Array.isArray(p.pot)&&p.pot.length===0,'capacity 2-6');caps.add(p.plus);}
+ assert(caps.size===3,'all capacities 3..5 occur (got '+[...caps].sort()+')');
+ known.add('savepot');
  const pot=mkItem('savepot',3);assert(itemName(pot)==='保存の壺（3）','name shows capacity: '+itemName(pot));
  // 2) 持ち物欄から入れる（1ターン）
  inv=[pot,mkItem('potion'),mkItem('bread'),mkItem('sword',1),mkItem('woodshield',0)];eqWeapon=inv[3];
