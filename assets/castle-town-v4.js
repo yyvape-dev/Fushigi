@@ -122,6 +122,7 @@
  }
  function activate(id){
   if(scene!=='town')return;
+  faceService(id);
   if(id==='inn')enterInn();else if(id==='deposit'){state.service='deposit';whSide='bag';openWh();}
   else if(id==='market'){state.service='market';whSide='shop';openWh();}
   else if(id==='dungeon')show('departure');else show(id);
@@ -139,10 +140,12 @@
   if(scene!=='town'||state.area!=='inn')return;
   playSE('heal');close(false);state.waking=true;place(bed.x,bed.y);player.hp=player.maxhp;player.st=newStatus();snapshot();saveGame();say('ゆっくり休んだ。ベッドで目を覚ました。');startFade();render();
  }
- function talk(npc){if(npc.mercenary){state.talking=npc;show('mercTalk');}else if(npc.id==='smith')show('smith');else if(npc.id==='depositor')activate('deposit');else if(npc.id==='market')activate('market');else if(npc.id==='innkeeper')show('innkeeper');else{state.talking=npc;show('resident');}}
+ function faceService(id){const npc=state.npcs.find(n=>n.id===({deposit:'depositor'}[id]||id));if(npc)facePlayer(npc);}
+ function talk(npc){facePlayer(npc);if(npc.mercenary){state.talking=npc;show('mercTalk');}else if(npc.id==='smith')show('smith');else if(npc.id==='depositor')activate('deposit');else if(npc.id==='market')activate('market');else if(npc.id==='innkeeper')show('innkeeper');else{state.talking=npc;show('resident');}}
  const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
  function button(action,label,data='',disabled=false){return '<button data-town="'+action+'"'+data+(disabled?' disabled':'')+'>'+label+'</button>';}
  function show(panel){
+  if(scene==='town')faceService(panel);
   if(!state.open||state.panel!==panel)playSE('ui-open');
   if(scene!=='town')return;
   holdStop();if(typeof closeGameMenu==='function'&&menuOpen)closeGameMenu();closeBag();closeWh();

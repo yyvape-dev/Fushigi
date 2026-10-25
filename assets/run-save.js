@@ -81,8 +81,8 @@
    Object.assign(ShopSecurity.state,{active:!!s.security?.active,nextWave:s.security?.nextWave|0,spawnIndex:s.security?.spawnIndex|0});
    if(Array.isArray(s.history)){msgHistory.length=0;msgHistory.push(...s.history);}
    // 演出の途中だった値は捨てる（保存していない）。歩き・攻撃の動きは止まった状態から再開
-   const still=e=>{if(!e)return;e.flash=0;e.bump=null;e.action=null;e.walkEnd=0;e.walkStart=0;};
-   [player,...enemies,...(floorShop?.keepers||[]),AllySystem.state.actor].forEach(still);
+   const still=e=>{if(!e)return;e.flash=0;e.bump=null;e.action=null;e.walkEnd=0;e.walkStart=0;if(e.isDungeonNPC){e.vx=e.x;e.vy=e.y;}};
+   [player,...enemies,...(floorShop?.keepers||[]),AllySystem.state.actor,...DungeonNPC.state.actors].forEach(still);
    dead=false;
    return true;
   }catch(e){

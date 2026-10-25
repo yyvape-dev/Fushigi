@@ -4,7 +4,7 @@ const {chromium}=require('playwright');const fs=require('fs');
  const results=[];const base=process.env.FUSHIGI_TEST_URL||'http://127.0.0.1:8766/';
  try{
   const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(base+'index.html?floor=3&dungeon=third');await page.waitForFunction(()=>Object.keys(DungeonNPC.state.images).length===24);
+  await page.goto(base+'index.html?floor=3&dungeon=third');await page.waitForFunction(()=>Object.keys(DungeonNPC.state.images).length===48);
   const setup=kind=>page.evaluate(kind=>{
    EventVfx.reset();closeBag();closeStairs();closeGameMenu();AllySystem.reset();ShopSystem.reset();DungeonNPC.reset();
    scene='dungeon';dungeonId='third';floorNo=3;dead=false;turn=0;MW=20;MH=16;floorShop=null;

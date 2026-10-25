@@ -1,0 +1,18 @@
+{
+  "passed": true,
+  "checks": [
+    "yursa moves once per world turn with interpolation",
+    "yursa alternates visible walking and idle artwork",
+    "yursa finishes visual motion",
+    "yursa faces the hero on real conversation click",
+    "kamil moves once per world turn with interpolation",
+    "kamil alternates visible walking and idle artwork",
+    "kamil finishes visual motion",
+    "kamil faces the hero on real conversation click",
+    "ialmas moves once per world turn with interpolation",
+    "ialmas alternates visible walking and idle artwork",
+    "ialmas finishes visual motion",
+    "ialmas faces the hero on real conversation click",
+    "no JavaScript exceptions"
+  ]
+}
