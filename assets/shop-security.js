@@ -12,7 +12,7 @@
  });}
  function reset(){state.active=false;state.nextWave=0;state.spawnIndex=0;}
  function spawn(n=6,mode='mixed'){if(scene!=='dungeon'||dead)return 0;const capacity=12-enemies.filter(isSecurity).length;if(capacity<=0)return 0;const dist=distMap(),cells=[],stairs=[];for(let y=0;y<MH;y++)for(let x=0;x<MW;x++)if(map[y][x]===STAIRS)stairs.push({x,y});
-  for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){const range=Math.max(Math.abs(x-player.x),Math.abs(y-player.y));const stairNear=stairs.some(s=>Math.max(Math.abs(x-s.x),Math.abs(y-s.y))===1);if(map[y][x]!==FLOOR||dist[y][x]<1||(mode==='stairs'?!stairNear:range<3||range>18)||enemyAt(x,y)||AllySystem.at(x,y)||ShopSystem.at(x,y)||itemAt(x,y)||trapAt(x,y))continue;cells.push({x,y,score:Math.abs(range-8)+(vis[y]?.[x]?4:0)+Math.random()*2});}
+  for(let y=1;y<MH-1;y++)for(let x=1;x<MW-1;x++){const range=Math.max(Math.abs(x-player.x),Math.abs(y-player.y));const stairNear=stairs.some(s=>Math.max(Math.abs(x-s.x),Math.abs(y-s.y))===1);if(map[y][x]!==FLOOR||dist[y][x]<1||(mode==='stairs'?!stairNear:range<3||range>18)||enemyAt(x,y)||friendlyAt(x,y)||ShopSystem.at(x,y)||itemAt(x,y)||trapAt(x,y))continue;cells.push({x,y,score:Math.abs(range-8)+(vis[y]?.[x]?4:0)+Math.random()*2});}
   cells.sort((a,b)=>a.score-b.score);let count=0;
   for(const c of cells.slice(0,Math.min(n,capacity))){const kind=mode==='stairs'?'shop_guard':mode==='dogs'?'shop_dog':kinds[state.spawnIndex++%2],hp=ENEMIES[kind].hp(floorNo),e={kind,x:c.x,y:c.y,vx:c.x,vy:c.y,hp,maxhp:hp,aware:true,lost:0,flash:0,bump:null,fl:false,st:{},monsterFace:[Math.sign(player.x-c.x),Math.sign(player.y-c.y)],isPursuer:true,spawnTurn:turn};enemies.push(e);count++;}
   if(count)say('番兵と黒い番犬が駆けつけた！');return count;

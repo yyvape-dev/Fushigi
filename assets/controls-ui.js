@@ -28,7 +28,7 @@ function runSafe(dx,dy){
  if(scene!=='dungeon'||uiBlocked()||dead||player.st.confuse>0||player.st.sleep>0||player.st.blind>0)return false;
  if(enemies.some(e=>vis[e.y]?.[e.x]))return false;
  const x=player.x+dx,y=player.y+dy;
- if(!geomOK(player.x,player.y,dx,dy)||enemyAt(x,y)||(typeof AllySystem!=='undefined'&&AllySystem.at(x,y)))return false;
+ if(!geomOK(player.x,player.y,dx,dy)||enemyAt(x,y)||(typeof AllySystem!=='undefined'&&friendlyAt(x,y)))return false;
  if(map[y][x]===STAIRS||traps.some(t=>t.seen&&Math.max(Math.abs(t.x-x),Math.abs(t.y-y))<=1))return false;
  return true;
 }

@@ -13,7 +13,7 @@
  };
  const config=a=>roster[a?.kind]||roster.yuzunamiki;
  const state={actor:null,used:false,open:false,renderScale:1.20,registration:{},ready:false,error:null,images:{},art:{}};
- const merchantAt=(x,y)=>typeof ShopSystem!=='undefined'&&ShopSystem.at(x,y);
+ const merchantAt=(x,y)=>(typeof ShopSystem!=='undefined'&&ShopSystem.at(x,y))||DungeonNPC.at(x,y);
  const distance=(a,b)=>Math.max(Math.abs(a.x-b.x),Math.abs(a.y-b.y));
  const at=(x,y)=>state.actor?.x===x&&state.actor?.y===y?state.actor:null;
  const stats=a=>({attack:Math.max(1,Math.round(playerAtk()+config(a).attack+(a.lv-1)*config(a).growth)-(a.poison||0)),defense:Math.max(0,defBonus()+config(a).defense+Math.floor((a.lv-1)/3)),maxhp:config(a).hp+4*(a.lv-1)});

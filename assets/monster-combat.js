@@ -20,7 +20,7 @@
    const nx=x+dx,ny=y+dy;if(!inb(nx,ny))return{x,y,dx,dy,distance:n-1};
    if(dx&&dy){for(const [wx,wy]of [[x+dx,y],[x,y+dy]])if(solid(map[wy][wx]))return{x:wx,y:wy,dx,dy,distance:n};}
    x=nx;y=ny;
-   const actor=enemyAt(x,y)||AllySystem.at(x,y)||ShopSystem.at(x,y)||(player.x===x&&player.y===y?player:null);
+   const actor=enemyAt(x,y)||friendlyAt(x,y)||ShopSystem.at(x,y)||(player.x===x&&player.y===y?player:null);
    if(solid(map[y][x])||actor)return{x,y,dx,dy,distance:n};
   }
   return{x,y,dx,dy,distance:range};

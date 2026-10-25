@@ -129,7 +129,7 @@
  function ray(n){const [dx,dy]=player.face,out=[];let x=player.x,y=player.y;for(let i=0;i<n;i++){if(!geomOK(x,y,dx,dy))break;x+=dx;y+=dy;out.push({x,y,enemy:enemyAt(x,y),keeper:ShopSystem.at(x,y)});}return out;}
  function summon(x,y,n,confuse=false){let count=0;for(let r=1;r<=3&&count<n;r++)for(let dy=-r;dy<=r&&count<n;dy++)for(let dx=-r;dx<=r&&count<n;dx++){
   if(Math.max(Math.abs(dx),Math.abs(dy))!==r)continue;const xx=x+dx,yy=y+dy;
-  if(!inb(xx,yy)||map[yy][xx]!==FLOOR||enemyAt(xx,yy)||AllySystem.at(xx,yy)||ShopSystem.at(xx,yy)||(xx===player.x&&yy===player.y))continue;
+  if(!inb(xx,yy)||map[yy][xx]!==FLOOR||enemyAt(xx,yy)||friendlyAt(xx,yy)||ShopSystem.at(xx,yy)||(xx===player.x&&yy===player.y))continue;
   const e=spawnEnemy(xx,yy,true);e.sum=true;e.spawnTurn=turn;if(confuse)e.st.confuse=15;count++;
  }return count;}
  function push(pot){
@@ -191,7 +191,7 @@
  function enemyHiddenStep(e){
   if(!player.st.hidden)return false;e.aware=false;
   const [dx,dy]=DIRS8[rnd(0,7)],x=e.x+dx,y=e.y+dy;
-  if(geomOK(e.x,e.y,dx,dy)&&!enemyAt(x,y)&&!AllySystem.at(x,y)&&!ShopSystem.at(x,y)&&!(x===player.x&&y===player.y)){e.x=x;e.y=y;}return true;
+  if(geomOK(e.x,e.y,dx,dy)&&!enemyAt(x,y)&&!friendlyAt(x,y)&&!ShopSystem.at(x,y)&&!(x===player.x&&y===player.y)){e.x=x;e.y=y;}return true;
  }
  function revivalSource(){for(const i of inv){if(i.type==='reviveherb'&&!i.cursed)return {item:i,list:inv};for(const c of i.pot||[])if(c.type==='reviveherb'&&!c.cursed)return {item:c,list:i.pot,container:i};}return null;}
  function metadata(it){const m={};for(const k of ['cursed','potUsed','potFloor'])if(it[k]!==undefined&&!(k==='cursed'&&!it.cursed)&&!(k==='potUsed'&&it.potUsed===it.pot.length))m[k]=it[k];return Object.keys(m).length?'@'+encodeURIComponent(JSON.stringify(m)):'';}

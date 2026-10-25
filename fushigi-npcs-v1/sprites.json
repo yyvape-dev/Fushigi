@@ -1,0 +1,264 @@
+{
+  "source_sha256": "2bef02a2680e617087bbbcb3494f54a2a2e0250f9d43cfba39f6959569644a8a",
+  "source_size": [
+    1024,
+    1536
+  ],
+  "frame_size": [
+    256,
+    256
+  ],
+  "anchor": [
+    128,
+    224
+  ],
+  "body_height": 192,
+  "actors": {
+    "yursa": {
+      "S": {
+        "path": "assets/yursa/S.png",
+        "bbox": [
+          58,
+          32,
+          198,
+          224
+        ],
+        "sha256": "39928d77b297619046f65ba2eb94d935fc08b6ab026f8847ee523264aef4e387"
+      },
+      "SW": {
+        "path": "assets/yursa/SW.png",
+        "bbox": [
+          53,
+          32,
+          204,
+          224
+        ],
+        "sha256": "17c19113a631b70aab4e07cade7bde27ee9d57c0ef42c996e10c8129740b7e85"
+      },
+      "W": {
+        "path": "assets/yursa/W.png",
+        "bbox": [
+          56,
+          32,
+          200,
+          224
+        ],
+        "sha256": "f247ae92376ba33243bdaf62a02f8ac2492887995abdce1f411b0c6a8721f8b2"
+      },
+      "NW": {
+        "path": "assets/yursa/NW.png",
+        "bbox": [
+          62,
+          32,
+          195,
+          224
+        ],
+        "sha256": "47e9a98e36ac6730a1899de0844d159ebb6968ce90381b6f51e7b1dfa2bb7486"
+      },
+      "N": {
+        "path": "assets/yursa/N.png",
+        "bbox": [
+          59,
+          32,
+          198,
+          224
+        ],
+        "sha256": "7712a274ca671a1860dc20d17b5586d4958d84c338bae92725d224ad50c839a9"
+      },
+      "NE": {
+        "path": "assets/yursa/NE.png",
+        "bbox": [
+          53,
+          32,
+          203,
+          224
+        ],
+        "sha256": "93128a6f965fa570aa266888c7a8dee44c6e942893ae7c4cf5cf21c53e9449f2"
+      },
+      "E": {
+        "path": "assets/yursa/E.png",
+        "bbox": [
+          61,
+          32,
+          196,
+          224
+        ],
+        "sha256": "5cad90c5f6bd20c67debd401e1aeac18857a90326b97761e1a7fc6646cf413e9"
+      },
+      "SE": {
+        "path": "assets/yursa/SE.png",
+        "bbox": [
+          62,
+          32,
+          194,
+          224
+        ],
+        "sha256": "2ac15a92cc8c7ff6c8bf39b8bf1187dd46708d44f6598d6ad13e2701d09b4309"
+      }
+    },
+    "kamil": {
+      "S": {
+        "path": "assets/kamil/S.png",
+        "bbox": [
+          66,
+          32,
+          191,
+          224
+        ],
+        "sha256": "1009e866724dd8de5d1fe2d8784d90fd418456eb47f3bad5d1d68c80a5c147b1"
+      },
+      "SW": {
+        "path": "assets/kamil/SW.png",
+        "bbox": [
+          68,
+          32,
+          188,
+          224
+        ],
+        "sha256": "48e4154a47aa719cd54640ddcef85a4b71bf708b4101f8634fd8ce13928a857b"
+      },
+      "W": {
+        "path": "assets/kamil/W.png",
+        "bbox": [
+          72,
+          32,
+          185,
+          224
+        ],
+        "sha256": "06df2c015862b1b9d845bff4b850a821b4ae692a3f197d21eb1b3693fd49fbe5"
+      },
+      "NW": {
+        "path": "assets/kamil/NW.png",
+        "bbox": [
+          68,
+          32,
+          188,
+          224
+        ],
+        "sha256": "ede34fb68d24ec0392a0beb99bfc5cf226f1193177e6b9ede945ab681fb268ef"
+      },
+      "N": {
+        "path": "assets/kamil/N.png",
+        "bbox": [
+          64,
+          32,
+          192,
+          224
+        ],
+        "sha256": "7ae87f1476905d4791446815dbb6292c733bf7a23140087da9e32088b791ee47"
+      },
+      "NE": {
+        "path": "assets/kamil/NE.png",
+        "bbox": [
+          65,
+          32,
+          192,
+          224
+        ],
+        "sha256": "be02c0d04e33289804328a60fe58ff3d93fb369b41d441d1132f426904764d87"
+      },
+      "E": {
+        "path": "assets/kamil/E.png",
+        "bbox": [
+          75,
+          32,
+          182,
+          224
+        ],
+        "sha256": "f3d0bb17be3772de9b60cdd5655130e11c6e1cb113cb5b32c46f5e45b88909b8"
+      },
+      "SE": {
+        "path": "assets/kamil/SE.png",
+        "bbox": [
+          67,
+          32,
+          190,
+          224
+        ],
+        "sha256": "16356c4efa2ea4a38b6d71c9fa5a5db03455681e228e662bf1400684117cfd55"
+      }
+    },
+    "ialmas": {
+      "S": {
+        "path": "assets/ialmas/S.png",
+        "bbox": [
+          48,
+          32,
+          209,
+          224
+        ],
+        "sha256": "e9b0e1f2d2a780d2f0a93af15b5e87e18661d9915c293e32603f48977224a19e"
+      },
+      "SW": {
+        "path": "assets/ialmas/SW.png",
+        "bbox": [
+          51,
+          32,
+          206,
+          224
+        ],
+        "sha256": "57ef251e6ac7b43917087d6ad2197c157ac5326a0f1a3efe7baf663292a1bc26"
+      },
+      "W": {
+        "path": "assets/ialmas/W.png",
+        "bbox": [
+          63,
+          32,
+          194,
+          224
+        ],
+        "sha256": "19c5e6768fdb7f8e25304223d3f1882591631d56bc318e10d7b674c7b0d350ae"
+      },
+      "NW": {
+        "path": "assets/ialmas/NW.png",
+        "bbox": [
+          55,
+          32,
+          202,
+          224
+        ],
+        "sha256": "d84d8318d959f60cfd22953a70d79e9b91df52d79c41985095723a6aca6b3fcb"
+      },
+      "N": {
+        "path": "assets/ialmas/N.png",
+        "bbox": [
+          54,
+          32,
+          203,
+          224
+        ],
+        "sha256": "1dceace97cfc4cd9e857bf15448d4409e8abd3d91f18456ece2a3a1582c53e62"
+      },
+      "NE": {
+        "path": "assets/ialmas/NE.png",
+        "bbox": [
+          55,
+          32,
+          201,
+          224
+        ],
+        "sha256": "5ccb44f2465630fcfd6369dd41ed677b821807c24d9612134dc1823fdcb60d6a"
+      },
+      "E": {
+        "path": "assets/ialmas/E.png",
+        "bbox": [
+          64,
+          32,
+          192,
+          224
+        ],
+        "sha256": "314a9d6ca8df6294c10ff41d6d90e08e1fc9c4d7daf64d00a364d26708bbbc61"
+      },
+      "SE": {
+        "path": "assets/ialmas/SE.png",
+        "bbox": [
+          48,
+          32,
+          209,
+          224
+        ],
+        "sha256": "9db87b08e8b46d0f631755bf02249ccd60f3c878cf46fbf54f19bbd00740e00a"
+      }
+    }
+  }
+}

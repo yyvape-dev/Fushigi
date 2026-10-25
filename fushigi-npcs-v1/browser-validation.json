@@ -1,0 +1,17 @@
+{
+  "passed": true,
+  "checks": [
+    "decline leaves smith unused",
+    "smith strengthens both equipped pieces",
+    "healer cures and gives one large bread on conversation",
+    "exchange reveals both sides",
+    "exchange delivers exact disclosed reward",
+    "dialog fits 390x844",
+    "keyboard decline pauses world 390",
+    "dialog fits 844x390",
+    "keyboard decline pauses world 844",
+    "dialog fits 360x640",
+    "keyboard decline pauses world 360",
+    "no JavaScript exceptions: "
+  ]
+}
