@@ -2402,7 +2402,7 @@ function renderCfg() {
     `<div class="set"><span class="lab">主人公の表示<br><small>承認済み8方向の基準絵・攻撃・所持品の武器盾を表示</small></span><span>承認済み8方向</span></div>`,
     `<div class="set"><span class="lab">陰影（立体感）<br><small>壁の高さ・壁際の影・暗がり。絵が平らに見えるとき「強」</small></span><button class="sm" data-cfg="shade">${['なし', '標準', '強'][shadePref]}</button></div>`,
     `<div class="set"><span class="lab">光の雰囲気（洞窟）<br><small>暗さ・周囲の影・松明のゆらぎ。階が深いほど暗くなる。「従来」で元の明るさ</small></span><button class="sm" data-cfg="mood">${['従来', '標準', '濃い'][moodPref]}</button></div>`,
-    `<div class="set"><span class="lab">3D表示（洞窟）<br><small>地形・壁・光を3Dで描く（65°）。重いときは「影なし」か「なし」。「なし」で2D絵のみ</small></span><button class="sm" data-cfg="view3d">${['なし', '影あり', '影なし'][view3dPref]}</button></div>`,
+    `<div class="set"><span class="lab">3D表示（洞窟）<br><small>地形・壁・光を3Dで描く（65°）。重いときは「影なし」か「なし」。「なし」で2D絵のみ<br>状態：${typeof Render3D === 'undefined' ? '未読込（2D表示）' : Render3D.status()}</small></span><button class="sm" data-cfg="view3d">${['なし', '影あり', '影なし'][view3dPref]}</button></div>`,
     `<div class="set"><span class="lab">壁の高さ（洞窟）<br><small>岩壁の背の高さ。「従来」で元の低い壁に戻る</small></span><button class="sm" data-cfg="wall">${['従来', '高め', '高い'][wallPref]}</button></div>`,
     `<div class="set"><span class="lab">手前のぼかし（洞窟）<br><small>画面の下（手前）をぼかして遠近感を出す。重いときは「なし」</small></span><button class="sm" data-cfg="blur">${['なし', '標準', '強'][blurPref]}</button></div>`,
     `<div class="set"><span class="lab">戦闘の演出<br><small>斬撃の弧・命中の火花・被弾や撃破での画面の揺れ。酔うときは「なし」</small></span><button class="sm" data-cfg="vfx">${['なし', '標準', '強'][vfxPref]}</button></div>`,

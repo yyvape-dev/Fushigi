@@ -11,6 +11,17 @@ const CAM_DIST = 30;               // 正射影なので見た目には影響し
 const BG = 0x0d0d12;
 
 let inited = false, failed = false;
+// 失敗しても本編が止まらないよう、描けなくなったら自動で2D表示に戻す（ready() が false になる）。理由は status() で見える（設定画面に表示）。
+let status = '準備中', contextLost = false, probeLeft = 0, blankCount = 0, texPending = 0;
+let autoNoShadow = false, slowSum = 0, slowN = 0, slowStrikes = 0, lastT = 0;
+function fail(reason) {
+  if (failed) return;
+  failed = true;
+  status = '失敗：' + reason + '（自動で2D表示に切替）';
+  console.warn('Render3D:', status);
+  if (cvs) cvs.style.display = 'none';
+  document.body.style.backgroundColor = '';
+}
 let renderer, scene, camera, torch, ambient, group, cvs;
 let levelKey = '', sizeKey = '', shakeKey = '', shadowsOn = true;
 let lastFrame = null;
@@ -19,7 +30,8 @@ const texCache = new Map();
 
 function tex(url) {
   if (texCache.has(url)) return texCache.get(url);
-  const t = loader.load(url, () => { if (lastFrame && cvs?.style.display !== 'none') frame(lastFrame); }, undefined, () => console.warn('Render3D: 画像を読めません', url));
+  texPending++;
+  const t = loader.load(url, () => { texPending--; if (lastFrame && cvs?.style.display !== 'none') frame(lastFrame); }, undefined, () => { texPending--; console.warn('Render3D: 画像を読めません', url); });
   t.colorSpace = THREE.SRGBColorSpace;
   t.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   t.wrapS = t.wrapT = THREE.RepeatWrapping;
@@ -40,6 +52,10 @@ function init() {
     renderer.setClearColor(BG, 1);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.debug.onShaderError = () => fail('シェーダの作成に失敗');
+    // 画面メモリ不足などでWebGLが止まったら、2D表示に戻して復帰を待つ（復帰したら3Dを作り直す）
+    cvs.addEventListener('webglcontextlost', e => { e.preventDefault(); contextLost = true; status = '一時停止：WebGLが止まりました（2D表示で復帰待ち）'; console.warn('Render3D:', status); });
+    cvs.addEventListener('webglcontextrestored', () => { contextLost = false; levelKey = ''; probeLeft = 40; status = '動作中（復帰）'; if (lastLevel) { sync(lastLevel); if (lastFrame) frame(lastFrame); } });
     scene = new THREE.Scene();
     camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 100);
     ambient = new THREE.AmbientLight(0x7a8098, 1.1);
@@ -51,8 +67,10 @@ function init() {
     torch.shadow.camera.near = 0.3;
     scene.add(torch);
     inited = true;
+    status = '動作中';
   } catch (e) {
     failed = true;
+    status = '失敗：WebGLを開始できません（2D表示）';
     console.warn('Render3D: WebGLを開始できません。2D描画のままにします。', e);
     if (cvs && cvs.parentNode) cvs.parentNode.removeChild(cvs);
   }
@@ -62,6 +80,7 @@ function disposeGroup() {
   if (!group) return;
   scene.remove(group);
   group.traverse(o => {
+    if (o.isInstancedMesh) o.dispose();
     if (o.geometry) o.geometry.dispose();
     if (o.material) (Array.isArray(o.material) ? o.material : [o.material]).forEach(m => m.dispose());
   });
@@ -115,6 +134,7 @@ function sync(level) {
   const g = new THREE.Group();
   group = g;
   scene.add(g);
+  probeLeft = 40;
   const stats = { rock: 0, decals: 0, props: 0, floor: man.floor, wallF: man.wallF, wallT: man.wallT, wallMeshes: 0 };
   g.userData.stats = stats;
   const forest = themeId === 'forest' && !!window.ForestFestival;
@@ -296,7 +316,7 @@ function frame(o) {
   const tx = (W / 2 - camX) / TS, tz = (focusY - camY) / pitch;
   camera.position.set(tx, S * CAM_DIST, tz + C * CAM_DIST);
   camera.lookAt(tx, 0, tz);
-  const sh = !!o.shadows;
+  const sh = !!o.shadows && !autoNoShadow;
   if (sh !== shadowsOn) { shadowsOn = sh; torch.castShadow = sh; scene.traverse(n => { if (n.material) (Array.isArray(n.material) ? n.material : [n.material]).forEach(m => { m.needsUpdate = true; }); }); }
   torch.position.set(o.hx, 1.9, o.hy + 0.2);
   if (group?.userData.forest) {
@@ -307,6 +327,40 @@ function frame(o) {
   const shk = Math.round(o.shx || 0) + ',' + Math.round(o.shy || 0);
   if (shk !== shakeKey) { shakeKey = shk; cvs.style.transform = shk === '0,0' ? '' : `translate(${shk.split(',')[0]}px,${shk.split(',')[1]}px)`; }
   renderer.render(scene, camera);
+  // --- 描けているか・重すぎないかの確認 ---
+  const now = performance.now(), dt = now - lastT;
+  lastT = now;
+  if (dt < 250) {                       // 続けて動いている間だけ測る（止まっている間の間隔は除く）
+    slowSum += dt; slowN++;
+    if (slowN >= 90) {
+      const avg = slowSum / slowN; slowSum = slowN = 0;
+      if (avg > 70 && !autoNoShadow) { autoNoShadow = true; status = '動作中（重いので影を自動でオフ）'; console.warn('Render3D: 重いので影をオフ', avg); }
+      else if (avg > 110 && ++slowStrikes >= 2) fail('重すぎます（' + Math.round(avg) + 'ms/コマ）');
+      else if (avg <= 110) slowStrikes = 0;
+    }
+  }
+  if (probeLeft > 0 && texPending === 0) {
+    probeLeft--;
+    if (isBlank(o)) { if (++blankCount >= 6) fail('3D画面が空のままです（画像の読み込み失敗など）'); }
+    else { blankCount = 0; probeLeft = 0; if (status.startsWith('動作中')) status = autoNoShadow ? status : '動作中'; }
+  }
+}
+
+// 主人公の足元とその周り5点の色を読む。全部が「背景色」か「ほぼ真っ黒」なら、描けていない。
+function isBlank(o) {
+  try {
+    const gl = renderer.getContext(), sc = gl.drawingBufferWidth / o.W, buf = new Uint8Array(4);
+    const clear = new THREE.Color(); renderer.getClearColor(clear);
+    const hex = clear.getHex(), cr = (hex >> 16) & 255, cg = (hex >> 8) & 255, cb = hex & 255;
+    for (const [dx, dy] of [[0, 0], [-1, 0], [1, 0], [0, 1], [0, -1]]) {
+      const px = Math.round((o.W / 2 + dx * o.TS) * sc), py = gl.drawingBufferHeight - Math.round((o.focusY + dy * o.pitch) * sc);
+      gl.readPixels(px, py, 1, 1, gl.RGBA, gl.UNSIGNED_BYTE, buf);
+      const luma = buf[0] * .3 + buf[1] * .59 + buf[2] * .11;
+      const nearClear = Math.abs(buf[0] - cr) < 9 && Math.abs(buf[1] - cg) < 9 && Math.abs(buf[2] - cb) < 9;
+      if (luma >= 14 && !nearClear) return false;   // 1点でも、明るい（描けている）色があれば空ではない
+    }
+    return true;
+  } catch (e) { return false; }
 }
 
 // html にも同じ暗色の背景があるので、body の背景だけ透明にすれば見た目は変わらない
@@ -319,8 +373,9 @@ function show(on) {
 
 window.Render3D = {
   init,
-  ready: () => !failed,          // 読み込み済みで、WebGLの開始に失敗していない
+  ready: () => !failed && !contextLost,   // WebGLが動いている（失敗・停止中は false＝本編は2D表示）
+  status: () => status,          // 設定画面に出す状態の文
   pitchK: () => S,               // 1行の高さ = TS * pitchK（2D側の tilePitchY が使う）
   sync, frame, show,
-  debug: () => ({ inited, failed, levelKey, children: group ? group.children.length : -1, stats: group ? group.userData.stats : null, forest: group?.userData.forest ? { trees: group.userData.forest.plan.trees.length, lanterns: group.userData.forest.plan.lamps.length, garlands: group.userData.forest.plan.garlands.length, lights: group.userData.forest.lights.length, models: group.userData.forest.models } : null, cam: camera ? camera.position.toArray() : null, frustum: camera ? [camera.left, camera.right, camera.top, camera.bottom] : null, size: renderer ? renderer.getSize(new THREE.Vector2()).toArray() : null, calls: renderer ? renderer.info.render.calls : -1, tris: renderer ? renderer.info.render.triangles : -1 }),
+  debug: () => ({ status, autoNoShadow, texPending, probeLeft, blankCount, inited, failed, levelKey, children: group ? group.children.length : -1, stats: group ? group.userData.stats : null, forest: group?.userData.forest ? { trees: group.userData.forest.plan.trees.length, lanterns: group.userData.forest.plan.lamps.length, garlands: group.userData.forest.plan.garlands.length, lights: group.userData.forest.lights.length, models: group.userData.forest.models } : null, cam: camera ? camera.position.toArray() : null, frustum: camera ? [camera.left, camera.right, camera.top, camera.bottom] : null, size: renderer ? renderer.getSize(new THREE.Vector2()).toArray() : null, calls: renderer ? renderer.info.render.calls : -1, tris: renderer ? renderer.info.render.triangles : -1 }),
 };
